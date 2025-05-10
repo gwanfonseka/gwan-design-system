@@ -1,0 +1,17 @@
+export { Dashboard as DashboardSVG } from "./dashboardSVG";
+export { Orders as OrdersSVG } from "./ordersSVG";
+export { Products as ProductsSVG } from "./productsSVG";
+export { Templates as TemplatesSVG } from "./templatesSVG";
+export { Covers as CoversSVG } from "./coversSVG";
+export { Colors as ColorsSVG } from "./colorsSVG";
+export { SignOut as SignOutSVG } from "./signOutSVG";
+export { Filter as FilterSVG } from "./filterSVG";
+export { ChevDown as ChevDownSVG } from "./chevDownSVG";
+export { Cross as CrossSVG } from "./crossSVG";
+export { OrderInfo as OrderInfoSVG } from "./orderInfoSVG";
+export { ChevLeft as ChevLeftSVG } from "./chevLeftSVG";
+export { ChevRight as ChevRightSVG } from "./chevRightSVG";
+export { Check as CheckSVG } from "./checkSVG";
+export { Circle as CircleSVG } from "./circleSVG";
+export { Upload as UploadSVG } from "./uploadSVG";
+export { ArrowLeft as ArrowLeftSVG } from "./arrowLeftSVG";
