@@ -2,12 +2,14 @@ import { JSX } from "react";
 
 export interface ITableColumn {
   header: string;
-  render: (row: any) => JSX.Element;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  render: (row?: any) => JSX.Element;
   headerClassName?: string;
 }
 
 export interface ITable {
   columns: ITableColumn[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
 }
 

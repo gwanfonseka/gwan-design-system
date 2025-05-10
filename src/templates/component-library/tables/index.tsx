@@ -55,7 +55,7 @@ const columns: ITableColumn[] = [
   {
     header: "View",
     headerClassName: "w-[8%]",
-    render: (_row: IData) => (
+    render: () => (
       <div className="size-5 cursor-pointer">
         <OrderInfoSVG />
       </div>

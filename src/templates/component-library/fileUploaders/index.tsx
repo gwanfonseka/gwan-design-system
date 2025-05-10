@@ -2,7 +2,7 @@ import FileUploader from "@/components/fileUploader";
 import { useState } from "react";
 
 const FileUploaders = () => {
-  const [_file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
 
   return (
     <div className="flex flex-col gap-4 items-center">
