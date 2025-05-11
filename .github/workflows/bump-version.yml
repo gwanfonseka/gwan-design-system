@@ -38,10 +38,10 @@ jobs:
           echo "new_version=${NEW_VERSION/v/}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_APP_VERSION=$(jq -r .version package.json)" > .env
 
-      - name: Push changes and tags
+      - name: Push version tag only (not protected branch)
         run: |
           set -e
-          git push origin HEAD --tags
+          git push origin --tags
 
       - name: Create and push release branch
         run: |
