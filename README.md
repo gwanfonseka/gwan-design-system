@@ -1,39 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌈 Gwan Design System – The Ultimate UI Library for Next.js ⚡
 
-## Getting Started
+![npm](https://img.shields.io/npm/v/gwan-design-system.svg)
+![License](https://img.shields.io/github/license/gwanfonseka/gwan-design-system)
+![CI](https://img.shields.io/github/actions/workflow/status/gwanfonseka/gwan-design-system/publish.yml?branch=main)
 
-First, run the development server:
+> 🧪 Reusable, composable, and beautifully crafted UI components built with 💚 Next.js — supercharge your apps in minutes!
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📦 What is Gwan Design System?
+
+**Gwan Design System** is a plug-and-play React component library tailored specifically for **Next.js** projects. Whether you're building a SaaS dashboard, marketing site, or internal tool — we've got you covered.
+
+- ⚡ Built with Next.js App Router
+- 🎨 Pre-styled, customizable components
+- 🧱 Fully typed with TypeScript
+- 💅 Styled with Tailwind CSS
+- 🧪 Accessible and production-ready
+
+## 🚀 Getting Started
+
+### 📥 Installation
+
+Install via npm: ```npm install gwan-design-system```
+
+or with Yarn: ```yarn add gwan-design-system```
+
+### 🧰 Usage
+
+Import any component and use it right away!
+
 ```
+"use client";
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+import { Button, Card, Modal } from "gwan-design-system";
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+export default function HomePage() {
+  return (
+    <main className="p-10">
+      <h1 className="text-2xl font-bold mb-6">👋 Welcome to Gwan UI</h1>
+      <Card>
+        <h2 className="text-xl">Reusable UI</h2>
+        <p>Start using ready-made components!</p>
+        <Button onClick={() => alert("🎉 Clicked!")}>Click Me</Button>
+      </Card>
+    </main>
+  );
+}
+```
+### 🧱 Components
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 🔘 Buttons
+- 🟣 Modals
+- 🧾 Tables
+- ✅ Checkboxes
+- ☑️ Radio Buttons
+- 📥 File Uploaders
+- 📦 Cards
+- 🎛 Dropdowns
+- 📊 Pagination
+- 📎 Tags
+- 🧠 States (Empty, Error, Loading, etc.)
+- 🔔 Snackbars
+- ✨ Tooltips
+- 🧭 Navigation Bars
+- ...and more!
+> Want to see all available components? Visit 👉 [gwan-design-system](https://gwan-design-system.vercel.app) official website.
 
-## Learn More
+### 🛠 Customization
 
-To learn more about Next.js, take a look at the following resources:
+All components are styled using Tailwind CSS. You can easily override styles using your own Tailwind theme or utility classes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+<Button className="bg-purple-600 hover:bg-purple-700 text-white" />
+```
 
 ## 🤝 Contributing
 
@@ -52,3 +92,19 @@ Fork this repository
 - Open a pull request with a clear description
 
 Thanks for helping improve the project! 🙌
+
+## ✨ Show Some Love
+
+If you like this library:
+
+- ⭐ Star this repo on GitHub
+- 🧑‍💻 Use it in your projects
+- 🐛 Submit bugs or improvements
+- 🥳 Share with the community
+
+## 📦 Coming Soon
+
+- 🔌 Dark mode support
+- 🎨 Theming system
+- 📚 Storybook documentation
+- 🧩 Component playground
