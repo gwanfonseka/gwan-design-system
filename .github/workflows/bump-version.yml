@@ -1,0 +1,50 @@
+name: Bump Version and Create Release Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version bump type (patch, minor, major, or exact version)"
+        required: true
+        default: "patch"
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Configure Git user
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Bump version
+        id: bump
+        run: |
+          set -e
+          VERSION_INPUT="${{ github.event.inputs.version }}"
+          if [[ "$VERSION_INPUT" =~ ^(patch|minor|major)$ ]]; then
+            NEW_VERSION=$(npm version $VERSION_INPUT -m "chore(release): %s")
+          else
+            NEW_VERSION=$(npm version "$VERSION_INPUT" -m "chore(release): %s")
+          fi
+          echo "new_version=${NEW_VERSION/v/}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_APP_VERSION=$(jq -r .version package.json)" > .env
+
+      - name: Push version tag only (not protected branch)
+        run: |
+          set -e
+          git push origin --tags
+
+      - name: Create and push release branch
+        run: |
+          set -e
+          git checkout -b release/v${{ env.new_version }}
+          git push origin release/v${{ env.new_version }}
