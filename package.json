@@ -1,6 +1,14 @@
 {
   "name": "gwan-design-system",
   "version": "0.1.2",
+  "description": "✨ A reusable component library for Next.js projects.",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -23,5 +31,21 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "keywords": [
+    "nextjs",
+    "component-library",
+    "design-system",
+    "react",
+    "ui-kit"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }
