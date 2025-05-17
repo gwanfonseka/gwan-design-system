@@ -11,26 +11,31 @@ export enum TAG_TYPE {
 export interface ITag {
   type: TAG_TYPE;
   label: string;
+  className?: string;
 }
 
-const Tag: FC<ITag> = ({ type, label }: ITag) => {
+const Tag: FC<ITag> = ({ type, label, className = "" }: ITag) => {
   const getTagStyle = (type: TAG_TYPE) => {
     switch (type) {
       case TAG_TYPE.SUCCESS:
-        return "bg-greenola-50 text-greenola-600";
+        return "bg-green-50 text-green-600";
       case TAG_TYPE.DANGER:
-        return "bg-redola-50 text-redola-600";
+        return "bg-red-50 text-red-600";
       case TAG_TYPE.WARNING:
-        return "bg-yellowla-50 text-yellowla-600";
+        return "bg-yellow-50 text-yellow-600";
       case TAG_TYPE.INFO:
-        return "bg-blueola-50 text-blueola-600";
+        return "bg-blue-50 text-blue-600";
       default:
-        return "bg-neutrola-50 text-neutrola-600";
+        return "bg-neutral-50 text-neutral-600";
     }
   };
 
   return (
-    <div className={`w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(type)}`}>
+    <div
+      className={`w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(
+        type
+      )} ${className}`}
+    >
       {label}
     </div>
   );

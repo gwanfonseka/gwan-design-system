@@ -12,32 +12,34 @@ export interface ISnackBar {
   type?: SNACK_BAR_TYPE;
   message: string;
   icon?: React.ReactNode;
+  className?: string;
 }
 
 const Snackbar: FC<ISnackBar> = ({
   type = SNACK_BAR_TYPE.DEFAULT,
   message,
   icon,
+  className = "",
 }: ISnackBar) => {
   const getClassName = () => {
     switch (type) {
       case SNACK_BAR_TYPE.SUCCESS:
-        return "bg-greenola-50 text-greenola-800 border-greenola-500";
+        return "bg-green-50 text-green-800 border-green-500";
       case SNACK_BAR_TYPE.DANGER:
-        return "bg-redola-50 text-redola-600 border-redola-500";
+        return "bg-red-50 text-red-600 border-red-500";
       case SNACK_BAR_TYPE.WARNING:
-        return "bg-yellowla-50 text-yellowla-800 border-yellowla-600";
+        return "bg-yellow-50 text-yellow-800 border-yellow-600";
       case SNACK_BAR_TYPE.INFO:
-        return "bg-blueola-50 text-blueola-800 border-blueola-600";
+        return "bg-blue-50 text-blue-800 border-blue-600";
       case SNACK_BAR_TYPE.DEFAULT:
       default:
-        return "bg-neutrola-50 text-neutrola-800 border-neutrola-500";
+        return "bg-neutral-50 text-neutral-800 border-neutral-500";
     }
   };
 
   return (
     <div
-      className={`${getClassName()} p-4 rounded-lg flex flex-row gap-4 items-center font-normal border`}
+      className={`${getClassName()} p-4 rounded-lg flex flex-row gap-4 items-center font-normal border ${className}`}
     >
       {icon && <div className="size-5">{icon}</div>}
       <div>{message}</div>

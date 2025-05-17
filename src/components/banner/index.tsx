@@ -8,6 +8,7 @@ export interface IBanner {
   contentPlacement?: "left" | "right";
   backgroundImage?: string;
   backgroundColor?: string;
+  className?: string;
 }
 
 const Banner: FC<IBanner> = ({
@@ -18,6 +19,7 @@ const Banner: FC<IBanner> = ({
   backgroundColor = "",
   titleClassName = "",
   subTitleClassName = "",
+  className = "",
 }: IBanner) => {
   const handleContentPlacement = () => {
     if (contentPlacement === "left") {
@@ -45,7 +47,7 @@ const Banner: FC<IBanner> = ({
 
   return (
     <div
-      className={`w-full h-[484px] grid grid-cols-2 items-center px-16 ${backgroundColor} bg-no-repeat bg-cover bg-center`}
+      className={`w-full h-[484px] grid grid-cols-2 items-center px-16 ${backgroundColor} bg-no-repeat bg-cover bg-center ${className}`}
       style={
         backgroundImage !== ""
           ? { backgroundImage: `url(${backgroundImage})` }

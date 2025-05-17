@@ -16,7 +16,7 @@ const FilterPanel = ({ dismissPanel }: { dismissPanel: () => void }) => {
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium">Category</label>
           <select
-            className="border border-neutrola-300 rounded-lg p-2"
+            className="border border-neutral-300 rounded-lg p-2"
             onChange={dismissPanel}
           >
             <option value="">Select a category</option>

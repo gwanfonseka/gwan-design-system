@@ -23,7 +23,7 @@ export default {
           800: "#64675A",
           900: "#505146",
         },
-        greenola: {
+        green: {
           50: "#E6F7E6",
           100: "#C0EAC0",
           200: "#99DC99",
@@ -35,7 +35,7 @@ export default {
           800: "#066602",
           900: "#044C01",
         },
-        redola: {
+        red: {
           50: "#FDE7E7",
           100: "#FBC0C0",
           200: "#F89999",
@@ -47,7 +47,7 @@ export default {
           800: "#800202",
           900: "#5C0101",
         },
-        blueola: {
+        blue: {
           50: "#E6F3FA",
           100: "#BFE1F3",
           200: "#99CEEB",
@@ -59,7 +59,7 @@ export default {
           800: "#013C61",
           900: "#012B46",
         },
-        yellowla: {
+        yellow: {
           50: "#F9F7E6",
           100: "#F0EFC0",
           200: "#E6E699",
@@ -71,7 +71,7 @@ export default {
           800: "#615C01",
           900: "#464301",
         },
-        neutrola: {
+        neutral: {
           50: "#F8F8F8",
           100: "#F0F0F0",
           200: "#E7E7E7",

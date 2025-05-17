@@ -5,6 +5,7 @@ export interface IRadioButton {
   value: string;
   selectedValue?: string;
   onChange?: (value: string) => void;
+  className?: string;
 }
 
 const RadioButton: FC<IRadioButton> = ({
@@ -12,11 +13,12 @@ const RadioButton: FC<IRadioButton> = ({
   value,
   selectedValue,
   onChange,
+  className = "",
 }: IRadioButton) => {
   const isChecked = selectedValue === value;
 
   return (
-    <label className="flex items-center gap-2 cursor-pointer">
+    <label className={`flex items-center gap-2 cursor-pointer ${className}`}>
       <div
         className={`w-5 h-5 flex items-center justify-center border-2 rounded-full transition-all
             ${

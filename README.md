@@ -1,12 +1,8 @@
-# 🌈 Gwan Design System – The Ultimate UI Library for Next.js ⚡
+# ⚡ Gwan Design System – A Component Library for Next.js ⚡
 
 ![npm](https://img.shields.io/npm/v/gwan-design-system.svg)
-![License](https://img.shields.io/github/license/gwanfonseka/gwan-design-system)
-![CI](https://img.shields.io/github/actions/workflow/status/gwanfonseka/gwan-design-system/publish.yml?branch=main)
 
 > 🧪 Reusable, composable, and beautifully crafted UI components built with 💚 Next.js — supercharge your apps in minutes!
-
----
 
 ## 📦 What is Gwan Design System?
 
@@ -22,32 +18,74 @@
 
 ### 📥 Installation
 
-Install via npm: ```npm install gwan-design-system```
+Install via npm: `npm install gwan-design-system`
 
-or with Yarn: ```yarn add gwan-design-system```
+or with Yarn: `yarn add gwan-design-system`
 
 ### 🧰 Usage
+
+Include this in your `tailwind.config.ts`
+
+```
+content: [
+  "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  "./src/templates/**/*.{js,ts,jsx,tsx,mdx}",
+  join(
+    dirname(require.resolve("gwan-design-system")),
+    "**/*.{js,ts,jsx,tsx,mdx}"
+  ),
+],
+```
+
+Define your custom theme in your `tailwind.config.ts`
+
+```
+theme: {
+  extend: {
+    colors: {
+      primary: {
+        50: "#F2F3EE",
+        100: "#E1E3DA",
+        200: "#D0D3C6",
+        300: "#BEC3B2",
+        400: "#ADB39E",
+        500: "#9EA593",
+        600: "#8C9382",
+        700: "#787D6E",
+        800: "#64675A",
+        900: "#505146",
+      },
+      neutral: {...},
+      green: {...},
+      red: {...},
+      blue: {...},
+      yellow: {...}
+    }
+  }
+}
+```
 
 Import any component and use it right away!
 
 ```
 "use client";
 
-import { Button, Card, Modal } from "gwan-design-system";
+import { Button, BUTTON_VARIANTS } from "gwan-design-system";
 
 export default function HomePage() {
   return (
     <main className="p-10">
       <h1 className="text-2xl font-bold mb-6">👋 Welcome to Gwan UI</h1>
-      <Card>
-        <h2 className="text-xl">Reusable UI</h2>
-        <p>Start using ready-made components!</p>
-        <Button onClick={() => alert("🎉 Clicked!")}>Click Me</Button>
-      </Card>
+        <Button
+          variant={BUTTON_VARIANTS.PRIMARY}
+          label="Primary"
+          onClick={() => handleClick()}
+        />
     </main>
   );
 }
 ```
+
 ### 🧱 Components
 
 - 🔘 Buttons
@@ -55,17 +93,17 @@ export default function HomePage() {
 - 🧾 Tables
 - ✅ Checkboxes
 - ☑️ Radio Buttons
-- 📥 File Uploaders
+- 📥 File Uploader
 - 📦 Cards
 - 🎛 Dropdowns
 - 📊 Pagination
 - 📎 Tags
 - 🧠 States (Empty, Error, Loading, etc.)
-- 🔔 Snackbars
+- 🔔 Snackbar
 - ✨ Tooltips
 - 🧭 Navigation Bars
 - ...and more!
-> Want to see all available components? Visit 👉 [gwan-design-system](https://gwan-design-system.vercel.app) official website.
+  > Want to see all available components? Visit 👉 [gwan-design-system](https://gwan-design-system.vercel.app) official website.
 
 ### 🛠 Customization
 
@@ -85,7 +123,7 @@ However, to keep the project stable and secure:
 👀 Pull requests require review and approval before merging
 
 Want to contribute?
-Fork this repository
+Fork this 👉 [repository](https://github.com/gwanfonseka/gwan-design-system)
 
 - Create a feature branch: git checkout -b feature/my-feature
 - Commit your changes and push: git push origin feature/my-feature

@@ -13,6 +13,7 @@ export interface IStateBase {
   subTitle: string;
   imageWidth?: number;
   imageHeight?: number;
+  className?: string;
 }
 
 export type IState =
@@ -26,6 +27,7 @@ const State: FC<IState> = ({
   subTitle,
   imageWidth = 526,
   imageHeight = 526,
+  className = "",
 }: IState) => {
   const typeImage = () => {
     switch (type) {
@@ -43,7 +45,9 @@ const State: FC<IState> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-8 items-center justify-center">
+    <div
+      className={`w-full h-full flex flex-col gap-8 items-center justify-center ${className}`}
+    >
       {stateImage ? (
         <Image
           src={stateImage}

@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "dev": "next dev",
+    "prebuild": "echo \"NEXT_PUBLIC_APP_VERSION=$(git describe --tags --abbrev=0)\" > .env.local",
     "build": "next build",
     "build:lib": "tsup",
     "prepare": "npm run build:lib",
@@ -47,11 +48,11 @@
   },
   "keywords": [
     "nextjs",
-    "tailwindcss",
-    "component-library",
-    "design-system",
     "react",
-    "ui-kit"
+    "tailwindcss",
+    "typescript",
+    "component-library",
+    "design-system"
   ],
   "author": "Nimesh Fonseka",
   "license": "MIT"

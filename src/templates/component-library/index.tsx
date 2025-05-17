@@ -135,8 +135,8 @@ const LibraryTemplate = () => {
           <div className="flex flex-col gap-4 bg-[#0000004D] h-[100vh] py-4 px-8 overflow-y-auto w-[350px]">
             <p className="text-white text-2xl font-medium">
               Components Library{" "}
-              <span className="text-sm text-neutrola-500">
-                v{process.env.NEXT_PUBLIC_APP_VERSION}
+              <span className="text-sm text-neutral-500">
+                {process.env.NEXT_PUBLIC_APP_VERSION}
               </span>
             </p>
             <hr className="opacity-50 border-2" />

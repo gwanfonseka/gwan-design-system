@@ -5,12 +5,14 @@ export interface ICheckbox {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  className?: string;
 }
 
 const Checkbox: FC<ICheckbox> = ({
   label,
   checked = false,
   onChange,
+  className = "",
 }: ICheckbox) => {
   const [isChecked, setIsChecked] = useState(checked);
 
@@ -22,7 +24,7 @@ const Checkbox: FC<ICheckbox> = ({
   };
 
   return (
-    <label className="flex items-center gap-2 cursor-pointer">
+    <label className={`flex items-center gap-2 cursor-pointer ${className}`}>
       <input
         type="checkbox"
         checked={isChecked}
@@ -34,7 +36,7 @@ const Checkbox: FC<ICheckbox> = ({
           ${
             isChecked
               ? "bg-primary-500 border-primary-600"
-              : "bg-white border-neutrola-500"
+              : "bg-white border-neutral-500"
           }
         `}
       >
