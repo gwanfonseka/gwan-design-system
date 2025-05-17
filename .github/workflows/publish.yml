@@ -7,6 +7,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,8 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Verify package version
-        run: npm version
+      - name: Extract package version
+        id: extract_version
+        run: |
+          VERSION=$(jq -r .version package.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build library
         run: npm run build:lib
@@ -41,3 +46,37 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  create-prs:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v3
+        with:
+          ref: release/v${{ needs.publish.outputs.version }}
+          fetch-depth: 0
+
+      - name: Set up GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Create PR to main
+        run: |
+          gh pr create \
+            --base main \
+            --head release/v${{ needs.publish.outputs.version }} \
+            --title "Release v${{ needs.publish.outputs.version }} → main" \
+            --body "This PR merges release v${{ needs.publish.outputs.version }} into **main**"
+
+      - name: Create PR to develop
+        run: |
+          gh pr create \
+            --base develop \
+            --head release/v${{ needs.publish.outputs.version }} \
+            --title "Release v${{ needs.publish.outputs.version }} → develop" \
+            --body "This PR merges release v${{ needs.publish.outputs.version }} into **develop**"

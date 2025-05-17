@@ -14,6 +14,7 @@ export interface IAvatar {
   email: string;
   image?: string;
   variant: string;
+  className?: string;
 }
 
 const generatePastelColor = () => {
@@ -24,7 +25,13 @@ const generatePastelColor = () => {
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
-const Avatar: FC<IAvatar> = ({ name, email, image, variant }: IAvatar) => {
+const Avatar: FC<IAvatar> = ({
+  name,
+  email,
+  image,
+  variant,
+  className = "",
+}: IAvatar) => {
   const [bgColor, setBgColor] = useState<string>("transparent");
   const [isTooltipInitialVisible, setIsTooltipInitialVisible] = useState(false);
   const [isTooltipImageVisible, setIsTooltipImageVisible] = useState(false);
@@ -47,7 +54,7 @@ const Avatar: FC<IAvatar> = ({ name, email, image, variant }: IAvatar) => {
         label={
           <div className="flex flex-col">
             {name}
-            <p className="text-neutrola-300 text-xs">{email}</p>
+            <p className="text-neutral-300 text-xs">{email}</p>
           </div>
         }
         isVisible={isVisible}
@@ -65,7 +72,7 @@ const Avatar: FC<IAvatar> = ({ name, email, image, variant }: IAvatar) => {
           onMouseLeave={() => setIsTooltipImageVisible(false)}
         >
           <Image
-            className="rounded-full border border-neutrola-400"
+            className="rounded-full border border-neutral-400"
             src={image}
             alt="profile"
             width={60}
@@ -92,14 +99,14 @@ const Avatar: FC<IAvatar> = ({ name, email, image, variant }: IAvatar) => {
   };
 
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className={`flex flex-row items-center gap-2 ${className}`}>
       {renderAvatarImage()}
 
       {(variant === AVATAR_VARIANT.IMAGE_WITH_FULL ||
         variant === AVATAR_VARIANT.INITIALS_WITH_FULL) && (
         <div className="flex flex-col">
           <p className="text-base font-semibold">{name}</p>
-          <p className="text-sm text-neutrola-700">{email}</p>
+          <p className="text-sm text-neutral-700">{email}</p>
         </div>
       )}
     </div>

@@ -10,6 +10,13 @@ import { useEffect, useState } from "react";
 
 // src/components/tooltip/index.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
+var TOOLTIP_POSITION = /* @__PURE__ */ ((TOOLTIP_POSITION2) => {
+  TOOLTIP_POSITION2["TOP"] = "top";
+  TOOLTIP_POSITION2["BOTTOM"] = "bottom";
+  TOOLTIP_POSITION2["LEFT"] = "left";
+  TOOLTIP_POSITION2["RIGHT"] = "right";
+  return TOOLTIP_POSITION2;
+})(TOOLTIP_POSITION || {});
 var Tooltip = ({
   position,
   label,
@@ -70,6 +77,13 @@ var tooltip_default = Tooltip;
 
 // src/components/avatar/index.tsx
 import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+var AVATAR_VARIANT = /* @__PURE__ */ ((AVATAR_VARIANT2) => {
+  AVATAR_VARIANT2["IMAGE_WITH_FULL"] = "image_with_full";
+  AVATAR_VARIANT2["INITIALS_WITH_FULL"] = "initials_with_full";
+  AVATAR_VARIANT2["IMAGE_ONLY"] = "image-only";
+  AVATAR_VARIANT2["INITIALS_ONLY"] = "initials-only";
+  return AVATAR_VARIANT2;
+})(AVATAR_VARIANT || {});
 var generatePastelColor = () => {
   const hue = Math.floor(Math.random() * 360);
   const saturation = 60 + Math.random() * 20;
@@ -352,25 +366,18 @@ var Products = () => {
 // src/components/icons/templatesSVG/index.tsx
 import { jsx as jsx9, jsxs as jsxs7 } from "react/jsx-runtime";
 var Templates = () => {
-  return /* @__PURE__ */ jsxs7(
-    "svg",
-    {
-      viewBox: "0 0 30 30",
-      xmlns: "http://www.w3.org/2000/svg",
-      children: [
-        /* @__PURE__ */ jsx9("g", { clipPath: "url(#clip0_897_105)", children: /* @__PURE__ */ jsx9(
-          "path",
-          {
-            fillRule: "evenodd",
-            clipRule: "evenodd",
-            d: "M20 15.0002H10C8.625 15.0002 7.5 16.1252 7.5 17.5002V22.5002C7.5 23.8752 8.625 25.0002 10 25.0002H20C21.375 25.0002 22.5 23.8752 22.5 22.5002V17.5002C22.5 16.1252 21.375 15.0002 20 15.0002ZM21.25 22.5002C21.25 23.1877 20.6875 23.7502 20 23.7502H10C9.3125 23.7502 8.75 23.1877 8.75 22.5002V17.5002C8.75 16.8127 9.3125 16.2502 10 16.2502H20C20.6875 16.2502 21.25 16.8127 21.25 17.5002V22.5002ZM7.5 10.6252C7.5 10.2752 7.775 10.0002 8.125 10.0002H13.125C13.475 10.0002 13.75 10.2752 13.75 10.6252C13.75 10.9752 13.475 11.2502 13.125 11.2502H8.125C7.775 11.2502 7.5 10.9752 7.5 10.6252ZM25.125 6.73774L20.775 2.38774C19.2375 0.850241 17.2 0.0127415 15.025 0.0127415H8.125C5.025 0.000241525 2.5 2.52524 2.5 5.62524V24.3752C2.5 27.4752 5.025 30.0002 8.125 30.0002H21.875C24.975 30.0002 27.5 27.4752 27.5 24.3752V12.4877C27.5 10.3127 26.65 8.27524 25.125 6.73774ZM24.2375 7.62524C24.925 8.31274 25.45 9.12524 25.7875 10.0002H19.375C18.3375 10.0002 17.5 9.16274 17.5 8.12524V1.71274C18.3875 2.05024 19.1875 2.57524 19.875 3.26274L24.225 7.61274L24.2375 7.62524ZM26.25 24.3752C26.25 26.7877 24.2875 28.7502 21.875 28.7502H8.125C5.7125 28.7502 3.75 26.7877 3.75 24.3752V5.62524C3.75 3.21274 5.7125 1.25024 8.125 1.25024H15.0125C15.425 1.25024 15.8375 1.28774 16.25 1.36274V8.12524C16.25 9.85024 17.65 11.2502 19.375 11.2502H26.1375C26.2125 11.6502 26.25 12.0627 26.25 12.4877V24.3752Z",
-            fill: "currentColor"
-          }
-        ) }),
-        /* @__PURE__ */ jsx9("defs", { children: /* @__PURE__ */ jsx9("clipPath", { id: "clip0_897_105", children: /* @__PURE__ */ jsx9("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
-      ]
-    }
-  );
+  return /* @__PURE__ */ jsxs7("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ jsx9("g", { clipPath: "url(#clip0_897_105)", children: /* @__PURE__ */ jsx9(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        d: "M20 15.0002H10C8.625 15.0002 7.5 16.1252 7.5 17.5002V22.5002C7.5 23.8752 8.625 25.0002 10 25.0002H20C21.375 25.0002 22.5 23.8752 22.5 22.5002V17.5002C22.5 16.1252 21.375 15.0002 20 15.0002ZM21.25 22.5002C21.25 23.1877 20.6875 23.7502 20 23.7502H10C9.3125 23.7502 8.75 23.1877 8.75 22.5002V17.5002C8.75 16.8127 9.3125 16.2502 10 16.2502H20C20.6875 16.2502 21.25 16.8127 21.25 17.5002V22.5002ZM7.5 10.6252C7.5 10.2752 7.775 10.0002 8.125 10.0002H13.125C13.475 10.0002 13.75 10.2752 13.75 10.6252C13.75 10.9752 13.475 11.2502 13.125 11.2502H8.125C7.775 11.2502 7.5 10.9752 7.5 10.6252ZM25.125 6.73774L20.775 2.38774C19.2375 0.850241 17.2 0.0127415 15.025 0.0127415H8.125C5.025 0.000241525 2.5 2.52524 2.5 5.62524V24.3752C2.5 27.4752 5.025 30.0002 8.125 30.0002H21.875C24.975 30.0002 27.5 27.4752 27.5 24.3752V12.4877C27.5 10.3127 26.65 8.27524 25.125 6.73774ZM24.2375 7.62524C24.925 8.31274 25.45 9.12524 25.7875 10.0002H19.375C18.3375 10.0002 17.5 9.16274 17.5 8.12524V1.71274C18.3875 2.05024 19.1875 2.57524 19.875 3.26274L24.225 7.61274L24.2375 7.62524ZM26.25 24.3752C26.25 26.7877 24.2875 28.7502 21.875 28.7502H8.125C5.7125 28.7502 3.75 26.7877 3.75 24.3752V5.62524C3.75 3.21274 5.7125 1.25024 8.125 1.25024H15.0125C15.425 1.25024 15.8375 1.28774 16.25 1.36274V8.12524C16.25 9.85024 17.65 11.2502 19.375 11.2502H26.1375C26.2125 11.6502 26.25 12.0627 26.25 12.4877V24.3752Z",
+        fill: "currentColor"
+      }
+    ) }),
+    /* @__PURE__ */ jsx9("defs", { children: /* @__PURE__ */ jsx9("clipPath", { id: "clip0_897_105", children: /* @__PURE__ */ jsx9("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
+  ] });
 };
 
 // src/components/icons/coversSVG/index.tsx
@@ -575,7 +582,11 @@ var ArrowLeft = () => {
 
 // src/components/checkbox/index.tsx
 import { jsx as jsx23, jsxs as jsxs14 } from "react/jsx-runtime";
-var Checkbox = ({ label, checked = false, onChange }) => {
+var Checkbox = ({
+  label,
+  checked = false,
+  onChange
+}) => {
   const [isChecked, setIsChecked] = useState3(checked);
   const handleToggle = () => {
     setIsChecked(!isChecked);
@@ -760,6 +771,13 @@ var input_default = Input;
 // src/components/modal/index.tsx
 import { useEffect as useEffect3, useRef as useRef2 } from "react";
 import { jsx as jsx29, jsxs as jsxs20 } from "react/jsx-runtime";
+var MODAL_SIZE = /* @__PURE__ */ ((MODAL_SIZE2) => {
+  MODAL_SIZE2["SMALL"] = "w-[600px] h-60";
+  MODAL_SIZE2["MEDIUM"] = "w-[800px] h-96";
+  MODAL_SIZE2["LARGE"] = "w-[950px] h-[600px]";
+  MODAL_SIZE2["FULL"] = "w-full h-full";
+  return MODAL_SIZE2;
+})(MODAL_SIZE || {});
 var Modal = ({
   title,
   children,
@@ -989,7 +1007,13 @@ var selectDropdown_default = SelectDropdown;
 
 // src/components/pagination/index.tsx
 import { jsx as jsx32, jsxs as jsxs23 } from "react/jsx-runtime";
-var Pagination = ({ total, page, size, options, onChange }) => {
+var Pagination = ({
+  total,
+  page,
+  size,
+  options,
+  onChange
+}) => {
   const [optionDropdown, setOptionDropdown] = useState8(size.toString());
   const onLeft = () => {
     if (page > 1) {
@@ -1082,6 +1106,14 @@ var radioButton_default = RadioButton;
 
 // src/components/snackBar/index.tsx
 import { jsx as jsx34, jsxs as jsxs25 } from "react/jsx-runtime";
+var SNACK_BAR_TYPE = /* @__PURE__ */ ((SNACK_BAR_TYPE2) => {
+  SNACK_BAR_TYPE2["DEFAULT"] = "default";
+  SNACK_BAR_TYPE2["SUCCESS"] = "success";
+  SNACK_BAR_TYPE2["DANGER"] = "danger";
+  SNACK_BAR_TYPE2["WARNING"] = "warning";
+  SNACK_BAR_TYPE2["INFO"] = "info";
+  return SNACK_BAR_TYPE2;
+})(SNACK_BAR_TYPE || {});
 var Snackbar = ({
   type = "default" /* DEFAULT */,
   message,
@@ -1118,6 +1150,13 @@ var snackBar_default = Snackbar;
 // src/components/state/index.tsx
 import Image3 from "next/image";
 import { jsx as jsx35, jsxs as jsxs26 } from "react/jsx-runtime";
+var STATE_TYPE = /* @__PURE__ */ ((STATE_TYPE2) => {
+  STATE_TYPE2["EMPTY"] = "EMPTY";
+  STATE_TYPE2["SUCCESS"] = "SUCCESS";
+  STATE_TYPE2["ERROR"] = "ERROR";
+  STATE_TYPE2["LOADING"] = "LOADING";
+  return STATE_TYPE2;
+})(STATE_TYPE || {});
 var State = ({
   type,
   stateImage,
@@ -1192,6 +1231,14 @@ var table_default = Table;
 
 // src/components/tag/index.tsx
 import { jsx as jsx37 } from "react/jsx-runtime";
+var TAG_TYPE = /* @__PURE__ */ ((TAG_TYPE2) => {
+  TAG_TYPE2["DEFAULT"] = "default";
+  TAG_TYPE2["SUCCESS"] = "success";
+  TAG_TYPE2["DANGER"] = "danger";
+  TAG_TYPE2["WARNING"] = "warning";
+  TAG_TYPE2["INFO"] = "info";
+  return TAG_TYPE2;
+})(TAG_TYPE || {});
 var Tag = ({ type, label }) => {
   const getTagStyle = (type2) => {
     switch (type2) {
@@ -1262,7 +1309,7 @@ var TimeLine = ({ logs }) => {
 };
 var timeLine_default = TimeLine;
 export {
-  avatar_default as AVATAR_VARIANT,
+  AVATAR_VARIANT,
   avatar_default as Avatar,
   BUTTON_VARIANTS,
   banner_default as Banner,
@@ -1275,13 +1322,18 @@ export {
   filterDropdown_default as FilterDropdown,
   icons_exports as Icons,
   input_default as Input,
+  MODAL_SIZE,
   modal_default as Modal,
   navBar_default as NavBar,
   pagination_default as Pagination,
   radioButton_default as RadioButton,
+  SNACK_BAR_TYPE,
+  STATE_TYPE,
   selectDropdown_default as SelectDropdown,
   snackBar_default as Snackbar,
   state_default as States,
+  TAG_TYPE,
+  TOOLTIP_POSITION,
   table_default as Table,
   tag_default as Tag,
   timeLine_default as TimeLine,

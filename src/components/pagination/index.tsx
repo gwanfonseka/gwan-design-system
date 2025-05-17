@@ -13,6 +13,7 @@ export interface IPaging {
 export interface IPagination extends IPaging {
   options: ISelectDropdownOption[];
   onChange: (paging: IPaging) => void;
+  className?: string;
 }
 
 const Pagination: FC<IPagination> = ({
@@ -21,6 +22,7 @@ const Pagination: FC<IPagination> = ({
   size,
   options,
   onChange,
+  className = "",
 }: IPagination) => {
   const [optionDropdown, setOptionDropdown] = useState<string>(size.toString());
 
@@ -42,7 +44,9 @@ const Pagination: FC<IPagination> = ({
   };
 
   return (
-    <div className="bg-neutrola-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg">
+    <div
+      className={`bg-neutral-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg ${className}`}
+    >
       <div className="flex-1">
         {page} of {Math.ceil(total / size)} pages
       </div>

@@ -72,7 +72,7 @@ const SelectDropdowns = () => {
         disabled
       />
       <div className="flex flex-col gap-2">
-        <label className="text-sm text-neutrola-600 mb-2">
+        <label className="text-sm text-neutral-600 mb-2">
           Pagination dropdown
         </label>
         <div className="w-20">

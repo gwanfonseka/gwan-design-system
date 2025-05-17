@@ -40,7 +40,7 @@ const Tooltips = () => {
         ({ label, position, showTooltip, setShowTooltip }, index) => (
           <div
             key={index}
-            className="relative border border-neutrola-700 p-2 rounded-lg cursor-pointer hover:border-primary-500 hover:text-primary-500"
+            className="relative border border-neutral-700 p-2 rounded-lg cursor-pointer hover:border-primary-500 hover:text-primary-500"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
           >

@@ -13,6 +13,7 @@ export interface IModal {
   children: React.ReactNode;
   onClear: () => void;
   size?: MODAL_SIZE;
+  className?: string;
 }
 
 const Modal: FC<IModal> = ({
@@ -20,6 +21,7 @@ const Modal: FC<IModal> = ({
   children,
   onClear,
   size = MODAL_SIZE.MEDIUM,
+  className = "",
 }: IModal) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +30,9 @@ const Modal: FC<IModal> = ({
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+    <div
+      className={`fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`}
+    >
       <div
         ref={modalRef}
         tabIndex={-1}

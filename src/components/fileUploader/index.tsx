@@ -7,6 +7,7 @@ export interface IFileUploader {
   subTitle2?: string;
   handleAttachment: (file: File) => void;
   accept?: string;
+  className?: string;
 }
 
 const FileUploader: FC<IFileUploader> = ({
@@ -15,6 +16,7 @@ const FileUploader: FC<IFileUploader> = ({
   subTitle2 = "",
   handleAttachment,
   accept = ".jpg,.jpeg,.png",
+  className = "",
 }: IFileUploader) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,7 +28,9 @@ const FileUploader: FC<IFileUploader> = ({
   };
 
   return (
-    <div className="flex flex-row gap-4 items-start border border-dashed border-neutral-200 p-4 rounded-lg">
+    <div
+      className={`flex flex-row gap-4 items-start border border-dashed border-neutral-200 p-4 rounded-lg ${className}`}
+    >
       <div
         className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-8 rounded-lg cursor-pointer"
         onClick={() => fileInputRef.current?.click()}
@@ -44,8 +48,8 @@ const FileUploader: FC<IFileUploader> = ({
       />
       <div className="flex-1 flex flex-col">
         <p className="text-lg">{title}</p>
-        <p className="text-sm text-neutrola-400">{subTitle1}</p>
-        <p className="text-sm text-neutrola-400">{subTitle2}</p>
+        <p className="text-sm text-neutral-400">{subTitle1}</p>
+        <p className="text-sm text-neutral-400">{subTitle2}</p>
       </div>
     </div>
   );

@@ -5,18 +5,20 @@ export interface IEllipsis {
   label: string;
   tooltipPosition?: TOOLTIP_POSITION;
   tooltipWidth?: string;
+  className?: string;
 }
 
 const Ellipsis: FC<IEllipsis> = ({
   label,
   tooltipPosition = TOOLTIP_POSITION.RIGHT,
   tooltipWidth = "w-40",
+  className = "",
 }: IEllipsis) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   return (
     <div
-      className="relative"
+      className={`relative ${className}`}
       onMouseEnter={() => setIsTooltipVisible(true)}
       onMouseLeave={() => setIsTooltipVisible(false)}
     >

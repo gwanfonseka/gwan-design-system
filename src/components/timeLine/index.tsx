@@ -19,9 +19,10 @@ export interface ILog {
 
 export interface ITimeLine {
   logs: ILog[];
+  className?: string;
 }
 
-const TimeLine: FC<ITimeLine> = ({ logs }: ITimeLine) => {
+const TimeLine: FC<ITimeLine> = ({ logs, className = "" }: ITimeLine) => {
   const [steps, setSteps] = useState<ILog[]>([]);
 
   useEffect(() => {
@@ -48,19 +49,19 @@ const TimeLine: FC<ITimeLine> = ({ logs }: ITimeLine) => {
       case ORDER_STATUS.DISPATCHED_TO_COURIER:
       case ORDER_STATUS.DELIVERED:
         return (
-          <div className="size-5 bg-greenola-500 rounded-full p-1 text-white">
+          <div className="size-5 bg-green-500 rounded-full p-1 text-white">
             <CheckSVG />
           </div>
         );
       case ORDER_STATUS.ORDER_CANCELLED:
         return (
-          <div className="size-5 bg-redola-500 rounded-full p-1 text-white">
+          <div className="size-5 bg-red-500 rounded-full p-1 text-white">
             <CrossSVG />
           </div>
         );
       default:
         return (
-          <div className="size-5 bg-neutrola-600 text-neutrola-200 rounded-full p-1">
+          <div className="size-5 bg-neutral-600 text-neutral-200 rounded-full p-1">
             <CircleSVG />
           </div>
         );
@@ -68,12 +69,12 @@ const TimeLine: FC<ITimeLine> = ({ logs }: ITimeLine) => {
   };
 
   return (
-    <div>
+    <div className={className}>
       {steps.map(({ title, date, description }, index) => (
         <div key={`log_${index}`} className="flex flex-row gap-4">
           <div className="flex flex-col items-center">
             {getIcon(title)}
-            <div className="w-0.5 h-full bg-neutrola-500"></div>
+            <div className="w-0.5 h-full bg-neutral-500"></div>
           </div>
           <div className="flex flex-col flex-1">
             <p
@@ -83,9 +84,9 @@ const TimeLine: FC<ITimeLine> = ({ logs }: ITimeLine) => {
             >
               {title}
             </p>
-            {title && <p className="text-xs text-neutrola-700">{date}</p>}
+            {title && <p className="text-xs text-neutral-700">{date}</p>}
             {description && (
-              <p className="p-4 text-xs bg-neutrola-50 text-neutral-800 rounded-lg my-2">
+              <p className="p-4 text-xs bg-neutral-50 text-neutral-800 rounded-lg my-2">
                 {description}
               </p>
             )}
