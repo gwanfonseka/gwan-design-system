@@ -1,4 +1,6 @@
-const Upload = () => {
+import { FC } from "react";
+
+const Upload: FC = () => {
   return (
     <svg viewBox="0 0 53 53" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_859_45)">

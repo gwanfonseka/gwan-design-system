@@ -1,4 +1,6 @@
-const Colors = () => {
+import { FC } from "react";
+
+const Colors: FC = () => {
   return (
     <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_897_109)">

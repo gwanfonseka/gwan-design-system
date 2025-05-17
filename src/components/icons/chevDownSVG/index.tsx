@@ -1,4 +1,6 @@
-const ChevDown = () => {
+import { FC } from "react";
+
+const ChevDown: FC = () => {
   return (
     <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
       <path
