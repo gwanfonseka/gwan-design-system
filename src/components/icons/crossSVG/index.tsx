@@ -1,4 +1,6 @@
-const Cross = () => {
+import { ReactNode } from "react";
+
+const Cross = (): ReactNode => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 600 600">
       <g>

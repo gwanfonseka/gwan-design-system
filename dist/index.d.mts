@@ -1,4 +1,3 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import { FC, ReactNode, JSX } from 'react';
 
 declare enum AVATAR_VARIANT {
@@ -13,7 +12,7 @@ interface IAvatar {
     image?: string;
     variant: string;
 }
-declare const Avatar: ({ name, email, image, variant }: IAvatar) => react_jsx_runtime.JSX.Element;
+declare const Avatar: FC<IAvatar>;
 
 interface IBanner {
     title?: string;
@@ -24,7 +23,7 @@ interface IBanner {
     backgroundImage?: string;
     backgroundColor?: string;
 }
-declare const Banner: ({ title, subTitle, contentPlacement, backgroundImage, backgroundColor, titleClassName, subTitleClassName, }: IBanner) => react_jsx_runtime.JSX.Element;
+declare const Banner: FC<IBanner>;
 
 declare enum BUTTON_VARIANTS {
     PRIMARY = "primary",
@@ -45,20 +44,20 @@ interface ICarousel {
     slides: IBanner[];
     interval?: number;
 }
-declare const Carousel: ({ slides, interval }: ICarousel) => react_jsx_runtime.JSX.Element;
+declare const Carousel: FC<ICarousel>;
 
 interface ICheckbox {
     label: string;
     checked: boolean;
     onChange: (checked: boolean) => void;
 }
-declare const Checkbox: ({ label, checked, onChange }: ICheckbox) => react_jsx_runtime.JSX.Element;
+declare const Checkbox: FC<ICheckbox>;
 
 interface IChip {
     label: string;
     onClear: () => void;
 }
-declare const Chip: ({ label, onClear }: IChip) => react_jsx_runtime.JSX.Element;
+declare const Chip: FC<IChip>;
 
 declare enum TOOLTIP_POSITION {
     TOP = "top",
@@ -73,14 +72,14 @@ interface ITooltip {
     toolTipWidth?: string;
     toolTipClass?: string;
 }
-declare const Tooltip: ({ position, label, isVisible, toolTipWidth, toolTipClass, }: ITooltip) => react_jsx_runtime.JSX.Element;
+declare const Tooltip: FC<ITooltip>;
 
 interface IEllipsis {
     label: string;
     tooltipPosition?: TOOLTIP_POSITION;
     tooltipWidth?: string;
 }
-declare const Ellipsis: ({ label, tooltipPosition, tooltipWidth, }: IEllipsis) => react_jsx_runtime.JSX.Element;
+declare const Ellipsis: FC<IEllipsis>;
 
 interface IFileUploader {
     title: string;
@@ -89,12 +88,21 @@ interface IFileUploader {
     handleAttachment: (file: File) => void;
     accept?: string;
 }
-declare const FileUploader: ({ title, subTitle1, subTitle2, handleAttachment, accept, }: IFileUploader) => react_jsx_runtime.JSX.Element;
+declare const FileUploader: FC<IFileUploader>;
 
+interface IFilterOption {
+    label: string;
+    value: string;
+    isChecked?: boolean;
+}
+interface IFilterCategory {
+    category: string;
+    options: IFilterOption[];
+}
 interface IFilter {
     children: (closeDropdown: () => void) => React.ReactNode;
 }
-declare const FilterDropdown: ({ children }: IFilter) => react_jsx_runtime.JSX.Element;
+declare const FilterDropdown: FC<IFilter>;
 
 interface IInput {
     label: string;
@@ -105,7 +113,7 @@ interface IInput {
     inputClassName?: string;
     required?: boolean;
 }
-declare const Input: ({ label, value, onChange, disabled, placeholder, inputClassName, required, }: IInput) => react_jsx_runtime.JSX.Element;
+declare const Input: FC<IInput>;
 
 declare enum MODAL_SIZE {
     SMALL = "w-[600px] h-60",
@@ -119,7 +127,7 @@ interface IModal {
     onClear: () => void;
     size?: MODAL_SIZE;
 }
-declare const Modal: ({ title, children, onClear, size, }: IModal) => react_jsx_runtime.JSX.Element;
+declare const Modal: FC<IModal>;
 
 interface IMenuItem {
     title: string;
@@ -141,7 +149,7 @@ interface INavBar {
     isCollapsed?: boolean;
     menuBackgroundColor?: string;
 }
-declare const NavBar: ({ menuItems, logoShort, logoLong, avatarName, avatarEmail, avatarImage, avatarType, menuWidthClass, menuHeightClass, isCollapsed, menuBackgroundColor, }: INavBar) => react_jsx_runtime.JSX.Element;
+declare const NavBar: FC<INavBar>;
 
 interface ISelectDropdownOption {
     value?: string;
@@ -156,7 +164,7 @@ interface ISelectDropdown {
     onChange: (option: string) => void;
     inputClassName?: string;
 }
-declare const SelectDropdown: ({ options, label, placeholder, disabled, value, onChange, inputClassName, }: ISelectDropdown) => react_jsx_runtime.JSX.Element;
+declare const SelectDropdown: FC<ISelectDropdown>;
 
 interface IPaging {
     total: number;
@@ -167,7 +175,7 @@ interface IPagination extends IPaging {
     options: ISelectDropdownOption[];
     onChange: (paging: IPaging) => void;
 }
-declare const Pagination: ({ total, page, size, options, onChange }: IPagination) => react_jsx_runtime.JSX.Element;
+declare const Pagination: FC<IPagination>;
 
 interface IRadioButton {
     label: string;
@@ -175,7 +183,7 @@ interface IRadioButton {
     selectedValue?: string;
     onChange?: (value: string) => void;
 }
-declare const RadioButton: ({ label, value, selectedValue, onChange, }: IRadioButton) => react_jsx_runtime.JSX.Element;
+declare const RadioButton: FC<IRadioButton>;
 
 declare enum SNACK_BAR_TYPE {
     DEFAULT = "default",
@@ -189,7 +197,7 @@ interface ISnackBar {
     message: string;
     icon?: React.ReactNode;
 }
-declare const Snackbar: ({ type, message, icon, }: ISnackBar) => react_jsx_runtime.JSX.Element;
+declare const Snackbar: FC<ISnackBar>;
 
 declare enum STATE_TYPE {
     EMPTY = "EMPTY",
@@ -210,7 +218,7 @@ type IState = ({
     type?: undefined;
     stateImage: string;
 } & IStateBase);
-declare const State: ({ type, stateImage, title, subTitle, imageWidth, imageHeight, }: IState) => react_jsx_runtime.JSX.Element;
+declare const State: FC<IState>;
 
 interface ITableColumn {
     header: string;
@@ -221,7 +229,7 @@ interface ITable {
     columns: ITableColumn[];
     data: any[];
 }
-declare const Table: ({ columns, data }: ITable) => react_jsx_runtime.JSX.Element;
+declare const Table: FC<ITable>;
 
 declare enum TAG_TYPE {
     DEFAULT = "default",
@@ -234,7 +242,7 @@ interface ITag {
     type: TAG_TYPE;
     label: string;
 }
-declare const Tag: ({ type, label }: ITag) => react_jsx_runtime.JSX.Element;
+declare const Tag: FC<ITag>;
 
 declare enum ORDER_STATUS {
     ORDER_PLACED = "Order placed",
@@ -253,44 +261,44 @@ interface ILog {
 interface ITimeLine {
     logs: ILog[];
 }
-declare const TimeLine: ({ logs }: ITimeLine) => react_jsx_runtime.JSX.Element;
+declare const TimeLine: FC<ITimeLine>;
 
-declare const Dashboard: () => react_jsx_runtime.JSX.Element;
+declare const Dashboard: () => ReactNode;
 
-declare const Orders: () => react_jsx_runtime.JSX.Element;
+declare const Orders: () => ReactNode;
 
-declare const Products: () => react_jsx_runtime.JSX.Element;
+declare const Products: () => ReactNode;
 
-declare const Templates: () => react_jsx_runtime.JSX.Element;
+declare const Templates: () => ReactNode;
 
-declare const Covers: () => react_jsx_runtime.JSX.Element;
+declare const Covers: () => ReactNode;
 
-declare const Colors: () => react_jsx_runtime.JSX.Element;
+declare const Colors: () => ReactNode;
 
-declare const SignOut: () => react_jsx_runtime.JSX.Element;
+declare const SignOut: () => ReactNode;
 
-declare const Filter: () => react_jsx_runtime.JSX.Element;
+declare const Filter: () => ReactNode;
 
-declare const ChevDown: () => react_jsx_runtime.JSX.Element;
+declare const ChevDown: () => ReactNode;
 
-declare const Cross: () => react_jsx_runtime.JSX.Element;
+declare const Cross: () => ReactNode;
 
-declare const OrderInfo: () => react_jsx_runtime.JSX.Element;
+declare const OrderInfo: () => ReactNode;
 
-declare const ChevLeft: () => react_jsx_runtime.JSX.Element;
+declare const ChevLeft: () => ReactNode;
 
-declare const ChevRight: () => react_jsx_runtime.JSX.Element;
+declare const ChevRight: () => ReactNode;
 
-declare const Check: () => react_jsx_runtime.JSX.Element;
+declare const Check: () => ReactNode;
 
-declare const Circle: () => react_jsx_runtime.JSX.Element;
+declare const Circle: () => ReactNode;
 
-declare const Upload: () => react_jsx_runtime.JSX.Element;
+declare const Upload: () => ReactNode;
 
-declare const ArrowLeft: () => react_jsx_runtime.JSX.Element;
+declare const ArrowLeft: () => ReactNode;
 
 declare namespace index {
   export { ArrowLeft as ArrowLeftSVG, Check as CheckSVG, ChevDown as ChevDownSVG, ChevLeft as ChevLeftSVG, ChevRight as ChevRightSVG, Circle as CircleSVG, Colors as ColorsSVG, Covers as CoversSVG, Cross as CrossSVG, Dashboard as DashboardSVG, Filter as FilterSVG, OrderInfo as OrderInfoSVG, Orders as OrdersSVG, Products as ProductsSVG, SignOut as SignOutSVG, Templates as TemplatesSVG, Upload as UploadSVG };
 }
 
-export { Avatar as AVATAR_VARIANT, Avatar, BUTTON_VARIANTS, Banner, Button, Carousel, Checkbox, Chip, Ellipsis, FileUploader, FilterDropdown, type IButton, index as Icons, Input, Modal, NavBar, Pagination, RadioButton, SelectDropdown, Snackbar, State as States, Table, Tag, TimeLine, Tooltip };
+export { AVATAR_VARIANT, Avatar, BUTTON_VARIANTS, Banner, Button, Carousel, Checkbox, Chip, Ellipsis, FileUploader, FilterDropdown, type IAvatar, type IBanner, type IButton, type ICarousel, type ICheckbox, type IChip, type IEllipsis, type IFileUploader, type IFilter, type IFilterCategory, type IFilterOption, type IInput, type ILog, type IMenuItem, type IModal, type INavBar, type IPagination, type IPaging, type IRadioButton, type ISelectDropdown, type ISelectDropdownOption, type ISnackBar, type IState, type IStateBase, type ITable, type ITableColumn, type ITag, type ITimeLine, type ITooltip, index as Icons, Input, MODAL_SIZE, Modal, NavBar, Pagination, RadioButton, SNACK_BAR_TYPE, STATE_TYPE, SelectDropdown, Snackbar, State as States, TAG_TYPE, TOOLTIP_POSITION, Table, Tag, TimeLine, Tooltip };
