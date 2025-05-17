@@ -9,11 +9,10 @@
     "isolatedModules": true,
     "incremental": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "declarationMap": false,
     "skipLibCheck": true,
     "types": ["react"],
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "plugins": [
@@ -23,7 +22,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "noEmit": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

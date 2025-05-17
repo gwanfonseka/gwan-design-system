@@ -30,7 +30,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
-  AVATAR_VARIANT: () => avatar_default,
+  AVATAR_VARIANT: () => AVATAR_VARIANT,
   Avatar: () => avatar_default,
   BUTTON_VARIANTS: () => BUTTON_VARIANTS,
   Banner: () => banner_default,
@@ -43,13 +43,18 @@ __export(index_exports, {
   FilterDropdown: () => filterDropdown_default,
   Icons: () => icons_exports,
   Input: () => input_default,
+  MODAL_SIZE: () => MODAL_SIZE,
   Modal: () => modal_default,
   NavBar: () => navBar_default,
   Pagination: () => pagination_default,
   RadioButton: () => radioButton_default,
+  SNACK_BAR_TYPE: () => SNACK_BAR_TYPE,
+  STATE_TYPE: () => STATE_TYPE,
   SelectDropdown: () => selectDropdown_default,
   Snackbar: () => snackBar_default,
   States: () => state_default,
+  TAG_TYPE: () => TAG_TYPE,
+  TOOLTIP_POSITION: () => TOOLTIP_POSITION,
   Table: () => table_default,
   Tag: () => tag_default,
   TimeLine: () => timeLine_default,
@@ -63,6 +68,13 @@ var import_react = require("react");
 
 // src/components/tooltip/index.tsx
 var import_jsx_runtime = require("react/jsx-runtime");
+var TOOLTIP_POSITION = /* @__PURE__ */ ((TOOLTIP_POSITION2) => {
+  TOOLTIP_POSITION2["TOP"] = "top";
+  TOOLTIP_POSITION2["BOTTOM"] = "bottom";
+  TOOLTIP_POSITION2["LEFT"] = "left";
+  TOOLTIP_POSITION2["RIGHT"] = "right";
+  return TOOLTIP_POSITION2;
+})(TOOLTIP_POSITION || {});
 var Tooltip = ({
   position,
   label,
@@ -123,6 +135,13 @@ var tooltip_default = Tooltip;
 
 // src/components/avatar/index.tsx
 var import_jsx_runtime2 = require("react/jsx-runtime");
+var AVATAR_VARIANT = /* @__PURE__ */ ((AVATAR_VARIANT2) => {
+  AVATAR_VARIANT2["IMAGE_WITH_FULL"] = "image_with_full";
+  AVATAR_VARIANT2["INITIALS_WITH_FULL"] = "initials_with_full";
+  AVATAR_VARIANT2["IMAGE_ONLY"] = "image-only";
+  AVATAR_VARIANT2["INITIALS_ONLY"] = "initials-only";
+  return AVATAR_VARIANT2;
+})(AVATAR_VARIANT || {});
 var generatePastelColor = () => {
   const hue = Math.floor(Math.random() * 360);
   const saturation = 60 + Math.random() * 20;
@@ -405,25 +424,18 @@ var Products = () => {
 // src/components/icons/templatesSVG/index.tsx
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var Templates = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-    "svg",
-    {
-      viewBox: "0 0 30 30",
-      xmlns: "http://www.w3.org/2000/svg",
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("g", { clipPath: "url(#clip0_897_105)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          "path",
-          {
-            fillRule: "evenodd",
-            clipRule: "evenodd",
-            d: "M20 15.0002H10C8.625 15.0002 7.5 16.1252 7.5 17.5002V22.5002C7.5 23.8752 8.625 25.0002 10 25.0002H20C21.375 25.0002 22.5 23.8752 22.5 22.5002V17.5002C22.5 16.1252 21.375 15.0002 20 15.0002ZM21.25 22.5002C21.25 23.1877 20.6875 23.7502 20 23.7502H10C9.3125 23.7502 8.75 23.1877 8.75 22.5002V17.5002C8.75 16.8127 9.3125 16.2502 10 16.2502H20C20.6875 16.2502 21.25 16.8127 21.25 17.5002V22.5002ZM7.5 10.6252C7.5 10.2752 7.775 10.0002 8.125 10.0002H13.125C13.475 10.0002 13.75 10.2752 13.75 10.6252C13.75 10.9752 13.475 11.2502 13.125 11.2502H8.125C7.775 11.2502 7.5 10.9752 7.5 10.6252ZM25.125 6.73774L20.775 2.38774C19.2375 0.850241 17.2 0.0127415 15.025 0.0127415H8.125C5.025 0.000241525 2.5 2.52524 2.5 5.62524V24.3752C2.5 27.4752 5.025 30.0002 8.125 30.0002H21.875C24.975 30.0002 27.5 27.4752 27.5 24.3752V12.4877C27.5 10.3127 26.65 8.27524 25.125 6.73774ZM24.2375 7.62524C24.925 8.31274 25.45 9.12524 25.7875 10.0002H19.375C18.3375 10.0002 17.5 9.16274 17.5 8.12524V1.71274C18.3875 2.05024 19.1875 2.57524 19.875 3.26274L24.225 7.61274L24.2375 7.62524ZM26.25 24.3752C26.25 26.7877 24.2875 28.7502 21.875 28.7502H8.125C5.7125 28.7502 3.75 26.7877 3.75 24.3752V5.62524C3.75 3.21274 5.7125 1.25024 8.125 1.25024H15.0125C15.425 1.25024 15.8375 1.28774 16.25 1.36274V8.12524C16.25 9.85024 17.65 11.2502 19.375 11.2502H26.1375C26.2125 11.6502 26.25 12.0627 26.25 12.4877V24.3752Z",
-            fill: "currentColor"
-          }
-        ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("clipPath", { id: "clip0_897_105", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
-      ]
-    }
-  );
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("g", { clipPath: "url(#clip0_897_105)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        d: "M20 15.0002H10C8.625 15.0002 7.5 16.1252 7.5 17.5002V22.5002C7.5 23.8752 8.625 25.0002 10 25.0002H20C21.375 25.0002 22.5 23.8752 22.5 22.5002V17.5002C22.5 16.1252 21.375 15.0002 20 15.0002ZM21.25 22.5002C21.25 23.1877 20.6875 23.7502 20 23.7502H10C9.3125 23.7502 8.75 23.1877 8.75 22.5002V17.5002C8.75 16.8127 9.3125 16.2502 10 16.2502H20C20.6875 16.2502 21.25 16.8127 21.25 17.5002V22.5002ZM7.5 10.6252C7.5 10.2752 7.775 10.0002 8.125 10.0002H13.125C13.475 10.0002 13.75 10.2752 13.75 10.6252C13.75 10.9752 13.475 11.2502 13.125 11.2502H8.125C7.775 11.2502 7.5 10.9752 7.5 10.6252ZM25.125 6.73774L20.775 2.38774C19.2375 0.850241 17.2 0.0127415 15.025 0.0127415H8.125C5.025 0.000241525 2.5 2.52524 2.5 5.62524V24.3752C2.5 27.4752 5.025 30.0002 8.125 30.0002H21.875C24.975 30.0002 27.5 27.4752 27.5 24.3752V12.4877C27.5 10.3127 26.65 8.27524 25.125 6.73774ZM24.2375 7.62524C24.925 8.31274 25.45 9.12524 25.7875 10.0002H19.375C18.3375 10.0002 17.5 9.16274 17.5 8.12524V1.71274C18.3875 2.05024 19.1875 2.57524 19.875 3.26274L24.225 7.61274L24.2375 7.62524ZM26.25 24.3752C26.25 26.7877 24.2875 28.7502 21.875 28.7502H8.125C5.7125 28.7502 3.75 26.7877 3.75 24.3752V5.62524C3.75 3.21274 5.7125 1.25024 8.125 1.25024H15.0125C15.425 1.25024 15.8375 1.28774 16.25 1.36274V8.12524C16.25 9.85024 17.65 11.2502 19.375 11.2502H26.1375C26.2125 11.6502 26.25 12.0627 26.25 12.4877V24.3752Z",
+        fill: "currentColor"
+      }
+    ) }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("clipPath", { id: "clip0_897_105", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
+  ] });
 };
 
 // src/components/icons/coversSVG/index.tsx
@@ -628,7 +640,11 @@ var ArrowLeft = () => {
 
 // src/components/checkbox/index.tsx
 var import_jsx_runtime23 = require("react/jsx-runtime");
-var Checkbox = ({ label, checked = false, onChange }) => {
+var Checkbox = ({
+  label,
+  checked = false,
+  onChange
+}) => {
   const [isChecked, setIsChecked] = (0, import_react3.useState)(checked);
   const handleToggle = () => {
     setIsChecked(!isChecked);
@@ -813,6 +829,13 @@ var input_default = Input;
 // src/components/modal/index.tsx
 var import_react7 = require("react");
 var import_jsx_runtime29 = require("react/jsx-runtime");
+var MODAL_SIZE = /* @__PURE__ */ ((MODAL_SIZE2) => {
+  MODAL_SIZE2["SMALL"] = "w-[600px] h-60";
+  MODAL_SIZE2["MEDIUM"] = "w-[800px] h-96";
+  MODAL_SIZE2["LARGE"] = "w-[950px] h-[600px]";
+  MODAL_SIZE2["FULL"] = "w-full h-full";
+  return MODAL_SIZE2;
+})(MODAL_SIZE || {});
 var Modal = ({
   title,
   children,
@@ -1042,7 +1065,13 @@ var selectDropdown_default = SelectDropdown;
 
 // src/components/pagination/index.tsx
 var import_jsx_runtime32 = require("react/jsx-runtime");
-var Pagination = ({ total, page, size, options, onChange }) => {
+var Pagination = ({
+  total,
+  page,
+  size,
+  options,
+  onChange
+}) => {
   const [optionDropdown, setOptionDropdown] = (0, import_react10.useState)(size.toString());
   const onLeft = () => {
     if (page > 1) {
@@ -1135,6 +1164,14 @@ var radioButton_default = RadioButton;
 
 // src/components/snackBar/index.tsx
 var import_jsx_runtime34 = require("react/jsx-runtime");
+var SNACK_BAR_TYPE = /* @__PURE__ */ ((SNACK_BAR_TYPE2) => {
+  SNACK_BAR_TYPE2["DEFAULT"] = "default";
+  SNACK_BAR_TYPE2["SUCCESS"] = "success";
+  SNACK_BAR_TYPE2["DANGER"] = "danger";
+  SNACK_BAR_TYPE2["WARNING"] = "warning";
+  SNACK_BAR_TYPE2["INFO"] = "info";
+  return SNACK_BAR_TYPE2;
+})(SNACK_BAR_TYPE || {});
 var Snackbar = ({
   type = "default" /* DEFAULT */,
   message,
@@ -1171,6 +1208,13 @@ var snackBar_default = Snackbar;
 // src/components/state/index.tsx
 var import_image3 = __toESM(require("next/image"));
 var import_jsx_runtime35 = require("react/jsx-runtime");
+var STATE_TYPE = /* @__PURE__ */ ((STATE_TYPE2) => {
+  STATE_TYPE2["EMPTY"] = "EMPTY";
+  STATE_TYPE2["SUCCESS"] = "SUCCESS";
+  STATE_TYPE2["ERROR"] = "ERROR";
+  STATE_TYPE2["LOADING"] = "LOADING";
+  return STATE_TYPE2;
+})(STATE_TYPE || {});
 var State = ({
   type,
   stateImage,
@@ -1245,6 +1289,14 @@ var table_default = Table;
 
 // src/components/tag/index.tsx
 var import_jsx_runtime37 = require("react/jsx-runtime");
+var TAG_TYPE = /* @__PURE__ */ ((TAG_TYPE2) => {
+  TAG_TYPE2["DEFAULT"] = "default";
+  TAG_TYPE2["SUCCESS"] = "success";
+  TAG_TYPE2["DANGER"] = "danger";
+  TAG_TYPE2["WARNING"] = "warning";
+  TAG_TYPE2["INFO"] = "info";
+  return TAG_TYPE2;
+})(TAG_TYPE || {});
 var Tag = ({ type, label }) => {
   const getTagStyle = (type2) => {
     switch (type2) {
@@ -1329,13 +1381,18 @@ var timeLine_default = TimeLine;
   FilterDropdown,
   Icons,
   Input,
+  MODAL_SIZE,
   Modal,
   NavBar,
   Pagination,
   RadioButton,
+  SNACK_BAR_TYPE,
+  STATE_TYPE,
   SelectDropdown,
   Snackbar,
   States,
+  TAG_TYPE,
+  TOOLTIP_POSITION,
   Table,
   Tag,
   TimeLine,
