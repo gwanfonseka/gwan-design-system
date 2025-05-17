@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Avatar, { AVATAR_VARIANT } from "../avatar";
-import { ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevLeftSVG, ChevRightSVG } from "../icons";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
@@ -27,7 +27,7 @@ export interface INavBar {
   menuBackgroundColor?: string;
 }
 
-const NavBar = ({
+const NavBar: FC<INavBar> = ({
   menuItems,
   logoShort,
   logoLong,

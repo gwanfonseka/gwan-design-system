@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FC } from "react";
 
 export enum STATE_TYPE {
   EMPTY = "EMPTY",
@@ -18,7 +19,7 @@ export type IState =
   | ({ type: STATE_TYPE; stateImage?: string } & IStateBase)
   | ({ type?: undefined; stateImage: string } & IStateBase);
 
-const State = ({
+const State: FC<IState> = ({
   type,
   stateImage,
   title,

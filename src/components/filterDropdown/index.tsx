@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { ChevDownSVG, FilterSVG } from "../icons";
 
 export interface IFilterOption {
@@ -16,7 +16,7 @@ export interface IFilter {
   children: (closeDropdown: () => void) => React.ReactNode;
 }
 
-const FilterDropdown = ({ children }: IFilter) => {
+const FilterDropdown: FC<IFilter> = ({ children }: IFilter) => {
   const [isChildrenVisible, setIsChildrenVisible] = useState<boolean>(false);
 
   const closeDropdown = () => setIsChildrenVisible(false);

@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export interface IRadioButton {
   label: string;
   value: string;
@@ -5,7 +7,7 @@ export interface IRadioButton {
   onChange?: (value: string) => void;
 }
 
-const RadioButton = ({
+const RadioButton: FC<IRadioButton> = ({
   label,
   value,
   selectedValue,

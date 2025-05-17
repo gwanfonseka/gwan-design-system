@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { CheckSVG } from "../icons";
 
 export interface ICheckbox {
@@ -7,7 +7,11 @@ export interface ICheckbox {
   onChange: (checked: boolean) => void;
 }
 
-const Checkbox = ({ label, checked = false, onChange }: ICheckbox) => {
+const Checkbox: FC<ICheckbox> = ({
+  label,
+  checked = false,
+  onChange,
+}: ICheckbox) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleToggle = () => {

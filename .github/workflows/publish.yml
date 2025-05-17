@@ -31,8 +31,8 @@ jobs:
       - name: Verify package version
         run: npm version
 
-      - name: Build package
-        run: npm run build
+      - name: Build library
+        run: npm run build:lib
 
       - name: Dry run publish
         run: npm publish --dry-run

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Banner, { IBanner } from "../banner";
 
 export interface ICarousel {
@@ -6,7 +6,7 @@ export interface ICarousel {
   interval?: number;
 }
 
-const Carousel = ({ slides, interval = 3000 }: ICarousel) => {
+const Carousel: FC<ICarousel> = ({ slides, interval = 3000 }: ICarousel) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {

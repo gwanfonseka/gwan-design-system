@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export enum TAG_TYPE {
   DEFAULT = "default",
   SUCCESS = "success",
@@ -11,7 +13,7 @@ export interface ITag {
   label: string;
 }
 
-const Tag = ({ type, label }: ITag) => {
+const Tag: FC<ITag> = ({ type, label }: ITag) => {
   const getTagStyle = (type: TAG_TYPE) => {
     switch (type) {
       case TAG_TYPE.SUCCESS:
@@ -27,7 +29,11 @@ const Tag = ({ type, label }: ITag) => {
     }
   };
 
-  return <div className={`w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(type)}`}>{label}</div>;
+  return (
+    <div className={`w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(type)}`}>
+      {label}
+    </div>
+  );
 };
 
 export default Tag;

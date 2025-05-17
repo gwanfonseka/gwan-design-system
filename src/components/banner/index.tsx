@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export interface IBanner {
   title?: string;
   titleClassName?: string;
@@ -8,7 +10,7 @@ export interface IBanner {
   backgroundColor?: string;
 }
 
-const Banner = ({
+const Banner: FC<IBanner> = ({
   title = "",
   subTitle = "",
   contentPlacement = "left",
