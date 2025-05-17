@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ChevDownSVG } from "../icons";
 
 export interface ISelectDropdownOption {
@@ -16,7 +16,7 @@ export interface ISelectDropdown {
   inputClassName?: string;
 }
 
-const SelectDropdown = ({
+const SelectDropdown: FC<ISelectDropdown> = ({
   options,
   label,
   placeholder = "",

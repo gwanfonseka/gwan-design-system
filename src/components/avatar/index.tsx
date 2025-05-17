@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
 export enum AVATAR_VARIANT {
@@ -24,7 +24,7 @@ const generatePastelColor = () => {
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
-const Avatar = ({ name, email, image, variant }: IAvatar) => {
+const Avatar: FC<IAvatar> = ({ name, email, image, variant }: IAvatar) => {
   const [bgColor, setBgColor] = useState<string>("transparent");
   const [isTooltipInitialVisible, setIsTooltipInitialVisible] = useState(false);
   const [isTooltipImageVisible, setIsTooltipImageVisible] = useState(false);

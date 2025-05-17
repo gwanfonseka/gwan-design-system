@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export enum SNACK_BAR_TYPE {
   DEFAULT = "default",
   SUCCESS = "success",
@@ -12,7 +14,7 @@ export interface ISnackBar {
   icon?: React.ReactNode;
 }
 
-const Snackbar = ({
+const Snackbar: FC<ISnackBar> = ({
   type = SNACK_BAR_TYPE.DEFAULT,
   message,
   icon,

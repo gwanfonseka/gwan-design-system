@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export interface IInput {
   label: string;
   value: string;
@@ -8,7 +10,7 @@ export interface IInput {
   required?: boolean;
 }
 
-const Input = ({
+const Input: FC<IInput> = ({
   label,
   value,
   onChange,

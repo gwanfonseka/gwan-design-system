@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export enum TOOLTIP_POSITION {
   TOP = "top",
   BOTTOM = "bottom",
@@ -13,7 +15,7 @@ export interface ITooltip {
   toolTipClass?: string;
 }
 
-const Tooltip = ({
+const Tooltip: FC<ITooltip> = ({
   position,
   label,
   isVisible = false,

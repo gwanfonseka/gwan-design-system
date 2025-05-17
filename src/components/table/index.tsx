@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { FC, JSX } from "react";
 
 export interface ITableColumn {
   header: string;
@@ -13,7 +13,7 @@ export interface ITable {
   data: any[];
 }
 
-const Table = ({ columns, data }: ITable) => {
+const Table: FC<ITable> = ({ columns, data }: ITable) => {
   return (
     <div className="overflow-hidden rounded-lg border border-neutrola-300">
       <table className="w-full border-collapse">
