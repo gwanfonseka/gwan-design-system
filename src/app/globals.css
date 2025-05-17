@@ -1,20 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --custom-bg: linear-gradient(
-    135deg,
-    #9ea593,
-    #93a594,
-    #93a59c,
-    #939fa5,
-    #9394a5,
-    #9c93a5,
-    #a593a4,
-    #a59393
-  );
+}
+
+@layer utilities {
+  .custom-bg {
+    background-image: linear-gradient(
+      135deg,
+      #9ea593,
+      #93a594,
+      #93a59c,
+      #939fa5,
+      #9394a5,
+      #9c93a5,
+      #a593a4,
+      #a59393
+    );
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -30,79 +37,4 @@ body {
   font-family: "Roboto Flex", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-}
-
-@theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --color-primary-50: #f2f3ee;
-  --color-primary-100: #e1e3da;
-  --color-primary-200: #d0d3c6;
-  --color-primary-300: #bec3b2;
-  --color-primary-400: #adb39e;
-  --color-primary-500: #9ea593;
-  --color-primary-600: #8c9382;
-  --color-primary-700: #787d6e;
-  --color-primary-800: #64675a;
-  --color-primary-900: #505146;
-
-  --color-greenola-50: #e6f7e6;
-  --color-greenola-100: #c0eac0;
-  --color-greenola-200: #99dc99;
-  --color-greenola-300: #73cf73;
-  --color-greenola-400: #4cc14c;
-  --color-greenola-500: #0ba803;
-  --color-greenola-600: #0a9602;
-  --color-greenola-700: #087f02;
-  --color-greenola-800: #066602;
-  --color-greenola-900: #044c01;
-
-  --color-redola-50: #fde7e7;
-  --color-redola-100: #fbc0c0;
-  --color-redola-200: #f89999;
-  --color-redola-300: #f47373;
-  --color-redola-400: #f04c4c;
-  --color-redola-500: #df0303;
-  --color-redola-600: #c90202;
-  --color-redola-700: #a50202;
-  --color-redola-800: #800202;
-  --color-redola-900: #5c0101;
-
-  --color-blueola-50: #e6f3fa;
-  --color-blueola-100: #bfe1f3;
-  --color-blueola-200: #99ceeb;
-  --color-blueola-300: #73bce4;
-  --color-blueola-400: #4caadc;
-  --color-blueola-500: #0369a8;
-  --color-blueola-600: #025e97;
-  --color-blueola-700: #024d7c;
-  --color-blueola-800: #013c61;
-  --color-blueola-900: #012b46;
-
-  --color-yellowla-50: #f9f7e6;
-  --color-yellowla-100: #f0efc0;
-  --color-yellowla-200: #e6e699;
-  --color-yellowla-300: #dcdc73;
-  --color-yellowla-400: #d1d14c;
-  --color-yellowla-500: #a8a203;
-  --color-yellowla-600: #969002;
-  --color-yellowla-700: #7c7602;
-  --color-yellowla-800: #615c01;
-  --color-yellowla-900: #464301;
-
-  --color-neutrola-50: #f8f8f8;
-  --color-neutrola-100: #f0f0f0;
-  --color-neutrola-200: #e7e7e7;
-  --color-neutrola-300: #dedede;
-  --color-neutrola-400: #d9d9d9;
-  --color-neutrola-500: #bfbfbf;
-  --color-neutrola-600: #a6a6a6;
-  --color-neutrola-700: #8c8c8c;
-  --color-neutrola-800: #737373;
-  --color-neutrola-900: #595959;
-}
-
-.custom-bg {
-  background-image: var(--custom-bg);
 }

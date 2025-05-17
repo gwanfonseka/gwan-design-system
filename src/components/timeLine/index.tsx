@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { CheckSVG, CircleSVG, CrossSVG } from "../icons";
 
 export enum ORDER_STATUS {
@@ -21,7 +21,7 @@ export interface ITimeLine {
   logs: ILog[];
 }
 
-const TimeLine = ({ logs }: ITimeLine) => {
+const TimeLine: FC<ITimeLine> = ({ logs }: ITimeLine) => {
   const [steps, setSteps] = useState<ILog[]>([]);
 
   useEffect(() => {

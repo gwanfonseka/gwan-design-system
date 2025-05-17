@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
 export interface IEllipsis {
@@ -7,7 +7,7 @@ export interface IEllipsis {
   tooltipWidth?: string;
 }
 
-const Ellipsis = ({
+const Ellipsis: FC<IEllipsis> = ({
   label,
   tooltipPosition = TOOLTIP_POSITION.RIGHT,
   tooltipWidth = "w-40",

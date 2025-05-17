@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { FC, ReactNode } from "react";
 
 export enum BUTTON_VARIANTS {
   PRIMARY = "primary",
@@ -15,7 +15,7 @@ export interface IButton {
   disabled?: boolean;
 }
 
-const Button = ({
+const Button: FC<IButton> = ({
   variant = BUTTON_VARIANTS.PRIMARY,
   label,
   onClick,

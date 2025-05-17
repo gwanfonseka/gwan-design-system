@@ -1,11 +1,12 @@
+import { FC } from "react";
 import { CrossSVG } from "../icons";
 
-interface IChip {
+export interface IChip {
   label: string;
   onClear: () => void;
 }
 
-const Chip = ({ label, onClear }: IChip) => {
+const Chip: FC<IChip> = ({ label, onClear }: IChip) => {
   return (
     <div className="flex flex-row gap-2 items-center bg-neutrola-700 w-fit px-4 py-2 rounded-full">
       <div

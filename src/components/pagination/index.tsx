@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import Button, { BUTTON_VARIANTS } from "../button";
 import { ChevLeft } from "../icons/chevLeftSVG";
 import { ChevRight } from "../icons/chevRightSVG";
@@ -15,7 +15,13 @@ export interface IPagination extends IPaging {
   onChange: (paging: IPaging) => void;
 }
 
-const Pagination = ({ total, page, size, options, onChange }: IPagination) => {
+const Pagination: FC<IPagination> = ({
+  total,
+  page,
+  size,
+  options,
+  onChange,
+}: IPagination) => {
   const [optionDropdown, setOptionDropdown] = useState<string>(size.toString());
 
   const onLeft = () => {

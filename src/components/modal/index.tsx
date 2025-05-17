@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { CrossSVG } from "../icons";
 
 export enum MODAL_SIZE {
@@ -8,14 +8,14 @@ export enum MODAL_SIZE {
   FULL = "w-full h-full",
 }
 
-interface IModal {
+export interface IModal {
   title: string;
   children: React.ReactNode;
   onClear: () => void;
   size?: MODAL_SIZE;
 }
 
-const Modal = ({
+const Modal: FC<IModal> = ({
   title,
   children,
   onClear,

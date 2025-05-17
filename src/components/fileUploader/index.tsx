@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { FC, useRef } from "react";
 import { UploadSVG } from "../icons";
 
 export interface IFileUploader {
@@ -9,7 +9,7 @@ export interface IFileUploader {
   accept?: string;
 }
 
-const FileUploader = ({
+const FileUploader: FC<IFileUploader> = ({
   title,
   subTitle1 = "",
   subTitle2 = "",
