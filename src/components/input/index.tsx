@@ -8,6 +8,7 @@ export interface IInput {
   placeholder?: string;
   inputClassName?: string;
   required?: boolean;
+  className?: string;
 }
 
 const Input: FC<IInput> = ({
@@ -18,10 +19,11 @@ const Input: FC<IInput> = ({
   placeholder,
   inputClassName = "",
   required = false,
+  className = "",
 }: IInput) => {
   return (
-    <div className="flex flex-col gap-1 relative">
-      <label htmlFor={label} className="text-sm text-neutrola-600 mb-2">
+    <div className={`flex flex-col gap-1 relative ${className}`}>
+      <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
         {`${label}${required ? " *" : ""}`}
       </label>
       <input
@@ -30,7 +32,7 @@ const Input: FC<IInput> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className={`border border-neutrola-300 outline-none p-4 rounded-lg ${
+        className={`border border-neutral-300 outline-none p-4 rounded-lg ${
           disabled ? "cursor-not-allowed" : "cursor-text"
         } text-sm w-full ${inputClassName}`}
         required={required}

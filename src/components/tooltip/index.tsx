@@ -13,6 +13,7 @@ export interface ITooltip {
   isVisible: boolean;
   toolTipWidth?: string;
   toolTipClass?: string;
+  className?: string;
 }
 
 const Tooltip: FC<ITooltip> = ({
@@ -21,6 +22,7 @@ const Tooltip: FC<ITooltip> = ({
   isVisible = false,
   toolTipWidth = "w-60",
   toolTipClass = "",
+  className = "",
 }: ITooltip) => {
   const getTooltipPosition = (position: TOOLTIP_POSITION) => {
     switch (position) {
@@ -54,14 +56,14 @@ const Tooltip: FC<ITooltip> = ({
 
   return (
     <div
-      className={`bg-neutrola-800 text-white text-sm py-1 px-2 rounded-lg absolute z-50 
+      className={`bg-neutral-800 text-white text-sm py-1 px-2 rounded-lg absolute z-50 
         ${isVisible ? "block" : "hidden"} ${getTooltipPosition(
         position
-      )} ${toolTipWidth} ${toolTipClass}`}
+      )} ${toolTipWidth} ${toolTipClass} ${className}`}
     >
       <div>{label}</div>
       <div
-        className={`absolute w-2 h-2 bg-neutrola-800 rotate-45 ${tipPosition(
+        className={`absolute w-2 h-2 bg-neutral-800 rotate-45 ${tipPosition(
           position
         )}`}
       ></div>

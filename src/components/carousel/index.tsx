@@ -4,9 +4,14 @@ import Banner, { IBanner } from "../banner";
 export interface ICarousel {
   slides: IBanner[];
   interval?: number;
+  className?: string;
 }
 
-const Carousel: FC<ICarousel> = ({ slides, interval = 3000 }: ICarousel) => {
+const Carousel: FC<ICarousel> = ({
+  slides,
+  interval = 3000,
+  className = "",
+}: ICarousel) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -17,7 +22,7 @@ const Carousel: FC<ICarousel> = ({ slides, interval = 3000 }: ICarousel) => {
   }, [slides.length, interval]);
 
   return (
-    <div className="relative w-full h-[484px] overflow-hidden">
+    <div className={`relative w-full h-[484px] overflow-hidden ${className}`}>
       {slides.map(
         (
           {

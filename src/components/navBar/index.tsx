@@ -25,6 +25,7 @@ export interface INavBar {
   menuHeightClass?: string;
   isCollapsed?: boolean;
   menuBackgroundColor?: string;
+  className?: string;
 }
 
 const NavBar: FC<INavBar> = ({
@@ -39,6 +40,7 @@ const NavBar: FC<INavBar> = ({
   menuHeightClass = "h-[100vh]",
   isCollapsed = false,
   menuBackgroundColor = "bg-primary-100",
+  className = "",
 }: INavBar) => {
   const router = useRouter();
   const [isActiveMenuItem, setIsActiveMenuItem] = useState<string>("");
@@ -75,7 +77,7 @@ const NavBar: FC<INavBar> = ({
     <div
       className={`transition-[width] duration-300 ease-in-out ${
         isMenuCollapsed ? collapsedClass : menuWidthClass
-      } ${menuHeightClass}`}
+      } ${menuHeightClass} ${className}`}
     >
       <div
         className={`w-full h-full flex flex-col gap-4 p-4 ${menuBackgroundColor}`}

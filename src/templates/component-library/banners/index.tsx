@@ -26,7 +26,7 @@ const Banners = () => {
         subTitle="Below of the title is the sub title"
         subTitleClassName="text-4xl font-normal text-white"
         contentPlacement="left"
-        backgroundColor="bg-redola-500"
+        backgroundColor="bg-red-500"
       />
     </div>
   );

@@ -13,6 +13,7 @@ export interface IButton {
   icon?: ReactNode;
   type?: "button" | "submit";
   disabled?: boolean;
+  className?: string;
 }
 
 const Button: FC<IButton> = ({
@@ -22,22 +23,23 @@ const Button: FC<IButton> = ({
   icon,
   type = "button",
   disabled = false,
+  className = "",
 }: IButton) => {
   const getButtonVariant = (variant: BUTTON_VARIANTS) => {
     switch (variant) {
       case BUTTON_VARIANTS.PRIMARY:
         return disabled
-          ? "bg-neutrola-300 text-neutrola-800 cursor-not-allowed"
+          ? "bg-neutral-300 text-neutral-800 cursor-not-allowed"
           : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
 
       case BUTTON_VARIANTS.SECONDARY:
         return disabled
-          ? "bg-neutrola-100 text-neutrola-800 cursor-not-allowed"
-          : "bg-neutrola-50 text-primary-700 hover:bg-primary-50 active:bg-primary-100";
+          ? "bg-neutral-100 text-neutral-800 cursor-not-allowed"
+          : "bg-neutral-50 text-primary-700 hover:bg-primary-50 active:bg-primary-100";
       case BUTTON_VARIANTS.TERTIARY:
         return disabled
-          ? "text-neutrola-300 border border-neutrola-300 cursor-not-allowed"
-          : "bg-transparent text-primary-500 border border-primary-500 hover:bg-neutrola-50 active:bg-neutrola-100";
+          ? "text-neutral-300 border border-neutral-300 cursor-not-allowed"
+          : "bg-transparent text-primary-500 border border-primary-500 hover:bg-neutral-50 active:bg-neutral-100";
     }
   };
 
@@ -45,7 +47,7 @@ const Button: FC<IButton> = ({
     <button
       className={`${getButtonVariant(variant)} px-4 ${
         label ? "py-2" : "py-4"
-      } rounded-lg`}
+      } rounded-lg ${className}`}
       type={type}
       onClick={onClick}
       disabled={disabled}
