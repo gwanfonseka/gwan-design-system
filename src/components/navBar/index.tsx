@@ -11,6 +11,7 @@ export interface IMenuItem {
   route: string;
   isActive: boolean;
   isDivider: boolean;
+  onClick?: () => void;
 }
 
 export interface INavBar {
@@ -26,6 +27,7 @@ export interface INavBar {
   isCollapsed?: boolean;
   menuBackgroundColor?: string;
   className?: string;
+  menuItemTextClass?: string;
 }
 
 const NavBar: FC<INavBar> = ({
@@ -41,6 +43,7 @@ const NavBar: FC<INavBar> = ({
   isCollapsed = false,
   menuBackgroundColor = "bg-primary-100",
   className = "",
+  menuItemTextClass = "",
 }: INavBar) => {
   const router = useRouter();
   const [isActiveMenuItem, setIsActiveMenuItem] = useState<string>("");
@@ -70,6 +73,9 @@ const NavBar: FC<INavBar> = ({
 
   const handleClick = (menu: IMenuItem) => {
     setIsActiveMenuItem(menu.title);
+    if (menu.onClick) {
+      menu.onClick();
+    }
     router.push(menu.route);
   };
 
@@ -106,7 +112,7 @@ const NavBar: FC<INavBar> = ({
             />
             <span
               onClick={() => setIsMenuCollapsed(!isMenuCollapsed)}
-              className={`cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-neutral-300 absolute -right-8 flex items-center justify-center text-black`}
+              className={`cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-neutral-50 absolute -right-8 flex items-center justify-center text-black`}
             >
               <div className="size-5">
                 {isMenuCollapsed ? <ChevRightSVG /> : <ChevLeftSVG />}
@@ -114,7 +120,7 @@ const NavBar: FC<INavBar> = ({
             </span>
           </div>
         </div>
-        <div className="border-neutral-300 border-b"></div>
+        <div className="border-neutral-50 border-b"></div>
         <div className="flex flex-col gap-1">
           {menuItems.map((item, index) => {
             if (!item.isDivider) {
@@ -128,7 +134,7 @@ const NavBar: FC<INavBar> = ({
                   onMouseEnter={() => setShowTooltip(index)}
                   onMouseLeave={() => setShowTooltip(null)}
                 >
-                  <div className="w-6 h-6 ml-1 relative">
+                  <div className={`w-6 h-6 ml-1 relative ${menuItemTextClass}`}>
                     {item.icon}
                     {isMenuCollapsed && (
                       <Tooltip
@@ -141,7 +147,9 @@ const NavBar: FC<INavBar> = ({
                     )}
                   </div>
                   {!isMenuItemsCollapsed && (
-                    <span className="text-nowrap">{item.title}</span>
+                    <span className={`text-nowrap ${menuItemTextClass}`}>
+                      {item.title}
+                    </span>
                   )}
                 </div>
               );
@@ -150,7 +158,7 @@ const NavBar: FC<INavBar> = ({
             return (
               <div
                 key={`menu_item_${index + 1}`}
-                className="border-neutral-300 border-b my-3"
+                className="border-neutral-50 border-b my-3"
               ></div>
             );
           })}
