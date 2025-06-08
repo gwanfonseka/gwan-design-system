@@ -9,6 +9,7 @@ export interface IInput {
   inputClassName?: string;
   required?: boolean;
   className?: string;
+  type?: string;
 }
 
 const Input: FC<IInput> = ({
@@ -20,6 +21,7 @@ const Input: FC<IInput> = ({
   inputClassName = "",
   required = false,
   className = "",
+  type = "text",
 }: IInput) => {
   return (
     <div className={`flex flex-col gap-1 relative ${className}`}>
@@ -36,6 +38,7 @@ const Input: FC<IInput> = ({
           disabled ? "cursor-not-allowed" : "cursor-text"
         } text-sm w-full ${inputClassName}`}
         required={required}
+        type={type}
       />
     </div>
   );
