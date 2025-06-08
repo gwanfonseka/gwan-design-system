@@ -35,13 +35,13 @@ const Checkbox: FC<ICheckbox> = ({
         className={`w-5 h-5 flex items-center justify-center border-2 rounded-md transition-all 
           ${
             isChecked
-              ? "bg-primary-500 border-primary-600"
+              ? "bg-primary-300 border-primary-400"
               : "bg-white border-neutral-500"
           }
         `}
       >
         {isChecked && (
-          <div className="size-4 text-white">
+          <div className="size-4 text-black">
             <CheckSVG />
           </div>
         )}
