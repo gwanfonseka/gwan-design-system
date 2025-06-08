@@ -2,11 +2,16 @@ import { ReactNode } from "react";
 
 const Check = (): ReactNode => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <svg
+      viewBox="0 0 256 256"
+      stroke="currentColor"
+      strokeWidth="4"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         fillRule="evenodd"
-        d="M4.293 12.293a1 1 0 011.414 0L10 16.586l8.293-8.293a1 1 0 111.414 1.414l-9 9a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414z"
         clipRule="evenodd"
+        d="M103.99951,188.00012a3.98852,3.98852,0,0,1-2.82812-1.17139l-56-55.9956a3.99992,3.99992,0,0,1,5.65625-5.65723l53.17187,53.16748L213.17139,69.1759a3.99992,3.99992,0,0,1,5.65625,5.65723l-112,111.9956A3.98855,3.98855,0,0,1,103.99951,188.00012Z"
         fill="currentColor"
       />
     </svg>

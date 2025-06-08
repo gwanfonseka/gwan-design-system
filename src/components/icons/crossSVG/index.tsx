@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 const Cross = (): ReactNode => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 600 600">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -150 800 800">
       <g>
         <path
           fillRule="evenodd"
