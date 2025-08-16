@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 export interface IInput {
-  label: string;
+  label?: string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
@@ -25,9 +25,11 @@ const Input: FC<IInput> = ({
 }: IInput) => {
   return (
     <div className={`flex flex-col gap-1 relative ${className}`}>
-      <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
-        {`${label}${required ? " *" : ""}`}
-      </label>
+      {label && (
+        <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
+          {`${label}${required ? " *" : ""}`}
+        </label>
+      )}
       <input
         id={label}
         placeholder={placeholder}
