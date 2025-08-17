@@ -25,21 +25,19 @@ const FilterDropdown: FC<IFilter> = ({ children, className = "" }: IFilter) => {
   return (
     <div className={`relative ${className}`}>
       <div
-        className="flex flex-row gap-4 items-center w-fit border border-neutral-300 hover:border-neutral-400 group p-[14px] rounded-lg cursor-pointer"
+        className="flex flex-row gap-4 items-center w-fit border border-neutral-300 group p-4 rounded-lg cursor-pointer"
         onClick={() => setIsChildrenVisible(!isChildrenVisible)}
       >
-        <div className="size-5 text-neutral-300 group-hover:text-neutral-400">
+        <div className="size-5 text-neutral-700">
           <FilterSVG />
         </div>
-        <p className="text-neutral-300 text-base group-hover:text-neutral-400">
-          Filter
-        </p>
-        <div className="size-5 text-neutral-300 group-hover:text-neutral-400">
+        <p className="text-neutral-700 text-sm">Filter</p>
+        <div className="size-5 text-neutral-700">
           <ChevDownSVG />
         </div>
       </div>
       {isChildrenVisible && (
-        <div className="border border-neutral-300 rounded-lg shadow-lg overflow-y-auto absolute top-full bg-white z-10">
+        <div className="border border-neutral-300 rounded-lg shadow-lg overflow-y-auto absolute top-[105%] bg-white z-10">
           {children(closeDropdown)}
         </div>
       )}
