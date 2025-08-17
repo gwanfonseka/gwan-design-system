@@ -28,6 +28,7 @@ export interface INavBar {
   menuBackgroundColor?: string;
   className?: string;
   menuItemTextClass?: string;
+  isLoading?: boolean;
 }
 
 const NavBar: FC<INavBar> = ({
@@ -44,6 +45,7 @@ const NavBar: FC<INavBar> = ({
   menuBackgroundColor = "bg-primary-100",
   className = "",
   menuItemTextClass = "",
+  isLoading = false,
 }: INavBar) => {
   const router = useRouter();
   const [isActiveMenuItem, setIsActiveMenuItem] = useState<string>("");
@@ -109,6 +111,7 @@ const NavBar: FC<INavBar> = ({
                 isMenuItemsCollapsed ? AVATAR_VARIANT.IMAGE_ONLY : avatarType
               }
               image={avatarImage}
+              isLoading={isLoading}
             />
             <span
               onClick={() => setIsMenuCollapsed(!isMenuCollapsed)}
@@ -121,49 +124,77 @@ const NavBar: FC<INavBar> = ({
           </div>
         </div>
         <div className="border-neutral-50 border-b"></div>
-        <div className="flex flex-col gap-1">
-          {menuItems.map((item, index) => {
-            if (!item.isDivider) {
+        {!isLoading ? (
+          <div className="flex flex-col gap-1">
+            {menuItems.map((item, index) => {
+              if (!item.isDivider) {
+                return (
+                  <div
+                    key={`menu_item_${index + 1}`}
+                    className={`flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white hover:bg-opacity-35 hover:rounded-lg ${
+                      isActiveMenuItem === item.title ? activeClass : ""
+                    }`}
+                    onClick={() => handleClick(item)}
+                    onMouseEnter={() => setShowTooltip(index)}
+                    onMouseLeave={() => setShowTooltip(null)}
+                  >
+                    <div
+                      className={`w-6 h-6 ml-1 relative ${menuItemTextClass}`}
+                    >
+                      {item.icon}
+                      {isMenuCollapsed && (
+                        <Tooltip
+                          position={TOOLTIP_POSITION.RIGHT}
+                          label={item.title}
+                          isVisible={showTooltip === index}
+                          toolTipWidth="w-fit"
+                          toolTipClass="text-nowrap"
+                        />
+                      )}
+                    </div>
+                    {!isMenuItemsCollapsed && (
+                      <span className={`text-nowrap ${menuItemTextClass}`}>
+                        {item.title}
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+
               return (
                 <div
                   key={`menu_item_${index + 1}`}
-                  className={`flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white hover:bg-opacity-35 hover:rounded-lg ${
-                    isActiveMenuItem === item.title ? activeClass : ""
-                  }`}
-                  onClick={() => handleClick(item)}
-                  onMouseEnter={() => setShowTooltip(index)}
-                  onMouseLeave={() => setShowTooltip(null)}
-                >
-                  <div className={`w-6 h-6 ml-1 relative ${menuItemTextClass}`}>
-                    {item.icon}
-                    {isMenuCollapsed && (
-                      <Tooltip
-                        position={TOOLTIP_POSITION.RIGHT}
-                        label={item.title}
-                        isVisible={showTooltip === index}
-                        toolTipWidth="w-fit"
-                        toolTipClass="text-nowrap"
-                      />
-                    )}
-                  </div>
-                  {!isMenuItemsCollapsed && (
-                    <span className={`text-nowrap ${menuItemTextClass}`}>
-                      {item.title}
-                    </span>
-                  )}
-                </div>
+                  className="border-neutral-50 border-b my-3"
+                ></div>
               );
-            }
-
-            return (
-              <div
-                key={`menu_item_${index + 1}`}
-                className="border-neutral-50 border-b my-3"
-              ></div>
-            );
-          })}
-        </div>
+            })}
+          </div>
+        ) : (
+          <NavBarShimmer isMenuItemsCollapsed={isMenuItemsCollapsed} />
+        )}
       </div>
+    </div>
+  );
+};
+
+const NavBarShimmer = ({
+  isMenuItemsCollapsed,
+}: {
+  isMenuItemsCollapsed: boolean;
+}) => {
+  return (
+    <div className="flex flex-col gap-2 animate-pulse">
+      {[...Array(5)].map((_, index) => (
+        <div
+          key={index}
+          className="flex flex-row gap-4 items-center p-4 rounded-lg bg-neutral-400"
+        >
+          <div className="w-6 h-6 ml-1 bg-neutral-200"></div>
+          {!isMenuItemsCollapsed && (
+            <span className="w-full h-4 bg-neutral-200 rounded"></span>
+          )}
+        </div>
+      ))}
     </div>
   );
 };

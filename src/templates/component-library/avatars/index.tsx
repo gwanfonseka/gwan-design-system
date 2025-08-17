@@ -13,6 +13,7 @@ const Avatars = () => {
           email="john.doe@email.com"
           variant={AVATAR_VARIANT.IMAGE_WITH_FULL}
           image={profilePicture}
+          isLoading={false}
         />
         <p className="text-base font-semibold text-right">Avatar image only</p>
         <Avatar
@@ -20,6 +21,7 @@ const Avatars = () => {
           email="john.doe@email.com"
           variant={AVATAR_VARIANT.IMAGE_ONLY}
           image={profilePicture}
+          isLoading={false}
         />
         <p className="text-base font-semibold text-right">
           Avatar initials with details
@@ -28,6 +30,7 @@ const Avatars = () => {
           name="John Doe"
           email="john.doe@email.com"
           variant={AVATAR_VARIANT.INITIALS_WITH_FULL}
+          isLoading={false}
         />
         <p className="text-base font-semibold text-right">
           Avatar initials only
@@ -36,6 +39,7 @@ const Avatars = () => {
           name="John Doe"
           email="john.doe@email.com"
           variant={AVATAR_VARIANT.INITIALS_ONLY}
+          isLoading={false}
         />
       </div>
     </div>

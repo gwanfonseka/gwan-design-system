@@ -1,5 +1,5 @@
 import Input from "@/components/input";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const Inputs = () => {
   const [inputValue, setInputValue] = useState<string>("");
@@ -12,20 +12,27 @@ const Inputs = () => {
         label="Input"
         placeholder="This is an input"
         value={inputValue}
-        onChange={(val) => setInputValue(val)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setInputValue(e.target.value)
+        }
+        onClear={() => setInputValue("")}
       />
       <Input
         label="Required Input"
         placeholder="This is a required input"
         value={inputValueRequired}
-        onChange={(val) => setInputValueRequired(val)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setInputValueRequired(e.target.value)
+        }
         required
       />
       <Input
         label="Disabled Input"
         placeholder="This is a disabled input"
         value={inputValueDisabled}
-        onChange={(val) => setInputValueDisabled(val)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setInputValueDisabled(e.target.value)
+        }
         disabled
       />
     </div>
