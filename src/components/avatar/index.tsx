@@ -15,6 +15,7 @@ export interface IAvatar {
   image?: string;
   variant: string;
   className?: string;
+  isLoading?: boolean;
 }
 
 const generatePastelColor = () => {
@@ -31,6 +32,7 @@ const Avatar: FC<IAvatar> = ({
   image,
   variant,
   className = "",
+  isLoading = false,
 }: IAvatar) => {
   const [bgColor, setBgColor] = useState<string>("transparent");
   const [isTooltipInitialVisible, setIsTooltipInitialVisible] = useState(false);
@@ -75,8 +77,8 @@ const Avatar: FC<IAvatar> = ({
             className="rounded-full border border-neutral-400"
             src={image}
             alt="profile"
-            width={60}
-            height={60}
+            width={55}
+            height={55}
           />
           {variant === AVATAR_VARIANT.IMAGE_ONLY &&
             renderTooltip(name, email, isTooltipImageVisible)}
@@ -86,7 +88,7 @@ const Avatar: FC<IAvatar> = ({
 
     return (
       <div
-        className="size-[60px] flex items-center justify-center rounded-full font-semibold cursor-default relative"
+        className="size-[55px] flex items-center justify-center rounded-full font-semibold cursor-default relative"
         style={{ backgroundColor: bgColor }}
         onMouseEnter={() => setIsTooltipInitialVisible(true)}
         onMouseLeave={() => setIsTooltipInitialVisible(false)}
@@ -98,8 +100,23 @@ const Avatar: FC<IAvatar> = ({
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-row items-center gap-2 pl-[5px] animate-pulse">
+        <div className="w-[55px] h-[55px] rounded-full bg-neutral-400"></div>
+        {(variant === AVATAR_VARIANT.IMAGE_WITH_FULL ||
+          variant === AVATAR_VARIANT.INITIALS_WITH_FULL) && (
+          <div className="flex flex-col gap-2 flex-1">
+            <div className="w-full h-6 bg-neutral-400 rounded-lg"></div>
+            <div className="w-[70%] h-4 bg-neutral-400 rounded-lg"></div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div className={`flex flex-row items-center gap-2 ${className}`}>
+    <div className={`flex flex-row items-center gap-2 pl-[5px] ${className}`}>
       {renderAvatarImage()}
 
       {(variant === AVATAR_VARIANT.IMAGE_WITH_FULL ||

@@ -28,26 +28,31 @@ const columns: ITableColumn[] = [
   {
     header: "Date",
     headerClassName: "",
+    cellClassName: "",
     render: (row: IData) => <p>{row.date}</p>,
   },
   {
     header: "Order ID",
     headerClassName: "",
+    cellClassName: "",
     render: (row: IData) => <p>{row.orderId}</p>,
   },
   {
     header: "Price",
     headerClassName: "",
+    cellClassName: "",
     render: (row: IData) => <p>{row.price}</p>,
   },
   {
     header: "Owner Name",
     headerClassName: "w-[20%]",
+    cellClassName: "",
     render: (row: IData) => <p>{row.ownerName}</p>,
   },
   {
     header: "Status",
     headerClassName: "",
+    cellClassName: "",
     render: (row: IData) => (
       <Tag type={getTagType(row.status)} label={row.status} />
     ),
@@ -55,6 +60,7 @@ const columns: ITableColumn[] = [
   {
     header: "View",
     headerClassName: "w-[8%]",
+    cellClassName: "",
     render: () => (
       <div className="size-5 cursor-pointer">
         <OrderInfoSVG />

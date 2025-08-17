@@ -82,6 +82,7 @@ const NavBars = () => {
         menuWidthClass="w-[20rem]"
         menuHeightClass="h-[80vh]"
         menuBackgroundColor="bg-primary-100"
+        isLoading={false}
       />
       <div className="flex-1 p-4">Rest of the content</div>
     </div>
