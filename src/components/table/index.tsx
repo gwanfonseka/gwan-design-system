@@ -5,6 +5,7 @@ export interface ITableColumn {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   render: (row?: any) => JSX.Element;
   headerClassName?: string;
+  cellClassName?: string;
 }
 
 export interface ITable {
@@ -38,8 +39,11 @@ const Table: FC<ITable> = ({ columns, data, className = "" }: ITable) => {
               key={`row_${rowIndex}`}
               className="bg-white hover:bg-neutral-100"
             >
-              {columns.map(({ render }, cellIndex) => (
-                <td key={`cell_${cellIndex}`} className="text-left px-4 py-4">
+              {columns.map(({ render, cellClassName }, cellIndex) => (
+                <td
+                  key={`cell_${cellIndex}`}
+                  className={`text-left px-4 py-4 ${cellClassName}`}
+                >
                   {render(row)}
                 </td>
               ))}
