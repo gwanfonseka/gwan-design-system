@@ -1,76 +1,89 @@
-import TimeLine, { ORDER_STATUS } from "@/components/timeLine";
+import TimeLine, { STEP_STATUS } from "@/components/timeLine";
 
 const success = [
   {
-    title: ORDER_STATUS.DELIVERED,
+    title: "Delivered",
     date: "2021-01-04",
     description: "Package is delivered",
+    status: STEP_STATUS.FINISHED,
   },
   {
-    title: ORDER_STATUS.DISPATCHED_TO_COURIER,
+    title: "Delivering",
     date: "2021-01-03",
     description: "Package is in transit",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.PACKAGING,
+    title: "Packaging in progress",
     date: "2021-01-03",
     description: "Packaging is in progress",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.PRINTING_IN_PROGRESS,
+    title: "Printing in progress",
     date: "2021-01-02",
     description: "Planner is being printed",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.ORDER_PLACED,
+    title: "Order placed",
     date: "2025-01-01",
     description: "Order placed by customer",
+    status: STEP_STATUS.SUCCESS,
   },
 ];
 
 const canceled = [
   {
-    title: ORDER_STATUS.ORDER_CANCELLED,
+    title: "Delivered",
     date: "2021-01-04",
     description: "Package is delivered",
+    status: STEP_STATUS.FAILED,
   },
   {
-    title: ORDER_STATUS.DISPATCHED_TO_COURIER,
+    title: "Delivering",
     date: "2021-01-03",
     description: "Package is in transit",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.PACKAGING,
+    title: "Packaging in progress",
     date: "2021-01-03",
     description: "Packaging is in progress",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.PRINTING_IN_PROGRESS,
+    title: "Printing in progress",
     date: "2021-01-02",
     description: "Planner is being printed",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.ORDER_PLACED,
+    title: "Order placed",
     date: "2025-01-01",
     description: "Order placed by customer",
+    status: STEP_STATUS.SUCCESS,
   },
 ];
 
 const pending = [
   {
-    title: ORDER_STATUS.PACKAGING,
+    title: "Packaging in progress",
     date: "2021-01-03",
     description: "Packaging is in progress",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.PRINTING_IN_PROGRESS,
+    title: "Printing in progress",
     date: "2021-01-02",
     description: "Planner is being printed",
+    status: STEP_STATUS.SUCCESS,
   },
   {
-    title: ORDER_STATUS.ORDER_PLACED,
+    title: "Order placed",
     date: "2025-01-01",
     description: "Order placed by customer",
+    status: STEP_STATUS.SUCCESS,
   },
 ];
 

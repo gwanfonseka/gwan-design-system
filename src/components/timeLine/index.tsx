@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { CheckSVG, CircleSVG, CrossSVG } from "../icons";
+import { CircleSVG } from "../icons";
 
 export enum ORDER_STATUS {
   ORDER_PLACED = "Order placed",
@@ -11,10 +11,17 @@ export enum ORDER_STATUS {
   PENDING = "Pending",
 }
 
+export enum STEP_STATUS {
+  SUCCESS = "Success",
+  FAILED = "Failed",
+  FINISHED = "Finished",
+}
+
 export interface ILog {
-  title: ORDER_STATUS;
+  title: string;
   date?: string;
   description?: string;
+  status: string;
 }
 
 export interface ITimeLine {
@@ -27,12 +34,13 @@ const TimeLine: FC<ITimeLine> = ({ logs, className = "" }: ITimeLine) => {
 
   useEffect(() => {
     if (
-      logs[0].title !== ORDER_STATUS.ORDER_CANCELLED &&
-      logs[0].title !== ORDER_STATUS.DELIVERED
+      logs[0].status !== STEP_STATUS.FAILED &&
+      logs[0].status !== STEP_STATUS.FINISHED
     ) {
       setSteps([
         {
-          title: ORDER_STATUS.PENDING,
+          title: "Pending",
+          status: "Pending",
         },
         ...logs,
       ]);
@@ -41,27 +49,20 @@ const TimeLine: FC<ITimeLine> = ({ logs, className = "" }: ITimeLine) => {
     }
   }, [logs]);
 
-  const getIcon = (status?: ORDER_STATUS) => {
+  const getIcon = (status?: string) => {
     switch (status) {
-      case ORDER_STATUS.ORDER_PLACED:
-      case ORDER_STATUS.PRINTING_IN_PROGRESS:
-      case ORDER_STATUS.PACKAGING:
-      case ORDER_STATUS.DISPATCHED_TO_COURIER:
-      case ORDER_STATUS.DELIVERED:
+      case STEP_STATUS.SUCCESS:
+      case STEP_STATUS.FINISHED:
         return (
-          <div className="size-5 bg-green-500 rounded-full p-1 text-white">
-            <CheckSVG />
-          </div>
+          <div className="size-4 bg-green-500 rounded-full text-white p-2"></div>
         );
-      case ORDER_STATUS.ORDER_CANCELLED:
+      case STEP_STATUS.FAILED:
         return (
-          <div className="size-5 bg-red-500 rounded-full p-1 text-white">
-            <CrossSVG />
-          </div>
+          <div className="size-4 bg-red-500 rounded-full text-white p-2"></div>
         );
       default:
         return (
-          <div className="size-5 bg-neutral-600 text-neutral-200 rounded-full p-1">
+          <div className="size-4 bg-neutral-600 text-neutral-200 rounded-full p-1">
             <CircleSVG />
           </div>
         );
@@ -70,23 +71,23 @@ const TimeLine: FC<ITimeLine> = ({ logs, className = "" }: ITimeLine) => {
 
   return (
     <div className={className}>
-      {steps.map(({ title, date, description }, index) => (
+      {steps.map(({ title, date, description, status }, index) => (
         <div key={`log_${index}`} className="flex flex-row gap-4">
           <div className="flex flex-col items-center">
-            {getIcon(title)}
-            <div className="w-0.5 h-full bg-neutral-500"></div>
+            {getIcon(status)}
+            <div className="w-0.5 h-full bg-neutral-100"></div>
           </div>
           <div className="flex flex-col flex-1">
             <p
               className={`text-base font-semibold relative top-[-2px] ${
-                title === ORDER_STATUS.PENDING ? "pb-8" : ""
+                status === "Pending" ? "pb-8" : ""
               }`}
             >
               {title}
             </p>
             {title && <p className="text-xs text-neutral-700">{date}</p>}
             {description && (
-              <p className="p-4 text-xs bg-neutral-50 text-neutral-800 rounded-lg my-2">
+              <p className="p-4 text-xs bg-neutral-50 text-neutral-800 rounded-lg my-2 max-w-80">
                 {description}
               </p>
             )}
