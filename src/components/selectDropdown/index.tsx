@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 import { ChevDownSVG } from "../icons";
 
 export interface ISelectDropdownOption {
@@ -29,6 +29,8 @@ const SelectDropdown: FC<ISelectDropdown> = ({
 }: ISelectDropdown) => {
   const [dropdownValue, setDropdownValue] = useState<string>("");
   const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
+  const [openUpward, setOpenUpward] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const option = options.find((opt) => opt.label === value);
@@ -40,6 +42,18 @@ const SelectDropdown: FC<ISelectDropdown> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (isOptionsVisible && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const dropdownHeight = Math.min(options.length * 56, 384); // max-h-96 = 384px
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      // Open upward if not enough space below and more space above
+      setOpenUpward(spaceBelow < dropdownHeight && spaceAbove > spaceBelow);
+    }
+  }, [isOptionsVisible, options.length]);
+
   const handleMouseDown = (val: string) => {
     setDropdownValue(val);
     onChange(val);
@@ -47,7 +61,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   return (
-    <div className={`flex flex-col gap-1 relative ${className}`}>
+    <div ref={containerRef} className={`flex flex-col gap-1 relative ${className}`}>
       {label && (
         <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
           {label}
@@ -73,7 +87,11 @@ const SelectDropdown: FC<ISelectDropdown> = ({
       </div>
 
       {isOptionsVisible && (
-        <div className="border border-neutral-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full top-full bg-white z-10">
+        <div
+          className={`border border-neutral-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${
+            openUpward ? "bottom-full mb-1" : "top-full"
+          }`}
+        >
           {options.map(({ label, value: val }, index) => (
             <div
               key={`${label}_${val}_${index + 1}`}
