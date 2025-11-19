@@ -18,3 +18,6 @@ export { Circle as CircleSVG } from "./circleSVG";
 export { Upload as UploadSVG } from "./uploadSVG";
 export { ArrowLeft as ArrowLeftSVG } from "./arrowLeftSVG";
 export { ArrowRight as ArrowRightSVG } from "./arrowRightSVG";
+export { DotFill as DotFillSVG } from "./dotFillSVG";
+export { SquareFill as SquareFillSVG } from "./roudedSquareFillSVG";
+export { Eclipse as EclipseSVG } from "./eclipseSVG";
