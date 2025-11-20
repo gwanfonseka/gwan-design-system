@@ -17,6 +17,7 @@ const menuItems = [
     route: "",
     isActive: true,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "Manage orders",
@@ -44,6 +45,7 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "Manage covers",
@@ -65,12 +67,14 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "",
     route: "",
     isActive: false,
     isDivider: true,
+    onClick: () => {},
   },
   {
     title: "Sign out",
@@ -78,6 +82,7 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
 ];
 
