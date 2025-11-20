@@ -6,6 +6,7 @@ export interface ICheckbox {
   checked: boolean;
   onChange: (checked: boolean) => void;
   className?: string;
+  disabled?:boolean;
 }
 
 const Checkbox: FC<ICheckbox> = ({
@@ -13,10 +14,13 @@ const Checkbox: FC<ICheckbox> = ({
   checked = false,
   onChange,
   className = "",
+  disabled = false,
 }: ICheckbox) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleToggle = () => {
+    if (disabled) return;
+
     setIsChecked(!isChecked);
     if (onChange) {
       onChange(!isChecked);
@@ -24,11 +28,14 @@ const Checkbox: FC<ICheckbox> = ({
   };
 
   return (
-    <label className={`flex items-center gap-2 cursor-pointer ${className}`}>
+    <label className={`flex items-center gap-2 cursor-pointer ${className} ${
+        disabled ? "cursor-not-allowed opacity-50" : ""
+      }`}>
       <input
         type="checkbox"
         checked={isChecked}
         onChange={handleToggle}
+        disabled={disabled}
         className="hidden"
       />
       <div
@@ -38,6 +45,7 @@ const Checkbox: FC<ICheckbox> = ({
               ? "bg-primary-300 border-primary-400"
               : "bg-white border-neutral-500"
           }
+          ${disabled ? "bg-neutral-200 border-neutral-400" : ""}
         `}
       >
         {isChecked && (
