@@ -60,3 +60,4 @@ export type { ITableColumn, ITable } from "./components/table";
 export type { ITag } from "./components/tag";
 export type { ITimeLine, ILog } from "./components/timeLine";
 export type { ITooltip } from "./components/tooltip";
+export type { ITextArea } from "./components/textarea";

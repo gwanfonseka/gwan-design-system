@@ -23,6 +23,7 @@ import Banners from "./banners";
 import Carousels from "./carousels";
 import SnackBars from "./snackBars";
 import States from "./states";
+import TextAreas from "./textarea";
 
 const menuItems = [
   {
@@ -112,6 +113,10 @@ const menuItems = [
   {
     name: "State",
     template: <States />,
+  },
+  {
+    name: "Text Area",
+    template: <TextAreas />,
   },
 ];
 
