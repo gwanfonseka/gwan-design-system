@@ -102,3 +102,6 @@ export { VideoCam as VideoCamSVG } from "./videoCamSVG";
 export { Wallet as WalletSVG } from "./walletSVG";
 export { Whale as WhaleSVG } from "./whaleSVG";
 export { Wifi as WifiSVG } from "./wifiSVG";
+export { DotFill as DotFillSVG } from "./dotFillSVG";
+export { SquareFill as SquareFillSVG } from "./roudedSquareFillSVG";
+export { Eclipse as EclipseSVG } from "./eclipseSVG";
