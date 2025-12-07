@@ -63,7 +63,7 @@ const NavBar: FC<INavBar> = ({
     useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<number | null>(null);
   const [showSubTooltip, setShowSubTooltip] = useState<number | null>(null);
-  const activeClass = "rounded-lg bg-white bg-opacity-35";
+  const activeClass = "rounded-lg bg-white/35";
   const collapsedClass = "w-[6rem]";
 
   useEffect(() => {
@@ -71,6 +71,7 @@ const NavBar: FC<INavBar> = ({
       const active = menuItems.find((item) => item.isActive === true);
       setIsActiveMenuItem(active?.title ?? menuItems[0].title);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -156,7 +157,7 @@ const NavBar: FC<INavBar> = ({
                 return (
                   <div key={`menu_item_${index + 1}`}>
                     <div
-                      className={`flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white hover:bg-opacity-35 hover:rounded-lg ${
+                      className={`flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${
                         isActiveMenuItem === item.title ? activeClass : ""
                       }`}
                       onClick={() => handleClick(item)}
@@ -199,11 +200,11 @@ const NavBar: FC<INavBar> = ({
 
                     {/* Sub menu items starts from here if any */}
                     {isActiveMenuItem === item.title && item.hasChildren && (
-                      <div className="flex flex-col gap-1 bg-white bg-opacity-15 pt-3 relative -top-2">
+                      <div className="flex flex-col gap-1 bg-white/15 pt-3 relative -top-2">
                         {item.children?.map((subItem, subIndex) => (
                           <div
                             key={`sub_menu_item_${subIndex + 1}`}
-                            className={`flex flex-row gap-4 items-center p-4 h-14 rounded-lg hover:cursor-pointer hover:bg-white hover:bg-opacity-35 hover:rounded-lg ${
+                            className={`flex flex-row gap-4 items-center p-4 h-14 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${
                               isActiveSubMenuItem === subItem.title
                                 ? activeClass
                                 : ""
@@ -215,7 +216,7 @@ const NavBar: FC<INavBar> = ({
                             onMouseEnter={() => setShowSubTooltip(subIndex)}
                             onMouseLeave={() => setShowSubTooltip(null)}
                           >
-                            <div className="size-6 ml-2 mt-1 relative text-neutral-600">
+                            <div className="size-6 ml-1 mt-1 relative text-neutral-600">
                               <DotFillSVG />
                               {isMenuCollapsed && (
                                 <Tooltip
