@@ -67,6 +67,10 @@ const menuItems = [
     template: <Inputs />,
   },
   {
+    name: "Text Area",
+    template: <TextAreas />,
+  },
+  {
     name: "Modal",
     template: <Modals />,
   },
@@ -113,11 +117,7 @@ const menuItems = [
   {
     name: "State",
     template: <States />,
-  },
-  {
-    name: "Text Area",
-    template: <TextAreas />,
-  },
+  }
 ];
 
 const LibraryTemplate = () => {
