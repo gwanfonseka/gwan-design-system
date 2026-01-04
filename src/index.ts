@@ -46,6 +46,7 @@ export type {
   IFilter,
 } from "./components/filterDropdown";
 export type { IInput } from "./components/input";
+export type { ITextArea } from "./components/textarea";
 export type { IModal } from "./components/modal";
 export type { INavBar, IMenuItem } from "./components/navBar";
 export type { IPaging, IPagination } from "./components/pagination";
