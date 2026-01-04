@@ -3,8 +3,34 @@ var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -80,7 +106,8 @@ var Tooltip = ({
   label,
   isVisible = false,
   toolTipWidth = "w-60",
-  toolTipClass = ""
+  toolTipClass = "",
+  className = ""
 }) => {
   const getTooltipPosition = (position2) => {
     switch (position2) {
@@ -113,16 +140,16 @@ var Tooltip = ({
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     "div",
     {
-      className: `bg-neutrola-800 text-white text-sm py-1 px-2 rounded-lg absolute z-50 
+      className: `bg-neutral-800 text-white text-sm py-1 px-2 rounded-lg absolute z-50 
         ${isVisible ? "block" : "hidden"} ${getTooltipPosition(
         position
-      )} ${toolTipWidth} ${toolTipClass}`,
+      )} ${toolTipWidth} ${toolTipClass} ${className}`,
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: label }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "div",
           {
-            className: `absolute w-2 h-2 bg-neutrola-800 rotate-45 ${tipPosition(
+            className: `absolute w-2 h-2 bg-neutral-800 rotate-45 ${tipPosition(
               position
             )}`
           }
@@ -148,7 +175,14 @@ var generatePastelColor = () => {
   const lightness = 75 + Math.random() * 10;
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
-var Avatar = ({ name, email, image, variant }) => {
+var Avatar = ({
+  name,
+  email,
+  image,
+  variant,
+  className = "",
+  isLoading = false
+}) => {
   const [bgColor, setBgColor] = (0, import_react.useState)("transparent");
   const [isTooltipInitialVisible, setIsTooltipInitialVisible] = (0, import_react.useState)(false);
   const [isTooltipImageVisible, setIsTooltipImageVisible] = (0, import_react.useState)(false);
@@ -166,7 +200,7 @@ var Avatar = ({ name, email, image, variant }) => {
         position: "right" /* RIGHT */,
         label: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-col", children: [
           name2,
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-neutrola-300 text-xs", children: email2 })
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-neutral-300 text-xs", children: email2 })
         ] }),
         isVisible,
         toolTipWidth: "w-36"
@@ -185,11 +219,11 @@ var Avatar = ({ name, email, image, variant }) => {
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
               import_image.default,
               {
-                className: "rounded-full border border-neutrola-400",
+                className: "rounded-full border border-neutral-400",
                 src: image,
                 alt: "profile",
-                width: 60,
-                height: 60
+                width: 55,
+                height: 55
               }
             ),
             variant === "image-only" /* IMAGE_ONLY */ && renderTooltip(name, email, isTooltipImageVisible)
@@ -200,7 +234,7 @@ var Avatar = ({ name, email, image, variant }) => {
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
       "div",
       {
-        className: "size-[60px] flex items-center justify-center rounded-full font-semibold cursor-default relative",
+        className: "size-[55px] flex items-center justify-center rounded-full font-semibold cursor-default relative",
         style: { backgroundColor: bgColor },
         onMouseEnter: () => setIsTooltipInitialVisible(true),
         onMouseLeave: () => setIsTooltipInitialVisible(false),
@@ -211,11 +245,20 @@ var Avatar = ({ name, email, image, variant }) => {
       }
     );
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-row items-center gap-2", children: [
+  if (isLoading) {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-row items-center gap-2 pl-[5px] animate-pulse", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-[55px] h-[55px] rounded-full bg-neutral-400" }),
+      (variant === "image_with_full" /* IMAGE_WITH_FULL */ || variant === "initials_with_full" /* INITIALS_WITH_FULL */) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-col gap-2 flex-1", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-full h-6 bg-neutral-400 rounded-lg" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-[70%] h-4 bg-neutral-400 rounded-lg" })
+      ] })
+    ] });
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: `flex flex-row items-center gap-2 pl-[5px] ${className}`, children: [
     renderAvatarImage(),
     (variant === "image_with_full" /* IMAGE_WITH_FULL */ || variant === "initials_with_full" /* INITIALS_WITH_FULL */) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-col", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-base font-semibold", children: name }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-sm text-neutrola-700", children: email })
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-sm text-neutral-700", children: email })
     ] })
   ] });
 };
@@ -230,7 +273,8 @@ var Banner = ({
   backgroundImage = "",
   backgroundColor = "",
   titleClassName = "",
-  subTitleClassName = ""
+  subTitleClassName = "",
+  className = ""
 }) => {
   const handleContentPlacement = () => {
     if (contentPlacement === "left") {
@@ -253,7 +297,7 @@ var Banner = ({
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
     "div",
     {
-      className: `w-full h-[484px] grid grid-cols-2 items-center px-16 ${backgroundColor} bg-no-repeat bg-cover bg-center`,
+      className: `w-full h-[484px] grid grid-cols-2 items-center px-16 ${backgroundColor} bg-no-repeat bg-cover bg-center ${className}`,
       style: backgroundImage !== "" ? { backgroundImage: `url(${backgroundImage})` } : {},
       children: handleContentPlacement()
     }
@@ -275,22 +319,23 @@ var Button = ({
   onClick,
   icon,
   type = "button",
-  disabled = false
+  disabled = false,
+  className = ""
 }) => {
   const getButtonVariant = (variant2) => {
     switch (variant2) {
       case "primary" /* PRIMARY */:
-        return disabled ? "bg-neutrola-300 text-neutrola-800 cursor-not-allowed" : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
+        return disabled ? "bg-neutral-300 text-neutral-800 cursor-not-allowed" : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
       case "secondary" /* SECONDARY */:
-        return disabled ? "bg-neutrola-100 text-neutrola-800 cursor-not-allowed" : "bg-neutrola-50 text-primary-700 hover:bg-primary-50 active:bg-primary-100";
+        return disabled ? "bg-neutral-100 text-neutral-800 cursor-not-allowed" : "bg-neutral-50 text-primary-700 hover:bg-primary-50 active:bg-primary-100";
       case "tertiary" /* TERTIARY */:
-        return disabled ? "text-neutrola-300 border border-neutrola-300 cursor-not-allowed" : "bg-transparent text-primary-500 border border-primary-500 hover:bg-neutrola-50 active:bg-neutrola-100";
+        return disabled ? "text-neutral-300 border border-neutral-300 cursor-not-allowed" : "bg-transparent text-primary-500 border border-primary-500 hover:bg-neutral-50 active:bg-neutral-100";
     }
   };
   return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
     "button",
     {
-      className: `${getButtonVariant(variant)} px-4 ${label ? "py-2" : "py-4"} rounded-lg`,
+      className: `${getButtonVariant(variant)} px-4 ${label ? "py-2" : "py-4"} rounded-lg ${className}`,
       type,
       onClick,
       disabled,
@@ -306,7 +351,11 @@ var button_default = Button;
 // src/components/carousel/index.tsx
 var import_react2 = require("react");
 var import_jsx_runtime5 = require("react/jsx-runtime");
-var Carousel = ({ slides, interval = 3e3 }) => {
+var Carousel = ({
+  slides,
+  interval = 3e3,
+  className = ""
+}) => {
   const [currentIndex, setCurrentIndex] = (0, import_react2.useState)(0);
   (0, import_react2.useEffect)(() => {
     const timer = setInterval(() => {
@@ -314,7 +363,7 @@ var Carousel = ({ slides, interval = 3e3 }) => {
     }, interval);
     return () => clearInterval(timer);
   }, [slides.length, interval]);
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "relative w-full h-[484px] overflow-hidden", children: slides.map(
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: `relative w-full h-[484px] overflow-hidden ${className}`, children: slides.map(
     ({
       title,
       titleClassName,
@@ -354,23 +403,113 @@ var import_react3 = require("react");
 // src/components/icons/index.tsx
 var icons_exports = {};
 __export(icons_exports, {
+  AlienFaceSVG: () => AlienFace,
+  AlienUserSVG: () => AlienUser,
   ArrowLeftSVG: () => ArrowLeft,
+  ArrowRightSVG: () => ArrowRight,
+  AstronautSVG: () => Astronaut,
+  BalanceSVG: () => Balance,
+  BalloonsSVG: () => Balloons,
+  BasketSVG: () => Basket,
+  BatSVG: () => Bat,
+  BatterySVG: () => Battery,
+  BeeSVG: () => Bee,
+  BinocularSVG: () => Binocular,
+  BirdSVG: () => Bird,
+  BoxFilledSVG: () => BoxFilled,
+  BrainSVG: () => Brain,
+  BrightHigh: () => BrightHigh,
+  BrightLowSVG: () => BrightLow,
+  BucketSVG: () => Bucket,
+  CabinSVG: () => Cabin,
+  CakeSVG: () => Cake,
+  ChartSVG: () => Chart,
   CheckSVG: () => Check,
   ChevDownSVG: () => ChevDown,
   ChevLeftSVG: () => ChevLeft,
   ChevRightSVG: () => ChevRight,
+  ChevUpSVG: () => ChevUp,
   CircleSVG: () => Circle,
+  CitySVG: () => City,
+  ClockSVG: () => Clock,
+  CocktailSVG: () => Cocktail,
+  CodeSVG: () => Code,
+  CoinSVG: () => Coin,
+  CoinsSVG: () => Coins,
   ColorsSVG: () => Colors,
+  ConnectionSVG: () => Connection,
   CoversSVG: () => Covers,
+  CowSVG: () => Cow,
+  CrabSVG: () => Crab,
   CrossSVG: () => Cross,
+  CsvSVG: () => Csv,
   DashboardSVG: () => Dashboard,
+  DiceSVG: () => Dice,
+  DolphinSVG: () => Dolphin,
+  DoorOpnSVG: () => DoorOpen,
+  DotFillSVG: () => DotFill,
+  DownFolderSVG: () => DownFolder,
+  DownloadSVG: () => Download,
+  EclipseSVG: () => Eclipse,
+  EditSVG: () => Edit,
+  ElephantSVG: () => Elephant,
+  FenceSVG: () => Fence,
   FilterSVG: () => Filter,
+  FiltersSVG: () => Filters,
+  FoxSVG: () => Fox,
+  GhostSVG: () => Ghost,
+  HelicopterSVG: () => Helicopter,
+  HospitalSVG: () => Hospital,
+  ImageSVG: () => Image2,
+  JoystickSVG: () => Joystick,
+  LightSVG: () => Light,
+  LionSVG: () => Lion,
+  LobsterSVG: () => Lobster,
+  LockSVG: () => Lock,
+  MasksSVG: () => Masks,
+  MobileSVG: () => Mobile,
+  MoneyBagSVG: () => MoneyBag,
+  MoneySVG: () => Money,
+  MonkeySVG: () => Monkey,
+  NewTabSVG: () => NewTab,
   OrderInfoSVG: () => OrderInfo,
   OrdersSVG: () => Orders,
+  PdfSVG: () => Pdf,
+  PercentageSVG: () => Percentage,
+  PinSVG: () => Pin,
+  PlaneSVG: () => Plane,
+  PrinterSVG: () => Printer,
   ProductsSVG: () => Products,
+  RadioSVG: () => Radio,
+  RobotSVG: () => Robot,
+  RocketSVG: () => Rocket,
+  SheepSVG: () => Sheep,
+  ShuttleSVG: () => Shuttle,
+  SignInSVG: () => SignIn,
   SignOutSVG: () => SignOut,
+  SignalSVG: () => Signal,
+  SirenSVG: () => Siren,
+  SnakeSVG: () => Snake,
+  SortSVG: () => Sort,
+  SquareFillSVG: () => SquareFill,
+  StarsSVG: () => Stars,
+  StepsSVG: () => Steps,
+  StoreSVG: () => Store,
+  SuitcaseSVG: () => Suitcase,
+  TagsSVG: () => Tags,
   TemplatesSVG: () => Templates,
-  UploadSVG: () => Upload
+  TerminalSVG: () => Terminal,
+  ToDoSVG: () => ToDo,
+  TurtleSVG: () => Turtle,
+  UfoSVG: () => Ufo,
+  UnlockSVG: () => Unlock,
+  UpFolderSVG: () => UpFolder,
+  UploadSVG: () => Upload,
+  VanSVG: () => Van,
+  VideoCamSVG: () => VideoCam,
+  WalletSVG: () => Wallet,
+  WhaleSVG: () => Whale,
+  WifiSVG: () => Wifi
 });
 
 // src/components/icons/dashboardSVG/index.tsx
@@ -472,11 +611,25 @@ var Colors = () => {
   ] });
 };
 
-// src/components/icons/signOutSVG/index.tsx
+// src/components/icons/signInSVG/index.tsx
 var import_jsx_runtime12 = require("react/jsx-runtime");
+var SignIn = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-4 -4 30 30", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "m.5,11.5h17.412c-.074-.214-.191-.412-.357-.576l-4.154-4.107c-.196-.194-.198-.511-.004-.707.194-.197.511-.199.707-.004l4.154,4.107c.479.474.743,1.106.742,1.781,0,.001,0,.003,0,.004,0,0,0,.001,0,.002,0,.002-.001.004-.001.006-.004.669-.268,1.297-.745,1.766l-4.15,4.084c-.097.096-.224.144-.351.144-.129,0-.258-.05-.356-.149-.194-.196-.191-.514.006-.707l4.15-4.084c.162-.16.278-.352.354-.56H.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5ZM19.5,0H4.5C2.019,0,0,2.019,0,4.5v4c0,.276.224.5.5.5s.5-.224.5-.5v-4c0-1.93,1.57-3.5,3.5-3.5h15c1.93,0,3.5,1.57,3.5,3.5v15c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5v-4c0-.276-.224-.5-.5-.5s-.5.224-.5.5v4c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5V4.5c0-2.481-2.019-4.5-4.5-4.5Z",
+      fill: "currentColor"
+    }
+  ) });
+};
+
+// src/components/icons/signOutSVG/index.tsx
+var import_jsx_runtime13 = require("react/jsx-runtime");
 var SignOut = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("g", { clipPath: "url(#clip0_897_111)", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("svg", { viewBox: "-3 -3 35 35", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("g", { clipPath: "url(#clip0_897_111)", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -485,15 +638,15 @@ var SignOut = () => {
         fill: "currentColor"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("clipPath", { id: "clip0_897_111", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("clipPath", { id: "clip0_897_111", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
   ] });
 };
 
 // src/components/icons/filterSVG/index.tsx
-var import_jsx_runtime13 = require("react/jsx-runtime");
+var import_jsx_runtime14 = require("react/jsx-runtime");
 var Filter = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("g", { clipPath: "url(#clip0_918_510)", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("g", { clipPath: "url(#clip0_918_510)", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -502,14 +655,14 @@ var Filter = () => {
         fill: "currentColor"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("clipPath", { id: "clip0_918_510", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("rect", { width: "28", height: "28", rx: "8", fill: "currentColor" }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("clipPath", { id: "clip0_918_510", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("rect", { width: "28", height: "28", rx: "8", fill: "currentColor" }) }) })
   ] });
 };
 
 // src/components/icons/chevDownSVG/index.tsx
-var import_jsx_runtime14 = require("react/jsx-runtime");
+var import_jsx_runtime15 = require("react/jsx-runtime");
 var ChevDown = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -521,9 +674,9 @@ var ChevDown = () => {
 };
 
 // src/components/icons/crossSVG/index.tsx
-var import_jsx_runtime15 = require("react/jsx-runtime");
+var import_jsx_runtime16 = require("react/jsx-runtime");
 var Cross = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-50 -50 600 600", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("g", { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-150 -150 800 800", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("g", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -535,10 +688,10 @@ var Cross = () => {
 };
 
 // src/components/icons/orderInfoSVG/index.tsx
-var import_jsx_runtime16 = require("react/jsx-runtime");
+var import_jsx_runtime17 = require("react/jsx-runtime");
 var OrderInfo = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("g", { clipPath: "url(#clip0_907_32)", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("g", { clipPath: "url(#clip0_907_32)", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -547,14 +700,14 @@ var OrderInfo = () => {
         fill: "currentColor"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("clipPath", { id: "clip0_907_32", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("clipPath", { id: "clip0_907_32", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
   ] });
 };
 
 // src/components/icons/chevLeftSVG/index.tsx
-var import_jsx_runtime17 = require("react/jsx-runtime");
+var import_jsx_runtime18 = require("react/jsx-runtime");
 var ChevLeft = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -566,9 +719,9 @@ var ChevLeft = () => {
 };
 
 // src/components/icons/chevRightSVG/index.tsx
-var import_jsx_runtime18 = require("react/jsx-runtime");
+var import_jsx_runtime19 = require("react/jsx-runtime");
 var ChevRight = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -579,24 +732,47 @@ var ChevRight = () => {
   ) });
 };
 
-// src/components/icons/checkSVG/index.tsx
-var import_jsx_runtime19 = require("react/jsx-runtime");
-var Check = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+// src/components/icons/chevUpSVG/index.tsx
+var import_jsx_runtime20 = require("react/jsx-runtime");
+var ChevUp = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
     "path",
     {
       fillRule: "evenodd",
-      d: "M4.293 12.293a1 1 0 011.414 0L10 16.586l8.293-8.293a1 1 0 111.414 1.414l-9 9a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414z",
       clipRule: "evenodd",
+      d: "m17.635,14.428l-5.281-5.281c-.189-.189-.518-.189-.707,0l-5.281,5.281-.707-.707,5.281-5.281c.566-.566,1.555-.566,2.121,0l5.281,5.281-.707.707Z",
       fill: "currentColor"
     }
   ) });
 };
 
+// src/components/icons/checkSVG/index.tsx
+var import_jsx_runtime21 = require("react/jsx-runtime");
+var Check = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+    "svg",
+    {
+      viewBox: "0 0 256 256",
+      stroke: "currentColor",
+      strokeWidth: "4",
+      xmlns: "http://www.w3.org/2000/svg",
+      children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+        "path",
+        {
+          fillRule: "evenodd",
+          clipRule: "evenodd",
+          d: "M103.99951,188.00012a3.98852,3.98852,0,0,1-2.82812-1.17139l-56-55.9956a3.99992,3.99992,0,0,1,5.65625-5.65723l53.17187,53.16748L213.17139,69.1759a3.99992,3.99992,0,0,1,5.65625,5.65723l-112,111.9956A3.98855,3.98855,0,0,1,103.99951,188.00012Z",
+          fill: "currentColor"
+        }
+      )
+    }
+  );
+};
+
 // src/components/icons/circleSVG/index.tsx
-var import_jsx_runtime20 = require("react/jsx-runtime");
+var import_jsx_runtime22 = require("react/jsx-runtime");
 var Circle = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-3 -3 30 30", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-3 -3 30 30", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -608,10 +784,10 @@ var Circle = () => {
 };
 
 // src/components/icons/uploadSVG/index.tsx
-var import_jsx_runtime21 = require("react/jsx-runtime");
+var import_jsx_runtime23 = require("react/jsx-runtime");
 var Upload = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("svg", { viewBox: "0 0 53 53", xmlns: "http://www.w3.org/2000/svg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("g", { clipPath: "url(#clip0_859_45)", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("svg", { viewBox: "0 0 53 53", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("g", { clipPath: "url(#clip0_859_45)", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -620,14 +796,14 @@ var Upload = () => {
         fill: "currentColor"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("clipPath", { id: "clip0_859_45", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("rect", { width: "53", height: "53", fill: "currentColor" }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("clipPath", { id: "clip0_859_45", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("rect", { width: "53", height: "53", fill: "currentColor" }) }) })
   ] });
 };
 
 // src/components/icons/arrowLeftSVG/index.tsx
-var import_jsx_runtime22 = require("react/jsx-runtime");
+var import_jsx_runtime24 = require("react/jsx-runtime");
 var ArrowLeft = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -638,79 +814,1360 @@ var ArrowLeft = () => {
   ) });
 };
 
+// src/components/icons/arrowRightSVG/index.tsx
+var import_jsx_runtime25 = require("react/jsx-runtime");
+var ArrowRight = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "m18.541,10.894l-4.717-4.717-.707.707,4.616,4.617H5v1h12.735l-4.618,4.617.707.707,4.717-4.716c.296-.296.459-.69.459-1.108s-.163-.812-.459-1.106Z",
+      fill: "currentColor"
+    }
+  ) });
+};
+
+// src/components/icons/alienFaceSVG/index.tsx
+var import_jsx_runtime26 = require("react/jsx-runtime");
+var AlienFace = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m12,0C6.486,0,2,4.389,2,9.783c0,5.222,4.73,10.534,7.55,13.235.687.658,1.568.987,2.45.987s1.763-.329,2.45-.987c2.82-2.701,7.55-8.013,7.55-13.235C22,4.389,17.514,0,12,0Zm1.759,22.296c-.986.944-2.531.944-3.518,0-2.704-2.591-7.241-7.663-7.241-12.513S7.038,1,12,1s9,3.94,9,8.783-4.537,9.922-7.241,12.513Zm-3.907-14.033c-.84-.841-2.208-1.088-3.207-1.147-.44-.031-.875.138-1.188.451-.313.313-.478.746-.451,1.188.059.999.306,2.367,1.147,3.208.84.84,2.299,1.091,3.299,1.15.41,0,.806-.163,1.097-.455.313-.313.477-.746.451-1.188-.06-1-.308-2.367-1.147-3.207Zm-.011,3.688c-.112.113-.259.168-.422.161-1.168-.07-2.077-.374-2.56-.856s-.787-1.392-.856-2.56c-.009-.159.047-.309.16-.421.104-.104.241-.161.388-.161,1.168.069,2.111.375,2.594.857s.787,1.392.856,2.56c.009.159-.047.309-.16.421Zm8.703-4.384c-.312-.313-.744-.482-1.188-.451-.999.059-2.367.307-3.207,1.147-.84.84-1.088,2.208-1.147,3.207-.026.442.138.875.451,1.188.292.292.687.455,1.098.455,1-.06,2.458-.311,3.298-1.15.841-.841,1.088-2.208,1.147-3.208.026-.442-.138-.875-.451-1.188Zm-.547,1.128c-.069,1.168-.374,2.077-.856,2.56s-1.392.787-2.559.856c-.169.003-.31-.048-.422-.161-.113-.113-.169-.262-.16-.421.07-1.168.374-2.077.856-2.56s1.426-.788,2.594-.857c.146,0,.283.057.388.161.113.113.169.262.16.421Z"
+    }
+  ) });
+};
+
+// src/components/icons/NewTabSVGG/index.tsx
+var import_jsx_runtime27 = require("react/jsx-runtime");
+var NewTab = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M20,8.5v11c0,2.481-2.019,4.5-4.5,4.5H4.5c-2.481,0-4.5-2.019-4.5-4.5V8.5c0-2.481,2.019-4.5,4.5-4.5H15.5c.276,0,.5,.224,.5,.5s-.224,.5-.5,.5H4.5c-1.93,0-3.5,1.57-3.5,3.5v11c0,1.93,1.57,3.5,3.5,3.5H15.5c1.93,0,3.5-1.57,3.5-3.5V8.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5ZM21.5,0h-7c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h7c.231,0,.451,.053,.646,.147L8.146,15.146c-.195,.195-.195,.512,0,.707,.098,.098,.226,.146,.354,.146s.256-.049,.354-.146L22.853,1.854c.094,.196,.147,.415,.147,.646v7c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V2.5c0-1.378-1.122-2.5-2.5-2.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/percentageSVG/index.tsx
+var import_jsx_runtime28 = require("react/jsx-runtime");
+var Percentage = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,24c-1.539,0-2.99-.676-3.982-1.854-.095-.113-.219-.165-.376-.155-1.528,.127-3.039-.417-4.127-1.505-1.088-1.088-1.637-2.592-1.505-4.127,.013-.147-.043-.281-.155-.375-1.179-.993-1.854-2.445-1.854-3.983s.676-2.99,1.854-3.982c.113-.095,.169-.229,.156-.376-.132-1.535,.417-3.039,1.505-4.127,1.087-1.087,2.584-1.638,4.127-1.505,.145,.012,.281-.042,.376-.155,.992-1.179,2.443-1.854,3.982-1.854s2.99,.676,3.982,1.854c.096,.113,.22,.165,.376,.155,1.521-.134,3.039,.417,4.127,1.505,1.088,1.088,1.637,2.592,1.505,4.127-.013,.147,.043,.281,.155,.375,1.179,.993,1.854,2.445,1.854,3.983s-.676,2.99-1.854,3.982c-.113,.095-.169,.229-.156,.376,.132,1.535-.417,3.039-1.505,4.127-1.087,1.087-2.582,1.64-4.127,1.505-.144-.008-.281,.043-.376,.155-.992,1.179-2.443,1.854-3.982,1.854Zm-4.314-3.012c.425,0,.819,.183,1.098,.514,.801,.952,1.974,1.498,3.217,1.498s2.416-.546,3.217-1.498c.306-.364,.757-.554,1.228-.508,1.241,.105,2.455-.337,3.334-1.216s1.322-2.094,1.216-3.335c-.04-.474,.145-.92,.509-1.226,.951-.802,1.497-1.975,1.497-3.217s-.546-2.416-1.498-3.218c-.363-.305-.548-.752-.508-1.226,.106-1.241-.337-2.456-1.216-3.335-.88-.879-2.103-1.323-3.334-1.216-.48,.04-.921-.144-1.228-.508-.801-.952-1.974-1.498-3.217-1.498s-2.416,.546-3.217,1.498c-.307,.364-.762,.547-1.228,.508-1.243-.107-2.455,.337-3.334,1.216-.879,.879-1.322,2.094-1.216,3.335,.04,.474-.145,.92-.509,1.226-.951,.802-1.497,1.975-1.497,3.217s.546,2.416,1.498,3.218c.363,.305,.548,.752,.508,1.226-.106,1.241,.337,2.456,1.216,3.335s2.099,1.318,3.334,1.216c.044-.004,.087-.006,.13-.006Zm1.314-12.988c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Zm6,6c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Zm-5.084,2.277l5-7.5c.153-.23,.091-.54-.139-.693-.228-.152-.539-.091-.693,.139l-5,7.5c-.153,.23-.091,.54,.139,.693,.085,.057,.182,.084,.277,.084,.161,0,.319-.078,.416-.223Z"
+    }
+  ) });
+};
+
+// src/components/icons/balloonsSVG/index.tsx
+var import_jsx_runtime29 = require("react/jsx-runtime");
+var Balloons = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m19.076,11.234c.46-.734.924-1.864.924-2.734,0-.276.224-.5.5-.5s.5.224.5.5c0,1.142-.58,2.473-1.076,3.266-.095.151-.258.234-.424.234-.091,0-.183-.024-.266-.076-.233-.146-.305-.455-.158-.689Zm-9.576-3.234c-.276,0-.5.224-.5.5,0,.87-.464,2-.924,2.734-.146.234-.075.543.158.689.083.052.175.076.266.076.166,0,.329-.083.424-.234.496-.793,1.076-2.124,1.076-3.266,0-.276-.224-.5-.5-.5Zm12.5,14c0,1.294-1.225,1.921-1.276,1.947-.072.036-.148.053-.224.053-.183,0-.359-.101-.447-.276-.123-.247-.023-.547.224-.671.005-.002.724-.382.724-1.053,0-.746-.646-1.16-1.712-1.752-.908-.505-1.938-1.078-2.217-2.158-.164-.636-.044-1.358.367-2.194-2.009-.515-3.65-2.887-4.436-5.597-1.003,3.524-3.413,6.695-6.243,6.702-.402.584-.742,1.195-.759,1.378,0,.566.678.926,1.712,1.409,1.072.501,2.288,1.07,2.288,2.323,0,1.186-1.225,1.812-1.276,1.838-.072.036-.148.053-.224.053-.183,0-.359-.101-.447-.276-.123-.247-.023-.547.224-.671.005-.002.724-.387.724-.943,0-.574-.678-.934-1.712-1.417-1.072-.501-2.288-1.07-2.288-2.323,0-.391.339-1.018.662-1.527C2.444,15.914,0,11.021,0,6.9,0,3.095,3.028,0,6.75,0c2.833,0,5.263,1.793,6.263,4.327.879-2.021,2.817-3.327,5.237-3.327,3.332,0,5.75,2.475,5.75,5.885,0,4.096-2.372,8.838-5.477,9.103-.441.764-.604,1.386-.484,1.852.172.665.932,1.087,1.735,1.534,1.043.58,2.226,1.238,2.226,2.626ZM12.5,6.9c0-3.253-2.579-5.9-5.75-5.9S1,3.646,1,6.9c0,4.096,2.653,9.1,5.75,9.1s5.75-5.004,5.75-9.1Zm5.75,8.1c2.631,0,4.75-4.439,4.75-8.115,0-2.876-1.953-4.885-4.75-4.885s-4.75,2.009-4.75,4.885c0,3.676,2.119,8.115,4.75,8.115Z"
+    }
+  ) });
+};
+
+// src/components/icons/toDoSVG/index.tsx
+var import_jsx_runtime30 = require("react/jsx-runtime");
+var ToDo = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M17.5,24H6.5c-2.481,0-4.5-2.019-4.5-4.5V4.5C2,2.019,4.019,0,6.5,0h11c2.481,0,4.5,2.019,4.5,4.5v15c0,2.481-2.019,4.5-4.5,4.5ZM6.5,1c-1.93,0-3.5,1.57-3.5,3.5v15c0,1.93,1.57,3.5,3.5,3.5h11c1.93,0,3.5-1.57,3.5-3.5V4.5c0-1.93-1.57-3.5-3.5-3.5H6.5Zm11.5,4.5c0-.276-.224-.5-.5-.5h-6c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h6c.276,0,.5-.224,.5-.5Zm0,6c0-.276-.224-.5-.5-.5h-6c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h6c.276,0,.5-.224,.5-.5Zm0,6c0-.276-.224-.5-.5-.5h-6c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h6c.276,0,.5-.224,.5-.5ZM8.5,7h-2c-.276,0-.5-.224-.5-.5v-2c0-.276,.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5v2c0,.276-.224,.5-.5,.5Zm-1.5-1h1v-1h-1v1Zm1.5,7h-2c-.276,0-.5-.224-.5-.5v-2c0-.276,.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5v2c0,.276-.224,.5-.5,.5Zm-1.5-1h1v-1h-1v1Zm1.5,7h-2c-.276,0-.5-.224-.5-.5v-2c0-.276,.224-.5,.5-.5h2c.276,0,.5,.224,.5,.5v2c0,.276-.224,.5-.5,.5Zm-1.5-1h1v-1h-1v1Z"
+    }
+  ) });
+};
+
+// src/components/icons/basketSVG/index.tsx
+var import_jsx_runtime31 = require("react/jsx-runtime");
+var Basket = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.38,8.85c-.47-.54-1.16-.85-1.88-.85h-.56C20.44,3.48,16.6,0,12,0S3.56,3.48,3.06,8h-.56c-.72,0-1.41,.31-1.88,.85-.47,.54-.69,1.26-.6,1.98l1.12,8.4c.36,2.72,2.71,4.77,5.45,4.77h10.81c2.75,0,5.09-2.05,5.45-4.77l1.12-8.4c.09-.71-.12-1.44-.6-1.98ZM12,1c4.05,0,7.44,3.03,7.94,7H4.06c.49-3.97,3.88-7,7.94-7Zm10.99,9.7l-1.12,8.4c-.3,2.23-2.21,3.91-4.46,3.91H6.59c-2.25,0-4.16-1.68-4.46-3.91L1.01,10.7c-.06-.43,.07-.86,.36-1.19s.7-.51,1.13-.51H21.5c.43,0,.84,.19,1.13,.51s.42,.76,.36,1.19Z"
+    }
+  ) });
+};
+
+// src/components/icons/batSVG/index.tsx
+var import_jsx_runtime32 = require("react/jsx-runtime");
+var Bat = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m21.33,1.533c-.321-.454-.878-.642-1.415-.48-.552.167-.92.643-.938,1.214-.131,4.101-1.05,6.862-4.859,7.559.242-.385.383-.84.383-1.327v-3.151c0-.31-.375-.466-.595-.246l-1.049,1.049c-.267-.098-.556-.151-.857-.151s-.589.053-.857.151l-1.049-1.049c-.219-.219-.595-.064-.595.246v3.151c0,.487.141.942.383,1.327-3.809-.697-4.728-3.458-4.859-7.559-.019-.571-.387-1.048-.938-1.214-.536-.163-1.094.026-1.415.48C.864,4.071-.052,8.825.002,12.008c.013.747.219,2.857.341,4.048.043.421.334.773.741.897.401.122.823,0,1.093-.324.283-.339.815-.63,1.054-.63,1.283,0,1.796,2.099,2.042,3.107l.043.175c.082.331.337.593.665.684.328.089.681-.004.922-.247.438-.443,1.157-.719,1.348-.719h.002c.688.009,1.19.36,1.578,1.102.292,1.254.623,2.363.93,3.08.217.505.692.818,1.24.818s1.023-.313,1.24-.819c.298-.696.62-1.763.905-2.974.395-.814.912-1.198,1.626-1.207.205.012.91.299,1.327.719.24.242.593.337.92.247.328-.09.583-.351.667-.684l.041-.167c.246-1.011.759-3.115,2.094-3.115.221,0,.707.275,1.003.63.27.324.69.444,1.093.324.407-.125.698-.477.741-.897.098-.951.327-3.25.341-4.048.054-3.184-.862-7.937-2.668-10.475Zm-11.874,16.756c-.355-.186-.753-.283-1.191-.289-.585-.008-1.53.467-1.979,1.041l-.042-.171c-.283-1.158-.945-3.87-3.014-3.87-.624,0-1.416.504-1.894.955-.204-2-.326-3.444-.335-3.963-.044-2.591.697-7.368,2.482-9.879.101-.14.238-.125.312-.102.052.016.221.083.228.289.127,3.983.971,7.704,5.803,8.53-.457.742-.827,1.774-.827,3.17,0,1.227.183,2.777.456,4.289Zm2.544-11.289c.827,0,1.5.673,1.5,1.5,0,.793-.619,1.444-1.4,1.496-.067.003-.134.003-.201,0-.781-.052-1.4-.703-1.4-1.496,0-.827.673-1.5,1.5-1.5Zm.32,15.787c-.082.192-.251.213-.32.213s-.238-.021-.32-.212c-.677-1.578-1.68-5.963-1.68-8.788,0-1.456.465-2.423.952-3.036.333.024.682.036,1.048.036s.715-.012,1.048-.036c.486.613.952,1.58.952,3.036,0,2.824-1.003,7.209-1.68,8.787Zm10.678-10.795c-.009.527-.134,2.008-.407,3.999-.409-.492-1.149-.991-1.771-.991-2.046,0-2.816,2.678-3.122,3.91-.556-.505-1.404-.91-1.928-.91h-.013c-.449.006-.855.108-1.217.305.275-1.518.459-3.075.459-4.305,0-1.396-.37-2.428-.827-3.17,4.832-.826,5.676-4.547,5.803-8.53.007-.207.176-.273.228-.289.073-.022.212-.039.312.102,1.785,2.511,2.526,7.289,2.482,9.879Z"
+    }
+  ) });
+};
+
+// src/components/icons/batterySVG/index.tsx
+var import_jsx_runtime33 = require("react/jsx-runtime");
+var Battery = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M17.5,20H4.5c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h13c2.312,0,4.223,1.753,4.473,4h.527c.827,0,1.5,.673,1.5,1.5v5c0,.827-.673,1.5-1.5,1.5h-.527c-.25,2.247-2.16,4-4.473,4ZM4.5,5c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h13c1.93,0,3.5-1.57,3.5-3.5,0-.276,.224-.5,.5-.5h1c.275,0,.5-.224,.5-.5v-5c0-.276-.225-.5-.5-.5h-1c-.276,0-.5-.224-.5-.5,0-1.93-1.57-3.5-3.5-3.5H4.5Zm13,12H4.5c-.827,0-1.5-.673-1.5-1.5v-7c0-.827,.673-1.5,1.5-1.5h13c.827,0,1.5,.673,1.5,1.5v7c0,.827-.673,1.5-1.5,1.5ZM4.5,8c-.275,0-.5,.224-.5,.5v7c0,.276,.225,.5,.5,.5h13c.275,0,.5-.224,.5-.5v-7c0-.276-.225-.5-.5-.5H4.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/beeSVG/index.tsx
+var import_jsx_runtime34 = require("react/jsx-runtime");
+var Bee = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m22.826,9.315c-1.252-1.223-4.477-2.047-8.653-2.259.509-.538.826-1.259.826-2.056,0-1.279-.808-2.365-1.937-2.796.331-.504,1.073-1.204,2.437-1.204.276,0,.5-.224.5-.5s-.224-.5-.5-.5c-2.061,0-3.093,1.242-3.465,2.004-.012,0-.023-.004-.035-.004s-.023.003-.035.004c-.372-.761-1.404-2.004-3.465-2.004-.276,0-.5.224-.5.5s.224.5.5.5c1.364,0,2.106.7,2.437,1.204-1.129.431-1.937,1.517-1.937,2.796,0,.797.318,1.518.826,2.056-4.176.212-7.401,1.036-8.653,2.259-.757.74-1.174,1.724-1.174,2.772s.417,2.031,1.174,2.771c.777.76,1.799,1.14,2.82,1.14s2.042-.38,2.819-1.14c.08-.078.171-.177.258-.268.349,3.22,1.962,6.873,3.166,8.515.417.569,1.06.896,1.763.896s1.346-.326,1.763-.896c1.204-1.643,2.816-5.295,3.166-8.516.087.092.178.19.258.268.777.76,1.799,1.14,2.819,1.14s2.043-.38,2.82-1.14c.757-.739,1.174-1.724,1.174-2.771s-.417-2.032-1.174-2.772Zm-8.066,9.685h-5.521c-.249-.64-.477-1.315-.669-2h6.858c-.192.685-.42,1.36-.669,2Zm-6.442-3c-.15-.68-.256-1.355-.298-2h7.958c-.042.645-.148,1.32-.298,2h-7.363Zm.115-3c.496-.618,1.023-1.301,1.553-2h4.026c.53.699,1.057,1.382,1.553,2h-7.133Zm2.307-3c.115-.153.231-.308.344-.458.321-.428.624-.831.915-1.215.291.384.594.787.915,1.215.113.151.229.305.344.458h-2.518Zm-.741-5c0-1.103.897-2,2-2s2,.897,2,2-.897,2-2,2-2-.897-2-2Zm-3.886,9.143c-1.171,1.143-3.072,1.143-4.241,0-.562-.55-.873-1.28-.873-2.056s.311-1.506.873-2.057c1.154-1.127,4.746-1.912,9.11-2.018-.225.297-.459.609-.698.929-1.482,1.977-3.163,4.217-4.171,5.201Zm6.842,8.37c-.453.619-1.459.619-1.912,0-.429-.584-.922-1.473-1.387-2.513h4.685c-.464,1.04-.958,1.928-1.387,2.513Zm9.171-8.37c-1.169,1.143-3.07,1.143-4.241,0-1.008-.984-2.688-3.225-4.171-5.201-.239-.32-.474-.632-.698-.929,4.364.106,7.956.89,9.11,2.018.562.55.873,1.281.873,2.057s-.311,1.506-.873,2.056Z"
+    }
+  ) });
+};
+
+// src/components/icons/binocularSVG/index.tsx
+var import_jsx_runtime35 = require("react/jsx-runtime");
+var Binocular = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M20,5.051V2.5c0-1.378-1.122-2.5-2.5-2.5s-2.5,1.122-2.5,2.5v2.5h-6V2.5c0-1.378-1.122-2.5-2.5-2.5s-2.5,1.122-2.5,2.5v2.551C1.756,5.303,0,7.19,0,9.5v9.5c0,2.757,2.243,5,5,5s5-2.243,5-5v-5c0-1.103,.897-2,2-2s2,.897,2,2v5c0,2.757,2.243,5,5,5s5-2.243,5-5V9.5c0-2.31-1.756-4.197-4-4.449Zm-4-2.551c0-.827,.673-1.5,1.5-1.5s1.5,.673,1.5,1.5v2.5h-3V2.5ZM6.5,1c.827,0,1.5,.673,1.5,1.5v2.5h-3V2.5c0-.827,.673-1.5,1.5-1.5Zm-1.5,22c-2.206,0-4-1.794-4-4s1.794-4,4-4,4,1.794,4,4-1.794,4-4,4Zm14,0c-2.206,0-4-1.794-4-4s1.794-4,4-4,4,1.794,4,4-1.794,4-4,4Zm0-9c-1.641,0-3.088,.806-4,2.031v-2.031c0-1.654-1.346-3-3-3s-3,1.346-3,3v2.031c-.912-1.225-2.359-2.031-4-2.031s-3.088,.806-4,2.031v-6.531c0-1.93,1.57-3.5,3.5-3.5h15c1.93,0,3.5,1.57,3.5,3.5v6.531c-.912-1.225-2.359-2.031-4-2.031Z"
+    }
+  ) });
+};
+
+// src/components/icons/birdSVG/index.tsx
+var import_jsx_runtime36 = require("react/jsx-runtime");
+var Bird = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m19,5c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm5,3l-2,.857v2.143c0,4.653-2.909,8.631-7,10.236v2.264c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-1.926c-.955.271-1.959.426-3,.426v1.5c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-1.551C4.402,21.442,0,16.728,0,11v-4.5c0-.276.224-.5.5-.5s.5.224.5.5c0,2.481,2.019,4.5,4.5,4.5s4.5-2.019,4.5-4.5v-.5c0-3.309,2.691-6,6-6s6,2.691,6,6v.143l2,.857v1ZM1,11c0,2.252.758,4.326,2.019,6h1.981c2.757,0,5-2.243,5-5v-2.348c-.996,1.417-2.64,2.348-4.5,2.348s-3.504-.93-4.5-2.348v1.348Zm20-5c0-2.757-2.243-5-5-5s-5,2.243-5,5v6c0,3.309-2.691,6-6,6h-1.129c1.816,1.849,4.339,3,7.129,3,5.514,0,10-4.486,10-10v-5Z"
+    }
+  ) });
+};
+
+// src/components/icons/printerSVG/index.tsx
+var import_jsx_runtime37 = require("react/jsx-runtime");
+var Printer = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M19.5,8h-.5V3.5c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v4.5h-.5c-2.481,0-4.5,2.019-4.5,4.5v7c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5v-7c0-2.481-2.019-4.5-4.5-4.5ZM6,3.5c0-1.378,1.122-2.5,2.5-2.5h7c1.379,0,2.5,1.122,2.5,2.5V13H6V3.5Zm-1.5,5.5h.5v4.5c0,.276,.224,.5,.5,.5h13c.276,0,.5-.224,.5-.5v-4.5h.5c1.93,0,3.5,1.57,3.5,3.5v5.5H1v-5.5c0-1.93,1.57-3.5,3.5-3.5Zm15,14H4.5c-1.93,0-3.5-1.57-3.5-3.5v-.5H23v.5c0,1.93-1.57,3.5-3.5,3.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/boxFilledSVG/index.tsx
+var import_jsx_runtime38 = require("react/jsx-runtime");
+var BoxFilled = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.636,10.281l-1.197-2.236c-.439-.821-1.4-1.209-2.291-.92l-8.147,2.657L3.853,7.125c-.893-.29-1.852,.099-2.291,.92L.376,10.26c-.412,.685-.49,1.508-.213,2.258,.276,.75,.871,1.325,1.629,1.578l.21,.07-.006,3.621c0,1.941,1.235,3.658,3.077,4.272l4.862,1.621c.663,.221,1.359,.331,2.056,.331s1.393-.11,2.056-.331l4.866-1.622c1.843-.614,3.082-2.329,3.083-4.267v-3.625l.212-.071c.758-.253,1.353-.828,1.629-1.578,.277-.75,.199-1.573-.201-2.236ZM1.101,12.172c-.171-.464-.123-.973,.145-1.418l1.197-2.236c.164-.307,.48-.487,.813-.487,.095,0,.191,.015,.286,.046l7.719,2.517-1.972,3.635c-.387,.645-1.156,.931-1.867,.69l-5.313-1.771c-.469-.156-.836-.512-1.008-.975Zm10.384,10.816c-.419-.038-.833-.124-1.233-.258l-4.862-1.621c-1.433-.478-2.395-1.812-2.394-3.322l.005-3.288,4.104,1.368c.274,.091,.553,.135,.827,.135,.89,0,1.735-.463,2.225-1.279l1.334-2.457-.006,10.722Zm9.511-5.197c0,1.507-.965,2.84-2.399,3.317l-4.866,1.622c-.404,.135-.823,.221-1.246,.259l.006-10.758,1.362,2.51c.48,.802,1.323,1.261,2.212,1.261,.275,0,.555-.044,.829-.135l4.102-1.367v3.291Zm1.903-5.619c-.172,.463-.539,.818-1.008,.975l-5.313,1.771c-.715,.239-1.481-.047-1.856-.672l-1.982-3.653,7.719-2.517c.428-.141,.889,.048,1.1,.441l1.209,2.258c.256,.424,.304,.933,.133,1.396ZM4.759,5.851c-.193-.196-.191-.514,.006-.707L9.547,.437c.58-.582,1.532-.583,2.118,.003l1.885,1.885c.568-.508,1.515-.493,2.063,.055l2.754,2.753c.195,.195,.195,.512,0,.707-.195,.195-.512,.195-.707,0l-2.754-2.753c-.195-.195-.512-.195-.707,0l-4.349,4.27c-.098,.096-.225,.144-.351,.144-.13,0-.259-.05-.356-.149-.193-.197-.19-.514,.006-.707l3.686-3.619-1.878-1.878c-.195-.195-.512-.195-.707,0L5.466,5.856c-.098,.096-.224,.144-.351,.144-.129,0-.259-.05-.356-.149Z"
+    }
+  ) });
+};
+
+// src/components/icons/brainSVG/index.tsx
+var import_jsx_runtime39 = require("react/jsx-runtime");
+var Brain = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M24,10.98c0-1.562-.799-3.022-2.105-3.887,.009-.097,.015-.195,.015-.294,0-1.953-1.275-3.515-2.995-3.744C18.574,1.325,17.041,.026,15.25,.026c-1.387,0-2.601,.758-3.25,1.881C11.351,.783,10.137,.026,8.75,.026,6.96,.026,5.428,1.324,5.087,3.052c-1.71,.219-2.996,1.786-2.996,3.746,0,.1,.006,.198,.015,.294-1.307,.865-2.105,2.325-2.105,3.887,0,.936,.281,1.832,.818,2.614-.537,.782-.818,1.678-.818,2.614,0,1.642,.871,3.155,2.288,4.002,.622,2.258,2.65,3.816,5.008,3.816,2.074,0,3.869-1.22,4.704-2.98,.836,1.76,2.63,2.98,4.704,2.98,2.357,0,4.386-1.558,5.008-3.816,1.417-.847,2.288-2.36,2.288-4.002,0-.936-.281-1.832-.818-2.614,.537-.782,.818-1.678,.818-2.614ZM7.296,23.026c-1.964,0-3.646-1.34-4.088-3.258-.032-.141-.124-.26-.251-.329-1.207-.646-1.957-1.885-1.957-3.231,0-.832,.287-1.627,.83-2.299,.148-.184,.148-.445,0-.629-.543-.672-.83-1.467-.83-2.299,0-1.316,.725-2.541,1.892-3.196,.186-.104,.285-.315,.247-.524-.027-.15-.048-.303-.048-.461,0-1.363,.901-2.772,2.435-2.772,.261,0,.479-.201,.498-.461,.11-1.423,1.309-2.539,2.727-2.539,1.517,0,2.75,1.233,2.75,2.75v4.724h-2.563c-.223-.862-1.007-1.5-1.937-1.5-1.103,0-2,.897-2,2s.897,2,2,2c.93,0,1.714-.638,1.937-1.5h2.563v6h-2.563c-.223-.862-1.007-1.5-1.937-1.5-1.103,0-2,.897-2,2s.897,2,2,2c.93,0,1.714-.638,1.937-1.5h2.563v2.321c0,2.318-1.886,4.205-4.204,4.205Zm.704-14.026c0,.551-.448,1-1,1s-1-.449-1-1,.448-1,1-1,1,.449,1,1Zm0,7c0,.551-.448,1-1,1s-1-.449-1-1,.448-1,1-1,1,.449,1,1Zm14.17-2.092c.543,.672,.83,1.467,.83,2.299,0,1.347-.75,2.585-1.957,3.231-.127,.068-.219,.188-.251,.329-.442,1.918-2.124,3.258-4.088,3.258-2.318,0-4.204-1.886-4.204-4.205v-4.821h2.5c1.379,0,2.5-1.122,2.5-2.5v-.563c.862-.223,1.5-1.006,1.5-1.937,0-1.103-.897-2-2-2s-2,.897-2,2c0,.93,.638,1.714,1.5,1.937v.563c0,.827-.673,1.5-1.5,1.5h-2.5V3.776c0-1.517,1.233-2.75,2.75-2.75,1.418,0,2.616,1.115,2.727,2.539,.02,.26,.263,.461,.523,.461,1.508,0,2.409,1.41,2.409,2.772,0,.158-.021,.311-.048,.461-.038,.209,.062,.42,.247,.524,1.167,.655,1.892,1.88,1.892,3.196,0,.832-.287,1.627-.83,2.299-.148,.184-.148,.445,0,.629Zm-5.17-3.908c-.552,0-1-.449-1-1s.448-1,1-1,1,.449,1,1-.448,1-1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/brightLowSVG/index.tsx
+var import_jsx_runtime40 = require("react/jsx-runtime");
+var BrightLow = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Zm0-9c-2.21,0-4,1.79-4,4s1.79,4,4,4,4-1.79,4-4-1.79-4-4-4Zm0-5c.55,0,1-.45,1-1s-.45-1-1-1-1,.45-1,1,.45,1,1,1Zm0,20c.55,0,1-.45,1-1s-.45-1-1-1-1,.45-1,1,.45,1,1,1ZM3,12c0-.55-.45-1-1-1s-1,.45-1,1,.45,1,1,1,1-.45,1-1Zm20,0c0-.55-.45-1-1-1s-1,.45-1,1,.45,1,1,1,1-.45,1-1Zm-4-6c.55,0,1-.45,1-1s-.45-1-1-1-1,.45-1,1,.45,1,1,1ZM5,20c.55,0,1-.45,1-1s-.45-1-1-1-1,.45-1,1,.45,1,1,1Zm0-14c.55,0,1-.45,1-1s-.45-1-1-1-1,.45-1,1,.45,1,1,1Zm15,13c0-.55-.45-1-1-1s-1,.45-1,1,.45,1,1,1,1-.45,1-1Z"
+    }
+  ) });
+};
+
+// src/components/icons/brightHighSVG/index.tsx
+var import_jsx_runtime41 = require("react/jsx-runtime");
+var BrightHigh = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Zm0-9c-2.21,0-4,1.79-4,4s1.79,4,4,4,4-1.79,4-4-1.79-4-4-4Zm.5-3.5V.5c0-.28-.22-.5-.5-.5s-.5,.22-.5,.5V4.5c0,.28,.22,.5,.5,.5s.5-.22,.5-.5Zm0,19v-4c0-.28-.22-.5-.5-.5s-.5,.22-.5,.5v4c0,.28,.22,.5,.5,.5s.5-.22,.5-.5ZM5,12c0-.28-.22-.5-.5-.5H.5c-.28,0-.5,.22-.5,.5s.22,.5,.5,.5H4.5c.28,0,.5-.22,.5-.5Zm19,0c0-.28-.22-.5-.5-.5h-4c-.28,0-.5,.22-.5,.5s.22,.5,.5,.5h4c.28,0,.5-.22,.5-.5Zm-6.15-5.15l3-3c.2-.2,.2-.51,0-.71s-.51-.2-.71,0l-3,3c-.2,.2-.2,.51,0,.71,.1,.1,.23,.15,.35,.15s.26-.05,.35-.15ZM3.85,20.85l3-3c.2-.2,.2-.51,0-.71s-.51-.2-.71,0l-3,3c-.2,.2-.2,.51,0,.71,.1,.1,.23,.15,.35,.15s.26-.05,.35-.15ZM6.85,6.85c.2-.2,.2-.51,0-.71L3.85,3.15c-.2-.2-.51-.2-.71,0s-.2,.51,0,.71l3,3c.1,.1,.23,.15,.35,.15s.26-.05,.35-.15Zm14,14c.2-.2,.2-.51,0-.71l-3-3c-.2-.2-.51-.2-.71,0s-.2,.51,0,.71l3,3c.1,.1,.23,.15,.35,.15s.26-.05,.35-.15Z"
+    }
+  ) });
+};
+
+// src/components/icons/cabinSVG/index.tsx
+var import_jsx_runtime42 = require("react/jsx-runtime");
+var Cabin = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,5c-1.103,0-2,.897-2,2s.897,2,2,2,2-.897,2-2-.897-2-2-2Zm0,3c-.551,0-1-.448-1-1s.449-1,1-1,1,.448,1,1-.449,1-1,1Zm10.017-2.169l-1.017-.686V1.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v2.97L14.517,.771c-1.528-1.032-3.504-1.032-5.034,0L1.983,5.831c-1.242,.838-1.983,2.232-1.983,3.729v9.939c0,2.481,2.019,4.5,4.5,4.5h3c.827,0,1.5-.673,1.5-1.5V13.5c0-.827,.673-1.5,1.5-1.5h3c.827,0,1.5,.673,1.5,1.5v9c0,.827,.673,1.5,1.5,1.5h3c2.481,0,4.5-2.019,4.5-4.5V9.561c0-1.497-.741-2.892-1.983-3.729ZM8,22.5c0,.275-.224,.5-.5,.5h-3c-1.76,0-3.221-1.306-3.464-3h6.964v2.5Zm0-3.5H1v-3h7v3Zm0-5.5v1.5H1v-3h7.501c-.315,.418-.501,.938-.501,1.5Zm11.5,9.5h-3c-.276,0-.5-.225-.5-.5v-2.5h6.964c-.243,1.694-1.704,3-3.464,3Zm3.5-4h-7v-3h7v3Zm0-4h-7v-1.5c0-.562-.187-1.082-.501-1.5h7.501v3Zm0-4H1v-1.439c0-1.164,.577-2.249,1.542-2.901L10.042,1.599c1.189-.803,2.726-.803,3.915,0l7.5,5.061c.966,.652,1.542,1.737,1.542,2.901v1.439Z"
+    }
+  ) });
+};
+
+// src/components/icons/cakeSVG/index.tsx
+var import_jsx_runtime43 = require("react/jsx-runtime");
+var Cake = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m23.5,23h-1.5v-8.5c0-2.481-2.019-4.5-4.5-4.5h-5v-3.042c1.417-.239,2.5-1.474,2.5-2.958,0-.944-.637-2.125-1.892-3.509-.565-.624-1.65-.624-2.216,0-.812.896-1.892,2.233-1.892,3.509,0,1.484,1.083,2.719,2.5,2.958v3.042h-5c-2.481,0-4.5,2.019-4.5,4.5v2.768s0,.004,0,.006v5.726H.5c-.276,0-.5.224-.5.5s.224.5.5.5h23c.276,0,.5-.224.5-.5s-.224-.5-.5-.5ZM10,4c0-1.037,1.229-2.392,1.632-2.837.096-.105.226-.163.368-.163s.272.058.367.163c1.053,1.161,1.633,2.168,1.633,2.837,0,1.103-.897,2-2,2s-2-.897-2-2Zm-3.5,7h11c1.93,0,3.5,1.57,3.5,3.5v2.402c-.242.064-.496.098-.75.098-1.267,0-2.25-.806-2.25-1.5,0-.276-.224-.5-.5-.5s-.5.224-.5.5c0,.694-.983,1.5-2.25,1.5s-2.25-.806-2.25-1.5c0-.276-.224-.5-.5-.5s-.5.224-.5.5c0,.694-.983,1.5-2.25,1.5s-2.25-.806-2.25-1.5c0-.276-.224-.5-.5-.5s-.5.224-.5.5c0,.694-.983,1.5-2.25,1.5-.253,0-.508-.034-.75-.099v-2.401c0-1.93,1.57-3.5,3.5-3.5Zm-3.5,6.928c.245.048.495.072.75.072,1.127,0,2.163-.495,2.75-1.208.587.713,1.623,1.208,2.75,1.208s2.164-.495,2.75-1.208c.586.713,1.624,1.208,2.75,1.208s2.163-.495,2.75-1.208c.587.713,1.623,1.208,2.75,1.208.255,0,.506-.024.75-.071v5.071H3v-5.072Z"
+    }
+  ) });
+};
+
+// src/components/icons/chartSVG/index.tsx
+var import_jsx_runtime44 = require("react/jsx-runtime");
+var Chart = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M24,23.5c0,.276-.224,.5-.5,.5H2.5c-1.378,0-2.5-1.122-2.5-2.5V.5C0,.224,.224,0,.5,0s.5,.224,.5,.5V21.5c0,.827,.673,1.5,1.5,1.5H23.5c.276,0,.5,.224,.5,.5Zm-2.5-18.5h-4c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h4c.231,0,.45,.053,.646,.146l-5.771,5.414c-.584,.585-1.536,.586-2.153-.029l-.954-.799c-.943-.944-2.597-.939-3.53-.005l-5.586,5.414c-.198,.192-.203,.509-.011,.707,.098,.101,.229,.152,.359,.152,.125,0,.251-.047,.348-.141l5.591-5.419c.566-.566,1.523-.596,2.153,.029l.954,.799c.974,.975,2.561,.975,3.524,.011l5.771-5.414,.011-.011c.094,.196,.147,.415,.147,.647v4c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V7.5c0-1.378-1.122-2.5-2.5-2.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/citySVG/index.tsx
+var import_jsx_runtime45 = require("react/jsx-runtime");
+var City = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M16,13.5c0,.276-.224,.5-.5,.5h-1c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h1c.276,0,.5,.224,.5,.5Zm3.5-.5h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm-4,4h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm4,0h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5ZM15.5,5h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm4,0h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm-4,4h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm4,0h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm4.5-4.5v15c0,2.481-2.019,4.5-4.5,4.5H4.5c-2.481,0-4.5-2.019-4.5-4.5V8.852c0-1.216,.502-2.397,1.378-3.241l1.694-1.631c1.361-1.312,3.494-1.312,4.855,0l1.694,1.631c.135,.13,.262,.269,.378,.414v-1.524c0-2.481,2.019-4.5,4.5-4.5h5c2.481,0,4.5,2.019,4.5,4.5Zm-14,4.352c0-.946-.391-1.865-1.072-2.521l-1.694-1.631c-.486-.469-1.11-.703-1.734-.703s-1.248,.234-1.734,.703l-1.694,1.632c-.681,.656-1.072,1.575-1.072,2.521v10.648c0,1.93,1.57,3.5,3.5,3.5h5.5V8.852Zm13-4.352c0-1.93-1.57-3.5-3.5-3.5h-5c-1.93,0-3.5,1.57-3.5,3.5V23h8.5c1.93,0,3.5-1.57,3.5-3.5V4.5ZM6.5,13h-2c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm0-4h-2c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm0,8h-2c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/clockSVG/index.tsx
+var import_jsx_runtime46 = require("react/jsx-runtime");
+var Clock = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,24C5.383,24,0,18.617,0,12S5.383,0,12,0s12,5.383,12,12-5.383,12-12,12ZM12,1C5.935,1,1,5.935,1,12s4.935,11,11,11,11-4.935,11-11S18.065,1,12,1Zm-.235,11.924l4-2.5c.234-.146,.305-.455,.159-.688-.146-.235-.455-.307-.689-.159l-3.235,2.021V5.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v7c0,.182,.099,.35,.258,.438,.075,.042,.159,.062,.242,.062,.092,0,.184-.025,.265-.076Z"
+    }
+  ) });
+};
+
+// src/components/icons/codeSVG/index.tsx
+var import_jsx_runtime47 = require("react/jsx-runtime");
+var Code = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M9,22c-.125,0-.25-.046-.347-.14L1.032,14.532c-1.372-1.372-1.372-3.592-.007-4.957L8.651,2.142c.198-.192,.515-.188,.707,.009,.193,.198,.189,.515-.009,.707L1.728,10.287c-.468,.468-.728,1.096-.728,1.764s.26,1.295,.732,1.768l7.614,7.321c.199,.191,.205,.508,.014,.707-.098,.102-.229,.153-.36,.153Zm6.349-.142l7.625-7.437c1.365-1.365,1.365-3.585-.007-4.957L15.347,2.14c-.2-.192-.515-.186-.707,.014-.191,.199-.185,.516,.014,.707l7.614,7.318c.975,.975,.975,2.561,.004,3.531l-7.621,7.432c-.198,.193-.202,.51-.009,.707,.098,.101,.228,.151,.358,.151,.126,0,.252-.047,.349-.142Z"
+    }
+  ) });
+};
+
+// src/components/icons/coinsSVG/index.tsx
+var import_jsx_runtime48 = require("react/jsx-runtime");
+var Coins = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M17,0c-3.925,0-7,1.757-7,4v4.378c-.906-.24-1.919-.378-3-.378-3.925,0-7,1.757-7,4v8c0,2.243,3.075,4,7,4s7-1.757,7-4v-.385c.933,.248,1.955,.385,3,.385,3.925,0,7-1.757,7-4V4c0-2.243-3.075-4-7-4Zm6,12c0,1.626-2.748,3-6,3-1.061,0-2.086-.151-3-.424v-2.576c0-.131-.013-.26-.033-.387,.938,.253,1.968,.387,3.033,.387,2.581,0,4.787-.762,6-1.92v1.92ZM1,14.08c1.213,1.158,3.419,1.92,6,1.92s4.787-.762,6-1.92v1.92c0,1.626-2.748,3-6,3s-6-1.374-6-3v-1.92ZM17,1c3.252,0,6,1.374,6,3s-2.748,3-6,3-6-1.374-6-3,2.748-3,6-3Zm-6,5.08c1.213,1.158,3.419,1.92,6,1.92s4.787-.762,6-1.92v1.92c0,1.626-2.748,3-6,3-1.297,0-2.531-.213-3.576-.613-.518-.688-1.36-1.27-2.424-1.688v-2.619Zm-4,2.92c3.252,0,6,1.374,6,3s-2.748,3-6,3-6-1.374-6-3,2.748-3,6-3Zm0,14c-3.252,0-6-1.374-6-3v-1.92c1.213,1.158,3.419,1.92,6,1.92s4.787-.762,6-1.92v1.92c0,1.626-2.748,3-6,3Zm10-4c-1.057,0-2.086-.149-3-.422v-2.962c.932,.248,1.953,.383,3,.383,2.581,0,4.787-.762,6-1.92v1.92c0,1.626-2.748,3-6,3Z"
+    }
+  ) });
+};
+
+// src/components/icons/cowSVG/index.tsx
+var import_jsx_runtime49 = require("react/jsx-runtime");
+var Cow = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m23.818,2.441c-.189-.276-.502-.441-.837-.441h-1.45c.29-.419.469-.935.469-1.5,0-.276-.224-.5-.5-.5s-.5.224-.5.5c0,.827-.577,1.5-1.286,1.5h-6.428c-.709,0-1.286-.673-1.286-1.5,0-.276-.224-.5-.5-.5s-.5.224-.5.5c0,.565.179,1.081.469,1.5h-1.45c-.335,0-.647.165-.837.441-.193.282-.234.641-.111.961.364.941,1.363,1.598,2.43,1.598h.084l.368,2h-5.452c-1.093,0-2.082.407-2.862,1.057-.038.019-3.471,3.071-3.471,3.071-.206.184-.224.5-.04.706.099.11.236.167.373.167.119,0,.238-.042.333-.127l1.242-1.11c-.04.241-.075.485-.075.738v10c0,1.378,1.121,2.5,2.5,2.5,1.029,0,1.914-.626,2.297-1.516,2.809-.077,4.475-1.222,5.081-3.484h1.622c.275,0,.5.224.5.5v2c0,1.378,1.121,2.5,2.5,2.5s2.5-1.122,2.5-2.5v-5c0-.276-.224-.5-.5-.5s-.5.224-.5.5v5c0,.827-.673,1.5-1.5,1.5s-1.5-.673-1.5-1.5v-2c0-.827-.673-1.5-1.5-1.5h-6c-.827,0-1.5.673-1.5,1.5v2c0,.827-.673,1.5-1.5,1.5s-1.5-.673-1.5-1.5v-10c0-.09.02-.174.027-.263.729.482,1.582.763,2.473.763,2.31,0,4.197-1.756,4.449-4h2.186l.472,2.568c-.374.364-.608.87-.608,1.432,0,1.103.897,2,2,2h5c1.103,0,2-.897,2-2,0-.562-.234-1.068-.608-1.432l1.024-5.568h.084c1.066,0,2.065-.657,2.429-1.597.124-.32.083-.68-.11-.961ZM7.5,19h3.345c-.521,1.591-1.742,2.37-3.845,2.476v-1.976c0-.276.225-.5.5-.5Zm-2-8c-.826,0-1.609-.305-2.235-.828.524-1.273,1.775-2.172,3.235-2.172h2.449c-.245,1.692-1.691,3-3.449,3Zm13.5,2h-5c-.552,0-1-.449-1-1s.448-1,1-1h5c.552,0,1,.449,1,1s-.448,1-1,1Zm2.5-9h-.5c-.241,0-.448.172-.492.41l-1.04,5.651c-.151-.036-.306-.061-.468-.061h-5c-.162,0-.317.024-.468.061l-1.04-5.651c-.044-.237-.251-.41-.492-.41h-.5c-.642,0-1.285-.412-1.481-1l12.978.042c-.211.546-.854.958-1.496.958Zm-8,2c0-.552.448-1,1-1s1,.448,1,1-.448,1-1,1-1-.448-1-1Zm4,0c0-.552.448-1,1-1s1,.448,1,1-.448,1-1,1-1-.448-1-1Z"
+    }
+  ) });
+};
+
+// src/components/icons/crabSVG/index.tsx
+var import_jsx_runtime50 = require("react/jsx-runtime");
+var Crab = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m24,7.5s-.002-3.863-.017-4.01c-.086-.848-.497-1.61-1.156-2.148-.758-.618-2.086-1.054-3.065-1.31-.365-.097-.752.032-.988.328-.238.298-.275.692-.099,1.028.067.129.145.266.226.408.111.195.229.404.337.623-.371-.053-.711-.124-1.027-.214-.364-.105-.743.011-.987.303-.242.29-.291.696-.124,1.034l.221.462c.383.815.818,1.74,1.477,2.278.591.481,1.303.716,2.012.716.8,0,1.584-.317,2.191-.896v1.397c0,1.852-1.451,3.358-3.274,3.477-.695-2.39-2.657-3.369-4.772-3.748.018-.076.046-.148.046-.229,0-.552-.448-1-1-1s-1,.448-1,1c0,.008.005.015.005.023-.341-.015-.679-.023-1.005-.023s-.663.009-1.005.023c0-.008.005-.015.005-.023,0-.552-.448-1-1-1s-1,.448-1,1c0,.081.028.153.046.229-2.115.379-4.077,1.358-4.772,3.748-1.823-.119-3.274-1.625-3.274-3.477v-1.397c.607.58,1.391.896,2.191.896.708,0,1.421-.234,2.012-.716.659-.538,1.093-1.463,1.477-2.278l.221-.462c.167-.338.119-.744-.124-1.034-.244-.292-.625-.408-.987-.303-.316.09-.656.161-1.027.214.107-.219.226-.428.337-.623.081-.143.158-.279.226-.407.176-.337.139-.731-.099-1.029-.235-.295-.623-.425-.987-.328-.98.256-2.308.691-3.065,1.31C.513,1.88.103,2.643.017,3.489c-.015.147-.017,4.011-.017,4.011,0,2.334,1.792,4.235,4.068,4.456-.042.328-.068.672-.068,1.044,0,.32.047.657.112,1h-.369c-.935,0-1.813.364-2.475,1.025l-1.121,1.121c-.195.195-.195.512,0,.707.098.098.226.146.354.146s.256-.049.354-.146l1.121-1.121c.473-.473,1.101-.732,1.768-.732h.627c.333,1.03.847,2.075,1.379,3h-.506c-.935,0-1.813.364-2.475,1.025l-1.121,1.121c-.195.195-.195.512,0,.707.098.098.226.146.354.146s.256-.049.354-.146l1.121-1.121c.473-.473,1.101-.732,1.768-.732h1.118c.328.487.737.896,1.204,1.215l-2.448,2.963c-.178.211-.151.526.06.705.094.078.208.117.322.117.143,0,.284-.061.383-.178l2.625-3.115c.5.188,1.035.292,1.588.292h3.801c.556,0,1.093-.105,1.594-.295l2.627,3.117c.099.117.24.178.383.178.114,0,.228-.039.322-.117.211-.179.238-.494.06-.705l-2.449-2.967c.465-.318.871-.726,1.197-1.211h1.127c.667,0,1.295.26,1.768.732l1.121,1.121c.098.098.226.146.354.146s.256-.049.354-.146c.195-.195.195-.512,0-.707l-1.121-1.121c-.662-.661-1.541-1.025-2.475-1.025h-.515c.532-.927,1.048-1.974,1.383-3h.632c.667,0,1.295.26,1.768.732l1.121,1.121c.098.098.226.146.354.146s.256-.049.354-.146c.195-.195.195-.512,0-.707l-1.121-1.121c-.662-.661-1.541-1.025-2.475-1.025h-.371c.066-.343.114-.681.114-1,0-.372-.026-.716-.068-1.044,2.276-.221,4.068-2.123,4.068-4.456Zm-1.493-2.306c-.762.936-2.143,1.075-3.078.313-.483-.394-.866-1.209-1.205-1.928-.068-.146-.135-.288-.205-.389.576.157,1.213.258,1.946.308.163.016.318-.058.421-.183.103-.126.138-.293.095-.449-.167-.604-.469-1.137-.712-1.563-.075-.133-.147-.259-.262-.305,1.25.327,2.204.724,2.687,1.118.453.369.735.893.794,1.474s-.112,1.151-.481,1.604ZM1.011,3.591c.059-.581.341-1.104.794-1.474.482-.395,1.437-.791,2.634-1.191-.062.119-.134.245-.209.378-.243.427-.545.959-.712,1.563-.043.156-.008.323.095.449.102.125.255.197.421.183.722-.049,1.353-.148,1.922-.302-.059.123-.12.251-.181.383-.338.719-.721,1.534-1.204,1.928-.935.762-2.317.622-3.079-.313-.369-.452-.54-1.022-.481-1.604Zm13.839,4.64l-.759,1.708c-.294.662-.481,1.358-.57,2.066-.007,0-.013-.004-.021-.004h-3c-.007,0-.013.004-.02.004-.089-.705-.275-1.399-.568-2.059l-.762-1.714c.819-.153,1.762-.231,2.85-.231s2.031.078,2.85.231Zm-7.725,10.123c-.969-1.539-2.125-3.717-2.125-5.354,0-2.394.978-3.849,3.161-4.532l.837,1.883c.625,1.405.716,2.987.257,4.455l-1.374,4.396c-.29-.238-.549-.52-.757-.849Zm2.97,1.646c-.466,0-.917-.093-1.333-.264l1.447-4.63c.215-.688.32-1.397.328-2.105h2.926c.008.711.113,1.423.329,2.113l1.443,4.619c-.418.173-.871.268-1.34.268h-3.801Zm4.652-5.186c-.46-1.473-.369-3.06.258-4.47l.834-1.876c2.182.683,3.161,2.138,3.161,4.532,0,1.611-1.158,3.797-2.129,5.347-.207.33-.465.612-.754.851l-1.37-4.383Z"
+    }
+  ) });
+};
+
+// src/components/icons/diceSVG/index.tsx
+var import_jsx_runtime51 = require("react/jsx-runtime");
+var Dice = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M20.718,4.43L14.417,.666c-1.49-.889-3.344-.889-4.834,0L3.283,4.43c-1.408,.842-2.283,2.38-2.283,4.016v7.109c0,1.636,.875,3.174,2.283,4.016l6.3,3.764c.746,.444,1.581,.667,2.417,.667s1.672-.223,2.418-.667l6.3-3.765c1.407-.841,2.282-2.38,2.282-4.015v-7.109c0-1.635-.875-3.174-2.282-4.016ZM3.795,5.289L10.096,1.525c1.175-.703,2.635-.701,3.809,0l6.3,3.763c.412,.247,.767,.569,1.049,.943l-9.253,5.195L2.746,6.232c.282-.374,.636-.697,1.049-.943Zm0,13.422c-1.107-.661-1.795-1.871-1.795-3.156v-7.109c0-.465,.09-.919,.258-1.342l9.242,5.189v10.675c-.488-.067-.966-.231-1.404-.492l-6.3-3.764Zm18.205-3.156c0,1.285-.688,2.495-1.796,3.156l-6.299,3.764c-.439,.262-.917,.427-1.405,.493V12.292l9.242-5.189c.167,.423,.258,.877,.258,1.342v7.109Z"
+    }
+  ) });
+};
+
+// src/components/icons/dolphinSVG/index.tsx
+var import_jsx_runtime52 = require("react/jsx-runtime");
+var Dolphin = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m19,6c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm5,2.5c0,.827-.673,1.5-1.5,1.5h-5.899c-.466,0-.972.034-1.492.097-.101,1.158-.444,2.512-1.029,4.038-.195.507-.748.865-1.315.865-.491-.038-.96-.351-1.059-.81-.217-1.013-.499-1.834-.84-2.44-.53.416-1.026.913-1.455,1.534-.785,1.138-1.582,3.344-2.026,5.108,1.709.661,3.05,2.13,3.478,3.852.116.465-.009.955-.333,1.312-.266.293-.636.455-1.018.455-.067,0-.135-.005-.202-.016-2.083-.317-3.316-1.418-3.913-2.127-.59.712-1.817,1.812-3.922,2.127-.454.071-.908-.098-1.219-.439-.324-.356-.448-.847-.333-1.312.467-1.88,1.943-3.396,3.83-3.98-.382-1.656-.752-3.909-.752-5.764,0-2.193.343-4.04.921-5.596-.793-1.732-1.957-3.225-3.478-4.429C.019,2.141-.112,1.603.1,1.071.328.501,1-.064,1.77.006c2.319.214,4.41.794,6.238,1.705,1.853-1.188,3.987-1.711,5.992-1.711,5.017,0,7.749,3.443,7.983,7h.517c.827,0,1.5.673,1.5,1.5ZM4.433,5.721c.696-1.387,1.608-2.485,2.647-3.335-1.604-.725-3.408-1.2-5.403-1.384-.271-.018-.556.207-.649.44-.067.168,0,.221.036.249,1.394,1.104,2.532,2.489,3.369,4.03Zm9.648,4.552c-.808.181-1.623.476-2.395.924.392.694.76,1.669.998,2.784.013.016.093.032.21-.002.12-.038.219-.117.252-.203.508-1.324.814-2.493.935-3.503Zm8.919-1.774c0-.275-.224-.5-.5-.5h-1c-.276,0-.5-.224-.5-.5,0-3.23-2.404-6.5-7-6.5C6.18,1,3.718,8.692,4,12.5c.144,1.945.433,4.379.837,6.002.033.132.011.271-.061.386s-.187.196-.319.225c-1.722.369-3.155,1.725-3.564,3.373-.035.141.003.288.102.397.052.057.165.148.332.124,2.603-.39,3.584-2.16,3.625-2.235.087-.161.256-.264.44-.264h0c.183,0,.352.1.44.26.041.073,1.052,1.847,3.627,2.239.164.023.278-.066.331-.124.099-.108.137-.257.102-.396-.381-1.533-1.653-2.823-3.241-3.288-.253-.074-.406-.333-.347-.591.422-1.855,1.317-4.49,2.283-5.892,1.677-2.431,4.448-3.716,8.013-3.716h5.899c.276,0,.5-.225.5-.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/doorOpenSVG/index.tsx
+var import_jsx_runtime53 = require("react/jsx-runtime");
+var DoorOpen = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.5,23h-3.5V5.5c0-1.93-1.57-3.5-3.5-3.5h-.837c-.218-.46-.538-.872-.944-1.205-.814-.667-1.873-.93-2.906-.726L7.617,.908c-2.096,.419-3.617,2.275-3.617,4.413V23H.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5H23.5c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5ZM16.5,3c1.378,0,2.5,1.121,2.5,2.5V23h-3V3.501c0-.169-.012-.336-.036-.501h.536ZM5,5.321c0-1.663,1.183-3.106,2.813-3.433l4.196-.839c.735-.15,1.494,.041,2.076,.519,.581,.477,.915,1.181,.915,1.933V23H5V5.321Zm8,6.679c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/cocktailSVG/index.tsx
+var import_jsx_runtime54 = require("react/jsx-runtime");
+var Cocktail = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.81,1.77c-.421-1.075-1.427-1.77-2.563-1.77H2.754C1.617,0,.611,.695,.19,1.77-.214,2.8,.03,3.898,.871,4.675l8.503,7.31c.616,.559,1.36,.888,2.126,.988v10.027H6.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h11c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-5V12.974c.765-.099,1.506-.425,2.116-.98l8.559-7.36c.795-.736,1.039-1.833,.635-2.864Zm-1.333,2.147l-8.522,7.328c-.548,.498-1.266,.748-1.954,.755-.69-.008-1.41-.261-1.964-.764L2.785,5h14.715c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5H1.622l-.117-.101c-.494-.457-.638-1.117-.384-1.765,.27-.689,.911-1.134,1.633-1.134H21.246c.722,0,1.363,.445,1.633,1.134,.254,.648,.11,1.309-.402,1.783ZM12,12c-.011,0,.01,0,0,0h0Z"
+    }
+  ) });
+};
+
+// src/components/icons/elephantSVG/index.tsx
+var import_jsx_runtime55 = require("react/jsx-runtime");
+var Elephant = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m17,9c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm7,8.5v2.899c0,1.279-.902,2.383-2.099,2.569-.132.021-.264.03-.395.03-.593,0-1.165-.207-1.615-.593-.555-.476-.873-1.171-.872-1.908v-2.499h-2.495c-.275,0-.5.224-.5.5v2.002c0,1.377-1.121,2.498-2.498,2.498-.668,0-1.296-.26-1.768-.733-.473-.473-.731-1.102-.73-1.77l.004-1.996c0-.134-.052-.259-.146-.354-.094-.095-.22-.147-.354-.147h-5.024c-.275,0-.499.224-.5.499l-.004,2.008c-.002,1.375-1.123,2.493-2.498,2.493-1.385,0-2.506-1.121-2.506-2.498v-12.002C0,5.467,2.468,3,5.5,3h2.766c1.01-1.221,2.535-2,4.239-2,2.352,0,4.463,1.545,5.201,3.783,1.434.907,2.314,2.487,2.313,4.169v11.547c0,.445.19.863.522,1.148.332.284.757.403,1.205.333.715-.111,1.253-.791,1.253-1.581v-2.899c0-.276.224-.5.5-.5s.5.224.5.5Zm-4.98-.5v-7.998c0-1.464-.741-2.738-1.985-3.458-.111-.064-.193-.169-.229-.293-.556-1.915-2.324-3.251-4.3-3.251-2.481,0-4.5,2.019-4.5,4.5s2.019,4.5,4.5,4.5c.276,0,.5.224.5.5s-.224.5-.5.5c-3.032,0-5.5-2.467-5.5-5.5,0-.901.222-1.749.607-2.5h-2.112c-2.481,0-4.5,2.019-4.5,4.5v12.002c0,.826.672,1.498,1.498,1.498.832,0,1.505-.671,1.506-1.495l.004-2.008c0-.826.675-1.497,1.5-1.497h5.024c.401,0,.778.156,1.062.44.283.284.439.661.438,1.062l-.004,1.996c0,.401.155.778.438,1.062.283.283.66.439,1.061.439.826,0,1.498-.672,1.498-1.498v-2.002c0-.827.673-1.5,1.5-1.5h2.495Z"
+    }
+  ) });
+};
+
+// src/components/icons/balanceSVG/index.tsx
+var import_jsx_runtime56 = require("react/jsx-runtime");
+var Balance = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.964,12.314l-.003-.006-.002-.005-3.493-8.732c-.382-.955-1.293-1.572-2.321-1.572h-5.646V.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v1.5H5.854c-1.028,0-1.939,.617-2.321,1.572L.041,12.303l-.002,.005-.003,.006c-.024,.059-.036,1.101-.036,1.101,0,2.197,1.457,4.041,3.543,4.484,.314,.067,.634,.101,.95,.101h.008c2.48-.004,4.499-2.023,4.499-4.5,0,0-.012-1.126-.036-1.186l-.003-.006-.002-.005L5.283,3.112c.177-.073,.37-.112,.571-.112h5.646V23H4.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h15c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-7V3h5.646c.201,0,.395,.039,.571,.112l-3.676,9.191-.002,.005-.003,.006c-.024,.059-.036,1.186-.036,1.186,0,2.477,2.019,4.496,4.499,4.5h.008c.316,0,.636-.034,.949-.101,2.087-.444,3.544-2.288,3.544-4.484,0,0-.012-1.042-.036-1.101ZM4.499,17c-.283,.016-.5-.026-.748-.079-1.619-.344-2.751-1.786-2.751-3.506v-.415h7v.5c0,1.926-1.57,3.497-3.501,3.5Zm3.263-5H1.238S4.487,3.881,4.502,3.851l3.26,8.149ZM19.498,3.851c.015,.03,3.263,8.149,3.263,8.149h-6.523l3.26-8.149Zm.75,13.07c-.247,.053-.466,.097-.747,.079-1.931-.003-3.501-1.574-3.501-3.5v-.5h7v.415c0,1.72-1.132,3.162-2.752,3.506Z"
+    }
+  ) });
+};
+
+// src/components/icons/fenceSVG/index.tsx
+var import_jsx_runtime57 = require("react/jsx-runtime");
+var Fence = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.5,17h-.5V8h.5c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-.5V3c0-.461-.187-.911-.513-1.237l-1.25-1.25c-.683-.682-1.792-.682-2.475,0l-1.25,1.25c-.326,.326-.513,.776-.513,1.237V7h-2V3c0-.461-.187-.911-.513-1.237l-1.25-1.25c-.683-.682-1.792-.682-2.475,0l-1.25,1.25c-.326,.326-.513,.776-.513,1.237V7h-2V3c0-.461-.187-.911-.513-1.237l-1.25-1.25C4.555-.169,3.445-.169,2.763,.513L1.513,1.763c-.326,.326-.513,.776-.513,1.237V7H.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h.5v9H.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h.5v4c0,1.103,.897,2,2,2h2c1.103,0,2-.897,2-2v-4h2v4c0,1.103,.897,2,2,2h2c1.103,0,2-.897,2-2v-4h2v4c0,1.103,.897,2,2,2h2c1.103,0,2-.897,2-2v-4h.5c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Zm-1.5,0h-4V8h4v9ZM18,3c0-.197,.08-.391,.22-.53l1.25-1.25c.146-.146,.338-.22,.53-.22s.384,.073,.53,.22l1.25,1.25c.14,.14,.22,.333,.22,.53V7h-4V3Zm-8,0c0-.197,.08-.391,.22-.53l1.25-1.25c.146-.146,.338-.22,.53-.22s.384,.073,.53,.22l1.25,1.25c.14,.14,.22,.333,.22,.53V7h-4V3Zm4,5v9h-4V8h4ZM2,3c0-.197,.08-.391,.22-.53l1.25-1.25c.146-.146,.338-.22,.53-.22s.384,.073,.53,.22l1.25,1.25c.14,.14,.22,.333,.22,.53V7H2V3Zm0,5H6v9H2V8Zm4,14c0,.552-.449,1-1,1H3c-.551,0-1-.448-1-1v-4H6v4Zm1-5V8h2v9h-2Zm7,5c0,.552-.449,1-1,1h-2c-.551,0-1-.448-1-1v-4h4v4Zm1-5V8h2v9h-2Zm7,5c0,.552-.449,1-1,1h-2c-.551,0-1-.448-1-1v-4h4v4Z"
+    }
+  ) });
+};
+
+// src/components/icons/csvSVG/index.tsx
+var import_jsx_runtime58 = require("react/jsx-runtime");
+var Csv = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m8.873,17.673c-.276.772-1.022,1.327-1.898,1.327-1.086,0-1.967-.881-1.967-1.967l-.008-2.066c0-1.086.881-1.967,1.967-1.967.879,0,1.628.559,1.901,1.336.112.319-.13.653-.468.658h-.004c-.21.003-.405-.123-.475-.322-.137-.395-.513-.672-.955-.672-.533,0-.967.434-.967.967l.008,2.063c0,.537.434.97.967.97.443,0,.821-.279.957-.666.069-.195.26-.319.466-.319.341,0,.59.337.475.658Zm3.927-2.12c-.463-.173-1.327-.54-1.327-.54-.143-.096-.21-.256-.188-.438.016-.108.092-.369.459-.481.758-.234,1.431.33,1.438.335.212.182.532.154.71-.061l.019-.023c.175-.21.148-.522-.06-.7l-.016-.014c-.013-.01-1.101-.931-2.385-.531-.637.193-1.088.701-1.177,1.325-.084.603.185,1.154.736,1.51.003,0,.687.309,1.435.59.185.069.786.329.706.788-.057.315-.41.648-.953.648-.514,0-1.008-.212-1.323-.565-.189-.211-.513-.227-.722-.035l-.01.01c-.204.188-.219.504-.034.71l.01.012c.514.575,1.272.906,2.079.906.982,0,1.806-.632,1.959-1.502.115-.651-.182-1.504-1.356-1.945Zm5.593-2.552c-.239,0-.445.168-.493.401l-.797,3.855-.918-3.869c-.054-.227-.257-.387-.49-.387-.328,0-.618.308-.537.626l1.204,4.78c.088.349.402.593.761.593.372,0,.693-.261.768-.625l.995-4.769c.065-.313-.173-.606-.493-.606Zm3.607-3.015v9.515c0,2.481-2.019,4.5-4.5,4.5H6.5c-2.481,0-4.5-2.019-4.5-4.5V4.5C2,2.019,4.019,0,6.5,0h5.515c1.736,0,3.369.677,4.597,1.904l3.484,3.484c1.228,1.228,1.904,2.86,1.904,4.597Zm-8-3.485c0,.827.673,1.5,1.5,1.5h5.132c-.273-.706-.693-1.353-1.244-1.904l-3.484-3.484c-.551-.551-1.199-.971-1.904-1.244v5.132Zm7,3.485c0-.334-.03-.663-.088-.985h-5.412c-1.379,0-2.5-1.121-2.5-2.5V1.088c-.322-.058-.651-.088-.985-.088h-5.515c-1.93,0-3.5,1.57-3.5,3.5v15c0,1.93,1.57,3.5,3.5,3.5h11c1.93,0,3.5-1.57,3.5-3.5v-9.515Z"
+    }
+  ) });
+};
+
+// src/components/icons/editSVG/index.tsx
+var import_jsx_runtime59 = require("react/jsx-runtime");
+var Edit = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m4.5,1h5.515c.334,0,.663.03.985.088v5.412c0,1.378,1.122,2.5,2.5,2.5h5.411c.033.178.057.359.071.541.022.275.274.479.539.458.275-.022.48-.264.458-.539-.125-1.536-.793-2.981-1.883-4.07l-3.485-3.485c-1.228-1.228-2.86-1.904-4.596-1.904h-5.515C2.019,0,0,2.019,0,4.5v15c0,2.481,2.019,4.5,4.5,4.5h4c.276,0,.5-.224.5-.5s-.224-.5-.5-.5h-4c-1.93,0-3.5-1.57-3.5-3.5V4.5c0-1.93,1.57-3.5,3.5-3.5Zm12.889,5.096c.545.545.965,1.195,1.24,1.904h-5.129c-.827,0-1.5-.673-1.5-1.5V1.368c.706.273,1.353.692,1.904,1.243l3.485,3.485Zm5.878,5.636c-.943-.944-2.592-.944-3.535,0l-7.707,7.707c-.661.661-1.025,1.54-1.025,2.475v1.586c0,.276.224.5.5.5h1.586c.935,0,1.814-.364,2.475-1.025l7.707-7.707c.472-.472.732-1.1.732-1.768s-.26-1.296-.732-1.768Zm-.707,2.828l-7.707,7.707c-.472.472-1.1.732-1.768.732h-1.086v-1.086c0-.668.26-1.295.732-1.768l7.707-7.707c.566-.566,1.555-.566,2.121,0,.283.283.439.66.439,1.061s-.156.777-.439,1.061Z"
+    }
+  ) });
+};
+
+// src/components/icons/pdfSVG/index.tsx
+var import_jsx_runtime60 = require("react/jsx-runtime");
+var Pdf = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M20.1,5.39l-3.49-3.49c-1.23-1.23-2.86-1.9-4.6-1.9H6.5C4.02,0,2,2.02,2,4.5v15c0,2.48,2.02,4.5,4.5,4.5h11c2.48,0,4.5-2.02,4.5-4.5V9.99c0-1.74-.68-3.37-1.9-4.6Zm-.71,.71c.55,.55,.97,1.2,1.24,1.9h-5.13c-.83,0-1.5-.67-1.5-1.5V1.37c.71,.27,1.35,.69,1.9,1.24l3.49,3.49Zm1.61,13.4c0,1.93-1.57,3.5-3.5,3.5H6.5c-1.93,0-3.5-1.57-3.5-3.5V4.5c0-1.93,1.57-3.5,3.5-3.5h5.51c.33,0,.66,.03,.99,.09V6.5c0,1.38,1.12,2.5,2.5,2.5h5.41c.06,.32,.09,.65,.09,.99v9.51ZM6.97,13h-.97c-.55,0-1,.45-1,1v4.5c0,.28,.22,.5,.5,.5s.5-.22,.5-.5v-1.5h.97c1.11,0,2.01-.92,2.01-2.02s-.9-1.98-2.01-1.98Zm0,3h-.97v-2h.97c.56,0,1.01,.44,1.01,.98s-.46,1.02-1.01,1.02Zm5.03-3h0s-.51,0-1,0c-.55,0-1,.45-1,1v4c0,.55,.45,1,1,1,.48,0,.97,0,1,0h0c1.11,0,2-.89,2-1.98v-2.03c0-1.09-.89-1.98-2-1.98Zm1,4.02c0,.53-.43,.96-.96,.98h-1.04v-4h1.04c.53,.02,.96,.46,.96,.98v2.03Zm6-3.52c0,.28-.22,.5-.5,.5h-2.5v2s1.5,0,1.5,0c.28,0,.5,.22,.5,.5s-.22,.5-.5,.5h-1.5v1.5c0,.28-.22,.5-.5,.5s-.5-.22-.5-.5v-4.5c0-.55,.45-1,1-1h2.5c.28,0,.5,.22,.5,.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/filtersSVG/index.tsx
+var import_jsx_runtime61 = require("react/jsx-runtime");
+var Filters = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M15.5,20c-.106,0-.212-.034-.3-.1l-4-3c-.126-.094-.2-.243-.2-.4v-3.301L3.869,5.667c-.564-.635-.869-1.437-.869-2.27,0-1.874,1.524-3.398,3.398-3.398h14.203c1.874,0,3.398,1.524,3.398,3.398,0,.833-.305,1.635-.858,2.258l-7.142,7.543v6.301c0,.189-.107,.362-.276,.447-.07,.035-.147,.053-.224,.053Zm-3.5-3.75l3,2.25v-5.5c0-.128,.049-.251,.137-.344l7.268-7.676c.381-.428,.596-.994,.596-1.582,0-1.322-1.076-2.398-2.398-2.398H6.398c-1.322,0-2.398,1.076-2.398,2.398,0,.588,.215,1.154,.606,1.594l7.257,7.665c.088,.093,.137,.216,.137,.344v3.25Zm.724,7.697c.169-.085,.276-.258,.276-.447v-3c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v2l-3-2.25v-3.25c0-.128-.049-.251-.137-.344L1.606,8.992c-.392-.44-.606-1.006-.606-1.594,0-.695,.302-1.356,.828-1.812,.208-.181,.23-.497,.05-.705-.183-.209-.497-.232-.706-.05-.744,.646-1.172,1.582-1.172,2.567,0,.833,.305,1.635,.869,2.27l7.131,7.532v3.301c0,.157,.074,.306,.2,.4l4,3c.088,.066,.193,.1,.3,.1,.076,0,.153-.018,.224-.053Z"
+    }
+  ) });
+};
+
+// src/components/icons/downFolderSVG/index.tsx
+var import_jsx_runtime62 = require("react/jsx-runtime");
+var DownFolder = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M19.5,3h-7.028c-.231,0-.464-.055-.671-.158l-3.156-1.578c-.345-.173-.732-.264-1.118-.264h-3.028C2.019,1,0,3.019,0,5.5v13c0,2.481,2.019,4.5,4.5,4.5h3c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-3c-1.93,0-3.5-1.57-3.5-3.5V8H23v10.5c0,1.93-1.57,3.5-3.5,3.5h-3c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h3c2.481,0,4.5-2.019,4.5-4.5V7.5c0-2.481-2.019-4.5-4.5-4.5ZM1,5.5c0-1.93,1.57-3.5,3.5-3.5h3.028c.231,0,.464,.055,.671,.158l3.156,1.578c.345,.173,.732,.264,1.118,.264h7.028c1.76,0,3.221,1.306,3.464,3H1v-1.5Zm14.912,14.35l-2.515,2.57c-.386,.386-.891,.579-1.396,.58h-.003c-.504,0-1.008-.192-1.392-.576l-2.519-2.574c-.193-.197-.189-.514,.008-.707,.198-.191,.515-.189,.707,.008l2.515,2.57c.056,.056,.117,.103,.183,.142V12.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5v9.362c.066-.04,.129-.088,.187-.145l2.511-2.566c.193-.197,.51-.199,.707-.008,.197,.193,.201,.51,.008,.707Z"
+    }
+  ) });
+};
+
+// src/components/icons/upFolderSVG/index.tsx
+var import_jsx_runtime63 = require("react/jsx-runtime");
+var UpFolder = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M19.5,3h-7.028c-.231,0-.464-.055-.671-.158l-3.156-1.578c-.345-.173-.732-.264-1.118-.264h-3.028C2.019,1,0,3.019,0,5.5v13c0,2.481,2.019,4.5,4.5,4.5h4c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5H4.5c-1.93,0-3.5-1.57-3.5-3.5V8H23v10.5c0,1.93-1.57,3.5-3.5,3.5h-4c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h4c2.481,0,4.5-2.019,4.5-4.5V7.5c0-2.481-2.019-4.5-4.5-4.5ZM1,5.5c0-1.93,1.57-3.5,3.5-3.5h3.028c.231,0,.464,.055,.671,.158l3.156,1.578c.345,.173,.732,.264,1.118,.264h7.028c1.76,0,3.221,1.306,3.464,3H1v-1.5Zm11.683,7.78c-.056-.056-.117-.103-.183-.142v9.363c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5V13.139c-.066,.04-.129,.088-.187,.146l-2.511,2.566c-.193,.198-.509,.201-.707,.008-.197-.193-.201-.51-.008-.707l2.515-2.57c.384-.384,.886-.577,1.388-.58h.018c.502,.002,1.003,.194,1.384,.576l2.519,2.574c.193,.197,.189,.514-.008,.707-.097,.095-.224,.143-.35,.143-.13,0-.259-.05-.357-.15l-2.515-2.57Z"
+    }
+  ) });
+};
+
+// src/components/icons/foxSVG/index.tsx
+var import_jsx_runtime64 = require("react/jsx-runtime");
+var Fox = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m23.105.344c-.545-.365-1.228-.438-1.825-.193-1.273.519-2.108,1.944-2.758,3.27-.229.468-.71.706-1.184.571-1.223-.35-3.467-.992-5.339-.992s-4.115.642-5.339.992c-.466.134-.954-.102-1.183-.571C4.829,2.095,3.994.67,2.72.151,2.12-.094,1.437-.021.892.344c-.559.375-.892,1-.892,1.67v7.938c0,2.803,1.092,5.439,3.075,7.422l5.002,5.001c1.048,1.048,2.441,1.625,3.923,1.625s2.876-.577,3.923-1.625l5.002-5.001c1.983-1.983,3.075-4.621,3.075-7.425V2.018c0-.671-.334-1.297-.895-1.674Zm-14.321,21.324l-5.002-5.001c-1.794-1.794-2.782-4.18-2.782-6.715v-.82c.659.177,1.786.551,3,1.269v.6s.47,2.763,3.613,2.979c.827,1.42,1.387,3.221,1.387,5.521v1.5c0,.351.072.683.183.996-.134-.107-.275-.204-.399-.328Zm5.216-.668c0,1.103-.897,2-2,2s-2-.897-2-2v-.271c.301-.238,1.039-.729,2-.729s1.7.491,2,.729v.271Zm9-11.051c0,2.538-.988,4.923-2.782,6.718l-5.002,5.001c-.123.123-.264.221-.399.328.111-.313.183-.645.183-.996v-1.5c0-2.3.56-4.101,1.387-5.521,3.143-.216,3.613-2.979,3.613-2.979v-.6c1.214-.719,2.341-1.092,3-1.269v.817Zm0-1.845c-1.809.466-9,2.893-9,11.431-.494-.273-1.178-.535-2-.535s-1.506.262-2,.535c0-8.538-7.191-10.965-9-11.431V2.014c0-.336.168-.65.45-.84.166-.111.351-.167.537-.167.12,0,.24.023.355.07.962.393,1.671,1.627,2.237,2.784.439.896,1.431,1.355,2.355,1.093,1.173-.336,3.333-.954,5.065-.954s3.893.618,5.065.954c.927.263,1.916-.197,2.355-1.093.566-1.156,1.274-2.392,2.236-2.784.296-.12.62-.084.891.098.283.19.452.506.452.844v6.085Z"
+    }
+  ) });
+};
+
+// src/components/icons/joystickSVG/index.tsx
+var import_jsx_runtime65 = require("react/jsx-runtime");
+var Joystick = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m22.355,5.378c-.776-1.467-2.297-2.378-3.97-2.378H5.615c-1.673,0-3.194.911-3.97,2.377-.75,1.418-1.645,3.715-1.645,6.601,0,5.526,2.019,10.022,4.5,10.022,1.628,0,2.603-2.146,3.133-3.946.183-.62.771-1.054,1.432-1.054h5.87c.661,0,1.25.434,1.432,1.054.53,1.8,1.504,3.946,3.133,3.946,2.481,0,4.5-4.496,4.5-10.022,0-2.886-.895-5.183-1.645-6.6Zm-2.855,15.622c-.766,0-1.578-1.207-2.174-3.229-.307-1.042-1.29-1.771-2.391-1.771h-5.87c-1.101,0-2.084.729-2.391,1.771-.596,2.022-1.408,3.229-2.174,3.229-1.652,0-3.5-3.858-3.5-9.022,0-2.681.832-4.814,1.529-6.133.603-1.138,1.785-1.845,3.086-1.845h12.77c1.301,0,2.484.707,3.086,1.845.697,1.318,1.529,3.452,1.529,6.133,0,5.164-1.848,9.022-3.5,9.022Zm-10.5-11.5c0,.276-.224.5-.5.5h-1.5v1.5c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-1.5h-1.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h1.5v-1.5c0-.276.224-.5.5-.5s.5.224.5.5v1.5h1.5c.276,0,.5.224.5.5Zm7-1.5c0-.552.448-1,1-1s1,.448,1,1-.448,1-1,1-1-.448-1-1Zm0,2c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm4,0c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm-2,2c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/ghostSVG/index.tsx
+var import_jsx_runtime66 = require("react/jsx-runtime");
+var Ghost = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m9,8c-1.103,0-2,.897-2,2s.897,2,2,2,2-.897,2-2-.897-2-2-2Zm0,3c-.551,0-1-.449-1-1s.449-1,1-1,1,.449,1,1-.449,1-1,1Zm6-3c-1.103,0-2,.897-2,2s.897,2,2,2,2-.897,2-2-.897-2-2-2Zm0,3c-.551,0-1-.449-1-1s.449-1,1-1,1,.449,1,1-.449,1-1,1ZM12,0C6.486,0,2,4.486,2,10v13.5c0,.234.167.5.5.5.19,0,.369-.109.452-.287.482-1.024,1.573-1.713,2.714-1.713,1.104,0,2.149.666,2.727,1.737.087.162.256.263.44.263h0c.184,0,.353-.102.44-.264.575-1.071,1.619-1.736,2.726-1.736,1.095,0,2.213.708,2.719,1.723.086.174.259.281.462.277.195-.006.369-.125.445-.304.413-.967,1.577-1.696,2.707-1.696,1.256,0,2.273.87,2.723,1.731.107.204.338.308.562.254.224-.055.381-.255.381-.485v-13.5C22,4.486,17.514,0,12,0Zm9,22.069c-.687-.617-1.611-1.069-2.667-1.069-1.227,0-2.451.623-3.182,1.557-.766-.955-1.949-1.557-3.152-1.557-1.222,0-2.38.595-3.167,1.592-.789-.997-1.947-1.592-3.166-1.592-.984,0-1.939.385-2.667,1.027v-12.027C3,5.038,7.038,1,12,1s9,4.038,9,9v12.069Z"
+    }
+  ) });
+};
+
+// src/components/icons/imageSVG/index.tsx
+var import_jsx_runtime67 = require("react/jsx-runtime");
+var Image2 = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M15,4.43c0,.2,.12,.39,.31,.47l2.66,1.12,1.07,2.66c.08,.19,.26,.31,.46,.31s.39-.12,.46-.31l1.06-2.66,2.66-1.06c.19-.08,.31-.26,.31-.46s-.12-.39-.31-.46l-2.66-1.06-1.06-2.66c-.15-.38-.78-.38-.93,0l-1.06,2.65-2.65,1c-.19,.07-.32,.25-.32,.46Zm3.53-.6c.13-.05,.23-.15,.29-.28l.68-1.7,.68,1.7c.05,.13,.15,.23,.28,.28l1.7,.68-1.7,.68c-.13,.05-.23,.15-.28,.28l-.68,1.7-.68-1.7c-.05-.12-.15-.22-.27-.28l-1.71-.72,1.69-.64Zm-4.02,5.66l-.53-2.11c-.06-.22-.26-.38-.48-.38s-.43,.16-.48,.38l-.53,2.1-2.1,.48c-.22,.05-.38,.25-.39,.48,0,.23,.15,.43,.37,.49l2.12,.57,.53,2.11c.06,.22,.26,.38,.48,.38s.43-.16,.48-.38l.53-2.11,2.11-.53c.22-.06,.38-.26,.38-.48s-.16-.43-.38-.48l-2.11-.53Zm-.53,1.13c-.18,.04-.32,.18-.36,.36l-.12,.46-.12-.46c-.04-.18-.18-.31-.35-.36l-.47-.13,.41-.09c.18-.04,.38-.23,.42-.42l.1-.42,.12,.46c.04,.18,.18,.32,.36,.36l.46,.12-.46,.12Zm9.52-2.62c-.28,0-.5,.22-.5,.5v11c0,.09,0,.19-.01,.28l-2.9-2.9c-1.15-1.15-3.02-1.15-4.17,0l-.58,.58c-.74,.74-1.94,.74-2.68,0l-5.58-5.58c-1.15-1.15-3.02-1.15-4.17,0l-1.92,1.92V4.5c0-1.93,1.57-3.5,3.5-3.5H15.5c.28,0,.5-.22,.5-.5s-.22-.5-.5-.5H4.5C2.02,0,0,2.02,0,4.5v15c0,2.48,2.02,4.5,4.5,4.5h15c2.48,0,4.5-2.02,4.5-4.5V8.5c0-.28-.22-.5-.5-.5Zm-4,15H4.5c-1.93,0-3.5-1.57-3.5-3.5v-4.29l2.62-2.62c.76-.76,2-.76,2.75,0l5.58,5.58c1.13,1.13,2.96,1.13,4.09,0l.58-.58c.76-.76,2-.76,2.75,0l3.33,3.33c-.54,1.23-1.77,2.09-3.2,2.09ZM7,5c.55,0,1,.45,1,1s-.45,1-1,1-1-.45-1-1,.45-1,1-1Z"
+    }
+  ) });
+};
+
+// src/components/icons/helicopterSVG/index.tsx
+var import_jsx_runtime68 = require("react/jsx-runtime");
+var Helicopter = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.5,20c-.276,0-.5,.224-.5,.5,0,.827-.673,1.5-1.5,1.5h-2.5v-4h.5c2.481,0,4.5-2.019,4.5-4.5,0-4.136-3.364-7.5-7.5-7.5h-1.5V3h7.5c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-7.5v-.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v.5H6.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h7.5v3H1v-1.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v2.237c0,1.555,1.044,2.938,2.539,3.365l4.461,1.274v1.123c0,2.513,1.694,4.638,4,5.292v4.208H6.5c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h15c1.379,0,2.5-1.122,2.5-2.5,0-.276-.224-.5-.5-.5Zm-7-13c3.416,0,6.225,2.649,6.481,6h-6.481c-.827,0-1.5-.673-1.5-1.5V7h1.5Zm-8.5,5.5v-1.5c0-.223-.148-.419-.363-.481l-4.824-1.378c-.982-.28-1.692-1.14-1.799-2.141H14v4.5c0,1.378,1.121,2.5,2.5,2.5h6.464c-.243,1.694-1.704,3-3.464,3h-7c-2.481,0-4.5-2.019-4.5-4.5Zm4,5.477c.165,.015,.331,.023,.5,.023h5.5v4h-6v-4.023Z"
+    }
+  ) });
+};
+
+// src/components/icons/hospitalSVG/index.tsx
+var import_jsx_runtime69 = require("react/jsx-runtime");
+var Hospital = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M16,12h-2v-2c0-1.103-.897-2-2-2s-2,.897-2,2v2h-2c-1.103,0-2,.897-2,2s.897,2,2,2h2v2c0,1.103,.897,2,2,2s2-.897,2-2v-2h2c1.103,0,2-.897,2-2s-.897-2-2-2Zm0,3h-2.5c-.276,0-.5,.224-.5,.5v2.5c0,.552-.448,1-1,1s-1-.448-1-1v-2.5c0-.276-.224-.5-.5-.5h-2.5c-.552,0-1-.448-1-1s.448-1,1-1h2.5c.276,0,.5-.224,.5-.5v-2.5c0-.552,.448-1,1-1s1,.448,1,1v2.5c0,.276,.224,.5,.5,.5h2.5c.552,0,1,.448,1,1s-.448,1-1,1Zm6.017-9.169l-1.017-.686V1.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v2.97L14.518,.771c-1.529-1.033-3.507-1.033-5.034,0L1.983,5.831c-1.242,.838-1.983,2.232-1.983,3.729v9.939c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5V9.561c0-1.497-.741-2.892-1.983-3.729Zm.983,13.669c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5V9.561c0-1.165,.576-2.249,1.542-2.901L10.043,1.599c.594-.401,1.275-.603,1.957-.603s1.363,.201,1.958,.603l7.5,5.061c.966,.652,1.542,1.736,1.542,2.901v9.939Z"
+    }
+  ) });
+};
+
+// src/components/icons/downloadSVG/index.tsx
+var import_jsx_runtime70 = require("react/jsx-runtime");
+var Download = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M21.5,12h-3c-.827,0-1.5,.673-1.5,1.5,0,1.379-1.121,2.5-2.5,2.5h-5c-1.379,0-2.5-1.121-2.5-2.5,0-.827-.673-1.5-1.5-1.5H2.5c-1.379,0-2.5,1.121-2.5,2.5v5c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5v-5c0-1.379-1.121-2.5-2.5-2.5Zm1.5,7.5c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5v-5c0-.827,.673-1.5,1.5-1.5h3c.275,0,.5,.225,.5,.5,0,1.93,1.57,3.5,3.5,3.5h5c1.93,0,3.5-1.57,3.5-3.5,0-.275,.225-.5,.5-.5h3c.827,0,1.5,.673,1.5,1.5v5ZM7.646,7.268c-.195-.195-.195-.512,0-.707s.512-.195,.707,0l3.146,3.146V.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5V9.707l3.146-3.146c.195-.195,.512-.195,.707,0s.195,.512,0,.707l-3.293,3.293c-.257,.257-.589,.381-.925,.412-.044,.013-.087,.027-.135,.027s-.091-.015-.135-.027c-.337-.031-.668-.155-.925-.412l-3.293-3.293Z"
+    }
+  ) });
+};
+
+// src/components/icons/lightSVG/index.tsx
+var import_jsx_runtime71 = require("react/jsx-runtime");
+var Light = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m17.063,3.257l1.671-3c.133-.242.439-.328.68-.193.241.134.328.438.193.68l-1.671,3c-.091.164-.262.257-.437.257-.083,0-.166-.021-.243-.063-.241-.134-.328-.438-.193-.68Zm6.895,2.028c-.112-.253-.406-.366-.659-.257l-3,1.321c-.253.111-.368.407-.257.659.083.188.266.299.458.299.067,0,.136-.014.201-.042l3-1.321c.253-.111.368-.407.257-.659ZM6.063,3.743c.091.164.262.257.437.257.083,0,.166-.021.243-.063.241-.134.328-.438.193-.68L5.266.257c-.134-.242-.439-.327-.68-.193-.241.134-.328.438-.193.68l1.671,3Zm-2.362,2.606l-3-1.321c-.251-.108-.547.003-.659.257-.111.252.004.548.257.659l3,1.321c.065.028.134.042.201.042.192,0,.375-.111.458-.299.111-.252-.004-.548-.257-.659Zm16.299,5.65c0,2.583-1.259,5.02-3.368,6.519-.396.282-.632.736-.632,1.215v1.267c0,1.654-1.346,3-3,3h-2c-1.683,0-3-1.377-3-3.136v-1.132c0-.478-.239-.934-.64-1.219-2.456-1.752-3.71-4.706-3.273-7.711.513-3.521,3.457-6.36,7.003-6.752,2.307-.256,4.527.45,6.245,1.987,1.693,1.517,2.665,3.689,2.665,5.962Zm-5,9v-1h-6v.864c0,1.218.859,2.136,2,2.136h2c1.103,0,2-.897,2-2Zm4-9c0-1.988-.85-3.89-2.332-5.217-1.301-1.164-2.931-1.783-4.658-1.783-.268,0-.538.015-.811.045-3.1.342-5.675,2.824-6.122,5.902-.383,2.632.714,5.22,2.863,6.752.454.324.771.787.933,1.301h2.627v-5.051c-1.14-.232-2-1.242-2-2.449,0-.276.224-.5.5-.5s.5.224.5.5c0,.827.673,1.5,1.5,1.5s1.5-.673,1.5-1.5c0-.276.224-.5.5-.5s.5.224.5.5c0,1.208-.86,2.217-2,2.449v5.051h2.626c.161-.513.475-.975.926-1.296,1.847-1.312,2.948-3.444,2.948-5.704Z"
+    }
+  ) });
+};
+
+// src/components/icons/lionSVG/index.tsx
+var import_jsx_runtime72 = require("react/jsx-runtime");
+var Lion = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m15,11c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm-5-1c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Zm8.109-3.912c.47.825.891,1.65.891,2.672,0,2.01-.711,3.663-.97,4.198l.207.827c.233.933-.072,1.903-.797,2.534l-2.027,1.768c-.683.595-1.558.923-2.464.923h-1.898c-.906,0-1.781-.328-2.464-.923l-2.027-1.768c-.725-.631-1.03-1.602-.796-2.534l.207-.827c-.259-.535-.97-2.188-.97-4.198,0-1.021.421-1.847.891-2.672.547-.963,1.653-1.481,2.755-1.28.869.155,2.13.488,3.354,1.2,1.224-.712,2.485-1.045,3.354-1.2,1.098-.202,2.207.317,2.755,1.28Zm-.109,2.672c0-.778-.344-1.446-.76-2.178-.338-.595-1.024-.913-1.71-.79-.844.15-2.095.485-3.263,1.224-.163.104-.371.104-.534,0-1.167-.738-2.418-1.073-3.263-1.224-.098-.018-.195-.025-.292-.025-.582,0-1.128.306-1.418.815-.416.731-.76,1.399-.76,2.178,0,2.152.93,3.882.939,3.899.06.11.077.239.046.36l-.252,1.008c-.142.566.044,1.155.483,1.538l2.028,1.768c.501.437,1.143.677,1.807.677h.438l-.034-1.555-1.248-1.248c-.133-.133-.207-.312-.207-.5,0-.391.317-.707.707-.707h2.586c.391,0,.707.317.707.707,0,.188-.075.367-.207.5l-1.336,1.336.032,1.467h.46c.664,0,1.306-.24,1.807-.677l2.027-1.768c.44-.383.625-.972.484-1.538l-.252-1.008c-.031-.121-.014-.25.045-.359.01-.018.939-1.76.939-3.9Zm6,3.72v1.788c0,.479-.272.896-.71,1.088-.304.134-.631.134-.922.017-.594,2.184-1.096,3.609-1.289,4.026l-.647,1.87c-.215.477-.634.757-1.11.773-.47,0-.914-.233-1.141-.651l-.198-.592c-1.231.839-3.316,2.221-4.638,2.884-.421.21-.883.315-1.345.315s-.923-.105-1.344-.315c-1.321-.663-3.403-2.042-4.634-2.881l-.166.505c-.263.502-.69.743-1.177.735-.477-.017-.895-.297-1.093-.729l-.683-1.961c-.177-.374-.677-1.797-1.271-3.979-.289.117-.618.117-.922-.017-.438-.192-.71-.609-.71-1.088v-1.788c0-1.738.359-3.52,1.07-5.305-.353.021-.675-.117-.87-.392-.227-.319-.246-.738-.052-1.095C1.006,4.118,3.257,1.851,6.174.581c1.853-.808,3.961-.774,5.826.081,1.864-.856,3.973-.889,5.826-.081,2.94,1.279,5.186,3.571,6.029,5.159.19.359.167.779-.061,1.097-.197.272-.513.421-.844.388.697,1.77,1.05,3.532,1.05,5.255Zm-1,0c0-1.881-.457-3.823-1.359-5.772-.082-.176-.054-.383.07-.531.125-.148.325-.21.511-.162l.847.224c-.788-1.485-3.043-3.608-5.643-4.74-1.654-.718-3.55-.659-5.203.167-.141.07-.307.07-.447,0-1.652-.826-3.548-.885-5.203-.167C3.993,2.621,1.829,4.697,1.026,6.167l.777-.159c.185-.036.376.031.494.178.117.148.142.35.062.521-.902,1.949-1.359,3.892-1.359,5.772v1.788c0,.106.07.154.112.172.043.02.125.04.202-.033l.272-.249c.129-.119.312-.159.479-.111.168.05.298.184.342.354.684,2.62,1.252,4.215,1.42,4.577l.685,1.964c.043.089.167.104.209.103.051,0,.156-.016.219-.131l.337-1.056c.049-.15.166-.269.315-.318.052-.018.106-.026.16-.026.1,0,.2.03.284.089,1.026.709,3.575,2.439,5.065,3.188.562.281,1.232.281,1.793,0,1.49-.748,4.039-2.479,5.065-3.188.129-.091.293-.113.444-.062.149.05.267.168.315.318l.373,1.14c.03.039.143.061.192.046.046,0,.16-.019.218-.146l.649-1.873c.187-.409.755-2.004,1.439-4.624.044-.17.174-.304.342-.354.17-.048.351-.008.479.111l.271.249c.078.072.16.052.203.033.042-.018.112-.065.112-.172v-1.788Z"
+    }
+  ) });
+};
+
+// src/components/icons/lobsterSVG/index.tsx
+var import_jsx_runtime73 = require("react/jsx-runtime");
+var Lobster = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m18.5,10c1.292,0,2.423-.838,2.832-2.034,1.497-.167,2.668-1.426,2.668-2.966,0-.866-.437-3.395-.799-4.352-.144-.38-.498-.634-.902-.648-.399.011-.784.219-.955.592-.121.263-.229.584-.344.932-.115-.348-.223-.669-.344-.931-.171-.374-.536-.58-.955-.593-.404.015-.759.269-.902.647-.362.957-.799,3.486-.799,4.353,0,1.404.973,2.576,2.277,2.902-.334.656-1.012,1.098-1.777,1.098h-2.5v-2.275c0-.645-.248-1.717-.618-2.802.362-.15.618-.506.618-.923,0-.552-.448-1-1-1-.134,0-.261.028-.378.076-.235-.472-.483-.893-.731-1.202-.891-1.111-2.758-1.112-3.646,0-.253.315-.52.754-.778,1.256-.141-.076-.295-.13-.466-.13-.552,0-1,.448-1,1,0,.439.287.801.681.936-.399,1.075-.681,2.141-.681,2.789v2.275h-2.5c-.765,0-1.443-.442-1.777-1.098,1.305-.326,2.277-1.498,2.277-2.902,0-.866-.437-3.395-.799-4.352-.144-.38-.498-.634-.902-.648-.402.011-.784.219-.955.592-.121.263-.229.584-.344.932-.115-.348-.223-.669-.344-.931-.171-.374-.539-.58-.955-.593-.404.015-.759.269-.902.647-.362.957-.799,3.486-.799,4.353,0,1.541,1.172,2.799,2.668,2.966.409,1.196,1.54,2.034,2.832,2.034h2.5v2h-.843c-1.202,0-2.333.468-3.183,1.318l-.828.828c-.195.195-.195.512,0,.707s.512.195.707,0l.828-.828c.661-.661,1.54-1.025,2.476-1.025h.843v2h-.258c-.921,0-1.823.374-2.475,1.025l-1.121,1.121c-.195.195-.195.512,0,.707s.512.195.707,0l1.121-1.121c.466-.466,1.109-.732,1.768-.732h.258v2.858l-1.514,1.667c-.676.676-.643,1.583.086,2.312,1.097,1.098,3.506,1.874,5.428.319.776.628,1.632.876,2.448.876,1.205,0,2.325-.541,2.979-1.195.729-.729.762-1.636.103-2.294l-1.53-1.685v-2.858h.258c.658,0,1.302.267,1.768.732l1.121,1.121c.098.098.226.146.354.146s.256-.049.354-.146c.195-.195.195-.512,0-.707l-1.121-1.121c-.651-.651-1.554-1.025-2.475-1.025h-.258v-2h.843c.936,0,1.814.364,2.476,1.025l.828.828c.098.098.226.146.354.146s.256-.049.354-.146c.195-.195.195-.512,0-.707l-.828-.828c-.85-.851-1.98-1.318-3.183-1.318h-.843v-2h2.5Zm.5-5c0-.765.417-3.162.748-3.99.108.235.203.525.306.838.135.406.287.868.494,1.308.164.35.74.35.904,0,.207-.439.359-.901.494-1.308.103-.312.197-.603.316-.852l.003.006h0c.317.836.734,3.233.734,3.998,0,1.103-.897,2-2,2s-2-.897-2-2ZM1,5c0-.765.417-3.162.748-3.99.108.235.203.525.306.838.135.406.287.868.494,1.308.164.35.74.35.904,0,.207-.439.359-.901.494-1.308.103-.312.197-.603.316-.852l.003.006h0c.317.836.734,3.233.734,3.998,0,1.103-.897,2-2,2s-2-.897-2-2Zm8,1.725c0-1.066,1.086-4.055,2.024-5.226.509-.636,1.577-.634,2.086,0,.312.39,1.89,3.512,1.89,5.226v2.275h-6v-2.275Zm7.721,15.405c-.685.685-2.731,1.634-4.367,0-.098-.098-.226-.146-.354-.146s-.256.049-.354.146c-1.635,1.636-3.683.686-4.367,0-.491-.492-.207-.776-.069-.915l2.012-2.215h5.557l2.028,2.232c.121.121.405.405-.086.897Zm-1.721-4.13h-6v-2h6v2Zm0-3h-6v-2h6v2Zm0-3h-6v-2h6v2Z"
+    }
+  ) });
+};
+
+// src/components/icons/lockSVG/index.tsx
+var import_jsx_runtime74 = require("react/jsx-runtime");
+var Lock = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M19,8.276v-1.276c0-3.86-3.141-7-7-7S5,3.14,5,7v1.276c-1.742,.621-3,2.271-3,4.224v7c0,2.481,2.019,4.5,4.5,4.5h11c2.481,0,4.5-2.019,4.5-4.5v-7c0-1.953-1.258-3.602-3-4.224Zm-13-1.276c0-3.309,2.691-6,6-6s6,2.691,6,6v1.051c-.166-.019-.329-.051-.5-.051H6.5c-.171,0-.334,.032-.5,.051v-1.051Zm15,12.5c0,1.93-1.57,3.5-3.5,3.5H6.5c-1.93,0-3.5-1.57-3.5-3.5v-7c0-1.93,1.57-3.5,3.5-3.5h11c1.93,0,3.5,1.57,3.5,3.5v7Zm-8.5-5v3c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-3c0-.276,.224-.5,.5-.5s.5,.224,.5,.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/pinSVG/index.tsx
+var import_jsx_runtime75 = require("react/jsx-runtime");
+var Pin = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M18,6c0-3.309-2.691-6-6-6S6,2.691,6,6c0,3.14,2.425,5.724,5.5,5.979v11.521c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V11.979c3.075-.255,5.5-2.839,5.5-5.979Zm-6,5c-2.757,0-5-2.243-5-5S9.243,1,12,1s5,2.243,5,5-2.243,5-5,5Z"
+    }
+  ) });
+};
+
+// src/components/icons/mobileSVG/index.tsx
+var import_jsx_runtime76 = require("react/jsx-runtime");
+var Mobile = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        fill: "currentColor",
+        d: "M15.5,0h-7c-2.481,0-4.5,2.019-4.5,4.5v15c0,2.481,2.019,4.5,4.5,4.5h7c2.481,0,4.5-2.019,4.5-4.5V4.5c0-2.481-2.019-4.5-4.5-4.5Zm-.693,1l-.325,.974c-.205,.614-.777,1.026-1.423,1.026h-2.117c-.646,0-1.218-.412-1.423-1.026l-.325-.974h5.613Zm4.193,18.5c0,1.93-1.57,3.5-3.5,3.5h-7c-1.93,0-3.5-1.57-3.5-3.5V4.5c0-1.81,1.387-3.287,3.151-3.465l.418,1.255c.341,1.022,1.294,1.709,2.372,1.709h2.117c1.078,0,2.031-.687,2.372-1.709l.418-1.255c1.764,.178,3.151,1.654,3.151,3.465v15Z"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        fill: "currentColor",
+        d: "M13.5,20h-3c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h3c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      }
+    )
+  ] });
+};
+
+// src/components/icons/moneySVG/index.tsx
+var import_jsx_runtime77 = require("react/jsx-runtime");
+var Money = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M13.5,7c-1.93,0-3.5,1.57-3.5,3.5s1.57,3.5,3.5,3.5,3.5-1.57,3.5-3.5-1.57-3.5-3.5-3.5Zm0,6c-1.38,0-2.5-1.12-2.5-2.5s1.12-2.5,2.5-2.5,2.5,1.12,2.5,2.5-1.12,2.5-2.5,2.5ZM20.5,3H6.5c-1.93,0-3.5,1.57-3.5,3.5V14.5c0,1.93,1.57,3.5,3.5,3.5h14c1.93,0,3.5-1.57,3.5-3.5V6.5c0-1.93-1.57-3.5-3.5-3.5Zm2.5,11.5c0,1.38-1.12,2.5-2.5,2.5H6.5c-1.38,0-2.5-1.12-2.5-2.5V6.5c0-1.38,1.12-2.5,2.5-2.5h14c1.38,0,2.5,1.12,2.5,2.5V14.5Zm-4,6c0,.28-.22,.5-.5,.5H4.5c-2.48,0-4.5-2.02-4.5-4.5V8.5c0-.28,.22-.5,.5-.5s.5,.22,.5,.5v8c0,1.93,1.57,3.5,3.5,3.5h14c.28,0,.5,.22,.5,.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/monkeySVG/index.tsx
+var import_jsx_runtime78 = require("react/jsx-runtime");
+var Monkey = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime78.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m15,6c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm4-1c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Zm5,1c0,.828-.672,1.5-1.5,1.5-.294,0-.565-.088-.797-.233-.332.975-.926,1.829-1.703,2.472v13.261h1.5c.276,0,.5.224.5.5s-.224.5-.5.5H7.5c-4.136,0-7.5-3.364-7.5-7.5V5.5C0,2.21,2.21,0,5.5,0c.276,0,.5.224.5.5s-.224.5-.5.5C2.724,1,1,2.724,1,5.5v11c0,2.316,1.222,4.348,3.05,5.499.216-2.635,1.478-10.84,8.546-12.63-.581-.586-1.028-1.304-1.3-2.102-.231.146-.503.233-.797.233-.828,0-1.5-.672-1.5-1.5s.672-1.5,1.5-1.5c.205,0,.4.042.578.116.425-2.613,2.692-4.616,5.422-4.616s4.997,2.003,5.422,4.616c.178-.074.373-.116.578-.116.828,0,1.5.672,1.5,1.5Zm-11.531-2.461c.506-.34,1.116-.539,1.781-.539.839,0,1.647.33,2.25.91.602-.581,1.411-.91,2.25-.91.664,0,1.274.198,1.78.537-.732-1.496-2.255-2.537-4.03-2.537s-3.299,1.042-4.031,2.539Zm6.531,19.461v-6c0-1.103-.897-2-2-2s-2,.897-2,2v6h4Zm0-12.607c-.751.385-1.599.607-2.5.607-1.071,0-2.069-.313-2.915-.845,0,0,0,0,0,0-7.387,1.254-8.424,9.743-8.566,12.35.765.318,1.603.495,2.482.495h6.5v-6c0-1.654,1.346-3,3-3,.771,0,1.468.301,2,.78v-4.388Zm1.937-4.265c-.061-1.201-.995-2.128-2.187-2.128-.629,0-1.233.268-1.658.736-.309.337-.877.335-1.182.001-.427-.469-1.031-.737-1.66-.737-1.196,0-2.133.936-2.185,2.148.317,2.173,2.175,3.852,4.435,3.852s4.128-1.69,4.437-3.872Z"
+    }
+  ) });
+};
+
+// src/components/icons/planeSVG/index.tsx
+var import_jsx_runtime79 = require("react/jsx-runtime");
+var Plane = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M10.471,24c-.806,0-1.537-.375-2.006-1.029-.47-.654-.591-1.467-.333-2.23l2.042-5.741H5.388l-1.228,1.872c-.464,.707-1.246,1.128-2.091,1.128-.676,0-1.306-.328-1.689-.877-.385-.55-.477-1.254-.246-1.885l1.129-3.23L.067,8.875c-.158-.809,.032-1.564,.484-2.108,.411-.494,.982-.766,1.608-.766,.842,0,1.621,.418,2.085,1.12l1.245,1.88h4.684l-2.039-5.733c-.261-.771-.14-1.583,.33-2.237,.469-.654,1.2-1.029,2.006-1.029,1.037,0,1.99,.565,2.487,1.476l4.307,7.524h3.602c1.531,0,2.861,1.075,3.093,2.5h0c.144,.881-.102,1.771-.673,2.443s-1.404,1.057-2.286,1.057h-3.735l-4.312,7.533c-.492,.902-1.445,1.467-2.482,1.467ZM5.118,14h5.765c.162,0,.314,.079,.408,.212s.117,.303,.062,.456l-2.277,6.401c-.15,.447-.078,.93,.201,1.319s.714,.612,1.193,.612c.671,0,1.288-.366,1.61-.956l4.46-7.793c.089-.155,.254-.251,.434-.251h4.025c.588,0,1.144-.257,1.524-.705,.387-.455,.546-1.035,.448-1.634h0c-.154-.947-1.06-1.661-2.106-1.661h-3.892c-.18,0-.345-.096-.434-.251L12.086,1.964c-.327-.598-.944-.964-1.615-.964-.479,0-.914,.223-1.193,.612s-.352,.873-.198,1.327l2.274,6.394c.055,.153,.031,.323-.062,.456s-.246,.212-.408,.212H5.222c-.168,0-.324-.084-.417-.224l-1.394-2.104c-.457-.69-1.533-.935-2.091-.266-.265,.318-.375,.767-.295,1.2l1.236,3.216c.042,.11,.044,.232,.005,.343l-1.191,3.41c-.122,.335-.076,.688,.124,.975s.516,.451,.865,.451c.512,0,.981-.253,1.26-.677l1.376-2.097c.093-.141,.249-.226,.418-.226Z"
+    }
+  ) });
+};
+
+// src/components/icons/radioSVG/index.tsx
+var import_jsx_runtime80 = require("react/jsx-runtime");
+var Radio = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m19.5,6H6.901L21.661.973c.261-.089.401-.373.312-.634-.088-.261-.373-.401-.634-.312L3.401,6.136c-1.952.492-3.401,2.262-3.401,4.364v9c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5v-9c0-2.481-2.019-4.5-4.5-4.5Zm3.5,13.5c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5v-9c0-1.425.856-2.653,2.081-3.199l.596-.203c.264-.064.54-.098.823-.098h15c1.93,0,3.5,1.57,3.5,3.5v9Zm-14-6c0,.276-.224.5-.5.5H3.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5c.276,0,.5.224.5.5Zm0,3c0,.276-.224.5-.5.5H3.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5c.276,0,.5.224.5.5Zm0,3c0,.276-.224.5-.5.5H3.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5c.276,0,.5.224.5.5Zm0-9c0,.276-.224.5-.5.5H3.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5c.276,0,.5.224.5.5Zm7-.5c-2.757,0-5,2.243-5,5s2.243,5,5,5,5-2.243,5-5-2.243-5-5-5Zm0,9c-2.206,0-4-1.794-4-4s1.794-4,4-4,4,1.794,4,4-1.794,4-4,4Zm0-6c-1.103,0-2,.897-2,2s.897,2,2,2,2-.897,2-2-.897-2-2-2Zm0,3c-.551,0-1-.449-1-1s.449-1,1-1,1,.449,1,1-.449,1-1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/sheepSVG/index.tsx
+var import_jsx_runtime81 = require("react/jsx-runtime");
+var Sheep = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m22.541,14.007c-.264-.041-.53.137-.576.41-.121.718-.557,1.346-1.195,1.722-.483.286-.771.792-.77,1.362,0,.927-.498,1.783-1.271,2.181-.695.36-1.386.417-2.056.168-.474-.175-.991-.048-1.323.321-.791.881-2.187,1.08-3.186.432-.404-.261-.926-.261-1.33,0-.999.646-2.394.448-3.186-.432-.331-.368-.85-.495-1.323-.321-.667.248-1.358.192-2.056-.168-.772-.398-1.271-1.254-1.271-2.187,0-.563-.286-1.07-.77-1.356-.771-.454-1.23-1.253-1.23-2.139s.46-1.685,1.23-2.139c.483-.286.771-.792.77-1.362,0-.927.498-1.783,1.271-2.181.693-.359,1.383-.416,2.055-.169.469.173.992.049,1.325-.321.663-.739,1.754-1.019,2.68-.683.256.094.546-.041.64-.3.095-.26-.04-.546-.3-.641-1.304-.473-2.833-.081-3.763.954-.059.064-.147.084-.236.052-.93-.342-1.918-.266-2.859.219-1.102.568-1.812,1.773-1.812,3.079,0,.205-.104.389-.277.492-1.079.635-1.723,1.757-1.723,3s.644,2.365,1.723,3c.174.103.278.287.277.5,0,1.297.71,2.503,1.812,3.071.391.201.789.315,1.188.375v1.555c0,.827.673,1.5,1.5,1.5s1.5-.673,1.5-1.5v-.867c1.065.494,2.366.463,3.378-.19.074-.049.17-.049.244,0,.564.364,1.213.557,1.878.557.944,0,1.843-.396,2.5-1.075v1.575c0,.827.673,1.5,1.5,1.5s1.5-.673,1.5-1.5v-1.854c.063-.029.126-.044.188-.076,1.102-.568,1.812-1.773,1.812-3.079,0-.205.104-.389.277-.492.893-.526,1.503-1.407,1.674-2.417.046-.272-.138-.53-.41-.577Zm-15.541,8.493c0,.276-.225.5-.5.5s-.5-.224-.5-.5v-1.541c.226-.034.451-.088.672-.17.089-.034.177-.012.233.051.033.036.073.064.107.099-.003.021-.012,1.562-.012,1.562Zm11,0c0,.276-.225.5-.5.5s-.5-.224-.5-.5v-1.541c.331.05.666.036,1-.014v1.555Zm-1-15.5c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm3,0c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Zm3.458-3.518c-.706-.167-1.912-.402-3.277-.574-.21-.157-.435-.293-.671-.412.146-.77.453-1.496,1.989-1.496.276,0,.5-.224.5-.5s-.224-.5-.5-.5c-2.27,0-2.773,1.365-2.94,2.14-.342-.083-.693-.14-1.06-.14s-.719.056-1.06.14c-.166-.774-.669-2.14-2.94-2.14-.276,0-.5.224-.5.5s.224.5.5.5c1.536,0,1.843.726,1.989,1.496-.236.119-.461.254-.671.412-1.364.172-2.571.407-3.277.574-.475.113-.689.658-.431,1.072.407.653,1.148,1.104,1.955,1.298-.031.213-.065.426-.065.648v3.879c0,2.268,1.683,3.621,4.5,3.621s4.5-1.354,4.5-3.621v-3.879c0-.222-.034-.435-.065-.648.807-.194,1.548-.644,1.955-1.298.258-.414.044-.96-.431-1.072Zm-2.458,6.897c0,2.281-2.192,2.621-3.5,2.621s-3.5-.34-3.5-2.621v-3.879c0-1.93,1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5v3.879Z"
+    }
+  ) });
+};
+
+// src/components/icons/rocketSVG/index.tsx
+var import_jsx_runtime82 = require("react/jsx-runtime");
+var Rocket = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M15.5,6c-1.378,0-2.5,1.122-2.5,2.5s1.122,2.5,2.5,2.5,2.5-1.122,2.5-2.5-1.122-2.5-2.5-2.5Zm0,4c-.827,0-1.5-.673-1.5-1.5s.673-1.5,1.5-1.5,1.5,.673,1.5,1.5-.673,1.5-1.5,1.5ZM24,2.544c0-1.403-1.142-2.544-2.559-2.544-5.16,.147-9.295,2.269-12.889,6.645-1.62,.019-3.237,.412-4.686,1.139-1.722,.865-3.09,2.169-3.661,3.488-.359,.83-.264,1.828,.247,2.605,.469,.713,1.2,1.122,2.006,1.122h2.541c1.326,0,2.335,.337,2.999,1.001,.683,.683,1.001,1.604,1.001,2.899v2.541c0,.824,.441,1.605,1.18,2.091,.473,.311,1.007,.47,1.535,.47,.347,0,.69-.068,1.012-.208,1.319-.57,2.624-1.938,3.488-3.661,.727-1.448,1.12-3.065,1.139-4.686,4.376-3.593,6.498-7.73,6.645-12.903ZM1.289,13.329c-.328-.5-.391-1.135-.165-1.66,.48-1.11,1.673-2.229,3.191-2.991,1.066-.535,2.233-.87,3.421-.987-.105,.141-.21,.284-.314,.43-1.603,2.235-2.861,4.969-3.262,5.879h-1.701c-.464,0-.89-.245-1.17-.671Zm14.034,6.355c-.763,1.519-1.881,2.711-2.991,3.191-.494,.215-1.107,.144-1.602-.18-.463-.305-.729-.762-.729-1.255v-1.693c.923-.382,3.649-1.571,5.879-3.171,.145-.104,.288-.209,.43-.314-.117,1.188-.452,2.355-.987,3.421Zm-.026-3.919c-1.873,1.343-4.178,2.412-5.3,2.897-.041-1.439-.465-2.543-1.29-3.369-.812-.812-1.972-1.245-3.45-1.29,.516-1.128,1.637-3.428,2.979-5.3C11.893,3.601,16.098,1.153,21.456,1c.852,0,1.544,.693,1.544,1.53-.153,5.372-2.601,9.577-7.704,13.235ZM1.732,18.732c-.604,.603-1.461,2.702-1.701,3.752-.096,.418,.029,.849,.332,1.152,.236,.236,.549,.363,.874,.363,.093,0,.186-.01,.279-.032,1.05-.24,3.148-1.097,3.752-1.701,.473-.472,.732-1.1,.732-1.768s-.26-1.296-.732-1.768c-.943-.944-2.592-.944-3.535,0Zm2.828,2.828c-.391,.391-2.223,1.194-3.268,1.433-.111,.025-.188-.029-.222-.064-.035-.035-.09-.11-.064-.222,.239-1.045,1.042-2.877,1.433-3.268,.283-.283,.66-.439,1.061-.439s.777,.156,1.061,.439,.439,.66,.439,1.061-.156,.777-.439,1.061Z"
+    }
+  ) });
+};
+
+// src/components/icons/moneyBagSVG/index.tsx
+var import_jsx_runtime83 = require("react/jsx-runtime");
+var MoneyBag = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime83.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M13.83,5.268c1.11-.592,2.461-1.581,3.06-3.087,.193-.486,.133-1.018-.166-1.458-.307-.453-.815-.724-1.36-.724h-6.728c-.544,0-1.053,.271-1.36,.724-.299,.44-.359,.972-.167,1.458,.599,1.506,1.95,2.495,3.06,3.087C5.238,6.62,1,13.094,1,18.25c0,3.17,2.58,5.75,5.75,5.75h10.5c3.17,0,5.75-2.58,5.75-5.75,0-5.156-4.238-11.63-9.17-12.982ZM8.039,1.812c-.094-.236,0-.432,.064-.526,.121-.179,.32-.285,.533-.285h6.728c.212,0,.412,.106,.533,.285,.064,.095,.158,.29,.064,.527-.788,1.982-3.337,2.952-3.961,3.163-.625-.21-3.169-1.174-3.96-3.164Zm9.211,21.188H6.75c-2.619,0-4.75-2.131-4.75-4.75,0-5.349,4.849-12.25,10-12.25s10,6.901,10,12.25c0,2.619-2.131,4.75-4.75,4.75Zm-1.25-5.626c0,1.448-1.178,2.626-2.626,2.626h-.874v1.5c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-1.5h-.926c-.979,0-1.891-.526-2.381-1.374-.139-.239-.057-.545,.182-.683,.239-.14,.544-.057,.683,.182,.312,.54,.894,.875,1.516,.875h2.8c.896,0,1.626-.729,1.626-1.626,0-.803-.575-1.478-1.368-1.605l-3.422-.55c-1.28-.206-2.209-1.296-2.209-2.593,0-1.448,1.178-2.626,2.626-2.626h.874v-1.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5v1.5h.926c.978,0,1.891,.527,2.381,1.375,.139,.239,.057,.545-.182,.683-.241,.138-.544,.056-.683-.182-.312-.54-.894-.875-1.516-.875h-2.8c-.896,0-1.626,.729-1.626,1.626,0,.803,.575,1.478,1.368,1.605l3.422,.55c1.28,.206,2.209,1.296,2.209,2.593Z"
+    }
+  ) });
+};
+
+// src/components/icons/stepsSVG/index.tsx
+var import_jsx_runtime84 = require("react/jsx-runtime");
+var Steps = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M17.944,2c-2.431,0-4.944,2.618-4.944,7,0,1.471,.707,2.98,1.456,4.58,.759,1.621,1.544,3.297,1.544,4.92v2c0,1.93,1.57,3.5,3.5,3.5s3.5-1.57,3.5-3.5v-2c0-1.732,.275-2.987,.542-4.201,.235-1.072,.458-2.085,.458-3.299,0-8.748-5.436-9-6.056-9Zm4.056,16.5v2c0,1.378-1.121,2.5-2.5,2.5s-2.5-1.122-2.5-2.5v-2c0-.167-.007-.334-.02-.5h5.028c-.005,.163-.008,.329-.008,.5Zm.565-4.415c-.187,.854-.393,1.789-.497,2.915h-5.239c-.284-1.315-.884-2.595-1.469-3.845-.7-1.495-1.361-2.907-1.361-4.155,0-3.756,2.006-6,3.944-6,.518,0,5.056,.225,5.056,8,0,1.106-.211,2.067-.435,3.085ZM6.056,0C5.436,0,0,.252,0,9c0,1.214,.223,2.227,.458,3.299,.267,1.213,.542,2.468,.542,4.201v2c0,1.93,1.57,3.5,3.5,3.5s3.5-1.57,3.5-3.5v-2c0-1.623,.785-3.299,1.544-4.92,.749-1.599,1.456-3.109,1.456-4.58C11,2.618,8.486,0,6.056,0Zm.944,16.5v2c0,1.378-1.121,2.5-2.5,2.5s-2.5-1.122-2.5-2.5v-2c0-.171-.003-.337-.008-.5H7.02c-.013,.166-.02,.333-.02,.5Zm1.639-5.345c-.585,1.25-1.185,2.53-1.469,3.845H1.931c-.104-1.126-.309-2.061-.497-2.915-.224-1.018-.435-1.979-.435-3.085C1,1.225,5.538,1,6.056,1c1.938,0,3.944,2.244,3.944,6,0,1.248-.661,2.66-1.361,4.155Z"
+    }
+  ) });
+};
+
+// src/components/icons/bucketSVG/index.tsx
+var import_jsx_runtime85 = require("react/jsx-runtime");
+var Bucket = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime85.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime85.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.38,8.853c-.475-.542-1.16-.853-1.88-.853h-.566C20.433,3.479,16.603,0,12,0S3.567,3.479,3.066,8h-.566c-.72,0-1.405,.311-1.88,.853S-.073,10.116,.021,10.831l1.12,8.396c.363,2.721,2.707,4.772,5.452,4.772h10.812c2.745,0,5.089-2.052,5.451-4.772l1.121-8.397c.095-.714-.124-1.436-.599-1.978ZM12,1c4.054,0,7.434,3.035,7.93,7H4.07c.495-3.965,3.876-7,7.93-7Zm10.986,9.698l-1.12,8.396c-.296,2.227-2.214,3.905-4.46,3.905H6.594c-2.246,0-4.164-1.679-4.461-3.905L1.014,10.699c-.058-.43,.073-.862,.358-1.188s.696-.512,1.128-.512H21.5c.432,0,.843,.187,1.128,.512s.416,.758,.358,1.187Zm-10.486,1.802v7c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-7c0-.276,.224-.5,.5-.5s.5,.224,.5,.5Zm5.5,0v7c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-7c0-.276,.224-.5,.5-.5s.5,.224,.5,.5Zm-11,0v7c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-7c0-.276,.224-.5,.5-.5s.5,.224,.5,.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/vanSVG/index.tsx
+var import_jsx_runtime86 = require("react/jsx-runtime");
+var Van = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime86.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M23.439,10.133l-2.427-5.461c-.722-1.624-2.335-2.672-4.112-2.672H4.5C2.019,2,0,4.019,0,6.5V15.5c0,1.653,1.437,2.96,3,3.367v1.133c0,1.654,1.346,3,3,3s3-1.346,3-3v-1h6v1c0,1.654,1.346,3,3,3s3-1.346,3-3v-1.036c1.694-.243,3-1.704,3-3.464v-2.727c0-.917-.188-1.805-.561-2.64Zm-3.341-5.055l2.187,4.921h-7.285V3h1.9c1.382,0,2.638,.816,3.198,2.079Zm-12.099,4.921V3h6v7h-6ZM4.5,3h2.5v7H1v-3.5c0-1.93,1.57-3.5,3.5-3.5Zm3.5,17c0,1.103-.897,2-2,2s-2-.897-2-2v-1h4v1Zm10,2c-1.103,0-2-.897-2-2v-1h4v1c0,1.103-.897,2-2,2Zm5-6.5c0,1.378-1.121,2.5-2.5,2.5H4c-1.359,0-3-1.115-3-2.5v-4.5H22.706c.195,.569,.294,1.164,.294,1.773v2.727Z"
+    }
+  ) });
+};
+
+// src/components/icons/signalSVG/index.tsx
+var import_jsx_runtime87 = require("react/jsx-runtime");
+var Signal = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime87.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m6,15v6c0,1.654-1.346,3-3,3s-3-1.346-3-3v-6c0-1.654,1.346-3,3-3s3,1.346,3,3ZM24,3v18c0,1.654-1.346,3-3,3s-3-1.346-3-3V3c0-1.654,1.346-3,3-3s3,1.346,3,3Zm-1,0c0-1.103-.897-2-2-2s-2,.897-2,2v18c0,1.103.897,2,2,2s2-.897,2-2V3Zm-11,3c-1.654,0-3,1.346-3,3v12c0,1.654,1.346,3,3,3s3-1.346,3-3v-12c0-1.654-1.346-3-3-3Z"
+    }
+  ) });
+};
+
+// src/components/icons/connectionSVG/index.tsx
+var import_jsx_runtime88 = require("react/jsx-runtime");
+var Connection = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime88.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,14c-1.1,0-2-.9-2-2s.9-2,2-2,2,.9,2,2-.9,2-2,2Zm0-3c-.55,0-1,.45-1,1s.45,1,1,1,1-.45,1-1-.45-1-1-1Zm8.49,9.49c4.68-4.68,4.68-12.29,0-16.97-.2-.2-.51-.2-.71,0s-.2,.51,0,.71c4.29,4.29,4.29,11.27,0,15.56-.2,.2-.2,.51,0,.71,.1,.1,.23,.15,.35,.15s.26-.05,.35-.15Zm-3.54-3.54c2.73-2.73,2.73-7.17,0-9.9-.2-.2-.51-.2-.71,0s-.2,.51,0,.71c2.34,2.34,2.34,6.15,0,8.49-.2,.2-.2,.51,0,.71,.1,.1,.23,.15,.35,.15s.26-.05,.35-.15Zm-12.73,3.54c.2-.2,.2-.51,0-.71C-.07,15.49-.07,8.51,4.22,4.22c.2-.2,.2-.51,0-.71s-.51-.2-.71,0C-1.16,8.19-1.16,15.81,3.51,20.49c.1,.1,.23,.15,.35,.15s.26-.05,.35-.15Zm3.54-3.54c.2-.2,.2-.51,0-.71-2.34-2.34-2.34-6.15,0-8.49,.2-.2,.2-.51,0-.71s-.51-.2-.71,0c-1.32,1.32-2.05,3.08-2.05,4.95s.73,3.63,2.05,4.95c.1,.1,.23,.15,.35,.15s.26-.05,.35-.15Z"
+    }
+  ) });
+};
+
+// src/components/icons/sirenSVG/index.tsx
+var import_jsx_runtime89 = require("react/jsx-runtime");
+var Siren = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime89.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m20.604,6.429c-.196-.194-.198-.511-.004-.707l2.544-2.573c.193-.197.51-.198.707-.004.196.194.198.511.004.707l-2.544,2.573c-.098.099-.227.148-.355.148-.127,0-.254-.048-.352-.145Zm-3.726-2.729c.073.038.152.056.229.056.181,0,.355-.098.444-.27l1.419-2.737c.127-.245.031-.547-.214-.674-.244-.128-.547-.033-.674.214l-1.419,2.737c-.127.245-.031.547.214.674ZM2.613,6.348c.098.099.227.148.355.148.127,0,.254-.048.352-.145.196-.194.198-.511.004-.707L.855,3.148c-.194-.197-.51-.197-.707-.004-.196.194-.198.511-.004.707l2.469,2.497Zm3.834-2.862c.089.172.263.27.444.27.078,0,.156-.018.229-.056.245-.127.341-.429.214-.674L5.917.289c-.127-.246-.429-.34-.674-.214-.245.127-.341.429-.214.674l1.418,2.737Zm17.552,18.414c0,1.158-.942,2.1-2.1,2.1H2.1c-1.158,0-2.1-.942-2.1-2.1,0-1.599,1.301-2.9,2.9-2.9h.198l.895-8.948c.23-2.31,2.156-4.052,4.478-4.052h7.059c2.322,0,4.247,1.742,4.478,4.052l.895,8.948h.198c1.599,0,2.9,1.301,2.9,2.9Zm-19.897-2.9h15.793l-.885-8.848c-.179-1.797-1.676-3.152-3.482-3.152h-7.059c-1.806,0-3.303,1.355-3.482,3.152l-.885,8.848Zm18.897,2.9c0-1.048-.852-1.9-1.9-1.9H2.9c-1.048,0-1.9.852-1.9,1.9,0,.606.494,1.1,1.1,1.1h19.8c.606,0,1.1-.494,1.1-1.1Zm-11.5-11.9h-2.075c-.774,0-1.416.581-1.491,1.341l-.251,2.1c-.033.274.163.523.437.556.021.002.041.003.06.003.25,0,.466-.187.496-.44l.252-2.11c.025-.256.239-.45.497-.45h2.075c.276,0,.5-.224.5-.5s-.224-.5-.5-.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/snakeSVG/index.tsx
+var import_jsx_runtime90 = require("react/jsx-runtime");
+var Snake = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime90.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m18,4c0-.552.448-1,1-1s1,.448,1,1-.448,1-1,1-1-.448-1-1Zm6,17c0,1.654-1.346,3-3,3H3c-1.654,0-3-1.346-3-3s1.346-3,3-3h1.589l-1.181-1.419c-.575-.691-1.239-2.407-1.394-3.599-.074-.577.14-1.153.572-1.54.427-.381,1.015-.526,1.57-.392,1.061.26,2.874,1.015,3.768,1.691-.57-1.371-.926-2.81-.926-4.241,0-2.378,1.072-3.848,1.972-4.662,1.59-1.439,4.694-2.138,6.114-2.307.298-.036.581-.162.793-.354,1.777-1.607,4.489-1.545,6.175.141.145.145.572.577,1.098,1.112,1.123,1.142,1.122,2.999,0,4.141-.526.535-.953.967-1.098,1.112-1.648,1.648-4.327,1.739-6.097.209-.316-.273-.717-.406-1.099-.364-.898.099-1.858.406-1.858.973,0,.977,0,2.315,2.242,4.934,1.081,1.262,3.303,3.607,4.904,4.566h.854c1.654,0,3,1.346,3,3ZM8,8.5c0,2.745,1.444,5.558,3.165,7.756,0,0,1.041,1.242,1.543,1.744h5.721c-1.476-1.193-3.075-2.897-3.948-3.916-2.482-2.899-2.482-4.515-2.482-5.584,0-.5.268-1.694,2.75-1.967.661-.069,1.337.147,1.862.601,1.377,1.19,3.457,1.121,4.736-.159.144-.144.569-.574,1.092-1.106.743-.755.743-1.983,0-2.738-.523-.532-.948-.962-1.092-1.106-1.309-1.309-3.417-1.355-4.797-.106-.366.33-.843.545-1.346.605-1.523.181-4.26.877-5.562,2.055-.75.678-1.643,1.909-1.643,3.92Zm-2.13,9.5h5.459c-.301-.333-.6-.687-.892-1.057l-2.887-3.206c-.394-.473-2.389-1.41-3.631-1.714-.241-.059-.482.001-.666.166-.189.169-.279.412-.247.666.142,1.102.756,2.59,1.17,3.088l1.693,2.058Zm17.13,3c0-1.103-.897-2-2-2H3c-1.103,0-2,.897-2,2s.897,2,2,2h18c1.103,0,2-.897,2-2Z"
+    }
+  ) });
+};
+
+// src/components/icons/sortSVG/index.tsx
+var import_jsx_runtime91 = require("react/jsx-runtime");
+var Sort = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime91.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime91.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M11.854,18.561c.195,.195,.195,.512,0,.707l-4.293,4.293c-.283,.283-.66,.439-1.061,.439s-.777-.156-1.061-.439L1.146,19.268c-.195-.195-.195-.512,0-.707s.512-.195,.707,0l4.146,4.146V.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5V22.707l4.146-4.146c.195-.195,.512-.195,.707,0ZM22.854,4.732L18.561,.439c-.566-.566-1.555-.566-2.121,0l-4.293,4.293c-.195,.195-.195,.512,0,.707s.512,.195,.707,0L17,1.293V23.5c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V1.293l4.146,4.146c.098,.098,.226,.146,.354,.146s.256-.049,.354-.146c.195-.195,.195-.512,0-.707Z"
+    }
+  ) });
+};
+
+// src/components/icons/shuttleSVG/index.tsx
+var import_jsx_runtime92 = require("react/jsx-runtime");
+var Shuttle = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime92.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M21.759,9.122c-1.321-.734-2.886-1.122-4.525-1.122h-3.459l-3.193-5.7c-.795-1.419-2.299-2.3-3.926-2.3h-1.156c-1.378,0-2.5,1.122-2.5,2.5v3c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V2.5c0-.827,.673-1.5,1.5-1.5h1.156c1.265,0,2.435,.686,3.054,1.789l2.919,5.211H2.5c-1.378,0-2.5,1.122-2.5,2.5v3c0,1.378,1.122,2.5,2.5,2.5H12.628l-2.919,5.21c-.619,1.104-1.789,1.79-3.054,1.79h-1.156c-.827,0-1.5-.673-1.5-1.5v-3c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v3c0,1.378,1.122,2.5,2.5,2.5h1.156c1.626,0,3.131-.881,3.926-2.301l3.193-5.699h3.459c1.64,0,3.204-.388,4.525-1.122,1.487-.827,2.241-1.795,2.241-2.878s-.754-2.052-2.241-2.878Zm-5.721,5.878H5v-6h11.038c.405,.237,1.962,1.262,1.962,3s-1.557,2.763-1.962,3ZM1,13.5v-3c0-.827,.673-1.5,1.5-1.5h1.5v6h-1.5c-.827,0-1.5-.673-1.5-1.5Zm20.272,.504c-1.053,.585-2.287,.921-3.592,.984,.658-.654,1.319-1.645,1.319-2.988s-.662-2.335-1.319-2.988c1.305,.063,2.539,.399,3.592,.984,.788,.438,1.728,1.142,1.728,2.004s-.939,1.566-1.728,2.004Z"
+    }
+  ) });
+};
+
+// src/components/icons/starsSVG/index.tsx
+var import_jsx_runtime93 = require("react/jsx-runtime");
+var Stars = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        fill: "currentColor",
+        d: "M19.333,2.94l1.27,.449,.423,1.269c.068,.204,.26,.342,.475,.342s.406-.138,.475-.342l.421-1.263,1.263-.421c.204-.068,.342-.259,.342-.474s-.138-.406-.342-.474l-1.263-.421-.421-1.263c-.137-.408-.812-.408-.949,0l-.419,1.257-1.256,.393c-.205,.064-.347,.252-.351,.468s.13,.409,.333,.48Z"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        fill: "currentColor",
+        d: "M23.686,19.036l-2.658-1.063-1.063-2.658c-.15-.38-.777-.38-.928,0l-1.062,2.653-2.651,1.003c-.191,.073-.319,.254-.323,.458s.117,.391,.306,.47l2.665,1.123,1.065,2.663c.075,.19,.26,.314,.464,.314s.389-.125,.464-.314l1.063-2.658,2.658-1.063c.19-.076,.314-.26,.314-.464s-.124-.388-.314-.464Zm-3.229,1.143c-.127,.051-.228,.152-.278,.279l-.679,1.696-.679-1.696c-.049-.124-.146-.223-.27-.275l-1.705-.719,1.688-.639c.131-.05,.235-.152,.287-.282l.679-1.696,.679,1.696c.051,.127,.151,.228,.278,.279l1.696,.679-1.696,.679Z"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+      "path",
+      {
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        fill: "currentColor",
+        d: "M18.935,12.459c.647-.207,1.065-.78,1.065-1.459s-.418-1.252-1.077-1.463l-5.767-1.692-1.678-5.759c-.198-.65-.766-1.076-1.445-1.085-.666,.028-1.257,.402-1.479,1.063l-1.709,5.78-5.76,1.679c-.65,.198-1.076,.766-1.085,1.445-.009,.679,.402,1.257,1.063,1.479l5.782,1.709,1.696,5.78c.207,.647,.78,1.065,1.459,1.065s1.252-.418,1.463-1.077l1.693-5.767,5.767-1.692,.012-.004Zm-.3-.954l-6.022,1.768c-.164,.048-.291,.176-.339,.339l-1.766,6.018c-.11,.343-.416,.37-.507,.37-.091,0-.397-.027-.503-.358l-1.77-6.029c-.048-.163-.175-.291-.338-.339l-6.025-1.781c-.342-.114-.364-.421-.363-.512,.001-.091,.032-.397,.371-.5l6.017-1.753c.164-.047,.292-.175,.34-.338l1.781-6.025c.112-.334,.407-.363,.505-.363h.006c.091,.001,.397,.032,.5,.371l1.753,6.016c.048,.164,.175,.292,.339,.34l6.018,1.766c.344,.11,.37,.416,.37,.507,0,.091-.026,.394-.365,.505Z"
+      }
+    )
+  ] });
+};
+
+// src/components/icons/terminalSVG/index.tsx
+var import_jsx_runtime94 = require("react/jsx-runtime");
+var Terminal = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M4.874,17.955c-.128,0-.256-.049-.354-.146-.195-.195-.195-.512,0-.707l4.041-4.041c.585-.585,.585-1.536,0-2.121L4.52,6.898c-.195-.195-.195-.512,0-.707s.512-.195,.707,0l4.041,4.041c.975,.975,.975,2.561,0,3.535l-4.041,4.041c-.098,.098-.226,.146-.354,.146Zm19.126,1.545V4.5c0-2.481-2.019-4.5-4.5-4.5H4.5C2.019,0,0,2.019,0,4.5v15c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5ZM19.5,1c1.93,0,3.5,1.57,3.5,3.5v15c0,1.93-1.57,3.5-3.5,3.5H4.5c-1.93,0-3.5-1.57-3.5-3.5V4.5c0-1.93,1.57-3.5,3.5-3.5h15Zm.5,16.5c0-.276-.224-.5-.5-.5h-7c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h7c.276,0,.5-.224,.5-.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/storeSVG/index.tsx
+var import_jsx_runtime95 = require("react/jsx-runtime");
+var Store = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime95.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M24,8.5c0-.041-.005-.082-.015-.121L21.985,.379c-.056-.223-.256-.379-.485-.379H2.5c-.229,0-.429,.156-.485,.379L.015,8.379c-.01,.04-.015,.08-.015,.121,0,.951,.382,1.815,1,2.447v9.553c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5V11.662c.623-.297,1.146-.773,1.5-1.361,.613,1.017,1.728,1.699,3,1.699h1c.536,0,1.045-.122,1.5-.338v11.838c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V10.987c0-.013,0-.026-.002-.039,.619-.632,1.002-1.496,1.002-2.449Zm-12.5,14.5H4.5c-1.378,0-2.5-1.122-2.5-2.5v-2.5H14v2.5c0,1.378-1.122,2.5-2.5,2.5Zm2.5-6H2v-5.338c.455,.217,.964,.338,1.5,.338h1c1.272,0,2.387-.682,3-1.699,.613,1.017,1.728,1.699,3,1.699h3c.17,0,.337-.012,.5-.036v5.036Zm5.5-6c-1.379,0-2.5-1.122-2.5-2.5,0-.276-.224-.5-.5-.5s-.5,.224-.5,.5c0,1.378-1.121,2.5-2.5,2.5h-3c-1.378,0-2.5-1.122-2.5-2.5,0-.276-.224-.5-.5-.5s-.5,.224-.5,.5c0,1.378-1.122,2.5-2.5,2.5h-1c-.625,0-1.198-.231-1.637-.612-.019-.02-.039-.038-.06-.054-.48-.445-.786-1.074-.803-1.775L2.891,1H7v3.5c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V1h8v3.5c0,.276,.224,.5,.5,.5s.5-.224,.5-.5V1h4.109l1.89,7.559c-.031,1.352-1.141,2.441-2.499,2.441h-1Z"
+    }
+  ) });
+};
+
+// src/components/icons/suitcaseSVG/index.tsx
+var import_jsx_runtime96 = require("react/jsx-runtime");
+var Suitcase = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime96.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M19.5,4h-1.551c-.252-2.244-2.139-4-4.449-4h-3c-2.31,0-4.197,1.756-4.449,4h-1.551C2.019,4,0,6.019,0,8.5v11c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5V8.5c0-2.481-2.019-4.5-4.5-4.5ZM10.5,1h3c1.758,0,3.204,1.308,3.449,3H7.051c.245-1.692,1.691-3,3.449-3Zm12.5,18.5c0,1.93-1.57,3.5-3.5,3.5h-1.5V7.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v15.5H7V7.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v15.5h-1.5c-1.93,0-3.5-1.57-3.5-3.5V8.5c0-1.93,1.57-3.5,3.5-3.5h15c1.93,0,3.5,1.57,3.5,3.5v11Z"
+    }
+  ) });
+};
+
+// src/components/icons/tagsSVG/index.tsx
+var import_jsx_runtime97 = require("react/jsx-runtime");
+var Tags = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime97.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M21.68,9.108L13.204,.723C12.655,.173,11.869-.089,11.098,.013L4.209,.955c-.274,.038-.466,.29-.428,.563,.037,.273,.293,.461,.562,.428l6.889-.942c.46-.066,.934,.095,1.267,.427l8.476,8.385c1.356,1.356,1.363,3.569,.01,4.94l-.19,.199c-.209-.677-.58-1.314-1.114-1.848L11.204,4.723c-.549-.55-1.337-.812-2.106-.709l-6.889,.942c-.228,.031-.404,.213-.43,.44l-.765,6.916c-.083,.759,.179,1.503,.72,2.044l8.417,8.326c.85,.85,1.979,1.318,3.181,1.318h.014c1.208-.004,2.341-.479,3.189-1.339l3.167-3.208c.886-.898,1.317-2.081,1.292-3.257l.708-.743c1.732-1.754,1.724-4.6-.022-6.345Zm-2.688,9.643l-3.167,3.208c-.66,.669-1.542,1.039-2.481,1.042h-.011c-.935,0-1.812-.364-2.476-1.027L2.439,13.646c-.324-.324-.48-.77-.431-1.225l.722-6.528,6.502-.889c.462-.063,.934,.095,1.267,.427l8.476,8.385c1.356,1.356,1.363,3.569,.017,4.934ZM8,10c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/masksSVG/index.tsx
+var import_jsx_runtime98 = require("react/jsx-runtime");
+var Masks = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime98.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m21.681,1.473c-1.698-.596-3.378-1.013-4.995-1.24C15.072.006,13.341-.056,11.539.049c-1.648.095-3.014,1.33-3.248,2.937l-.358,2.46c-.205.023-.412.049-.619.078-1.616.227-3.296.644-4.995,1.24C.762,7.31-.199,8.874.036,10.482l1.044,7.18c.459,3.158,4.838,5.206,7.408,6.146.354.129.721.193,1.083.193.64,0,1.267-.198,1.792-.581,1.258-.917,3.541-2.768,4.692-4.853.049-.089.068-.186.061-.28,2.598-1.023,6.379-2.994,6.804-5.917l1.044-7.181c.234-1.608-.726-3.172-2.284-3.718Zm-10.906,21.14c-.552.403-1.279.499-1.943.256-1.9-.695-6.363-2.607-6.762-5.35l-1.044-7.18c-.165-1.137.518-2.243,1.625-2.631,1.636-.574,3.252-.975,4.803-1.193.11-.016.221-.03.331-.044l-.538,3.696c-.057.391-.051.782.006,1.17-.451-.601-1.05-.952-1.667-.862-.754.109-1.3.838-1.504,1.794-.068.318.203.605.524.559l2.58-.369c.129-.018.235-.087.306-.181.269.759.71,1.497,1.241,2.191-.057.008-.115.018-.174.031-1.633.362-2.802,1.667-3.258,3.284-.136.482.411.867.828.588,1.482-.991,3.204-1.596,4.76-1.64.604.532,1.201.997,1.718,1.376.54.395,1.182.599,1.832.599.123,0,.247-.008.371-.023-1.134,1.674-2.971,3.151-4.036,3.929ZM22.975,5.047l-1.044,7.181c-.399,2.743-4.861,4.655-6.761,5.35-.665.244-1.402.141-1.971-.276-1.625-1.189-5.361-4.25-4.962-6.992l1.044-7.18c.166-1.139,1.14-2.014,2.316-2.083.548-.032,1.089-.047,1.622-.047,1.154,0,2.269.074,3.329.223,1.529.215,3.19.627,4.803,1.193,1.107.388,1.791,1.495,1.625,2.631Zm-4.144,6.243c-.996,1.336-2.537,2.134-4.181,1.902-1.643-.233-2.897-1.43-3.479-2.989-.181-.484.355-.922.806-.669,2.115,1.187,3.908,1.442,6.271.893.501-.116.89.451.583.863Zm.916-4.192c.068.317-.203.605-.524.559l-2.58-.369c-.321-.046-.5-.398-.346-.683.464-.861,1.191-1.41,1.947-1.301.754.109,1.3.838,1.504,1.794Zm-8.33-1.19c.464-.861,1.191-1.41,1.947-1.301.754.109,1.3.838,1.504,1.794.068.318-.203.605-.524.559l-2.58-.369c-.321-.046-.5-.398-.346-.683Z"
+    }
+  ) });
+};
+
+// src/components/icons/turtleSVG/index.tsx
+var import_jsx_runtime99 = require("react/jsx-runtime");
+var Turtle = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime99.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m21.987,10.756c-.107-1.435-.661-2.915-1.577-4.259.036.001.072.003.108.003.807,0,1.564-.313,2.134-.884,1.13-1.129,1.955-3.788.738-5.006-1.22-1.217-3.876-.391-5.006.738-.616.616-.909,1.435-.88,2.244-1.337-.909-2.808-1.457-4.252-1.57-.471-.526-2.047-2.023-4.752-2.023h-2c-.276,0-.5.224-.5.5s.224.5.5.5h2c1.553,0,2.658.573,3.328,1.073-1.571.222-3.073.94-4.288,2.154-1.456,1.455-2.928,4.117-3.776,6.78-1.425.079-3.764.875-3.764,3.493,0,.276.224.5.5.5s.5-.224.5-.5c0-1.832,1.599-2.321,2.464-2.452-.687,2.683-.609,4.917.21,6.47-.452.741-.925,1.616-1.135,2.178-.179.479.287.944.765.765.561-.21,1.436-.683,2.177-1.134.851.449,1.906.675,3.127.675,1.008,0,2.13-.155,3.343-.466-.131.865-.62,2.464-2.452,2.464-.276,0-.5.224-.5.5s.224.5.5.5c2.618,0,3.414-2.339,3.493-3.764,2.663-.848,5.326-2.321,6.78-3.776,1.211-1.211,1.959-2.693,2.17-4.265.496.672,1.056,1.77,1.056,3.305v2c0,.276.224.5.5.5s.5-.224.5-.5v-2c0-2.69-1.479-4.263-2.013-4.744Zm-2.896-8.701c.61-.61,1.74-1.052,2.615-1.052.406,0,.758.095.977.313.688.689.155,2.698-.738,3.592-.762.762-2.092.762-2.854,0-.787-.787-.787-2.066,0-2.854Zm1.781,7.944h-4.752l-2.12-2.12V3.137c1.543.319,3.089,1.185,4.384,2.48s2.171,2.85,2.488,4.384Zm-10.492-.62l2.923-.783,2.14,2.14-.775,2.891c-.007.006-.014.012-.021.019s-.013.014-.019.021l-2.891.775-2.14-2.14.783-2.923Zm1.684,10.092c-.021.006-.042.011-.063.017v-4.081l2.918-.782,2.461,2.461c-1.496.978-3.427,1.858-5.316,2.385Zm-3.816-14.538c1.248-1.248,2.828-1.934,4.453-1.934h.028c.09,0,.181.004.271.008v4.634l-2.879.772-2.621-2.621c.247-.321.498-.61.747-.859Zm-1.334,1.687l2.5,2.5-.772,2.879h-4.131c.006-.021.011-.042.017-.063.527-1.889,1.407-3.82,2.385-5.316Zm-1.769,12.235c-1.118-1.118-1.423-3.219-.875-5.855h4.61l2.12,2.12v4.611c-2.637.548-4.738.244-5.855-.875Zm13.922-3.103c-.249.249-.539.5-.859.747l-2.581-2.581.782-2.918h4.591c0,.007,0,.014.001.021.073,1.732-.614,3.413-1.934,4.732Z"
+    }
+  ) });
+};
+
+// src/components/icons/ufoSVG/index.tsx
+var import_jsx_runtime100 = require("react/jsx-runtime");
+var Ufo = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime100.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m18.918,11.33s.002,0,.003,0c-.005.007-.012.014-.003,0Zm-.918,2.67c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Zm-12,0c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Zm18,.558c0,3.052-5.271,5.442-12,5.442S0,17.609,0,14.558c0-1.764,1.727-3.23,5-4.25v-.308c0-3.859,3.14-7,7-7s7,3.141,7,7v.308c3.273,1.02,5,2.486,5,4.25Zm-18-3.746c.466.312,2.12,1.188,6,1.188s5.526-.872,6-1.189v-.811c0-3.309-2.691-6-6-6s-6,2.691-6,6v.812Zm17,3.746c0-1.234-1.443-2.37-4.08-3.227.005-.006.009-.013-.003,0-.065.065-1.715,1.67-6.918,1.67s-6.982-1.749-6.918-1.67c-2.638.857-4.082,1.994-4.082,3.228,0,2.146,4.42,4.442,11,4.442s11-2.297,11-4.442Zm-17.918-3.228c.019.028.022.027,0,0h0Zm6.918,3.67c-.552,0-1,.448-1,1s.448,1,1,1,1-.448,1-1-.448-1-1-1Z"
+    }
+  ) });
+};
+
+// src/components/icons/unlockSVG/index.tsx
+var import_jsx_runtime101 = require("react/jsx-runtime");
+var Unlock = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime101.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M17.5,8H6.5c-.171,0-.334,.032-.5,.051v-1.051c0-3.309,2.691-6,6-6,2.245,0,4.285,1.238,5.324,3.231,.127,.246,.431,.339,.675,.212,.244-.127,.34-.43,.212-.674-1.212-2.325-3.592-3.769-6.211-3.769-3.859,0-7,3.14-7,7v1.276c-1.742,.621-3,2.271-3,4.224v7c0,2.481,2.019,4.5,4.5,4.5h11c2.481,0,4.5-2.019,4.5-4.5v-7c0-2.481-2.019-4.5-4.5-4.5Zm3.5,11.5c0,1.93-1.57,3.5-3.5,3.5H6.5c-1.93,0-3.5-1.57-3.5-3.5v-7c0-1.93,1.57-3.5,3.5-3.5h11c1.93,0,3.5,1.57,3.5,3.5v7Zm-8.5-5v3c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-3c0-.276,.224-.5,.5-.5s.5,.224,.5,.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/coinSVG/index.tsx
+var import_jsx_runtime102 = require("react/jsx-runtime");
+var Coin = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm0,23c-6.065,0-11-4.935-11-11S5.935,1,12,1s11,4.935,11,11-4.935,11-11,11Zm4-8.626c0,1.448-1.178,2.626-2.626,2.626h-.874v1.5c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-1.5h-.926c-.979,0-1.893-.526-2.382-1.375-.139-.239-.057-.545,.183-.683,.238-.14,.544-.057,.683,.183,.312,.54,.894,.875,1.517,.875h2.8c.896,0,1.626-.729,1.626-1.626,0-.803-.575-1.478-1.368-1.605l-3.422-.55c-1.28-.206-2.21-1.296-2.21-2.593,0-1.448,1.178-2.626,2.626-2.626h.874v-1.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5v1.5h.926c.979,0,1.892,.527,2.382,1.375,.139,.239,.057,.545-.183,.683-.236,.136-.545,.057-.683-.183-.312-.54-.894-.875-1.517-.875h-2.8c-.896,0-1.626,.729-1.626,1.626,0,.803,.575,1.478,1.368,1.605l3.422,.55c1.28,.206,2.21,1.297,2.21,2.593Z"
+    }
+  ) });
+};
+
+// src/components/icons/alienUserSVG/index.tsx
+var import_jsx_runtime103 = require("react/jsx-runtime");
+var AlienUser = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime103.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m10.049,6.951c-.71-.709-1.861-.908-2.701-.949-.362-.016-.717.117-.973.373s-.392.61-.373.972c.041.841.24,1.992.949,2.702.71.709,1.926.91,2.766.951.34,0,.667-.135.908-.375.256-.256.392-.61.373-.972-.041-.841-.24-1.992-.949-2.702Zm-.131,2.967c-.034.032-.092.076-.216.082-.939-.047-1.666-.281-2.044-.658-.377-.378-.611-1.104-.658-2.045-.005-.109.05-.182.082-.215.032-.031.099-.082.199-.082.939.047,1.683.281,2.061.658.377.378.611,1.104.658,2.045.005.109-.05.182-.082.215Zm7.707-3.543c-.256-.255-.606-.389-.972-.373-.841.041-1.992.24-2.702.949-.709.71-.908,1.861-.949,2.701-.019.362.117.717.373.973.241.24.568.375.907.375.841-.041,2.057-.242,2.767-.951.709-.71.908-1.861.949-2.701.019-.362-.117-.717-.373-.973Zm-.625.923c-.047.939-.281,1.666-.658,2.044-.378.377-1.104.611-2.045.658-.089-.005-.181-.049-.215-.082-.032-.033-.087-.105-.082-.216.047-.939.281-1.666.658-2.044.378-.377,1.12-.611,2.061-.658.101,0,.167.051.199.082.032.033.087.105.082.215h0Zm-7.283,3.703c.021,0-.021,0,0,0h0Zm4.565,0c.021,0-.021,0,0,0h0Zm2.463,4.404c1.703-2.163,3.255-4.87,3.255-7.553,0-4.329-3.589-7.852-8-7.852S4,3.522,4,7.852c0,2.683,1.552,5.39,3.255,7.553-2.603,1.363-4.255,4.062-4.255,7.033v1.062c0,.276.224.5.5.5s.5-.224.5-.5v-1.062c0-2.667,1.522-5.082,3.904-6.241.738.865,1.47,1.617,2.088,2.211.563.541,1.285.812,2.008.812s1.444-.271,2.008-.812c.617-.593,1.35-1.346,2.088-2.211,2.382,1.158,3.904,3.573,3.904,6.241v1.062c0,.276.224.5.5.5s.5-.224.5-.5v-1.062c0-2.972-1.651-5.671-4.255-7.033Zm-3.431,2.282c-.736.709-1.893.709-2.629,0-2.123-2.041-5.686-6.032-5.686-9.835,0-3.778,3.141-6.852,7-6.852s7,3.073,7,6.852c0,3.803-3.563,7.794-5.686,9.835Z"
+    }
+  ) });
+};
+
+// src/components/icons/astronautSVG/index.tsx
+var import_jsx_runtime104 = require("react/jsx-runtime");
+var Astronaut = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m15.814,15.031c1.62-.882,2.902-2.308,3.602-4.031h.584c.552,0,1-.448,1-1v-4c0-.552-.448-1-1-1h-.584c-1.189-2.929-4.065-5-7.416-5s-6.227,2.071-7.416,5h-.584c-.552,0-1,.448-1,1v4c0,.552.448,1,1,1h.584c.699,1.723,1.982,3.149,3.602,4.031-3.465.327-6.186,3.253-6.186,6.802v1.667c0,.276.224.5.5.5s.5-.224.5-.5v-1.667c0-3.217,2.616-5.833,5.833-5.833h6.334c3.217,0,5.833,2.616,5.833,5.833v1.667c0,.276.224.5.5.5s.5-.224.5-.5v-1.667c0-3.549-2.721-6.475-6.186-6.802Zm-10.814-7.031c0-3.859,3.141-7,7-7s7,3.141,7,7-3.141,7-7,7-7-3.141-7-7Zm13,13.5v2c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-2c0-.827-.673-1.5-1.5-1.5h-7c-.827,0-1.5.673-1.5,1.5v2c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-2c0-1.379,1.121-2.5,2.5-2.5h7c1.379,0,2.5,1.121,2.5,2.5Zm-.5-14c0-.604-.477-1.5-1.5-1.5h-7.899c-1.03,0-1.601.887-1.601,1.5,0,3.032,2.468,5.5,5.5,5.5s5.5-2.468,5.5-5.5Zm-10,0c0-.088.158-.5.601-.5h7.899c.447,0,.5.495.5.5,0,2.481-2.019,4.5-4.5,4.5s-4.5-2.019-4.5-4.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/robotSVG/index.tsx
+var import_jsx_runtime105 = require("react/jsx-runtime");
+var Robot = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m21,22.5v1c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-1c0-2.481-2.019-4.5-4.5-4.5h-7c-2.481,0-4.5,2.019-4.5,4.5v1c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-1c0-3.032,2.467-5.5,5.5-5.5h7c3.033,0,5.5,2.468,5.5,5.5Zm1-15v3c0,.827-.673,1.5-1.5,1.5h-.536c-.243,1.694-1.704,3-3.464,3H7.5c-1.76,0-3.221-1.306-3.464-3h-.536c-.827,0-1.5-.673-1.5-1.5v-3c0-.827.673-1.5,1.5-1.5h.5v-.5c0-1.93,1.57-3.5,3.5-3.5h4V.5c0-.276.224-.5.5-.5s.5.224.5.5v1.5h4c1.93,0,3.5,1.57,3.5,3.5v.5h.5c.827,0,1.5.673,1.5,1.5ZM3.5,11h.5v-4h-.5c-.276,0-.5.225-.5.5v3c0,.275.224.5.5.5Zm15.5.5v-6c0-1.379-1.122-2.5-2.5-2.5H7.5c-1.378,0-2.5,1.121-2.5,2.5v6c0,1.379,1.122,2.5,2.5,2.5h9c1.378,0,2.5-1.121,2.5-2.5Zm2-4c0-.275-.224-.5-.5-.5h-.5v4h.5c.276,0,.5-.225.5-.5v-3Zm-10,1.5c0,1.103-.897,2-2,2s-2-.897-2-2,.897-2,2-2,2,.897,2,2Zm-1,0c0-.552-.449-1-1-1s-1,.448-1,1,.449,1,1,1,1-.448,1-1Zm7,0c0,1.103-.897,2-2,2s-2-.897-2-2,.897-2,2-2,2,.897,2,2Zm-1,0c0-.552-.449-1-1-1s-1,.448-1,1,.449,1,1,1,1-.448,1-1Z"
+    }
+  ) });
+};
+
+// src/components/icons/videoCamSVG/index.tsx
+var import_jsx_runtime106 = require("react/jsx-runtime");
+var VideoCam = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime106.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M24,7.64v8.666c0,.635-.353,1.206-.92,1.489-.238,.119-.493,.177-.747,.177-.353,0-.702-.113-.997-.334l-2.336-2.327v.19c0,2.481-2.019,4.5-4.5,4.5H4.5c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5H14.5c2.481,0,4.5,2.019,4.5,4.5v.157l2.281-2.301c.563-.428,1.23-.489,1.799-.205,.568,.284,.92,.854,.92,1.489Zm-6,.86c0-1.93-1.57-3.5-3.5-3.5H4.5c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5H14.5c1.93,0,3.5-1.57,3.5-3.5v-7Zm5-.86c0-.257-.138-.48-.368-.595-.23-.115-.491-.091-.697,.062l-2.936,2.97v3.821l2.989,2.986c.152,.108,.412,.133,.643,.017,.23-.115,.368-.337,.368-.595V7.64Z"
+    }
+  ) });
+};
+
+// src/components/icons/walletSVG/index.tsx
+var import_jsx_runtime107 = require("react/jsx-runtime");
+var Wallet = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime107.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M21.5,6H4.5c-1.146,0-2.221-.567-2.872-1.499,.634-.907,1.685-1.501,2.872-1.501H23.5c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5H4.5C2.015,2,0,4.015,0,6.5v11c0,2.485,2.015,4.5,4.5,4.5H21.5c1.381,0,2.5-1.119,2.5-2.5V8.5c0-1.381-1.119-2.5-2.5-2.5Zm1.5,13.5c0,.827-.673,1.5-1.5,1.5H4.5c-1.93,0-3.5-1.57-3.5-3.5V6.5c0-.348,.051-.684,.146-1.001,.846,.942,2.064,1.501,3.354,1.501H21.5c.827,0,1.5,.673,1.5,1.5v11Zm-2-5.5c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/whaleSVG/index.tsx
+var import_jsx_runtime108 = require("react/jsx-runtime");
+var Whale = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime108.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m15.508,8h-1.008c-2.949,0-6.206,1.77-8.49,3.319.027-1.362.144-2.513.389-3.983l.424-1.478c2.12-.536,3.813-2.318,4.171-4.432.062-.364-.051-.729-.308-1.002-.26-.276-.636-.417-1.01-.376-2.276.243-3.573,1.372-4.189,2.105C4.877,1.409,3.591.255,1.333.007.961-.037.583.105.322.381.063.656-.05,1.023.012,1.391c.3,1.756,1.479,3.3,3.073,4.082l-.228.346C.988,8.662,0,11.987,0,15.432c0,4.717,3.838,8.555,8.555,8.555h9.945c3.032,0,5.5-2.467,5.5-5.5v-1.988c0-4.683-3.81-8.495-8.492-8.499Zm7.492,10.487c0,2.481-2.019,4.5-4.5,4.5h-9.945c-4.166,0-7.555-3.389-7.555-7.555,0-3.25.932-6.384,2.693-9.064l.558-.848c.084-.129.104-.289.056-.435-.049-.146-.162-.261-.308-.312-1.549-.545-2.727-1.939-3.001-3.549-.013-.075.026-.13.052-.156.02-.021.072-.068.151-.068.008,0,.015,0,.022.001,2.767.303,3.771,2.174,3.811,2.251.085.166.256.271.441.272.002,0,.004,0,.006,0,.185,0,.354-.103.441-.266.042-.078,1.053-1.916,3.859-2.216.088-.011.153.044.175.067.024.025.062.078.05.15-.306,1.811-1.818,3.326-3.678,3.685-.185.036-.334.172-.386.353l-.519,1.818c-.304,1.798-.422,3.168-.422,4.884,0,.01,0,.02,0,.03-1.132.832-1.867,1.482-1.952,1.558-.206.184-.224.5-.04.706s.499.223.706.04c.06-.053,6.033-5.334,10.782-5.334h1.008c4.131.004,7.492,3.368,7.492,7.499v1.988Zm-6-.487c0,.552-.448,1-1,1s-1-.448-1-1,.448-1,1-1,1,.448,1,1Z"
+    }
+  ) });
+};
+
+// src/components/icons/wifiSVG/index.tsx
+var import_jsx_runtime109 = require("react/jsx-runtime");
+var Wifi = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime109.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M12,21c-1.1,0-2-.9-2-2s.9-2,2-2,2,.9,2,2-.9,2-2,2Zm0-3c-.55,0-1,.45-1,1s.45,1,1,1,1-.45,1-1-.45-1-1-1Zm6.81-4.12c.21-.18,.23-.5,.05-.71-.16-.18-.32-.37-.5-.54-1.7-1.7-3.96-2.64-6.36-2.64s-4.66,.94-6.36,2.64c-.17,.17-.34,.35-.5,.54-.18,.21-.16,.53,.05,.71,.21,.18,.53,.16,.71-.05,.14-.17,.29-.33,.44-.48,1.51-1.51,3.52-2.34,5.66-2.34s4.15,.83,5.66,2.34c.16,.16,.3,.32,.44,.48,.1,.12,.24,.17,.38,.17,.12,0,.23-.04,.33-.12Zm5.03-4.9c.21-.19,.22-.5,.04-.71-.18-.2-.37-.39-.56-.59-3.02-3.02-7.04-4.69-11.31-4.69S3.71,4.66,.69,7.69c-.19,.19-.38,.39-.56,.59-.19,.21-.17,.52,.04,.71,.21,.18,.52,.17,.71-.04,.17-.19,.34-.37,.52-.55,2.83-2.83,6.6-4.39,10.61-4.39s7.77,1.56,10.61,4.39c.18,.18,.35,.36,.52,.55,.1,.11,.23,.17,.37,.17,.12,0,.24-.04,.33-.13Z"
+    }
+  ) });
+};
+
+// src/components/icons/dotFillSVG/index.tsx
+var import_jsx_runtime110 = require("react/jsx-runtime");
+var DotFill = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime110.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Z",
+      fill: "currentColor"
+    }
+  ) });
+};
+
+// src/components/icons/squareFillSVG/index.tsx
+var import_jsx_runtime111 = require("react/jsx-runtime");
+var SquareFill = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime111.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M14.5,19h-5c-2.48,0-4.5-2.02-4.5-4.5v-5c0-2.48,2.02-4.5,4.5-4.5h5c2.48,0,4.5,2.02,4.5,4.5v5c0,2.48-2.02,4.5-4.5,4.5Z",
+      fill: "currentColor"
+    }
+  ) });
+};
+
+// src/components/icons/eclipseSVG/index.tsx
+var import_jsx_runtime112 = require("react/jsx-runtime");
+var Eclipse = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(import_jsx_runtime112.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      viewBox: "0 0 550 600",
+      width: "40",
+      height: "40",
+      fill: "currentColor",
+      children: /* @__PURE__ */ (0, import_jsx_runtime112.jsxs)("g", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("circle", { cx: "256", cy: "42.667", r: "42.667" }),
+        /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("circle", { cx: "256", cy: "256", r: "42.667" }),
+        /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("circle", { cx: "256", cy: "469.333", r: "42.667" })
+      ] })
+    }
+  ) });
+};
+
 // src/components/checkbox/index.tsx
-var import_jsx_runtime23 = require("react/jsx-runtime");
+var import_jsx_runtime113 = require("react/jsx-runtime");
 var Checkbox = ({
   label,
   checked = false,
-  onChange
+  onChange,
+  className = "",
+  disabled = false
 }) => {
   const [isChecked, setIsChecked] = (0, import_react3.useState)(checked);
   const handleToggle = () => {
+    if (disabled) return;
     setIsChecked(!isChecked);
     if (onChange) {
       onChange(!isChecked);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("label", { className: "flex items-center gap-2 cursor-pointer", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime113.jsxs)("label", { className: `flex items-center gap-2 cursor-pointer ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(
       "input",
       {
         type: "checkbox",
         checked: isChecked,
         onChange: handleToggle,
+        disabled,
         className: "hidden"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(
       "div",
       {
         className: `w-5 h-5 flex items-center justify-center border-2 rounded-md transition-all 
-          ${isChecked ? "bg-primary-500 border-primary-600" : "bg-white border-neutrola-500"}
+          ${isChecked ? "bg-primary-300 border-primary-400" : "bg-white border-neutral-500"}
+          ${disabled ? "bg-neutral-200 border-neutral-400" : ""}
         `,
-        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "size-4 text-white", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Check, {}) })
+        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("div", { className: "size-4 text-black", children: /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(Check, {}) })
       }
     ),
-    label && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "text-black", children: label })
+    label && /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("span", { className: "text-black", children: label })
   ] });
 };
 var checkbox_default = Checkbox;
 
 // src/components/chip/index.tsx
-var import_jsx_runtime24 = require("react/jsx-runtime");
-var Chip = ({ label, onClear }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("div", { className: "flex flex-row gap-2 items-center bg-neutrola-700 w-fit px-4 py-2 rounded-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
-      "div",
-      {
-        className: "size-3 cursor-pointer text-neutral-200 hover:text-white",
-        onClick: onClear,
-        children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Cross, {})
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("p", { className: "text-neutral-200 text-base font-semibold", children: label })
-  ] });
+var import_jsx_runtime114 = require("react/jsx-runtime");
+var Chip = ({ label, onClear, className = "" }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime114.jsxs)(
+    "div",
+    {
+      className: `flex flex-row gap-2 items-center bg-neutral-700 w-fit px-4 py-2 rounded-full ${className}`,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
+          "div",
+          {
+            className: "size-3 cursor-pointer text-neutral-200 hover:text-white",
+            onClick: onClear,
+            children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(Cross, {})
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("p", { className: "text-neutral-200 text-base font-semibold", children: label })
+      ]
+    }
+  );
 };
 var chip_default = Chip;
 
 // src/components/ellipsis/index.tsx
 var import_react4 = require("react");
-var import_jsx_runtime25 = require("react/jsx-runtime");
+var import_jsx_runtime115 = require("react/jsx-runtime");
 var Ellipsis = ({
   label,
   tooltipPosition = "right" /* RIGHT */,
-  tooltipWidth = "w-40"
+  tooltipWidth = "w-40",
+  className = ""
 }) => {
   const [isTooltipVisible, setIsTooltipVisible] = (0, import_react4.useState)(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)(
     "div",
     {
-      className: "relative",
+      className: `relative ${className}`,
       onMouseEnter: () => setIsTooltipVisible(true),
       onMouseLeave: () => setIsTooltipVisible(false),
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("p", { className: "text-ellipsis w-32 overflow-hidden whitespace-nowrap", children: label }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("p", { className: "text-ellipsis w-32 overflow-hidden whitespace-nowrap", children: label }),
+        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)(
           tooltip_default,
           {
             label,
@@ -727,13 +2184,14 @@ var ellipsis_default = Ellipsis;
 
 // src/components/fileUploader/index.tsx
 var import_react5 = require("react");
-var import_jsx_runtime26 = require("react/jsx-runtime");
+var import_jsx_runtime116 = require("react/jsx-runtime");
 var FileUploader = ({
   title,
   subTitle1 = "",
   subTitle2 = "",
   handleAttachment,
-  accept = ".jpg,.jpeg,.png"
+  accept = ".jpg,.jpeg,.png",
+  className = ""
 }) => {
   const fileInputRef = (0, import_react5.useRef)(null);
   const handleFileUpload = (event) => {
@@ -742,93 +2200,122 @@ var FileUploader = ({
       handleAttachment(files[0]);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "flex flex-row gap-4 items-start border border-dashed border-neutral-200 p-4 rounded-lg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-      "div",
-      {
-        className: "bg-primary-500 hover:bg-primary-600 text-white px-6 py-8 rounded-lg cursor-pointer",
-        onClick: () => {
-          var _a;
-          return (_a = fileInputRef.current) == null ? void 0 : _a.click();
-        },
-        children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "size-10", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Upload, {}) })
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-      "input",
-      {
-        type: "file",
-        ref: fileInputRef,
-        accept,
-        className: "hidden",
-        onChange: handleFileUpload
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "flex-1 flex flex-col", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("p", { className: "text-lg", children: title }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("p", { className: "text-sm text-neutrola-400", children: subTitle1 }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("p", { className: "text-sm text-neutrola-400", children: subTitle2 })
-    ] })
-  ] });
+  return /* @__PURE__ */ (0, import_jsx_runtime116.jsxs)(
+    "div",
+    {
+      className: `flex flex-row gap-4 items-start border border-dashed border-neutral-200 p-4 rounded-lg ${className}`,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+          "div",
+          {
+            className: "bg-primary-500 hover:bg-primary-600 text-white px-6 py-8 rounded-lg cursor-pointer",
+            onClick: () => {
+              var _a;
+              return (_a = fileInputRef.current) == null ? void 0 : _a.click();
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("div", { className: "size-10", children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(Upload, {}) })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+          "input",
+          {
+            type: "file",
+            ref: fileInputRef,
+            accept,
+            className: "hidden",
+            onChange: handleFileUpload
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime116.jsxs)("div", { className: "flex-1 flex flex-col", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("p", { className: "text-lg", children: title }),
+          /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("p", { className: "text-sm text-neutral-400", children: subTitle1 }),
+          /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("p", { className: "text-sm text-neutral-400", children: subTitle2 })
+        ] })
+      ]
+    }
+  );
 };
 var fileUploader_default = FileUploader;
 
 // src/components/filterDropdown/index.tsx
 var import_react6 = require("react");
-var import_jsx_runtime27 = require("react/jsx-runtime");
-var FilterDropdown = ({ children }) => {
+var import_jsx_runtime117 = require("react/jsx-runtime");
+var FilterDropdown = ({ children, className = "" }) => {
   const [isChildrenVisible, setIsChildrenVisible] = (0, import_react6.useState)(false);
   const closeDropdown = () => setIsChildrenVisible(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "relative", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)("div", { className: `relative ${className}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(
       "div",
       {
-        className: "flex flex-row gap-4 items-center w-fit border border-neutrola-300 hover:border-neutrola-400 group p-2 rounded-lg cursor-pointer",
+        className: "flex flex-row gap-4 items-center w-fit border border-neutral-300 group p-4 rounded-lg cursor-pointer",
         onClick: () => setIsChildrenVisible(!isChildrenVisible),
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "size-5 text-neutrola-300 group-hover:text-neutrola-400", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Filter, {}) }),
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("p", { className: "text-neutrola-300 text-base group-hover:text-neutrola-400", children: "Filter" }),
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "size-5 text-neutrola-300 group-hover:text-neutrola-400", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ChevDown, {}) })
+          /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "size-5 text-neutral-700", children: /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(Filter, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("p", { className: "text-neutral-700 text-sm", children: "Filter" }),
+          /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "size-5 text-neutral-700", children: /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(ChevDown, {}) })
         ]
       }
     ),
-    isChildrenVisible && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "border border-neutrola-300 rounded-lg shadow-lg overflow-y-auto absolute top-full bg-white z-10", children: children(closeDropdown) })
+    isChildrenVisible && /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "border border-neutral-300 rounded-lg shadow-lg overflow-y-auto absolute top-[105%] bg-white z-10", children: children(closeDropdown) })
   ] });
 };
 var filterDropdown_default = FilterDropdown;
 
 // src/components/input/index.tsx
-var import_jsx_runtime28 = require("react/jsx-runtime");
-var Input = ({
-  label,
-  value,
-  onChange,
-  disabled,
-  placeholder,
-  inputClassName = "",
-  required = false
-}) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "flex flex-col gap-1 relative", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("label", { htmlFor: label, className: "text-sm text-neutrola-600 mb-2", children: `${label}${required ? " *" : ""}` }),
-    /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-      "input",
-      {
-        id: label,
-        placeholder,
-        value,
-        onChange: (e) => onChange(e.target.value),
-        disabled,
-        className: `border border-neutrola-300 outline-none p-4 rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-text"} text-sm w-full ${inputClassName}`,
-        required
-      }
-    )
+var import_jsx_runtime118 = require("react/jsx-runtime");
+var Input = (_a) => {
+  var _b = _a, {
+    label,
+    value,
+    disabled,
+    placeholder = "",
+    inputClassName = "",
+    required = false,
+    className = "",
+    type = "text",
+    onClear
+  } = _b, rest = __objRest(_b, [
+    "label",
+    "value",
+    "disabled",
+    "placeholder",
+    "inputClassName",
+    "required",
+    "className",
+    "type",
+    "onClear"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime118.jsxs)("div", { className: `flex flex-col gap-1 relative ${className}`, children: [
+    label && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("label", { htmlFor: label, className: "text-sm text-neutral-600 mb-2", children: `${label}${required ? " *" : ""}` }),
+    /* @__PURE__ */ (0, import_jsx_runtime118.jsxs)("div", { className: "relative", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
+        "input",
+        __spreadValues({
+          id: label,
+          placeholder,
+          value,
+          disabled,
+          className: `border border-neutral-300 outline-none py-4 pl-4 ${onClear ? "pr-8" : "pr-4"} rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-text"} text-sm w-full ${inputClassName}`,
+          required,
+          type
+        }, rest)
+      ),
+      onClear && value && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
+        "div",
+        {
+          className: "size-3 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-900 cursor-pointer",
+          onClick: onClear,
+          children: /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(Cross, {})
+        }
+      )
+    ] })
   ] });
 };
 var input_default = Input;
 
 // src/components/modal/index.tsx
 var import_react7 = require("react");
-var import_jsx_runtime29 = require("react/jsx-runtime");
+var import_jsx_runtime119 = require("react/jsx-runtime");
 var MODAL_SIZE = /* @__PURE__ */ ((MODAL_SIZE2) => {
   MODAL_SIZE2["SMALL"] = "w-[600px] h-60";
   MODAL_SIZE2["MEDIUM"] = "w-[800px] h-96";
@@ -840,29 +2327,36 @@ var Modal = ({
   title,
   children,
   onClear,
-  size = "w-[800px] h-96" /* MEDIUM */
+  size = "w-[800px] h-96" /* MEDIUM */,
+  className = ""
 }) => {
   const modalRef = (0, import_react7.useRef)(null);
   (0, import_react7.useEffect)(() => {
     var _a;
     (_a = modalRef.current) == null ? void 0 : _a.focus();
   }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
     "div",
     {
-      ref: modalRef,
-      tabIndex: -1,
-      className: `bg-white p-4 ${size !== "w-full h-full" /* FULL */ && "rounded-lg"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`,
-      onBlur: () => onClear(),
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "flex-1 text-3xl", children: title }),
-          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "size-4 cursor-pointer", onClick: () => onClear(), children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(Cross, {}) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "flex-1 flex justify-center items-center", children })
-      ]
+      className: `fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`,
+      children: /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
+        "div",
+        {
+          ref: modalRef,
+          tabIndex: -1,
+          className: `bg-white p-4 ${size !== "w-full h-full" /* FULL */ && "rounded-lg"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`,
+          onBlur: () => onClear(),
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "flex-1 text-3xl", children: title }),
+              /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "size-4 cursor-pointer", onClick: () => onClear(), children: /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(Cross, {}) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "flex-1 flex justify-center items-center", children })
+          ]
+        }
+      )
     }
-  ) });
+  );
 };
 var modal_default = Modal;
 
@@ -870,7 +2364,7 @@ var modal_default = Modal;
 var import_image2 = __toESM(require("next/image"));
 var import_react8 = require("react");
 var import_navigation = require("next/navigation");
-var import_jsx_runtime30 = require("react/jsx-runtime");
+var import_jsx_runtime120 = require("react/jsx-runtime");
 var NavBar = ({
   menuItems,
   logoShort,
@@ -882,14 +2376,19 @@ var NavBar = ({
   menuWidthClass = "w-[20rem]",
   menuHeightClass = "h-[100vh]",
   isCollapsed = false,
-  menuBackgroundColor = "bg-primary-100"
+  menuBackgroundColor = "bg-primary-100",
+  className = "",
+  menuItemTextClass = "",
+  isLoading = false
 }) => {
   const router = (0, import_navigation.useRouter)();
   const [isActiveMenuItem, setIsActiveMenuItem] = (0, import_react8.useState)("");
+  const [isActiveSubMenuItem, setIsActiveSubMenuItem] = (0, import_react8.useState)("");
   const [isMenuCollapsed, setIsMenuCollapsed] = (0, import_react8.useState)(isCollapsed);
   const [isMenuItemsCollapsed, setIsMenuITemsCollapsed] = (0, import_react8.useState)(false);
   const [showTooltip, setShowTooltip] = (0, import_react8.useState)(null);
-  const activeClass = "rounded-lg bg-white bg-opacity-35";
+  const [showSubTooltip, setShowSubTooltip] = (0, import_react8.useState)(null);
+  const activeClass = "rounded-lg bg-white/35";
   const collapsedClass = "w-[6rem]";
   (0, import_react8.useEffect)(() => {
     var _a;
@@ -908,22 +2407,30 @@ var NavBar = ({
     }
   }, [isMenuCollapsed]);
   const handleClick = (menu) => {
-    setIsActiveMenuItem(menu.title);
-    router.push(menu.route);
+    const { hasChildren, title, onClick, route } = menu;
+    setIsActiveMenuItem(title);
+    if (hasChildren) {
+      return;
+    }
+    if (onClick) {
+      setIsActiveSubMenuItem("");
+      onClick();
+    }
+    router.push(route);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
     "div",
     {
-      className: `transition-[width] duration-300 ease-in-out ${isMenuCollapsed ? collapsedClass : menuWidthClass} ${menuHeightClass}`,
-      children: /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
+      className: `transition-[width] duration-300 ease-in-out ${isMenuCollapsed ? collapsedClass : menuWidthClass} ${menuHeightClass} ${className}`,
+      children: /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
         "div",
         {
           className: `w-full h-full flex flex-col gap-4 p-4 ${menuBackgroundColor}`,
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("div", { className: "flex flex-col gap-4", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("div", { className: "flex flex-row gap-2 items-center", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_image2.default, { src: logoShort, alt: "logo_short", width: 60, height: 60 }),
-                !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "flex flex-col gap-4", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "flex flex-row gap-2 items-center", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_image2.default, { src: logoShort, alt: "logo_short", width: 60, height: 60 }),
+                !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
                   import_image2.default,
                   {
                     src: logoLong,
@@ -934,69 +2441,141 @@ var NavBar = ({
                   }
                 )
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("div", { className: "relative", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "relative", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
                   avatar_default,
                   {
                     name: avatarName,
                     email: avatarEmail,
                     variant: isMenuItemsCollapsed ? "image-only" /* IMAGE_ONLY */ : avatarType,
-                    image: avatarImage
+                    image: avatarImage,
+                    isLoading
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
                   "span",
                   {
                     onClick: () => setIsMenuCollapsed(!isMenuCollapsed),
-                    className: `cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-neutral-300 absolute -right-8 flex items-center justify-center text-black`,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "size-5", children: isMenuCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(ChevRight, {}) : /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(ChevLeft, {}) })
+                    className: `cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-neutral-50 absolute -right-8 flex items-center justify-center text-black`,
+                    children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "size-5", children: isMenuCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(ChevRight, {}) : /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(ChevLeft, {}) })
                   }
                 )
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "border-neutral-300 border-b" }),
-            /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "flex flex-col gap-1", children: menuItems.map((item, index) => {
+            /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "border-neutral-50 border-b" }),
+            !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "flex flex-col gap-1", children: menuItems.map((item, index) => {
+              var _a;
               if (!item.isDivider) {
-                return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
-                  "div",
-                  {
-                    className: `flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white hover:bg-opacity-35 hover:rounded-lg ${isActiveMenuItem === item.title ? activeClass : ""}`,
-                    onClick: () => handleClick(item),
-                    onMouseEnter: () => setShowTooltip(index),
-                    onMouseLeave: () => setShowTooltip(null),
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("div", { className: "w-6 h-6 ml-1 relative", children: [
-                        item.icon,
-                        isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
-                          tooltip_default,
+                return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                    "div",
+                    {
+                      className: `flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${isActiveMenuItem === item.title ? activeClass : ""}`,
+                      onClick: () => handleClick(item),
+                      onMouseEnter: () => setShowTooltip(index),
+                      onMouseLeave: () => setShowTooltip(null),
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                          "div",
                           {
-                            position: "right" /* RIGHT */,
-                            label: item.title,
-                            isVisible: showTooltip === index,
-                            toolTipWidth: "w-fit",
-                            toolTipClass: "text-nowrap"
+                            className: `w-6 h-6 ml-1 relative ${menuItemTextClass}`,
+                            children: [
+                              item.icon,
+                              isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                                tooltip_default,
+                                {
+                                  position: "right" /* RIGHT */,
+                                  label: item.title,
+                                  isVisible: showTooltip === index,
+                                  toolTipWidth: "w-fit",
+                                  toolTipClass: "text-nowrap"
+                                }
+                              )
+                            ]
+                          }
+                        ),
+                        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                          "span",
+                          {
+                            className: `text-nowrap flex-1 ${menuItemTextClass}`,
+                            children: item.title
+                          }
+                        ),
+                        item.hasChildren && !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                          "div",
+                          {
+                            className: `size-5 transform transition-transform duration-300 ${isActiveMenuItem === item.title && item.hasChildren ? "rotate-180" : ""}`,
+                            children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(ChevDown, {})
                           }
                         )
-                      ] }),
-                      !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("span", { className: "text-nowrap", children: item.title })
-                    ]
-                  },
-                  `menu_item_${index + 1}`
-                );
+                      ]
+                    }
+                  ),
+                  isActiveMenuItem === item.title && item.hasChildren && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "flex flex-col gap-1 bg-white/15 pt-3 relative -top-2", children: (_a = item.children) == null ? void 0 : _a.map((subItem, subIndex) => /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                    "div",
+                    {
+                      className: `flex flex-row gap-4 items-center p-4 h-14 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${isActiveSubMenuItem === subItem.title ? activeClass : ""}`,
+                      onClick: () => {
+                        setIsActiveSubMenuItem(subItem.title);
+                        router.push(subItem.route);
+                      },
+                      onMouseEnter: () => setShowSubTooltip(subIndex),
+                      onMouseLeave: () => setShowSubTooltip(null),
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "size-6 ml-1 mt-1 relative text-neutral-600", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(DotFill, {}),
+                          isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                            tooltip_default,
+                            {
+                              position: "right" /* RIGHT */,
+                              label: subItem.title,
+                              isVisible: showSubTooltip === subIndex,
+                              toolTipWidth: "w-fit",
+                              toolTipClass: "text-nowrap"
+                            }
+                          )
+                        ] }),
+                        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                          "span",
+                          {
+                            className: `text-nowrap flex-1 ${menuItemTextClass}`,
+                            children: subItem.title
+                          }
+                        )
+                      ]
+                    },
+                    `sub_menu_item_${subIndex + 1}`
+                  )) })
+                ] }, `menu_item_${index + 1}`);
               }
-              return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+              return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
                 "div",
                 {
-                  className: "border-neutral-300 border-b my-3"
+                  className: "border-neutral-50 border-b my-3"
                 },
                 `menu_item_${index + 1}`
               );
-            }) })
+            }) }) : /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(NavBarShimmer, { isMenuItemsCollapsed })
           ]
         }
       )
     }
   );
+};
+var NavBarShimmer = ({
+  isMenuItemsCollapsed
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "flex flex-col gap-2 animate-pulse", children: [...Array(5)].map((_, index) => /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+    "div",
+    {
+      className: "flex flex-row gap-4 items-center p-4 rounded-lg bg-neutral-400",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "w-6 h-6 ml-1 bg-neutral-200" }),
+        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("span", { className: "w-full h-4 bg-neutral-200 rounded" })
+      ]
+    },
+    index
+  )) });
 };
 var navBar_default = NavBar;
 
@@ -1005,7 +2584,7 @@ var import_react10 = require("react");
 
 // src/components/selectDropdown/index.tsx
 var import_react9 = require("react");
-var import_jsx_runtime31 = require("react/jsx-runtime");
+var import_jsx_runtime121 = require("react/jsx-runtime");
 var SelectDropdown = ({
   options,
   label,
@@ -1013,10 +2592,13 @@ var SelectDropdown = ({
   disabled = false,
   value,
   onChange,
-  inputClassName = ""
+  inputClassName = "",
+  className = ""
 }) => {
   const [dropdownValue, setDropdownValue] = (0, import_react9.useState)("");
   const [isOptionsVisible, setIsOptionsVisible] = (0, import_react9.useState)(false);
+  const [openUpward, setOpenUpward] = (0, import_react9.useState)(false);
+  const containerRef = (0, import_react9.useRef)(null);
   (0, import_react9.useEffect)(() => {
     const option = options.find((opt) => opt.label === value);
     if (option) {
@@ -1026,21 +2608,30 @@ var SelectDropdown = ({
       setDropdownValue("");
     }
   }, []);
+  (0, import_react9.useEffect)(() => {
+    if (isOptionsVisible && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const dropdownHeight = Math.min(options.length * 56, 384);
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setOpenUpward(spaceBelow < dropdownHeight && spaceAbove > spaceBelow);
+    }
+  }, [isOptionsVisible, options.length]);
   const handleMouseDown = (val) => {
     setDropdownValue(val);
     onChange(val);
     setIsOptionsVisible(false);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { className: "flex flex-col gap-1 relative", children: [
-    label && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("label", { htmlFor: label, className: "text-sm text-neutrola-600 mb-2", children: label }),
-    /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { className: "relative", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("div", { className: "size-5 absolute inset-y-4 right-4 flex items-center text-neutrola-600 pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(ChevDown, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)("div", { ref: containerRef, className: `flex flex-col gap-1 relative ${className}`, children: [
+    label && /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("label", { htmlFor: label, className: "text-sm text-neutral-600 mb-2", children: label }),
+    /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)("div", { className: "relative", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("div", { className: "size-5 absolute inset-y-4 right-4 flex items-center text-neutral-600 pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(ChevDown, {}) }),
+      /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
         "input",
         {
           id: label,
           type: "text",
-          className: `border border-neutrola-300 outline-none p-4 rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-pointer"} text-sm w-full ${inputClassName}`,
+          className: `border border-neutral-300 outline-none p-4 rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-pointer"} text-sm w-full ${inputClassName}`,
           placeholder,
           onClick: () => setIsOptionsVisible(!isOptionsVisible),
           value: dropdownValue,
@@ -1050,27 +2641,34 @@ var SelectDropdown = ({
         }
       )
     ] }),
-    isOptionsVisible && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("div", { className: "border border-neutrola-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full top-full bg-white z-10", children: options.map(({ label: label2, value: val }, index) => /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+    isOptionsVisible && /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
       "div",
       {
-        className: "p-4 cursor-pointer hover:bg-neutrola-50 text-sm",
-        onMouseDown: () => handleMouseDown(label2),
-        children: label2
-      },
-      `${label2}_${val}_${index + 1}`
-    )) })
+        className: `border border-neutral-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${openUpward ? "bottom-full mb-1" : "top-full"}`,
+        children: options.map(({ label: label2, value: val }, index) => /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+          "div",
+          {
+            className: "p-4 cursor-pointer hover:bg-neutral-50 text-sm",
+            onMouseDown: () => handleMouseDown(label2),
+            children: label2
+          },
+          `${label2}_${val}_${index + 1}`
+        ))
+      }
+    )
   ] });
 };
 var selectDropdown_default = SelectDropdown;
 
 // src/components/pagination/index.tsx
-var import_jsx_runtime32 = require("react/jsx-runtime");
+var import_jsx_runtime122 = require("react/jsx-runtime");
 var Pagination = ({
   total,
   page,
   size,
   options,
-  onChange
+  onChange,
+  className = ""
 }) => {
   const [optionDropdown, setOptionDropdown] = (0, import_react10.useState)(size.toString());
   const onLeft = () => {
@@ -1087,73 +2685,88 @@ var Pagination = ({
     setOptionDropdown(size2);
     onChange({ total, page: 1, size: parseInt(size2) });
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { className: "bg-neutrola-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { className: "flex-1", children: [
-      page,
-      " of ",
-      Math.ceil(total / size),
-      " pages"
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "w-20", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
-      selectDropdown_default,
-      {
-        options,
-        value: optionDropdown,
-        onChange: (option) => handlePageSize(option)
-      }
-    ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { children: "items per page" }),
-    /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
-        button_default,
-        {
-          onClick: onLeft,
-          icon: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(ChevLeft, {}),
-          variant: "tertiary" /* TERTIARY */,
-          disabled: page === 1
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
-        button_default,
-        {
-          onClick: onRight,
-          icon: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(ChevRight, {}),
-          variant: "tertiary" /* TERTIARY */,
-          disabled: page === Math.ceil(total / size)
-        }
-      )
-    ] })
-  ] });
+  return /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)(
+    "div",
+    {
+      className: `bg-neutral-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg ${className}`,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)("div", { className: "flex-1", children: [
+          page,
+          " of ",
+          Math.ceil(total / size),
+          " pages"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { className: "w-20", children: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+          selectDropdown_default,
+          {
+            options,
+            value: optionDropdown,
+            onChange: (option) => handlePageSize(option)
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { children: "items per page" }),
+        /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+            button_default,
+            {
+              onClick: onLeft,
+              icon: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(ChevLeft, {}),
+              variant: "tertiary" /* TERTIARY */,
+              disabled: page === 1
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+            button_default,
+            {
+              onClick: onRight,
+              icon: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(ChevRight, {}),
+              variant: "tertiary" /* TERTIARY */,
+              disabled: page === Math.ceil(total / size)
+            }
+          )
+        ] })
+      ]
+    }
+  );
 };
 var pagination_default = Pagination;
 
 // src/components/radioButton/index.tsx
-var import_jsx_runtime33 = require("react/jsx-runtime");
+var import_jsx_runtime123 = require("react/jsx-runtime");
 var RadioButton = ({
   label,
   value,
   selectedValue,
-  onChange
+  onChange,
+  className = "",
+  disabled = false
 }) => {
   const isChecked = selectedValue === value;
-  return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("label", { className: "flex items-center gap-2 cursor-pointer", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+  const handleClick = () => {
+    if (disabled) return;
+    if (onChange) onChange(value);
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime123.jsxs)("label", { className: `flex items-center gap-2 cursor-pointer ${className}
+    ${disabled ? "cursor-not-allowed opacity-50" : ""}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
       "div",
       {
         className: `w-5 h-5 flex items-center justify-center border-2 rounded-full transition-all
             ${isChecked ? "border-primary-500 bg-primary-500" : "border-gray-400 bg-white"}
+             ${disabled ? "bg-gray-200 border-gray-300" : ""}
           `,
-        onClick: () => onChange && onChange(value),
-        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: "w-2.5 h-2.5 bg-white rounded-full" })
+        onClick: handleClick,
+        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime123.jsx)("div", { className: "w-2.5 h-2.5 bg-white rounded-full" })
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { className: "text-gray-700", children: label }),
-    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime123.jsx)("span", { className: "text-gray-700", children: label }),
+    /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
       "input",
       {
         type: "radio",
         value,
         checked: isChecked,
+        disabled,
         onChange: () => onChange && onChange(value),
         className: "hidden"
       }
@@ -1163,7 +2776,7 @@ var RadioButton = ({
 var radioButton_default = RadioButton;
 
 // src/components/snackBar/index.tsx
-var import_jsx_runtime34 = require("react/jsx-runtime");
+var import_jsx_runtime124 = require("react/jsx-runtime");
 var SNACK_BAR_TYPE = /* @__PURE__ */ ((SNACK_BAR_TYPE2) => {
   SNACK_BAR_TYPE2["DEFAULT"] = "default";
   SNACK_BAR_TYPE2["SUCCESS"] = "success";
@@ -1175,30 +2788,31 @@ var SNACK_BAR_TYPE = /* @__PURE__ */ ((SNACK_BAR_TYPE2) => {
 var Snackbar = ({
   type = "default" /* DEFAULT */,
   message,
-  icon
+  icon,
+  className = ""
 }) => {
   const getClassName = () => {
     switch (type) {
       case "success" /* SUCCESS */:
-        return "bg-greenola-50 text-greenola-800 border-greenola-500";
+        return "bg-green-50 text-green-800 border-green-500";
       case "danger" /* DANGER */:
-        return "bg-redola-50 text-redola-600 border-redola-500";
+        return "bg-red-50 text-red-600 border-red-500";
       case "warning" /* WARNING */:
-        return "bg-yellowla-50 text-yellowla-800 border-yellowla-600";
+        return "bg-yellow-50 text-yellow-800 border-yellow-600";
       case "info" /* INFO */:
-        return "bg-blueola-50 text-blueola-800 border-blueola-600";
+        return "bg-blue-50 text-blue-800 border-blue-600";
       case "default" /* DEFAULT */:
       default:
-        return "bg-neutrola-50 text-neutrola-800 border-neutrola-500";
+        return "bg-neutral-50 text-neutral-800 border-neutral-500";
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime124.jsxs)(
     "div",
     {
-      className: `${getClassName()} p-4 rounded-lg flex flex-row gap-4 items-center font-normal border`,
+      className: `${getClassName()} p-4 rounded-lg flex flex-row gap-4 items-center font-normal border ${className}`,
       children: [
-        icon && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { className: "size-5", children: icon }),
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { children: message })
+        icon && /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { className: "size-5", children: icon }),
+        /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { children: message })
       ]
     }
   );
@@ -1207,7 +2821,7 @@ var snackBar_default = Snackbar;
 
 // src/components/state/index.tsx
 var import_image3 = __toESM(require("next/image"));
-var import_jsx_runtime35 = require("react/jsx-runtime");
+var import_jsx_runtime125 = require("react/jsx-runtime");
 var STATE_TYPE = /* @__PURE__ */ ((STATE_TYPE2) => {
   STATE_TYPE2["EMPTY"] = "EMPTY";
   STATE_TYPE2["SUCCESS"] = "SUCCESS";
@@ -1221,7 +2835,8 @@ var State = ({
   title,
   subTitle,
   imageWidth = 526,
-  imageHeight = 526
+  imageHeight = 526,
+  className = ""
 }) => {
   const typeImage = () => {
     switch (type) {
@@ -1237,58 +2852,77 @@ var State = ({
         return "/images/empty.png";
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: "w-full h-full flex flex-col gap-8 items-center justify-center", children: [
-    stateImage ? /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
-      import_image3.default,
-      {
-        src: stateImage,
-        alt: "state image",
-        width: imageWidth,
-        height: imageHeight
-      }
-    ) : /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
-      import_image3.default,
-      {
-        src: typeImage(),
-        alt: "state image",
-        width: imageWidth,
-        height: imageHeight
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: "flex flex-col gap-2", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("p", { className: "text-3xl text-center font-semibold", children: title }),
-      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("p", { className: "w-[300px] text-center", children: subTitle })
-    ] })
-  ] });
+  return /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
+    "div",
+    {
+      className: `w-full h-full flex flex-col gap-8 items-center justify-center ${className}`,
+      children: [
+        stateImage ? /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
+          import_image3.default,
+          {
+            src: stateImage,
+            alt: "state image",
+            width: imageWidth,
+            height: imageHeight
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
+          import_image3.default,
+          {
+            src: typeImage(),
+            alt: "state image",
+            width: imageWidth,
+            height: imageHeight
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { className: "flex flex-col gap-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("p", { className: "text-3xl text-center font-semibold", children: title }),
+          /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("p", { className: "w-[300px] text-center", children: subTitle })
+        ] })
+      ]
+    }
+  );
 };
 var state_default = State;
 
 // src/components/table/index.tsx
-var import_jsx_runtime36 = require("react/jsx-runtime");
-var Table = ({ columns, data }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("div", { className: "overflow-hidden rounded-lg border border-neutrola-300", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("table", { className: "w-full border-collapse", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("tr", { className: "bg-neutrola-300 border border-neutrola-300", children: columns.map(({ header, headerClassName }, index) => /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
-      "th",
-      {
-        className: `text-left px-4 py-4 ${headerClassName}`,
-        children: header
-      },
-      `column_${index}`
-    )) }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("tbody", { children: data.map((row, rowIndex) => /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
-      "tr",
-      {
-        className: "bg-white hover:bg-neutrola-100",
-        children: columns.map(({ render }, cellIndex) => /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("td", { className: "text-left px-4 py-4", children: render(row) }, `cell_${cellIndex}`))
-      },
-      `row_${rowIndex}`
-    )) })
-  ] }) });
+var import_jsx_runtime126 = require("react/jsx-runtime");
+var Table = ({ columns, data, className = "" }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+    "div",
+    {
+      className: `overflow-hidden rounded-lg border border-neutral-300 ${className}`,
+      children: /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)("table", { className: "w-full border-collapse", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("tr", { className: "bg-neutral-300 border border-neutral-300", children: columns.map(({ header, headerClassName }, index) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+          "th",
+          {
+            className: `text-left px-4 py-4 ${headerClassName}`,
+            children: header
+          },
+          `column_${index}`
+        )) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("tbody", { children: data.map((row, rowIndex) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+          "tr",
+          {
+            className: "bg-white hover:bg-neutral-100",
+            children: columns.map(({ render, cellClassName }, cellIndex) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+              "td",
+              {
+                className: `text-left px-4 py-4 ${cellClassName}`,
+                children: render(row)
+              },
+              `cell_${cellIndex}`
+            ))
+          },
+          `row_${rowIndex}`
+        )) })
+      ] })
+    }
+  );
 };
 var table_default = Table;
 
 // src/components/tag/index.tsx
-var import_jsx_runtime37 = require("react/jsx-runtime");
+var import_jsx_runtime127 = require("react/jsx-runtime");
 var TAG_TYPE = /* @__PURE__ */ ((TAG_TYPE2) => {
   TAG_TYPE2["DEFAULT"] = "default";
   TAG_TYPE2["SUCCESS"] = "success";
@@ -1297,35 +2931,44 @@ var TAG_TYPE = /* @__PURE__ */ ((TAG_TYPE2) => {
   TAG_TYPE2["INFO"] = "info";
   return TAG_TYPE2;
 })(TAG_TYPE || {});
-var Tag = ({ type, label }) => {
+var Tag = ({ type, label, className = "" }) => {
   const getTagStyle = (type2) => {
     switch (type2) {
       case "success" /* SUCCESS */:
-        return "bg-greenola-50 text-greenola-600";
+        return "bg-green-50 text-green-600";
       case "danger" /* DANGER */:
-        return "bg-redola-50 text-redola-600";
+        return "bg-red-50 text-red-600";
       case "warning" /* WARNING */:
-        return "bg-yellowla-50 text-yellowla-600";
+        return "bg-yellow-50 text-yellow-600";
       case "info" /* INFO */:
-        return "bg-blueola-50 text-blueola-600";
+        return "bg-blue-50 text-blue-600";
       default:
-        return "bg-neutrola-50 text-neutrola-600";
+        return "bg-neutral-50 text-neutral-600";
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("div", { className: `w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(type)}`, children: label });
+  return /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(
+    "div",
+    {
+      className: `w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(
+        type
+      )} ${className}`,
+      children: label
+    }
+  );
 };
 var tag_default = Tag;
 
 // src/components/timeLine/index.tsx
 var import_react11 = require("react");
-var import_jsx_runtime38 = require("react/jsx-runtime");
-var TimeLine = ({ logs }) => {
+var import_jsx_runtime128 = require("react/jsx-runtime");
+var TimeLine = ({ logs, className = "" }) => {
   const [steps, setSteps] = (0, import_react11.useState)([]);
   (0, import_react11.useEffect)(() => {
-    if (logs[0].title !== "Order cancelled" /* ORDER_CANCELLED */ && logs[0].title !== "Delivered" /* DELIVERED */) {
+    if (logs[0].status !== "Failed" /* FAILED */ && logs[0].status !== "Finished" /* FINISHED */) {
       setSteps([
         {
-          title: "Pending" /* PENDING */
+          title: "Pending",
+          status: "Pending"
         },
         ...logs
       ]);
@@ -1335,33 +2978,30 @@ var TimeLine = ({ logs }) => {
   }, [logs]);
   const getIcon = (status) => {
     switch (status) {
-      case "Order placed" /* ORDER_PLACED */:
-      case "Printing in progress" /* PRINTING_IN_PROGRESS */:
-      case "Packaging" /* PACKAGING */:
-      case "Dispatched to courier" /* DISPATCHED_TO_COURIER */:
-      case "Delivered" /* DELIVERED */:
-        return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "size-5 bg-greenola-500 rounded-full p-1 text-white", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Check, {}) });
-      case "Order cancelled" /* ORDER_CANCELLED */:
-        return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "size-5 bg-redola-500 rounded-full p-1 text-white", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Cross, {}) });
+      case "Success" /* SUCCESS */:
+      case "Finished" /* FINISHED */:
+        return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "size-4 bg-green-500 rounded-full text-white p-2" });
+      case "Failed" /* FAILED */:
+        return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "size-4 bg-red-500 rounded-full text-white p-2" });
       default:
-        return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "size-5 bg-neutrola-600 text-neutrola-200 rounded-full p-1", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Circle, {}) });
+        return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "size-4 bg-neutral-600 text-neutral-200 rounded-full p-1", children: /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(Circle, {}) });
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { children: steps.map(({ title, date, description }, index) => /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { className: "flex flex-row gap-4", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { className: "flex flex-col items-center", children: [
-      getIcon(title),
-      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "w-0.5 h-full bg-neutrola-500" })
+  return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className, children: steps.map(({ title, date, description, status }, index) => /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "flex flex-row gap-4", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "flex flex-col items-center", children: [
+      getIcon(status),
+      /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "w-0.5 h-full bg-neutral-100" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { className: "flex flex-col flex-1", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "flex flex-col flex-1", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(
         "p",
         {
-          className: `text-base font-semibold relative top-[-2px] ${title === "Pending" /* PENDING */ ? "pb-8" : ""}`,
+          className: `text-base font-semibold relative top-[-2px] ${status === "Pending" ? "pb-8" : ""}`,
           children: title
         }
       ),
-      title && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("p", { className: "text-xs text-neutrola-700", children: date }),
-      description && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("p", { className: "p-4 text-xs bg-neutrola-50 text-neutral-800 rounded-lg my-2", children: description })
+      title && /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("p", { className: "text-xs text-neutral-700", children: date }),
+      description && /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("p", { className: "p-4 text-xs bg-neutral-50 text-neutral-800 rounded-lg my-2 max-w-80", children: description })
     ] })
   ] }, `log_${index}`)) });
 };

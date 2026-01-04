@@ -1,11 +1,87 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+@theme {
+  /* Existing CSS variables */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Primary */
+  --color-primary-50: #f2f3ee;
+  --color-primary-100: #e1e3da;
+  --color-primary-200: #d0d3c6;
+  --color-primary-300: #bec3b2;
+  --color-primary-400: #adb39e;
+  --color-primary-500: #9ea593;
+  --color-primary-600: #8c9382;
+  --color-primary-700: #787d6e;
+  --color-primary-800: #64675a;
+  --color-primary-900: #505146;
+
+  /* Green */
+  --color-green-50: #e6f7e6;
+  --color-green-100: #c0eac0;
+  --color-green-200: #99dc99;
+  --color-green-300: #73cf73;
+  --color-green-400: #4cc14c;
+  --color-green-500: #0ba803;
+  --color-green-600: #0a9602;
+  --color-green-700: #087f02;
+  --color-green-800: #066602;
+  --color-green-900: #044c01;
+
+  /* Red */
+  --color-red-50: #fde7e7;
+  --color-red-100: #fbc0c0;
+  --color-red-200: #f89999;
+  --color-red-300: #f47373;
+  --color-red-400: #f04c4c;
+  --color-red-500: #df0303;
+  --color-red-600: #c90202;
+  --color-red-700: #a50202;
+  --color-red-800: #800202;
+  --color-red-900: #5c0101;
+
+  /* Blue */
+  --color-blue-50: #e6f3fa;
+  --color-blue-100: #bfe1f3;
+  --color-blue-200: #99ceeb;
+  --color-blue-300: #73bce4;
+  --color-blue-400: #4caadc;
+  --color-blue-500: #0369a8;
+  --color-blue-600: #025e97;
+  --color-blue-700: #024d7c;
+  --color-blue-800: #013c61;
+  --color-blue-900: #012b46;
+
+  /* Yellow */
+  --color-yellow-50: #f9f7e6;
+  --color-yellow-100: #f0efc0;
+  --color-yellow-200: #e6e699;
+  --color-yellow-300: #dcdc73;
+  --color-yellow-400: #d1d14c;
+  --color-yellow-500: #a8a203;
+  --color-yellow-600: #969002;
+  --color-yellow-700: #7c7602;
+  --color-yellow-800: #615c01;
+  --color-yellow-900: #464301;
+
+  /* Neutral */
+  --color-neutral-50: #f8f8f8;
+  --color-neutral-100: #f0f0f0;
+  --color-neutral-200: #e7e7e7;
+  --color-neutral-300: #dedede;
+  --color-neutral-400: #d9d9d9;
+  --color-neutral-500: #bfbfbf;
+  --color-neutral-600: #a6a6a6;
+  --color-neutral-700: #8c8c8c;
+  --color-neutral-800: #737373;
+  --color-neutral-900: #595959;
 }
 
 @layer utilities {
