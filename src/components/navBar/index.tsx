@@ -2,8 +2,14 @@ import Image from "next/image";
 import Avatar, { AVATAR_VARIANT } from "../avatar";
 import { FC, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevLeftSVG, ChevRightSVG } from "../icons";
+import { ChevDownSVG, ChevLeftSVG, ChevRightSVG, DotFillSVG } from "../icons";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
+
+export interface ISubMenuItem {
+  title: string;
+  route: string;
+  isActive: boolean;
+}
 
 export interface IMenuItem {
   title: string;
@@ -12,6 +18,8 @@ export interface IMenuItem {
   isActive: boolean;
   isDivider: boolean;
   onClick?: () => void;
+  hasChildren?: boolean;
+  children?: ISubMenuItem[];
 }
 
 export interface INavBar {
@@ -49,11 +57,13 @@ const NavBar: FC<INavBar> = ({
 }: INavBar) => {
   const router = useRouter();
   const [isActiveMenuItem, setIsActiveMenuItem] = useState<string>("");
+  const [isActiveSubMenuItem, setIsActiveSubMenuItem] = useState<string>("");
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(isCollapsed);
   const [isMenuItemsCollapsed, setIsMenuITemsCollapsed] =
     useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<number | null>(null);
-  const activeClass = "rounded-lg bg-white bg-opacity-35";
+  const [showSubTooltip, setShowSubTooltip] = useState<number | null>(null);
+  const activeClass = "rounded-lg bg-white/35";
   const collapsedClass = "w-[6rem]";
 
   useEffect(() => {
@@ -61,6 +71,7 @@ const NavBar: FC<INavBar> = ({
       const active = menuItems.find((item) => item.isActive === true);
       setIsActiveMenuItem(active?.title ?? menuItems[0].title);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -74,11 +85,19 @@ const NavBar: FC<INavBar> = ({
   }, [isMenuCollapsed]);
 
   const handleClick = (menu: IMenuItem) => {
-    setIsActiveMenuItem(menu.title);
-    if (menu.onClick) {
-      menu.onClick();
+    const { hasChildren, title, onClick, route } = menu;
+
+    setIsActiveMenuItem(title);
+
+    if (hasChildren) {
+      return;
     }
-    router.push(menu.route);
+
+    if (onClick) {
+      setIsActiveSubMenuItem("");
+      onClick();
+    }
+    router.push(route);
   };
 
   return (
@@ -91,6 +110,7 @@ const NavBar: FC<INavBar> = ({
         className={`w-full h-full flex flex-col gap-4 p-4 ${menuBackgroundColor}`}
       >
         <div className="flex flex-col gap-4">
+          {/* Logo */}
           <div className="flex flex-row gap-2 items-center">
             <Image src={logoShort} alt="logo_short" width={60} height={60} />
             {!isMenuItemsCollapsed && (
@@ -103,6 +123,8 @@ const NavBar: FC<INavBar> = ({
               />
             )}
           </div>
+
+          {/* Avatar */}
           <div className="relative">
             <Avatar
               name={avatarName}
@@ -123,39 +145,99 @@ const NavBar: FC<INavBar> = ({
             </span>
           </div>
         </div>
+
+        {/* Divider */}
         <div className="border-neutral-50 border-b"></div>
+
+        {/* Menu Items */}
         {!isLoading ? (
           <div className="flex flex-col gap-1">
             {menuItems.map((item, index) => {
               if (!item.isDivider) {
                 return (
-                  <div
-                    key={`menu_item_${index + 1}`}
-                    className={`flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white hover:bg-opacity-35 hover:rounded-lg ${
-                      isActiveMenuItem === item.title ? activeClass : ""
-                    }`}
-                    onClick={() => handleClick(item)}
-                    onMouseEnter={() => setShowTooltip(index)}
-                    onMouseLeave={() => setShowTooltip(null)}
-                  >
+                  <div key={`menu_item_${index + 1}`}>
                     <div
-                      className={`w-6 h-6 ml-1 relative ${menuItemTextClass}`}
+                      className={`flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${
+                        isActiveMenuItem === item.title ? activeClass : ""
+                      }`}
+                      onClick={() => handleClick(item)}
+                      onMouseEnter={() => setShowTooltip(index)}
+                      onMouseLeave={() => setShowTooltip(null)}
                     >
-                      {item.icon}
-                      {isMenuCollapsed && (
-                        <Tooltip
-                          position={TOOLTIP_POSITION.RIGHT}
-                          label={item.title}
-                          isVisible={showTooltip === index}
-                          toolTipWidth="w-fit"
-                          toolTipClass="text-nowrap"
-                        />
+                      <div
+                        className={`w-6 h-6 ml-1 relative ${menuItemTextClass}`}
+                      >
+                        {item.icon}
+                        {isMenuCollapsed && (
+                          <Tooltip
+                            position={TOOLTIP_POSITION.RIGHT}
+                            label={item.title}
+                            isVisible={showTooltip === index}
+                            toolTipWidth="w-fit"
+                            toolTipClass="text-nowrap"
+                          />
+                        )}
+                      </div>
+                      {!isMenuItemsCollapsed && (
+                        <span
+                          className={`text-nowrap flex-1 ${menuItemTextClass}`}
+                        >
+                          {item.title}
+                        </span>
+                      )}
+                      {item.hasChildren && !isMenuItemsCollapsed && (
+                        <div
+                          className={`size-5 transform transition-transform duration-300 ${
+                            isActiveMenuItem === item.title && item.hasChildren
+                              ? "rotate-180"
+                              : ""
+                          }`}
+                        >
+                          <ChevDownSVG />
+                        </div>
                       )}
                     </div>
-                    {!isMenuItemsCollapsed && (
-                      <span className={`text-nowrap ${menuItemTextClass}`}>
-                        {item.title}
-                      </span>
+
+                    {/* Sub menu items starts from here if any */}
+                    {isActiveMenuItem === item.title && item.hasChildren && (
+                      <div className="flex flex-col gap-1 bg-white/15 pt-3 relative -top-2">
+                        {item.children?.map((subItem, subIndex) => (
+                          <div
+                            key={`sub_menu_item_${subIndex + 1}`}
+                            className={`flex flex-row gap-4 items-center p-4 h-14 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${
+                              isActiveSubMenuItem === subItem.title
+                                ? activeClass
+                                : ""
+                            }`}
+                            onClick={() => {
+                              setIsActiveSubMenuItem(subItem.title);
+                              router.push(subItem.route);
+                            }}
+                            onMouseEnter={() => setShowSubTooltip(subIndex)}
+                            onMouseLeave={() => setShowSubTooltip(null)}
+                          >
+                            <div className="size-6 ml-1 mt-1 relative text-neutral-600">
+                              <DotFillSVG />
+                              {isMenuCollapsed && (
+                                <Tooltip
+                                  position={TOOLTIP_POSITION.RIGHT}
+                                  label={subItem.title}
+                                  isVisible={showSubTooltip === subIndex}
+                                  toolTipWidth="w-fit"
+                                  toolTipClass="text-nowrap"
+                                />
+                              )}
+                            </div>
+                            {!isMenuItemsCollapsed && (
+                              <span
+                                className={`text-nowrap flex-1 ${menuItemTextClass}`}
+                              >
+                                {subItem.title}
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </div>
                 );

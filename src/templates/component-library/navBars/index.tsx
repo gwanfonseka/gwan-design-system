@@ -17,6 +17,7 @@ const menuItems = [
     route: "",
     isActive: true,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "Manage orders",
@@ -24,11 +25,17 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "Manage products",
     icon: <ProductsSVG />,
     route: "",
+    hasChildren: true,
+    children: [
+      { title: "Books", route: "", isActive: false },
+      { title: "Stickers", route: "", isActive: false },
+    ],
     isActive: false,
     isDivider: false,
   },
@@ -38,11 +45,19 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "Manage covers",
     icon: <CoversSVG />,
     route: "",
+    hasChildren: true,
+    children: [
+      { title: "A4 covers", route: "", isActive: false },
+      { title: "A3 covers", route: "", isActive: false },
+      { title: "B5 covers", route: "", isActive: false },
+      { title: "B6 covers", route: "", isActive: false },
+    ],
     isActive: false,
     isDivider: false,
   },
@@ -52,12 +67,14 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
   {
     title: "",
     route: "",
     isActive: false,
     isDivider: true,
+    onClick: () => {},
   },
   {
     title: "Sign out",
@@ -65,6 +82,7 @@ const menuItems = [
     route: "",
     isActive: false,
     isDivider: false,
+    onClick: () => {},
   },
 ];
 
