@@ -1,12 +1,13 @@
 {
   "name": "gwan-design-system",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "✨ A reusable component library for Next.js projects.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "src",
     "README.md"
   ],
   "scripts": {
