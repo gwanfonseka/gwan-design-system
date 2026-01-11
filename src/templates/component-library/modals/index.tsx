@@ -39,7 +39,7 @@ const Modals = () => {
           onClear={() => setIsSmallModalOpen(false)}
           size={MODAL_SIZE.SMALL}
         >
-          <div className="flex flex-col gap-4 items-center justify-center">
+          <div className="h-full flex flex-col gap-4 items-center justify-center">
             <Image
               src={modalImage}
               alt="modal_image"
@@ -57,7 +57,7 @@ const Modals = () => {
           onClear={() => setIsMediumModalOpen(false)}
           size={MODAL_SIZE.MEDIUM}
         >
-          <div className="flex flex-col gap-4 items-center justify-center">
+          <div className="h-full flex flex-col gap-4 items-center justify-center justify-center">
             <Image
               src={modalImage}
               alt="modal_image"
@@ -75,7 +75,7 @@ const Modals = () => {
           onClear={() => setIsLargeModalOpen(false)}
           size={MODAL_SIZE.LARGE}
         >
-          <div className="flex flex-col gap-4 items-center">
+          <div className="h-full flex flex-col gap-4 items-center justify-center">
             <Image
               src={modalImage}
               alt="modal_image"
@@ -93,7 +93,7 @@ const Modals = () => {
           onClear={() => setIsFullModalOpen(false)}
           size={MODAL_SIZE.FULL}
         >
-          <div className="flex flex-col gap-4 items-center">
+          <div className="h-full flex flex-col gap-4 items-center justify-center">
             <Image
               src={modalImage}
               alt="modal_image"

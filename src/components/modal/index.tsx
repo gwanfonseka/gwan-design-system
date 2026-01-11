@@ -29,9 +29,19 @@ const Modal: FC<IModal> = ({
     modalRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClear();
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClear]);
+
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`}
+      onMouseDown={onClear}
     >
       <div
         ref={modalRef}
@@ -39,7 +49,7 @@ const Modal: FC<IModal> = ({
         className={`bg-white p-4 ${
           size !== MODAL_SIZE.FULL && "rounded-lg"
         } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`}
-        onBlur={() => onClear()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex flex-row gap-4 items-center">
           <div className="flex-1 text-3xl">{title}</div>
@@ -47,9 +57,7 @@ const Modal: FC<IModal> = ({
             <CrossSVG />
           </div>
         </div>
-        <div className="flex-1 flex justify-center items-center">
-          {children}
-        </div>
+        <div className="flex-1">{children}</div>
       </div>
     </div>
   );
