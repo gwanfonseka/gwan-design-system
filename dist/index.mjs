@@ -2278,23 +2278,31 @@ var Modal = ({
     var _a;
     (_a = modalRef.current) == null ? void 0 : _a.focus();
   }, []);
+  useEffect3(() => {
+    const handler = (e) => {
+      if (e.key === "Escape") onClear();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClear]);
   return /* @__PURE__ */ jsx119(
     "div",
     {
       className: `fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`,
+      onMouseDown: onClear,
       children: /* @__PURE__ */ jsxs23(
         "div",
         {
           ref: modalRef,
           tabIndex: -1,
           className: `bg-white p-4 ${size !== "w-full h-full" /* FULL */ && "rounded-lg"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`,
-          onBlur: () => onClear(),
+          onMouseDown: (e) => e.stopPropagation(),
           children: [
             /* @__PURE__ */ jsxs23("div", { className: "flex flex-row gap-4 items-center", children: [
               /* @__PURE__ */ jsx119("div", { className: "flex-1 text-3xl", children: title }),
               /* @__PURE__ */ jsx119("div", { className: "size-4 cursor-pointer", onClick: () => onClear(), children: /* @__PURE__ */ jsx119(Cross, {}) })
             ] }),
-            /* @__PURE__ */ jsx119("div", { className: "flex-1 flex justify-center items-center", children })
+            /* @__PURE__ */ jsx119("div", { className: "flex-1", children })
           ]
         }
       )
