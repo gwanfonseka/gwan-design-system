@@ -2,9 +2,9 @@ import { FC, useEffect, useRef } from "react";
 import { CrossSVG } from "../icons";
 
 export enum MODAL_SIZE {
-  SMALL = "w-[600px] h-60",
-  MEDIUM = "w-[800px] h-96",
-  LARGE = "w-[950px] h-[600px]",
+  SMALL = "w-[600px]",
+  MEDIUM = "w-[800px]",
+  LARGE = "w-[950px]",
   FULL = "w-full h-full",
 }
 
@@ -57,7 +57,7 @@ const Modal: FC<IModal> = ({
             <CrossSVG />
           </div>
         </div>
-        <div className="flex-1">{children}</div>
+        <div className="w-full h-full overflow-auto">{children}</div>
       </div>
     </div>
   );
