@@ -57,7 +57,7 @@ const Modals = () => {
           onClear={() => setIsMediumModalOpen(false)}
           size={MODAL_SIZE.MEDIUM}
         >
-          <div className="h-full flex flex-col gap-4 items-center justify-center justify-center">
+          <div className="h-full flex flex-col gap-4 items-center">
             <Image
               src={modalImage}
               alt="modal_image"
