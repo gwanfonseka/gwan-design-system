@@ -10,7 +10,7 @@ const Icons = () => {
           className="flex flex-col items-center gap-4 border border-white bg-neutral-50 size-32 p-2 rounded-lg justify-center"
           key={`svg_${index}`}
         >
-          <div className="size-[40px]">
+          <div className="size-10">
             {svgList[svg as keyof typeof svgList]()}
           </div>
           <span className="text-sm font-medium">{svg}</span>

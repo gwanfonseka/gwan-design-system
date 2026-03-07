@@ -105,3 +105,4 @@ export { Wifi as WifiSVG } from "./wifiSVG";
 export { DotFill as DotFillSVG } from "./dotFillSVG";
 export { SquareFill as SquareFillSVG } from "./squareFillSVG";
 export { Eclipse as EclipseSVG } from "./eclipseSVG";
+export { Copy as CopySVG } from "./copySVG";

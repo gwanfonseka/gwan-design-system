@@ -61,7 +61,10 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   return (
-    <div ref={containerRef} className={`flex flex-col gap-1 relative ${className}`}>
+    <div
+      ref={containerRef}
+      className={`flex flex-col gap-1 relative ${className}`}
+    >
       {label && (
         <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
           {label}

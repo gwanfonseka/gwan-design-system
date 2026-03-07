@@ -6,40 +6,61 @@ export enum BUTTON_VARIANTS {
   TERTIARY = "tertiary",
 }
 
+export enum BUTTON_EDGE_STYLE {
+  ROUNDED = "rounded",
+  SQUARE = "square",
+  PILL = "pill",
+}
+
 export interface IButton {
   variant?: BUTTON_VARIANTS;
   label?: string;
   onClick: () => void;
-  icon?: ReactNode;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   type?: "button" | "submit";
   disabled?: boolean;
   className?: string;
+  edges?: BUTTON_EDGE_STYLE;
 }
 
 const Button: FC<IButton> = ({
   variant = BUTTON_VARIANTS.PRIMARY,
   label,
   onClick,
-  icon,
+  leftIcon,
+  rightIcon,
   type = "button",
   disabled = false,
   className = "",
+  edges = BUTTON_EDGE_STYLE.ROUNDED,
 }: IButton) => {
   const getButtonVariant = (variant: BUTTON_VARIANTS) => {
     switch (variant) {
       case BUTTON_VARIANTS.PRIMARY:
         return disabled
           ? "bg-neutral-300 text-neutral-800 cursor-not-allowed"
-          : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
+          : "bg-primary-500 text-white cursor-pointer hover:bg-primary-600 active:bg-primary-700";
 
       case BUTTON_VARIANTS.SECONDARY:
         return disabled
           ? "bg-neutral-100 text-neutral-800 cursor-not-allowed"
-          : "bg-neutral-50 text-primary-700 hover:bg-primary-50 active:bg-primary-100";
+          : "bg-primary-100 text-primary-800 cursor-pointer hover:bg-primary-200 active:bg-primary-300";
       case BUTTON_VARIANTS.TERTIARY:
         return disabled
           ? "text-neutral-300 border border-neutral-300 cursor-not-allowed"
-          : "bg-transparent text-primary-500 border border-primary-500 hover:bg-neutral-50 active:bg-neutral-100";
+          : "bg-transparent text-primary-500 border border-primary-500 cursor-pointer hover:bg-neutral-50 active:bg-neutral-100";
+    }
+  };
+
+  const getEdgesStyle = (edges: BUTTON_EDGE_STYLE) => {
+    switch (edges) {
+      case BUTTON_EDGE_STYLE.SQUARE:
+        return "rounded-none";
+      case BUTTON_EDGE_STYLE.PILL:
+        return "rounded-full";
+      default:
+        return "rounded-lg";
     }
   };
 
@@ -47,14 +68,15 @@ const Button: FC<IButton> = ({
     <button
       className={`${getButtonVariant(variant)} px-4 ${
         label ? "py-2" : "py-4"
-      } rounded-lg ${className}`}
+      } ${getEdgesStyle(edges)} ${className}`}
       type={type}
       onClick={onClick}
       disabled={disabled}
     >
       <div className="flex flex-row gap-2 items-center">
-        {icon && <div className="size-5">{icon}</div>}
+        {leftIcon && <div className="size-5">{leftIcon}</div>}
         {label && <p>{label}</p>}
+        {rightIcon && <div className="size-5">{rightIcon}</div>}
       </div>
     </button>
   );

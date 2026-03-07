@@ -117,7 +117,7 @@ const menuItems = [
   {
     name: "State",
     template: <States />,
-  }
+  },
 ];
 
 const LibraryTemplate = () => {
@@ -134,10 +134,10 @@ const LibraryTemplate = () => {
   };
 
   return (
-    <div className="custom-bg h-[100vh] overflow-hidden">
-      <div className="bg-[#FFFFFF4D] h-[100vh]">
-        <div className="flex flex-row gap-8 justify-start items-start">
-          <div className="flex flex-col gap-4 bg-[#0000004D] h-[100vh] py-4 px-8 overflow-y-auto w-[350px]">
+    <div className="custom-bg h-screen overflow-hidden">
+      <div className="bg-[#FFFFFF4D] h-screen">
+        <div className="flex flex-row gap-4 justify-start items-start">
+          <div className="flex flex-col gap-4 bg-[#0000004D] h-screen py-4 px-8 overflow-y-auto w-87.5">
             <p className="text-white text-2xl font-medium">
               Components Library{" "}
               <span className="text-sm text-neutral-500">
@@ -164,8 +164,8 @@ const LibraryTemplate = () => {
               );
             })}
           </div>
-          <div className="py-4 pr-8 flex flex-1 overflow-y-auto">
-            <div className="bg-white rounded-lg p-6 w-full h-[95vh] overflow-y-auto flex flex-col gap-12">
+          <div className="py-4 pr-4 flex flex-1 overflow-y-auto h-full">
+            <div className="bg-white rounded-lg p-6 w-full h-[97vh] overflow-y-auto flex flex-col gap-12">
               <p className="text-black text-xl font-medium">{activeMenuItem}</p>
               <div>
                 {
