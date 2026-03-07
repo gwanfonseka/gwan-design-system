@@ -61,13 +61,13 @@ const Pagination: FC<IPagination> = ({
       <div className="flex flex-row gap-4 items-center">
         <Button
           onClick={onLeft}
-          icon={<ChevLeft />}
+          leftIcon={<ChevLeft />}
           variant={BUTTON_VARIANTS.TERTIARY}
           disabled={page === 1}
         />
         <Button
           onClick={onRight}
-          icon={<ChevRight />}
+          leftIcon={<ChevRight />}
           variant={BUTTON_VARIANTS.TERTIARY}
           disabled={page === Math.ceil(total / size)}
         />
