@@ -92,7 +92,7 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row justify-center gap-4 items-center">
+      <div className="flex flex-row justify-center gap-8 items-center">
         <Tag type={TAG_TYPE.DEFAULT} label="Default" />
         <Tag type={TAG_TYPE.SUCCESS} label="Success" />
         <Tag type={TAG_TYPE.INFO} label="Info" />
