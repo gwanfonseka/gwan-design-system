@@ -18,14 +18,14 @@ const success = [
   },
   {
     title: "Printing cancelled",
-    placeholderBottom: "Sonali Rodrigo",
+    placeholderBottom: "Jane Smith",
     placeholderRight: "2021-01-02",
     description: "Customer requested changes",
     status: STEP_STATUS.FAILED,
   },
   {
     title: "Printing",
-    placeholderBottom: "Nimesh Fonseka",
+    placeholderBottom: "Tim Lee",
     placeholderRight: "2021-01-02",
     description: "Printing in progress",
     status: STEP_STATUS.SUCCESS,
@@ -63,7 +63,7 @@ const TimeLines = () => {
   ]);
   const [direction, setDirection] = useState<string>(STEP_DIRECTION.DOWNWARD);
 
-  const codeExample = `import { TimeLine, STEP_STATUS } from "gwan-design-system"
+  const codeExample = `import { TimeLine, STEP_STATUS, STEP_DIRECTION } from "gwan-design-system"
 
 const logs = [
   {
@@ -76,14 +76,14 @@ const logs = [
   {
     title: "Printing cancelled",
     placeholderRight: "2021-01-02",
-    placeholderBottom: "John Doe",
+    placeholderBottom: "Jane Smith",
     description: "Customer requested changes",
     status: STEP_STATUS.FAILED,
   },
   {
     title: "Order placed",
     placeholderRight: "2021-01-02",
-    placeholderBottom: "John Doe",
+    placeholderBottom: "Tim Lee",
     description: "Order placed by customer",
     status: STEP_STATUS.SUCCESS,
   },
@@ -91,7 +91,10 @@ const logs = [
 
 const Example = () => {
   return (
-    <TimeLine logs={logs} />
+    <TimeLine 
+      logs={logs} 
+      direction={STEP_DIRECTION.DOWNWARD} // Optional, default is downward
+    />
   );
 };`;
 
@@ -110,7 +113,7 @@ const Example = () => {
     updated.splice(index, 1);
     setPlayArray(updated);
   };
-  console.log("direction", direction);
+
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
