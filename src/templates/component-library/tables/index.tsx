@@ -1,7 +1,6 @@
 import { OrderInfoSVG } from "@/components/icons";
 import Table, { ITableColumn } from "@/components/table";
 import Tag, { TAG_TYPE } from "@/components/tag";
-import { ORDER_STATUS } from "@/components/timeLine";
 
 export interface IData {
   date: string;
@@ -9,6 +8,16 @@ export interface IData {
   price: string;
   ownerName: string;
   status: ORDER_STATUS;
+}
+
+enum ORDER_STATUS {
+  ORDER_PLACED = "Order placed",
+  PRINTING_IN_PROGRESS = "Printing in progress",
+  PACKAGING = "Packaging",
+  DISPATCHED_TO_COURIER = "Dispatched to courier",
+  DELIVERED = "Delivered",
+  ORDER_CANCELLED = "Order cancelled",
+  PENDING = "Pending",
 }
 
 const getTagType = (status: ORDER_STATUS) => {
