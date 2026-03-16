@@ -45,7 +45,7 @@ const Pagination: FC<IPagination> = ({
 
   return (
     <div
-      className={`bg-neutral-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg ${className}`}
+      className={`bg-neutral-100 flex flex-row gap-4 items-center p-3 rounded-lg ${className}`}
     >
       <div className="flex-1">
         {page} of {Math.ceil(total / size)} pages
@@ -55,6 +55,7 @@ const Pagination: FC<IPagination> = ({
           options={options}
           value={optionDropdown}
           onChange={(option) => handlePageSize(option)}
+          className="[&>div>input]:py-2! [&>div>div]:inset-y-2!"
         />
       </div>
       <div>items per page</div>
@@ -64,12 +65,14 @@ const Pagination: FC<IPagination> = ({
           leftIcon={<ChevLeft />}
           variant={BUTTON_VARIANTS.TERTIARY}
           disabled={page === 1}
+          className="py-2!"
         />
         <Button
           onClick={onRight}
           leftIcon={<ChevRight />}
           variant={BUTTON_VARIANTS.TERTIARY}
           disabled={page === Math.ceil(total / size)}
+          className="py-2!"
         />
       </div>
     </div>
