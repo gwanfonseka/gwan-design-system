@@ -6,6 +6,11 @@ export interface ISelectDropdownOption {
   label: string;
 }
 
+export enum SELECT_DROPDOWN_EDGE_STYLE {
+  ROUNDED = "rounded",
+  SQUARE = "square",
+}
+
 export interface ISelectDropdown {
   options: ISelectDropdownOption[];
   label?: string;
@@ -15,6 +20,10 @@ export interface ISelectDropdown {
   onChange: (option: string) => void;
   inputClassName?: string;
   className?: string;
+  isError?: boolean;
+  errorMessage?: string;
+  required?: boolean;
+  edges?: SELECT_DROPDOWN_EDGE_STYLE;
 }
 
 const SelectDropdown: FC<ISelectDropdown> = ({
@@ -26,6 +35,10 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   onChange,
   inputClassName = "",
   className = "",
+  isError = false,
+  errorMessage,
+  required = false,
+  edges = SELECT_DROPDOWN_EDGE_STYLE.ROUNDED,
 }: ISelectDropdown) => {
   const [dropdownValue, setDropdownValue] = useState<string>("");
   const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
@@ -61,50 +74,55 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   return (
-    <div
-      ref={containerRef}
-      className={`flex flex-col gap-1 relative ${className}`}
-    >
-      {label && (
-        <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
-          {label}
-        </label>
-      )}
-      <div className="relative">
-        <div className="size-5 absolute inset-y-4 right-4 flex items-center text-neutral-600 pointer-events-none">
-          <ChevDownSVG />
+    <div className="flex flex-col">
+      <div ref={containerRef} className={`flex flex-col relative ${className}`}>
+        {label && (
+          <label
+            htmlFor={label}
+            className={`text-sm ${isError ? "text-red-500" : "text-neutral-600"} mb-1`}
+          >
+            {`${label}${required ? " *" : ""}`}
+          </label>
+        )}
+        <div className="relative">
+          <div className="size-5 absolute inset-y-4 right-4 flex items-center text-neutral-600 pointer-events-none">
+            <ChevDownSVG />
+          </div>
+          <input
+            id={label}
+            type="text"
+            className={`border outline-none p-4 ${edges === SELECT_DROPDOWN_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
+              disabled ? "cursor-not-allowed" : "cursor-pointer"
+            } ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} text-sm w-full ${inputClassName}`}
+            placeholder={placeholder}
+            onClick={() => setIsOptionsVisible(!isOptionsVisible)}
+            value={dropdownValue}
+            onBlur={() => setIsOptionsVisible(false)}
+            readOnly
+            disabled={disabled}
+            required={required}
+          />
         </div>
-        <input
-          id={label}
-          type="text"
-          className={`border border-neutral-300 outline-none p-4 rounded-lg ${
-            disabled ? "cursor-not-allowed" : "cursor-pointer"
-          } text-sm w-full ${inputClassName}`}
-          placeholder={placeholder}
-          onClick={() => setIsOptionsVisible(!isOptionsVisible)}
-          value={dropdownValue}
-          onBlur={() => setIsOptionsVisible(false)}
-          readOnly
-          disabled={disabled}
-        ></input>
+        {isOptionsVisible && (
+          <div
+            className={`border border-neutral-300 ${edges === SELECT_DROPDOWN_EDGE_STYLE.ROUNDED && "rounded-lg"} shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${
+              openUpward ? "bottom-full mb-1" : "top-full"
+            }`}
+          >
+            {options.map(({ label, value: val }, index) => (
+              <div
+                key={`${label}_${val}_${index + 1}`}
+                className="p-4 cursor-pointer hover:bg-neutral-50 text-sm"
+                onMouseDown={() => handleMouseDown(label)}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      {isOptionsVisible && (
-        <div
-          className={`border border-neutral-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${
-            openUpward ? "bottom-full mb-1" : "top-full"
-          }`}
-        >
-          {options.map(({ label, value: val }, index) => (
-            <div
-              key={`${label}_${val}_${index + 1}`}
-              className="p-4 cursor-pointer hover:bg-neutral-50 text-sm"
-              onMouseDown={() => handleMouseDown(label)}
-            >
-              {label}
-            </div>
-          ))}
-        </div>
+      {isError && errorMessage && (
+        <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
       )}
     </div>
   );
