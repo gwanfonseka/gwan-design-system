@@ -8,7 +8,7 @@ export interface ISelectDropdownOption {
 
 export enum SELECT_DROPDOWN_EDGE_STYLE {
   ROUNDED = "rounded",
-  SQUARE = "square",
+  SQUARED = "squared",
 }
 
 export interface ISelectDropdown {

@@ -16,7 +16,7 @@ export enum CHIP_VARIANT {
 
 export enum CHIP_EDGE_STYLE {
   ROUNDED = "rounded",
-  SQUARE = "square",
+  SQUARED = "squared",
   PILL = "pill",
 }
 
@@ -39,7 +39,7 @@ const Chip: FC<IChip> = ({
 
   const getEdgesStyle = (edges: CHIP_EDGE_STYLE) => {
     switch (edges) {
-      case CHIP_EDGE_STYLE.SQUARE:
+      case CHIP_EDGE_STYLE.SQUARED:
         return "rounded-none";
       case CHIP_EDGE_STYLE.PILL:
         return "rounded-full";

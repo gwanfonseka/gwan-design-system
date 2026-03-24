@@ -26,7 +26,7 @@ const Tags = () => {
 
   const tagEdgesOptions = [
     { value: TAG_EDGE_STYLE.ROUNDED, label: "rounded" },
-    { value: TAG_EDGE_STYLE.SQUARE, label: "square" },
+    { value: TAG_EDGE_STYLE.SQUARED, label: "squared" },
     { value: TAG_EDGE_STYLE.PILL, label: "pill" },
   ];
 

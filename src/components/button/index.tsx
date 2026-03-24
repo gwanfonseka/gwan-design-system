@@ -8,7 +8,7 @@ export enum BUTTON_VARIANTS {
 
 export enum BUTTON_EDGE_STYLE {
   ROUNDED = "rounded",
-  SQUARE = "square",
+  SQUARED = "squared",
   PILL = "pill",
 }
 
@@ -55,7 +55,7 @@ const Button: FC<IButton> = ({
 
   const getEdgesStyle = (edges: BUTTON_EDGE_STYLE) => {
     switch (edges) {
-      case BUTTON_EDGE_STYLE.SQUARE:
+      case BUTTON_EDGE_STYLE.SQUARED:
         return "rounded-none";
       case BUTTON_EDGE_STYLE.PILL:
         return "rounded-full";

@@ -34,7 +34,7 @@ const Chips = () => {
 
   const tagEdgesOptions = [
     { value: CHIP_EDGE_STYLE.ROUNDED, label: "rounded" },
-    { value: CHIP_EDGE_STYLE.SQUARE, label: "square" },
+    { value: CHIP_EDGE_STYLE.SQUARED, label: "squared" },
     { value: CHIP_EDGE_STYLE.PILL, label: "pill" },
   ];
 
@@ -102,7 +102,7 @@ const Example = () => {
         <Chip label="This is a chip" onClear={() => {}} />
         <Chip
           label="This is a chip"
-          edges={CHIP_EDGE_STYLE.SQUARE}
+          edges={CHIP_EDGE_STYLE.SQUARED}
           onClear={() => {}}
         />
       </div>

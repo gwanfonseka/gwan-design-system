@@ -31,7 +31,7 @@ const Buttons = () => {
 
   const buttonEdgesOptions = [
     { value: BUTTON_EDGE_STYLE.ROUNDED, label: "rounded" },
-    { value: BUTTON_EDGE_STYLE.SQUARE, label: "square" },
+    { value: BUTTON_EDGE_STYLE.SQUARED, label: "squared" },
     { value: BUTTON_EDGE_STYLE.PILL, label: "pill" },
   ];
 

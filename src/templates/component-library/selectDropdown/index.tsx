@@ -62,7 +62,7 @@ const SelectDropdowns = () => {
 
   const dropdownEdgesOptions = [
     { value: SELECT_DROPDOWN_EDGE_STYLE.ROUNDED, label: "rounded" },
-    { value: SELECT_DROPDOWN_EDGE_STYLE.SQUARE, label: "square" },
+    { value: SELECT_DROPDOWN_EDGE_STYLE.SQUARED, label: "squared" },
   ];
 
   const codeExample = `import { SelectDropdown, type ISelectDropdownOption, SELECT_DROPDOWN_EDGE_STYLE } from "gwan-design-system";

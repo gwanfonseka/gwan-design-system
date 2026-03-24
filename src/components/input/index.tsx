@@ -1,5 +1,10 @@
-import { FC } from "react";
+import { ClipboardEvent, FC, KeyboardEvent } from "react";
 import { CrossSVG } from "../icons";
+
+export enum INPUT_EDGE_STYLE {
+  ROUNDED = "rounded",
+  SQUARED = "squared",
+}
 
 export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -11,6 +16,9 @@ export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   className?: string;
   type?: string;
   onClear?: () => void;
+  isError?: boolean;
+  errorMessage?: string;
+  edges?: INPUT_EDGE_STYLE;
 }
 
 const Input: FC<IInput> = ({
@@ -23,12 +31,38 @@ const Input: FC<IInput> = ({
   className = "",
   type = "text",
   onClear,
+  isError = false,
+  errorMessage,
+  edges = INPUT_EDGE_STYLE.ROUNDED,
+  onKeyDown,
+  onPaste,
   ...rest
 }: IInput) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
+      e.preventDefault();
+    }
+
+    onKeyDown?.(e);
+  };
+
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    if (type === "number") {
+      const paste = e.clipboardData.getData("text");
+      if (/[eE+\-]/.test(paste)) {
+        e.preventDefault();
+      }
+    }
+
+    onPaste?.(e);
+  };
   return (
-    <div className={`flex flex-col gap-1 relative ${className}`}>
+    <div className={`flex flex-col relative ${className}`}>
       {label && (
-        <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
+        <label
+          htmlFor={label}
+          className={`text-sm ${isError ? "text-red-500" : "text-neutral-600"} mb-1`}
+        >
           {`${label}${required ? " *" : ""}`}
         </label>
       )}
@@ -38,13 +72,15 @@ const Input: FC<IInput> = ({
           placeholder={placeholder}
           value={value}
           disabled={disabled}
-          className={`border border-neutral-300 outline-none py-4 pl-4 ${
+          className={`border ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} outline-none py-4 pl-4 ${
             onClear ? "pr-8" : "pr-4"
-          } rounded-lg ${
+          } ${edges === INPUT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
             disabled ? "cursor-not-allowed" : "cursor-text"
           } text-sm w-full ${inputClassName}`}
           required={required}
           type={type}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
           {...rest}
         />
         {onClear && value && (
@@ -56,6 +92,9 @@ const Input: FC<IInput> = ({
           </div>
         )}
       </div>
+      {isError && errorMessage && (
+        <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 };

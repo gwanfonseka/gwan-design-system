@@ -15,7 +15,7 @@ export enum TAG_VARIANT {
 
 export enum TAG_EDGE_STYLE {
   ROUNDED = "rounded",
-  SQUARE = "square",
+  SQUARED = "squared",
   PILL = "pill",
 }
 
@@ -51,7 +51,7 @@ const Tag: FC<ITag> = ({
 
   const getEdgesStyle = (edges: TAG_EDGE_STYLE) => {
     switch (edges) {
-      case TAG_EDGE_STYLE.SQUARE:
+      case TAG_EDGE_STYLE.SQUARED:
         return "rounded-none";
       case TAG_EDGE_STYLE.PILL:
         return "rounded-full";
