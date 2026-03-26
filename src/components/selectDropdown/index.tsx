@@ -1,14 +1,10 @@
 import { FC, useEffect, useState, useRef } from "react";
 import { ChevDownSVG } from "../icons";
+import { FORM_ELEMENT_EDGE_STYLE } from "../input";
 
 export interface ISelectDropdownOption {
   value?: string;
   label: string;
-}
-
-export enum SELECT_DROPDOWN_EDGE_STYLE {
-  ROUNDED = "rounded",
-  SQUARED = "squared",
 }
 
 export interface ISelectDropdown {
@@ -23,7 +19,7 @@ export interface ISelectDropdown {
   isError?: boolean;
   errorMessage?: string;
   required?: boolean;
-  edges?: SELECT_DROPDOWN_EDGE_STYLE;
+  edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 
 const SelectDropdown: FC<ISelectDropdown> = ({
@@ -38,7 +34,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   isError = false,
   errorMessage,
   required = false,
-  edges = SELECT_DROPDOWN_EDGE_STYLE.ROUNDED,
+  edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
 }: ISelectDropdown) => {
   const [dropdownValue, setDropdownValue] = useState<string>("");
   const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
@@ -91,7 +87,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
           <input
             id={label}
             type="text"
-            className={`border outline-none p-4 ${edges === SELECT_DROPDOWN_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
+            className={`border outline-none p-4 ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
               disabled ? "cursor-not-allowed" : "cursor-pointer"
             } ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} text-sm w-full ${inputClassName}`}
             placeholder={placeholder}
@@ -105,7 +101,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
         </div>
         {isOptionsVisible && (
           <div
-            className={`border border-neutral-300 ${edges === SELECT_DROPDOWN_EDGE_STYLE.ROUNDED && "rounded-lg"} shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${
+            className={`border border-neutral-300 ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"} shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${
               openUpward ? "bottom-full mb-1" : "top-full"
             }`}
           >

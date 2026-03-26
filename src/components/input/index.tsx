@@ -1,7 +1,7 @@
 import { ClipboardEvent, FC, KeyboardEvent } from "react";
 import { CrossSVG } from "../icons";
 
-export enum INPUT_EDGE_STYLE {
+export enum FORM_ELEMENT_EDGE_STYLE {
   ROUNDED = "rounded",
   SQUARED = "squared",
 }
@@ -18,7 +18,7 @@ export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   onClear?: () => void;
   isError?: boolean;
   errorMessage?: string;
-  edges?: INPUT_EDGE_STYLE;
+  edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 
 const Input: FC<IInput> = ({
@@ -33,7 +33,7 @@ const Input: FC<IInput> = ({
   onClear,
   isError = false,
   errorMessage,
-  edges = INPUT_EDGE_STYLE.ROUNDED,
+  edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
   onKeyDown,
   onPaste,
   ...rest
@@ -74,7 +74,7 @@ const Input: FC<IInput> = ({
           disabled={disabled}
           className={`border ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} outline-none py-4 pl-4 ${
             onClear ? "pr-8" : "pr-4"
-          } ${edges === INPUT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
+          } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
             disabled ? "cursor-not-allowed" : "cursor-text"
           } text-sm w-full ${inputClassName}`}
           required={required}

@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { CrossSVG } from "../icons";
+import { FORM_ELEMENT_EDGE_STYLE } from "../input";
 
-export interface ITextArea
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface ITextArea extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   value: string;
   disabled?: boolean;
@@ -11,6 +11,9 @@ export interface ITextArea
   required?: boolean;
   className?: string;
   onClear?: () => void;
+  isError?: boolean;
+  errorMessage?: string;
+  edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 
 const TextArea: FC<ITextArea> = ({
@@ -22,6 +25,9 @@ const TextArea: FC<ITextArea> = ({
   required = false,
   className = "",
   onClear,
+  isError = false,
+  errorMessage,
+  edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
   id,
   ...rest
 }) => {
@@ -29,9 +35,12 @@ const TextArea: FC<ITextArea> = ({
     id || label?.toLowerCase().replace(/\s+/g, "-") || "textarea";
 
   return (
-    <div className={`flex flex-col gap-1 relative ${className}`}>
+    <div className={`flex flex-col relative ${className}`}>
       {label && (
-        <label htmlFor={textareaId} className="text-sm text-neutral-600 mb-2">
+        <label
+          htmlFor={textareaId}
+          className={`text-sm ${isError ? "text-red-500" : "text-neutral-600"} mb-1`}
+        >
           {`${label}${required ? " *" : ""}`}
         </label>
       )}
@@ -42,9 +51,9 @@ const TextArea: FC<ITextArea> = ({
           placeholder={placeholder}
           value={value}
           disabled={disabled}
-          className={`border border-neutral-300 outline-none py-4 pl-4 ${
+          className={`border ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} outline-none py-4 pl-4 ${
             onClear ? "pr-8" : "pr-4"
-          } rounded-lg ${
+          } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
             disabled ? "cursor-not-allowed" : "cursor-text"
           } text-sm w-full ${inputClassName}`}
           required={required}
@@ -60,6 +69,9 @@ const TextArea: FC<ITextArea> = ({
           </div>
         )}
       </div>
+      {isError && errorMessage && (
+        <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 };

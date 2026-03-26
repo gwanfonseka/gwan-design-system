@@ -1,6 +1,6 @@
 import Checkbox from "@/components/checkbox";
 import CodeSnippet from "@/components/codeSnippet";
-import Input, { INPUT_EDGE_STYLE } from "@/components/input";
+import Input, { FORM_ELEMENT_EDGE_STYLE } from "@/components/input";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
 import { ChangeEvent, useState } from "react";
@@ -17,12 +17,12 @@ const Inputs = () => {
   const [errorMessage, setErrorMessage] = useState<string>(
     "This is an error message",
   );
-  const [edges, setEdges] = useState<string>(INPUT_EDGE_STYLE.ROUNDED);
+  const [edges, setEdges] = useState<string>(FORM_ELEMENT_EDGE_STYLE.ROUNDED);
   const [inputType, setInputType] = useState<string>("text");
 
   const inputEdgesOptions = [
-    { value: INPUT_EDGE_STYLE.ROUNDED, label: "rounded" },
-    { value: INPUT_EDGE_STYLE.SQUARED, label: "squared" },
+    { value: FORM_ELEMENT_EDGE_STYLE.ROUNDED, label: "rounded" },
+    { value: FORM_ELEMENT_EDGE_STYLE.SQUARED, label: "squared" },
   ];
 
   const inputTypes = [
@@ -40,7 +40,7 @@ const Inputs = () => {
     { value: "file", label: "file" },
   ];
 
-  const codeExample = `import { Input, INPUT_EDGE_STYLE } from "gwan-design-system";
+  const codeExample = `import { Input, FORM_ELEMENT_EDGE_STYLE } from "gwan-design-system";
 
 const Example = () => {
   const [inputText, setInputText] = useState<string>("");
@@ -58,7 +58,7 @@ const Example = () => {
       errorMessage="Error message" // optional, you can add an error message
       className="custom-class" // optional, you can add your own styles
       inputClassName="custom-class" // optional, you can add your own styles to the input
-      edges={INPUT_EDGE_STYLE.ROUNDED} // optional, you can choose rounded or squared
+      edges={FORM_ELEMENT_EDGE_STYLE.ROUNDED} // optional, you can choose rounded or squared
     />
   );
 }`;
@@ -80,7 +80,7 @@ const Example = () => {
             errorMessage={errorMessage}
             disabled={isDisabled}
             required={isRequired}
-            edges={edges as INPUT_EDGE_STYLE}
+            edges={edges as FORM_ELEMENT_EDGE_STYLE}
             className="w-80"
             inputClassName="bg-white disabled:bg-gray-100 disabled:text-gray-500"
           />
@@ -111,12 +111,12 @@ const Example = () => {
           />
           <div className="flex flex-col gap-2 w-64">
             <Checkbox
-              label="Required dropdown"
+              label="Required input"
               checked={isRequired}
               onChange={setIsRequired}
             />
             <Checkbox
-              label="Disable dropdown"
+              label="Disable input"
               checked={isDisabled}
               onChange={setIsDisabled}
             />
@@ -164,24 +164,6 @@ const Example = () => {
           onClear={() => setInputValue("")}
           className="w-80"
         />
-        {/* <Input
-          label="Required Input"
-          placeholder="This is a required input"
-          value={inputValueRequired}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setInputValueRequired(e.target.value)
-          }
-          required
-        />
-        <Input
-          label="Disabled Input"
-          placeholder="This is a disabled input"
-          value={inputValueDisabled}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setInputValueDisabled(e.target.value)
-          }
-          disabled
-        /> */}
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

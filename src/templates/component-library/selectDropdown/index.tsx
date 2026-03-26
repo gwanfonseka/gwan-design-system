@@ -1,9 +1,8 @@
 import Checkbox from "@/components/checkbox";
 import CodeSnippet from "@/components/codeSnippet";
-import Input from "@/components/input";
+import Input, { FORM_ELEMENT_EDGE_STYLE } from "@/components/input";
 import Playground from "@/components/playground";
 import SelectDropdown, {
-  SELECT_DROPDOWN_EDGE_STYLE,
   type ISelectDropdownOption,
 } from "@/components/selectDropdown";
 import { ChangeEvent, useState } from "react";
@@ -56,13 +55,11 @@ const SelectDropdowns = () => {
   const [errorMessage, setErrorMessage] = useState<string>(
     "This is an error message",
   );
-  const [edges, setEdges] = useState<string>(
-    SELECT_DROPDOWN_EDGE_STYLE.ROUNDED,
-  );
+  const [edges, setEdges] = useState<string>(FORM_ELEMENT_EDGE_STYLE.ROUNDED);
 
   const dropdownEdgesOptions = [
-    { value: SELECT_DROPDOWN_EDGE_STYLE.ROUNDED, label: "rounded" },
-    { value: SELECT_DROPDOWN_EDGE_STYLE.SQUARED, label: "squared" },
+    { value: FORM_ELEMENT_EDGE_STYLE.ROUNDED, label: "rounded" },
+    { value: FORM_ELEMENT_EDGE_STYLE.SQUARED, label: "squared" },
   ];
 
   const codeExample = `import { SelectDropdown, type ISelectDropdownOption, SELECT_DROPDOWN_EDGE_STYLE } from "gwan-design-system";
@@ -89,7 +86,7 @@ const Example = () => {
       errorMessage="Error message" // optional, you can add an error message
       className="custom-class" // optional, you can add your own styles
       inputClassName="custom-input-class" // optional, you can add your own styles to the read-only input
-      edges={SELECT_DROPDOWN_EDGE_STYLE.ROUNDED} // optional, you can choose rounded or squared
+      edges={FORM_ELEMENT_EDGE_STYLE.ROUNDED} // optional, you can choose rounded or squared
     />
   );
 }`;
@@ -110,7 +107,7 @@ const Example = () => {
             isError={isError}
             errorMessage={errorMessage}
             required={isRequired}
-            edges={edges as SELECT_DROPDOWN_EDGE_STYLE}
+            edges={edges as FORM_ELEMENT_EDGE_STYLE}
           />
         </div>
         <div className="flex flex-row justify-center gap-8 items-end">
