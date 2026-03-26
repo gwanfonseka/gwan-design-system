@@ -109,7 +109,7 @@ const Example = () => {
           <SelectDropdown
             label="Left icon"
             options={[
-              { value: "", label: "None" },
+              { value: "None", label: "None" },
               ...list.map((svg) => ({ value: svg, label: svg })),
             ]}
             value={leftIcon}
@@ -119,7 +119,7 @@ const Example = () => {
           <SelectDropdown
             label="Right icon"
             options={[
-              { value: "", label: "None" },
+              { value: "None", label: "None" },
               ...list.map((svg) => ({ value: svg, label: svg })),
             ]}
             value={rightIcon}

@@ -20,7 +20,7 @@ const Modal: FC<IModal> = ({
   title,
   children,
   onClear,
-  size = MODAL_SIZE.MEDIUM,
+  size = MODAL_SIZE.SMALL,
   className = "",
 }: IModal) => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ const Modal: FC<IModal> = ({
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`}
+      className={`fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.4)] ${className}`}
       onMouseDown={onClear}
     >
       <div
@@ -48,7 +48,7 @@ const Modal: FC<IModal> = ({
         tabIndex={-1}
         className={`bg-white p-4 ${
           size !== MODAL_SIZE.FULL && "rounded-lg"
-        } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`}
+        } absolute flex flex-col gap-4 ${size}`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex flex-row gap-4 items-center">

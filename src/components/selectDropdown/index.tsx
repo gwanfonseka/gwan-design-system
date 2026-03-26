@@ -42,14 +42,14 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const option = options.find((opt) => opt.label === value);
+    const option = options.find((opt) => (opt.value ?? opt.label) === value);
     if (option) {
       setDropdownValue(option.label);
-      onChange(option.label);
+      // onChange(option.label);
     } else {
-      setDropdownValue("");
+      setDropdownValue(value);
     }
-  }, []);
+  }, [value, options]);
 
   useEffect(() => {
     if (isOptionsVisible && containerRef.current) {
@@ -63,9 +63,11 @@ const SelectDropdown: FC<ISelectDropdown> = ({
     }
   }, [isOptionsVisible, options.length]);
 
-  const handleMouseDown = (val: string) => {
-    setDropdownValue(val);
-    onChange(val);
+  const handleMouseDown = (option: ISelectDropdownOption) => {
+    const actualValue = option.value ?? option.label;
+
+    setDropdownValue(option.label); // show label
+    onChange(actualValue); // send value
     setIsOptionsVisible(false);
   };
 
@@ -109,7 +111,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
               <div
                 key={`${label}_${val}_${index + 1}`}
                 className="p-4 cursor-pointer hover:bg-neutral-50 text-sm"
-                onMouseDown={() => handleMouseDown(label)}
+                onMouseDown={() => handleMouseDown({ label, value: val })}
               >
                 {label}
               </div>
