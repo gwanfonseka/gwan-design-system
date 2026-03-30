@@ -6,10 +6,9 @@ import Tooltip, { TOOLTIP_POSITION } from "@/components/tooltip";
 import { ChangeEvent, useState } from "react";
 
 const Tooltips = () => {
-  const [label, setLabel] = useState("This is a tooltip");
+  const [label, setLabel] = useState("This is a tooltip label");
   const [position, setPosition] = useState<string>(TOOLTIP_POSITION.TOP);
   const [isVisible, setIsVisible] = useState(true);
-  const [width, setWidth] = useState("w-60");
 
   const positionOptions = [
     { value: TOOLTIP_POSITION.TOP, label: "top" },
@@ -29,7 +28,7 @@ const Example = () => {
         position={TOOLTIP_POSITION.TOP}
         label="This is a tooltip"
         isVisible={true}
-        toolTipWidth="w-60" // optional, you can specify width using Tailwind classes
+        toolTipWidth="w-60" // optional, you can specify width using Tailwind classes, default is w-60
         toolTipClass="text-center" // optional, you can add your own styles
         className="custom-class" // optional, you can add your own styles
       />
@@ -40,7 +39,6 @@ const Example = () => {
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
-        {/* Preview */}
         <div className="flex flex-row justify-center items-center">
           <div className="relative w-fit">
             <button
@@ -55,13 +53,10 @@ const Example = () => {
               position={position as TOOLTIP_POSITION}
               label={label}
               isVisible={isVisible}
-              toolTipWidth={width}
-              toolTipClass="text-center"
             />
           </div>
         </div>
 
-        {/* Controls */}
         <div className="flex flex-row justify-center gap-4 items-center flex-wrap">
           <Input
             label="Tooltip label"
@@ -79,15 +74,6 @@ const Example = () => {
             onChange={(option) => setPosition(option)}
             className="w-64"
           />
-
-          <Input
-            label="Tooltip width (Tailwind)"
-            value={width}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setWidth(e.target.value)
-            }
-            className="w-64"
-          />
         </div>
       </div>
     );
@@ -95,7 +81,6 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Variants Preview */}
       <div className="flex flex-row justify-center gap-16 items-center">
         <div className="relative">
           <button className="px-4 py-2 border rounded-lg">Top</button>
