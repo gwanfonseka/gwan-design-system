@@ -1,59 +1,116 @@
+import CodeSnippet from "@/components/codeSnippet";
+import Input from "@/components/input";
+import Playground from "@/components/playground";
+import SelectDropdown from "@/components/selectDropdown";
 import Tooltip, { TOOLTIP_POSITION } from "@/components/tooltip";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const Tooltips = () => {
-  const [showTopTooltip, setShowTopTooltip] = useState(false);
-  const [showRightTooltip, setShowRightTooltip] = useState(false);
-  const [showBottomTooltip, setShowBottomTooltip] = useState(false);
-  const [showLeftTooltip, setShowLeftTooltip] = useState(false);
+  const [label, setLabel] = useState("This is a tooltip");
+  const [position, setPosition] = useState<string>(TOOLTIP_POSITION.TOP);
+  const [isVisible, setIsVisible] = useState(true);
+  const [width, setWidth] = useState("w-60");
 
-  const tooltipsComponents = [
-    {
-      label: "Tooltip on top",
-      position: TOOLTIP_POSITION.TOP,
-      showTooltip: showTopTooltip,
-      setShowTooltip: setShowTopTooltip,
-    },
-    {
-      label: "Tooltip on right",
-      position: TOOLTIP_POSITION.RIGHT,
-      showTooltip: showRightTooltip,
-      setShowTooltip: setShowRightTooltip,
-    },
-    {
-      label: "Tooltip on bottom",
-      position: TOOLTIP_POSITION.BOTTOM,
-      showTooltip: showBottomTooltip,
-      setShowTooltip: setShowBottomTooltip,
-    },
-    {
-      label: "Tooltip on left",
-      position: TOOLTIP_POSITION.LEFT,
-      showTooltip: showLeftTooltip,
-      setShowTooltip: setShowLeftTooltip,
-    },
+  const positionOptions = [
+    { value: TOOLTIP_POSITION.TOP, label: "top" },
+    { value: TOOLTIP_POSITION.BOTTOM, label: "bottom" },
+    { value: TOOLTIP_POSITION.LEFT, label: "left" },
+    { value: TOOLTIP_POSITION.RIGHT, label: "right" },
   ];
 
+  const codeExample = `import { Tooltip, TOOLTIP_POSITION } from "gwan-design-system";
+
+const Example = () => {
   return (
-    <div className="flex flex-row items-center justify-around pt-16">
-      {tooltipsComponents.map(
-        ({ label, position, showTooltip, setShowTooltip }, index) => (
-          <div
-            key={index}
-            className="relative border border-neutral-700 p-2 rounded-lg cursor-pointer hover:border-primary-500 hover:text-primary-500"
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-          >
-            {label}
+    <div className="relative w-fit">
+      <button className="px-4 py-2 border rounded-lg">Hover me</button>
+
+      <Tooltip
+        position={TOOLTIP_POSITION.TOP}
+        label="This is a tooltip"
+        isVisible={true}
+        toolTipWidth="w-60" // optional, you can specify width using Tailwind classes
+        toolTipClass="text-center" // optional, you can add your own styles
+        className="custom-class" // optional, you can add your own styles
+      />
+    </div>
+  );
+};`;
+
+  const renderPlayground = () => {
+    return (
+      <div className="flex flex-col gap-8">
+        {/* Preview */}
+        <div className="flex flex-row justify-center items-center">
+          <div className="relative w-fit">
+            <button
+              className="px-4 py-2 border rounded-lg"
+              onMouseEnter={() => setIsVisible(true)}
+              onMouseLeave={() => setIsVisible(false)}
+            >
+              Hover me
+            </button>
+
             <Tooltip
-              position={position}
+              position={position as TOOLTIP_POSITION}
               label={label}
-              isVisible={showTooltip}
-              toolTipWidth="w-32"
+              isVisible={isVisible}
+              toolTipWidth={width}
+              toolTipClass="text-center"
             />
           </div>
-        )
-      )}
+        </div>
+
+        {/* Controls */}
+        <div className="flex flex-row justify-center gap-4 items-center flex-wrap">
+          <Input
+            label="Tooltip label"
+            value={label}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setLabel(e.target.value)
+            }
+            className="w-64"
+          />
+
+          <SelectDropdown
+            label="Position"
+            options={positionOptions}
+            value={position}
+            onChange={(option) => setPosition(option)}
+            className="w-64"
+          />
+
+          <Input
+            label="Tooltip width (Tailwind)"
+            value={width}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setWidth(e.target.value)
+            }
+            className="w-64"
+          />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-8">
+      {/* Variants Preview */}
+      <div className="flex flex-row justify-center gap-16 items-center">
+        <div className="relative">
+          <button className="px-4 py-2 border rounded-lg">Top</button>
+          <Tooltip
+            position={TOOLTIP_POSITION.TOP}
+            label="Top tooltip"
+            isVisible={true}
+            toolTipWidth="w-32"
+            toolTipClass="text-center"
+          />
+        </div>
+      </div>
+
+      <Playground template={renderPlayground()} />
+      <CodeSnippet code={codeExample} />
     </div>
   );
 };
