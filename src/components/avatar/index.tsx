@@ -66,7 +66,11 @@ const Avatar: FC<IAvatar> = ({
   };
 
   const renderAvatarImage = () => {
-    if (image) {
+    if (
+      image &&
+      (variant === AVATAR_VARIANT.IMAGE_ONLY ||
+        variant === AVATAR_VARIANT.IMAGE_WITH_FULL)
+    ) {
       return (
         <div
           className="relative"
@@ -106,9 +110,9 @@ const Avatar: FC<IAvatar> = ({
         <div className="w-[55px] h-[55px] rounded-full bg-neutral-400"></div>
         {(variant === AVATAR_VARIANT.IMAGE_WITH_FULL ||
           variant === AVATAR_VARIANT.INITIALS_WITH_FULL) && (
-          <div className="flex flex-col gap-2 flex-1">
-            <div className="w-full h-6 bg-neutral-400 rounded-lg"></div>
-            <div className="w-[70%] h-4 bg-neutral-400 rounded-lg"></div>
+          <div className="flex flex-col gap-2">
+            <div className="w-32 h-6 bg-neutral-400 rounded-lg"></div>
+            <div className="w-24 h-4 bg-neutral-400 rounded-lg"></div>
           </div>
         )}
       </div>
