@@ -29,10 +29,10 @@ const Example = () => {
     <Avatar
       name="Nimesh Fonseka"
       email="nimesh@email.com"
-      image="/images/avatar.png" // optional
+      image="/images/avatar.png" // optional, you can provide an image URL or omit it to use initials
       variant={AVATAR_VARIANT.IMAGE_WITH_FULL}
-      isLoading={false} // optional
-      className="custom-class" // optional
+      isLoading={false} // optional, default is false
+      className="custom-class" // optional, you can add your own styles
     />
   );
 };`;
