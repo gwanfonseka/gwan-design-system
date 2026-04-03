@@ -6,7 +6,7 @@ const FileUploaders = () => {
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      <div className="w-[600px]">
+      <div className="w-full max-w-150">
         <FileUploader
           title="Upload your documents here"
           subTitle1="Please make sure the image is in better quality"

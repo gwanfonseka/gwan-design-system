@@ -133,7 +133,7 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row gap-8 items-center justify-center">
+      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
         <Button
           variant={BUTTON_VARIANTS.PRIMARY}
           label="Primary"

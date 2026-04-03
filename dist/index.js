@@ -208,7 +208,7 @@ var Avatar = ({
     );
   };
   const renderAvatarImage = () => {
-    if (image) {
+    if (image && (variant === "image-only" /* IMAGE_ONLY */ || variant === "image_with_full" /* IMAGE_WITH_FULL */)) {
       return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
         "div",
         {
@@ -248,9 +248,9 @@ var Avatar = ({
   if (isLoading) {
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-row items-center gap-2 pl-[5px] animate-pulse", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-[55px] h-[55px] rounded-full bg-neutral-400" }),
-      (variant === "image_with_full" /* IMAGE_WITH_FULL */ || variant === "initials_with_full" /* INITIALS_WITH_FULL */) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-col gap-2 flex-1", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-full h-6 bg-neutral-400 rounded-lg" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-[70%] h-4 bg-neutral-400 rounded-lg" })
+      (variant === "image_with_full" /* IMAGE_WITH_FULL */ || variant === "initials_with_full" /* INITIALS_WITH_FULL */) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-col gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-32 h-6 bg-neutral-400 rounded-lg" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "w-24 h-4 bg-neutral-400 rounded-lg" })
       ] })
     ] });
   }
@@ -258,7 +258,7 @@ var Avatar = ({
     renderAvatarImage(),
     (variant === "image_with_full" /* IMAGE_WITH_FULL */ || variant === "initials_with_full" /* INITIALS_WITH_FULL */) && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex flex-col", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-base font-semibold", children: name }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-sm text-neutral-700", children: email })
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-sm text-muted-fg", children: email })
     ] })
   ] });
 };
@@ -317,31 +317,44 @@ var Button = ({
   variant = "primary" /* PRIMARY */,
   label,
   onClick,
-  icon,
+  leftIcon,
+  rightIcon,
   type = "button",
   disabled = false,
-  className = ""
+  className = "",
+  edges = "rounded" /* ROUNDED */
 }) => {
   const getButtonVariant = (variant2) => {
     switch (variant2) {
       case "primary" /* PRIMARY */:
-        return disabled ? "bg-neutral-300 text-neutral-800 cursor-not-allowed" : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
+        return disabled ? "bg-primary-200 text-primary-500 cursor-not-allowed" : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
       case "secondary" /* SECONDARY */:
-        return disabled ? "bg-neutral-100 text-neutral-800 cursor-not-allowed" : "bg-neutral-50 text-primary-700 hover:bg-primary-50 active:bg-primary-100";
+        return disabled ? "bg-neutral-100 text-neutral-800 cursor-not-allowed" : "bg-primary-100 text-primary-800 cursor-pointer hover:bg-primary-200 active:bg-primary-300";
       case "tertiary" /* TERTIARY */:
-        return disabled ? "text-neutral-300 border border-neutral-300 cursor-not-allowed" : "bg-transparent text-primary-500 border border-primary-500 hover:bg-neutral-50 active:bg-neutral-100";
+        return disabled ? "text-neutral-300 border border-neutral-300 cursor-not-allowed" : "bg-transparent text-primary-500 border border-primary-500 cursor-pointer hover:bg-neutral-50 active:bg-neutral-100";
+    }
+  };
+  const getEdgesStyle = (edges2) => {
+    switch (edges2) {
+      case "squared" /* SQUARED */:
+        return "rounded-none";
+      case "pill" /* PILL */:
+        return "rounded-full";
+      default:
+        return "rounded-lg";
     }
   };
   return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
     "button",
     {
-      className: `${getButtonVariant(variant)} px-4 ${label ? "py-2" : "py-4"} rounded-lg ${className}`,
+      className: `${getButtonVariant(variant)} px-4 ${label ? "py-2" : "py-4"} ${getEdgesStyle(edges)} ${className}`,
       type,
       onClick,
       disabled,
       children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex flex-row gap-2 items-center", children: [
-        icon && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "size-5", children: icon }),
-        label && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: label })
+        leftIcon && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "size-5", children: leftIcon }),
+        label && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: label }),
+        rightIcon && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "size-5", children: rightIcon })
       ] })
     }
   );
@@ -363,7 +376,7 @@ var Carousel = ({
     }, interval);
     return () => clearInterval(timer);
   }, [slides.length, interval]);
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: `relative w-full h-[484px] overflow-hidden ${className}`, children: slides.map(
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: `relative w-full h-121 overflow-hidden ${className}`, children: slides.map(
     ({
       title,
       titleClassName,
@@ -397,12 +410,12 @@ var Carousel = ({
 };
 var carousel_default = Carousel;
 
-// src/components/checkbox/index.tsx
-var import_react3 = require("react");
-
 // src/components/icons/index.tsx
 var icons_exports = {};
 __export(icons_exports, {
+  AddCircularSVG: () => AddCircular,
+  AddSVG: () => Add,
+  AddSquaredSVG: () => AddSquared,
   AlienFaceSVG: () => AlienFace,
   AlienUserSVG: () => AlienUser,
   ArrowLeftSVG: () => ArrowLeft,
@@ -438,6 +451,7 @@ __export(icons_exports, {
   CoinsSVG: () => Coins,
   ColorsSVG: () => Colors,
   ConnectionSVG: () => Connection,
+  CopySVG: () => Copy,
   CoversSVG: () => Covers,
   CowSVG: () => Cow,
   CrabSVG: () => Crab,
@@ -500,6 +514,7 @@ __export(icons_exports, {
   TemplatesSVG: () => Templates,
   TerminalSVG: () => Terminal,
   ToDoSVG: () => ToDo,
+  TrashSVG: () => Trash,
   TurtleSVG: () => Turtle,
   UfoSVG: () => Ufo,
   UnlockSVG: () => Unlock,
@@ -673,10 +688,52 @@ var ChevDown = () => {
   ) });
 };
 
-// src/components/icons/crossSVG/index.tsx
+// src/components/icons/addSVG/index.tsx
 var import_jsx_runtime16 = require("react/jsx-runtime");
+var Add = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M24,12c0,.276-.224,.5-.5,.5H12.5v11c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5V12.5H.5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5H11.5V.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5V11.5h11c.276,0,.5,.224,.5,.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/addSquaredSVG/index.tsx
+var import_jsx_runtime17 = require("react/jsx-runtime");
+var AddSquared = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M17,12c0,.276-.224,.5-.5,.5h-4v4c0,.276-.224,.5-.5,.5s-.5-.224-.5-.5v-4H7.5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h4V7.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5v4h4c.276,0,.5,.224,.5,.5Zm7-7.5v15c0,2.481-2.019,4.5-4.5,4.5H4.5c-2.481,0-4.5-2.019-4.5-4.5V4.5C0,2.019,2.019,0,4.5,0h15c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5H4.5c-1.93,0-3.5,1.57-3.5,3.5v15c0,1.93,1.57,3.5,3.5,3.5h15c1.93,0,3.5-1.57,3.5-3.5V4.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/addCircularSVG/index.tsx
+var import_jsx_runtime18 = require("react/jsx-runtime");
+var AddCircular = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm0,23c-6.065,0-11-4.935-11-11S5.935,1,12,1s11,4.935,11,11-4.935,11-11,11Zm5-11c0,.276-.224.5-.5.5h-4v4c0,.276-.224.5-.5.5s-.5-.224-.5-.5v-4h-4c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h4v-4c0-.276.224-.5.5-.5s.5.224.5.5v4h4c.276,0,.5.224.5.5Z"
+    }
+  ) });
+};
+
+// src/components/icons/crossSVG/index.tsx
+var import_jsx_runtime19 = require("react/jsx-runtime");
 var Cross = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-150 -150 800 800", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("g", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-150 -150 800 800", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("g", { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -688,10 +745,10 @@ var Cross = () => {
 };
 
 // src/components/icons/orderInfoSVG/index.tsx
-var import_jsx_runtime17 = require("react/jsx-runtime");
+var import_jsx_runtime20 = require("react/jsx-runtime");
 var OrderInfo = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("g", { clipPath: "url(#clip0_907_32)", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("g", { clipPath: "url(#clip0_907_32)", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -700,14 +757,14 @@ var OrderInfo = () => {
         fill: "currentColor"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("clipPath", { id: "clip0_907_32", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("clipPath", { id: "clip0_907_32", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("rect", { width: "30", height: "30", fill: "currentColor" }) }) })
   ] });
 };
 
 // src/components/icons/chevLeftSVG/index.tsx
-var import_jsx_runtime18 = require("react/jsx-runtime");
+var import_jsx_runtime21 = require("react/jsx-runtime");
 var ChevLeft = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -719,9 +776,9 @@ var ChevLeft = () => {
 };
 
 // src/components/icons/chevRightSVG/index.tsx
-var import_jsx_runtime19 = require("react/jsx-runtime");
+var import_jsx_runtime22 = require("react/jsx-runtime");
 var ChevRight = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -733,9 +790,9 @@ var ChevRight = () => {
 };
 
 // src/components/icons/chevUpSVG/index.tsx
-var import_jsx_runtime20 = require("react/jsx-runtime");
+var import_jsx_runtime23 = require("react/jsx-runtime");
 var ChevUp = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -747,16 +804,16 @@ var ChevUp = () => {
 };
 
 // src/components/icons/checkSVG/index.tsx
-var import_jsx_runtime21 = require("react/jsx-runtime");
+var import_jsx_runtime24 = require("react/jsx-runtime");
 var Check = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
     "svg",
     {
       viewBox: "0 0 256 256",
       stroke: "currentColor",
       strokeWidth: "4",
       xmlns: "http://www.w3.org/2000/svg",
-      children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
         "path",
         {
           fillRule: "evenodd",
@@ -770,9 +827,9 @@ var Check = () => {
 };
 
 // src/components/icons/circleSVG/index.tsx
-var import_jsx_runtime22 = require("react/jsx-runtime");
+var import_jsx_runtime25 = require("react/jsx-runtime");
 var Circle = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-3 -3 30 30", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "-3 -3 30 30", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -784,10 +841,10 @@ var Circle = () => {
 };
 
 // src/components/icons/uploadSVG/index.tsx
-var import_jsx_runtime23 = require("react/jsx-runtime");
+var import_jsx_runtime26 = require("react/jsx-runtime");
 var Upload = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("svg", { viewBox: "0 0 53 53", xmlns: "http://www.w3.org/2000/svg", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("g", { clipPath: "url(#clip0_859_45)", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("svg", { viewBox: "0 0 53 53", xmlns: "http://www.w3.org/2000/svg", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("g", { clipPath: "url(#clip0_859_45)", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -796,14 +853,14 @@ var Upload = () => {
         fill: "currentColor"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("clipPath", { id: "clip0_859_45", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("rect", { width: "53", height: "53", fill: "currentColor" }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("clipPath", { id: "clip0_859_45", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("rect", { width: "53", height: "53", fill: "currentColor" }) }) })
   ] });
 };
 
 // src/components/icons/arrowLeftSVG/index.tsx
-var import_jsx_runtime24 = require("react/jsx-runtime");
+var import_jsx_runtime27 = require("react/jsx-runtime");
 var ArrowLeft = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("svg", { viewBox: "0 0 30 30", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -815,9 +872,9 @@ var ArrowLeft = () => {
 };
 
 // src/components/icons/arrowRightSVG/index.tsx
-var import_jsx_runtime25 = require("react/jsx-runtime");
+var import_jsx_runtime28 = require("react/jsx-runtime");
 var ArrowRight = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -829,9 +886,9 @@ var ArrowRight = () => {
 };
 
 // src/components/icons/alienFaceSVG/index.tsx
-var import_jsx_runtime26 = require("react/jsx-runtime");
+var import_jsx_runtime29 = require("react/jsx-runtime");
 var AlienFace = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -843,9 +900,9 @@ var AlienFace = () => {
 };
 
 // src/components/icons/NewTabSVGG/index.tsx
-var import_jsx_runtime27 = require("react/jsx-runtime");
+var import_jsx_runtime30 = require("react/jsx-runtime");
 var NewTab = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -857,9 +914,9 @@ var NewTab = () => {
 };
 
 // src/components/icons/percentageSVG/index.tsx
-var import_jsx_runtime28 = require("react/jsx-runtime");
+var import_jsx_runtime31 = require("react/jsx-runtime");
 var Percentage = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -871,9 +928,9 @@ var Percentage = () => {
 };
 
 // src/components/icons/balloonsSVG/index.tsx
-var import_jsx_runtime29 = require("react/jsx-runtime");
+var import_jsx_runtime32 = require("react/jsx-runtime");
 var Balloons = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -885,9 +942,9 @@ var Balloons = () => {
 };
 
 // src/components/icons/toDoSVG/index.tsx
-var import_jsx_runtime30 = require("react/jsx-runtime");
+var import_jsx_runtime33 = require("react/jsx-runtime");
 var ToDo = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -899,9 +956,9 @@ var ToDo = () => {
 };
 
 // src/components/icons/basketSVG/index.tsx
-var import_jsx_runtime31 = require("react/jsx-runtime");
+var import_jsx_runtime34 = require("react/jsx-runtime");
 var Basket = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -913,9 +970,9 @@ var Basket = () => {
 };
 
 // src/components/icons/batSVG/index.tsx
-var import_jsx_runtime32 = require("react/jsx-runtime");
+var import_jsx_runtime35 = require("react/jsx-runtime");
 var Bat = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -927,9 +984,9 @@ var Bat = () => {
 };
 
 // src/components/icons/batterySVG/index.tsx
-var import_jsx_runtime33 = require("react/jsx-runtime");
+var import_jsx_runtime36 = require("react/jsx-runtime");
 var Battery = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -941,9 +998,9 @@ var Battery = () => {
 };
 
 // src/components/icons/beeSVG/index.tsx
-var import_jsx_runtime34 = require("react/jsx-runtime");
+var import_jsx_runtime37 = require("react/jsx-runtime");
 var Bee = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -955,9 +1012,9 @@ var Bee = () => {
 };
 
 // src/components/icons/binocularSVG/index.tsx
-var import_jsx_runtime35 = require("react/jsx-runtime");
+var import_jsx_runtime38 = require("react/jsx-runtime");
 var Binocular = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -969,9 +1026,9 @@ var Binocular = () => {
 };
 
 // src/components/icons/birdSVG/index.tsx
-var import_jsx_runtime36 = require("react/jsx-runtime");
+var import_jsx_runtime39 = require("react/jsx-runtime");
 var Bird = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -983,9 +1040,9 @@ var Bird = () => {
 };
 
 // src/components/icons/printerSVG/index.tsx
-var import_jsx_runtime37 = require("react/jsx-runtime");
+var import_jsx_runtime40 = require("react/jsx-runtime");
 var Printer = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -997,9 +1054,9 @@ var Printer = () => {
 };
 
 // src/components/icons/boxFilledSVG/index.tsx
-var import_jsx_runtime38 = require("react/jsx-runtime");
+var import_jsx_runtime41 = require("react/jsx-runtime");
 var BoxFilled = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1011,9 +1068,9 @@ var BoxFilled = () => {
 };
 
 // src/components/icons/brainSVG/index.tsx
-var import_jsx_runtime39 = require("react/jsx-runtime");
+var import_jsx_runtime42 = require("react/jsx-runtime");
 var Brain = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1025,9 +1082,9 @@ var Brain = () => {
 };
 
 // src/components/icons/brightLowSVG/index.tsx
-var import_jsx_runtime40 = require("react/jsx-runtime");
+var import_jsx_runtime43 = require("react/jsx-runtime");
 var BrightLow = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1039,9 +1096,9 @@ var BrightLow = () => {
 };
 
 // src/components/icons/brightHighSVG/index.tsx
-var import_jsx_runtime41 = require("react/jsx-runtime");
+var import_jsx_runtime44 = require("react/jsx-runtime");
 var BrightHigh = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1053,9 +1110,9 @@ var BrightHigh = () => {
 };
 
 // src/components/icons/cabinSVG/index.tsx
-var import_jsx_runtime42 = require("react/jsx-runtime");
+var import_jsx_runtime45 = require("react/jsx-runtime");
 var Cabin = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1067,9 +1124,9 @@ var Cabin = () => {
 };
 
 // src/components/icons/cakeSVG/index.tsx
-var import_jsx_runtime43 = require("react/jsx-runtime");
+var import_jsx_runtime46 = require("react/jsx-runtime");
 var Cake = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1081,9 +1138,9 @@ var Cake = () => {
 };
 
 // src/components/icons/chartSVG/index.tsx
-var import_jsx_runtime44 = require("react/jsx-runtime");
+var import_jsx_runtime47 = require("react/jsx-runtime");
 var Chart = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1095,9 +1152,9 @@ var Chart = () => {
 };
 
 // src/components/icons/citySVG/index.tsx
-var import_jsx_runtime45 = require("react/jsx-runtime");
+var import_jsx_runtime48 = require("react/jsx-runtime");
 var City = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1109,9 +1166,9 @@ var City = () => {
 };
 
 // src/components/icons/clockSVG/index.tsx
-var import_jsx_runtime46 = require("react/jsx-runtime");
+var import_jsx_runtime49 = require("react/jsx-runtime");
 var Clock = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1123,9 +1180,9 @@ var Clock = () => {
 };
 
 // src/components/icons/codeSVG/index.tsx
-var import_jsx_runtime47 = require("react/jsx-runtime");
+var import_jsx_runtime50 = require("react/jsx-runtime");
 var Code = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1137,9 +1194,9 @@ var Code = () => {
 };
 
 // src/components/icons/coinsSVG/index.tsx
-var import_jsx_runtime48 = require("react/jsx-runtime");
+var import_jsx_runtime51 = require("react/jsx-runtime");
 var Coins = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1151,9 +1208,9 @@ var Coins = () => {
 };
 
 // src/components/icons/cowSVG/index.tsx
-var import_jsx_runtime49 = require("react/jsx-runtime");
+var import_jsx_runtime52 = require("react/jsx-runtime");
 var Cow = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1165,9 +1222,9 @@ var Cow = () => {
 };
 
 // src/components/icons/crabSVG/index.tsx
-var import_jsx_runtime50 = require("react/jsx-runtime");
+var import_jsx_runtime53 = require("react/jsx-runtime");
 var Crab = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1179,9 +1236,9 @@ var Crab = () => {
 };
 
 // src/components/icons/diceSVG/index.tsx
-var import_jsx_runtime51 = require("react/jsx-runtime");
+var import_jsx_runtime54 = require("react/jsx-runtime");
 var Dice = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1193,9 +1250,9 @@ var Dice = () => {
 };
 
 // src/components/icons/dolphinSVG/index.tsx
-var import_jsx_runtime52 = require("react/jsx-runtime");
+var import_jsx_runtime55 = require("react/jsx-runtime");
 var Dolphin = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1207,9 +1264,9 @@ var Dolphin = () => {
 };
 
 // src/components/icons/doorOpenSVG/index.tsx
-var import_jsx_runtime53 = require("react/jsx-runtime");
+var import_jsx_runtime56 = require("react/jsx-runtime");
 var DoorOpen = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1221,9 +1278,9 @@ var DoorOpen = () => {
 };
 
 // src/components/icons/cocktailSVG/index.tsx
-var import_jsx_runtime54 = require("react/jsx-runtime");
+var import_jsx_runtime57 = require("react/jsx-runtime");
 var Cocktail = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1235,9 +1292,9 @@ var Cocktail = () => {
 };
 
 // src/components/icons/elephantSVG/index.tsx
-var import_jsx_runtime55 = require("react/jsx-runtime");
+var import_jsx_runtime58 = require("react/jsx-runtime");
 var Elephant = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1249,9 +1306,9 @@ var Elephant = () => {
 };
 
 // src/components/icons/balanceSVG/index.tsx
-var import_jsx_runtime56 = require("react/jsx-runtime");
+var import_jsx_runtime59 = require("react/jsx-runtime");
 var Balance = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1263,9 +1320,9 @@ var Balance = () => {
 };
 
 // src/components/icons/fenceSVG/index.tsx
-var import_jsx_runtime57 = require("react/jsx-runtime");
+var import_jsx_runtime60 = require("react/jsx-runtime");
 var Fence = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1277,9 +1334,9 @@ var Fence = () => {
 };
 
 // src/components/icons/csvSVG/index.tsx
-var import_jsx_runtime58 = require("react/jsx-runtime");
+var import_jsx_runtime61 = require("react/jsx-runtime");
 var Csv = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1291,9 +1348,9 @@ var Csv = () => {
 };
 
 // src/components/icons/editSVG/index.tsx
-var import_jsx_runtime59 = require("react/jsx-runtime");
+var import_jsx_runtime62 = require("react/jsx-runtime");
 var Edit = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1305,9 +1362,9 @@ var Edit = () => {
 };
 
 // src/components/icons/pdfSVG/index.tsx
-var import_jsx_runtime60 = require("react/jsx-runtime");
+var import_jsx_runtime63 = require("react/jsx-runtime");
 var Pdf = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1319,9 +1376,9 @@ var Pdf = () => {
 };
 
 // src/components/icons/filtersSVG/index.tsx
-var import_jsx_runtime61 = require("react/jsx-runtime");
+var import_jsx_runtime64 = require("react/jsx-runtime");
 var Filters = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1333,9 +1390,9 @@ var Filters = () => {
 };
 
 // src/components/icons/downFolderSVG/index.tsx
-var import_jsx_runtime62 = require("react/jsx-runtime");
+var import_jsx_runtime65 = require("react/jsx-runtime");
 var DownFolder = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1347,9 +1404,9 @@ var DownFolder = () => {
 };
 
 // src/components/icons/upFolderSVG/index.tsx
-var import_jsx_runtime63 = require("react/jsx-runtime");
+var import_jsx_runtime66 = require("react/jsx-runtime");
 var UpFolder = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1361,9 +1418,9 @@ var UpFolder = () => {
 };
 
 // src/components/icons/foxSVG/index.tsx
-var import_jsx_runtime64 = require("react/jsx-runtime");
+var import_jsx_runtime67 = require("react/jsx-runtime");
 var Fox = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1375,9 +1432,9 @@ var Fox = () => {
 };
 
 // src/components/icons/joystickSVG/index.tsx
-var import_jsx_runtime65 = require("react/jsx-runtime");
+var import_jsx_runtime68 = require("react/jsx-runtime");
 var Joystick = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1389,9 +1446,9 @@ var Joystick = () => {
 };
 
 // src/components/icons/ghostSVG/index.tsx
-var import_jsx_runtime66 = require("react/jsx-runtime");
+var import_jsx_runtime69 = require("react/jsx-runtime");
 var Ghost = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1403,9 +1460,9 @@ var Ghost = () => {
 };
 
 // src/components/icons/imageSVG/index.tsx
-var import_jsx_runtime67 = require("react/jsx-runtime");
+var import_jsx_runtime70 = require("react/jsx-runtime");
 var Image2 = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1417,9 +1474,9 @@ var Image2 = () => {
 };
 
 // src/components/icons/helicopterSVG/index.tsx
-var import_jsx_runtime68 = require("react/jsx-runtime");
+var import_jsx_runtime71 = require("react/jsx-runtime");
 var Helicopter = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1431,9 +1488,9 @@ var Helicopter = () => {
 };
 
 // src/components/icons/hospitalSVG/index.tsx
-var import_jsx_runtime69 = require("react/jsx-runtime");
+var import_jsx_runtime72 = require("react/jsx-runtime");
 var Hospital = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1445,9 +1502,9 @@ var Hospital = () => {
 };
 
 // src/components/icons/downloadSVG/index.tsx
-var import_jsx_runtime70 = require("react/jsx-runtime");
+var import_jsx_runtime73 = require("react/jsx-runtime");
 var Download = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1459,9 +1516,9 @@ var Download = () => {
 };
 
 // src/components/icons/lightSVG/index.tsx
-var import_jsx_runtime71 = require("react/jsx-runtime");
+var import_jsx_runtime74 = require("react/jsx-runtime");
 var Light = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1473,9 +1530,9 @@ var Light = () => {
 };
 
 // src/components/icons/lionSVG/index.tsx
-var import_jsx_runtime72 = require("react/jsx-runtime");
+var import_jsx_runtime75 = require("react/jsx-runtime");
 var Lion = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1487,9 +1544,9 @@ var Lion = () => {
 };
 
 // src/components/icons/lobsterSVG/index.tsx
-var import_jsx_runtime73 = require("react/jsx-runtime");
+var import_jsx_runtime76 = require("react/jsx-runtime");
 var Lobster = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1501,9 +1558,9 @@ var Lobster = () => {
 };
 
 // src/components/icons/lockSVG/index.tsx
-var import_jsx_runtime74 = require("react/jsx-runtime");
+var import_jsx_runtime77 = require("react/jsx-runtime");
 var Lock = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1515,9 +1572,9 @@ var Lock = () => {
 };
 
 // src/components/icons/pinSVG/index.tsx
-var import_jsx_runtime75 = require("react/jsx-runtime");
+var import_jsx_runtime78 = require("react/jsx-runtime");
 var Pin = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime78.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1529,10 +1586,10 @@ var Pin = () => {
 };
 
 // src/components/icons/mobileSVG/index.tsx
-var import_jsx_runtime76 = require("react/jsx-runtime");
+var import_jsx_runtime79 = require("react/jsx-runtime");
 var Mobile = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -1541,7 +1598,7 @@ var Mobile = () => {
         d: "M15.5,0h-7c-2.481,0-4.5,2.019-4.5,4.5v15c0,2.481,2.019,4.5,4.5,4.5h7c2.481,0,4.5-2.019,4.5-4.5V4.5c0-2.481-2.019-4.5-4.5-4.5Zm-.693,1l-.325,.974c-.205,.614-.777,1.026-1.423,1.026h-2.117c-.646,0-1.218-.412-1.423-1.026l-.325-.974h5.613Zm4.193,18.5c0,1.93-1.57,3.5-3.5,3.5h-7c-1.93,0-3.5-1.57-3.5-3.5V4.5c0-1.81,1.387-3.287,3.151-3.465l.418,1.255c.341,1.022,1.294,1.709,2.372,1.709h2.117c1.078,0,2.031-.687,2.372-1.709l.418-1.255c1.764,.178,3.151,1.654,3.151,3.465v15Z"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -1554,9 +1611,9 @@ var Mobile = () => {
 };
 
 // src/components/icons/moneySVG/index.tsx
-var import_jsx_runtime77 = require("react/jsx-runtime");
+var import_jsx_runtime80 = require("react/jsx-runtime");
 var Money = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1568,9 +1625,9 @@ var Money = () => {
 };
 
 // src/components/icons/monkeySVG/index.tsx
-var import_jsx_runtime78 = require("react/jsx-runtime");
+var import_jsx_runtime81 = require("react/jsx-runtime");
 var Monkey = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime78.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1582,9 +1639,9 @@ var Monkey = () => {
 };
 
 // src/components/icons/planeSVG/index.tsx
-var import_jsx_runtime79 = require("react/jsx-runtime");
+var import_jsx_runtime82 = require("react/jsx-runtime");
 var Plane = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1596,9 +1653,9 @@ var Plane = () => {
 };
 
 // src/components/icons/radioSVG/index.tsx
-var import_jsx_runtime80 = require("react/jsx-runtime");
+var import_jsx_runtime83 = require("react/jsx-runtime");
 var Radio = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime83.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1610,9 +1667,9 @@ var Radio = () => {
 };
 
 // src/components/icons/sheepSVG/index.tsx
-var import_jsx_runtime81 = require("react/jsx-runtime");
+var import_jsx_runtime84 = require("react/jsx-runtime");
 var Sheep = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1624,9 +1681,9 @@ var Sheep = () => {
 };
 
 // src/components/icons/rocketSVG/index.tsx
-var import_jsx_runtime82 = require("react/jsx-runtime");
+var import_jsx_runtime85 = require("react/jsx-runtime");
 var Rocket = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime85.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime85.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1638,9 +1695,9 @@ var Rocket = () => {
 };
 
 // src/components/icons/moneyBagSVG/index.tsx
-var import_jsx_runtime83 = require("react/jsx-runtime");
+var import_jsx_runtime86 = require("react/jsx-runtime");
 var MoneyBag = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime83.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime86.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1652,9 +1709,9 @@ var MoneyBag = () => {
 };
 
 // src/components/icons/stepsSVG/index.tsx
-var import_jsx_runtime84 = require("react/jsx-runtime");
+var import_jsx_runtime87 = require("react/jsx-runtime");
 var Steps = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime87.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1666,9 +1723,9 @@ var Steps = () => {
 };
 
 // src/components/icons/bucketSVG/index.tsx
-var import_jsx_runtime85 = require("react/jsx-runtime");
+var import_jsx_runtime88 = require("react/jsx-runtime");
 var Bucket = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime85.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime85.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime88.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1680,9 +1737,9 @@ var Bucket = () => {
 };
 
 // src/components/icons/vanSVG/index.tsx
-var import_jsx_runtime86 = require("react/jsx-runtime");
+var import_jsx_runtime89 = require("react/jsx-runtime");
 var Van = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime86.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime89.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1694,9 +1751,9 @@ var Van = () => {
 };
 
 // src/components/icons/signalSVG/index.tsx
-var import_jsx_runtime87 = require("react/jsx-runtime");
+var import_jsx_runtime90 = require("react/jsx-runtime");
 var Signal = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime87.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime90.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1708,9 +1765,9 @@ var Signal = () => {
 };
 
 // src/components/icons/connectionSVG/index.tsx
-var import_jsx_runtime88 = require("react/jsx-runtime");
+var import_jsx_runtime91 = require("react/jsx-runtime");
 var Connection = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime88.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime91.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime91.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1722,9 +1779,9 @@ var Connection = () => {
 };
 
 // src/components/icons/sirenSVG/index.tsx
-var import_jsx_runtime89 = require("react/jsx-runtime");
+var import_jsx_runtime92 = require("react/jsx-runtime");
 var Siren = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime89.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime92.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1736,9 +1793,9 @@ var Siren = () => {
 };
 
 // src/components/icons/snakeSVG/index.tsx
-var import_jsx_runtime90 = require("react/jsx-runtime");
+var import_jsx_runtime93 = require("react/jsx-runtime");
 var Snake = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime90.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime93.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1750,9 +1807,9 @@ var Snake = () => {
 };
 
 // src/components/icons/sortSVG/index.tsx
-var import_jsx_runtime91 = require("react/jsx-runtime");
+var import_jsx_runtime94 = require("react/jsx-runtime");
 var Sort = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime91.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime91.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1764,9 +1821,9 @@ var Sort = () => {
 };
 
 // src/components/icons/shuttleSVG/index.tsx
-var import_jsx_runtime92 = require("react/jsx-runtime");
+var import_jsx_runtime95 = require("react/jsx-runtime");
 var Shuttle = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime92.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime95.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1778,10 +1835,10 @@ var Shuttle = () => {
 };
 
 // src/components/icons/starsSVG/index.tsx
-var import_jsx_runtime93 = require("react/jsx-runtime");
+var import_jsx_runtime96 = require("react/jsx-runtime");
 var Stars = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime96.jsxs)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -1790,7 +1847,7 @@ var Stars = () => {
         d: "M19.333,2.94l1.27,.449,.423,1.269c.068,.204,.26,.342,.475,.342s.406-.138,.475-.342l.421-1.263,1.263-.421c.204-.068,.342-.259,.342-.474s-.138-.406-.342-.474l-1.263-.421-.421-1.263c-.137-.408-.812-.408-.949,0l-.419,1.257-1.256,.393c-.205,.064-.347,.252-.351,.468s.13,.409,.333,.48Z"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -1799,7 +1856,7 @@ var Stars = () => {
         d: "M23.686,19.036l-2.658-1.063-1.063-2.658c-.15-.38-.777-.38-.928,0l-1.062,2.653-2.651,1.003c-.191,.073-.319,.254-.323,.458s.117,.391,.306,.47l2.665,1.123,1.065,2.663c.075,.19,.26,.314,.464,.314s.389-.125,.464-.314l1.063-2.658,2.658-1.063c.19-.076,.314-.26,.314-.464s-.124-.388-.314-.464Zm-3.229,1.143c-.127,.051-.228,.152-.278,.279l-.679,1.696-.679-1.696c-.049-.124-.146-.223-.27-.275l-1.705-.719,1.688-.639c.131-.05,.235-.152,.287-.282l.679-1.696,.679,1.696c.051,.127,.151,.228,.278,.279l1.696,.679-1.696,.679Z"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
       "path",
       {
         fillRule: "evenodd",
@@ -1812,9 +1869,9 @@ var Stars = () => {
 };
 
 // src/components/icons/terminalSVG/index.tsx
-var import_jsx_runtime94 = require("react/jsx-runtime");
+var import_jsx_runtime97 = require("react/jsx-runtime");
 var Terminal = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime97.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1826,9 +1883,9 @@ var Terminal = () => {
 };
 
 // src/components/icons/storeSVG/index.tsx
-var import_jsx_runtime95 = require("react/jsx-runtime");
+var import_jsx_runtime98 = require("react/jsx-runtime");
 var Store = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime95.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime98.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1840,9 +1897,9 @@ var Store = () => {
 };
 
 // src/components/icons/suitcaseSVG/index.tsx
-var import_jsx_runtime96 = require("react/jsx-runtime");
+var import_jsx_runtime99 = require("react/jsx-runtime");
 var Suitcase = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime96.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime99.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1854,9 +1911,9 @@ var Suitcase = () => {
 };
 
 // src/components/icons/tagsSVG/index.tsx
-var import_jsx_runtime97 = require("react/jsx-runtime");
+var import_jsx_runtime100 = require("react/jsx-runtime");
 var Tags = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime97.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime100.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1868,9 +1925,9 @@ var Tags = () => {
 };
 
 // src/components/icons/masksSVG/index.tsx
-var import_jsx_runtime98 = require("react/jsx-runtime");
+var import_jsx_runtime101 = require("react/jsx-runtime");
 var Masks = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime98.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime101.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1881,10 +1938,24 @@ var Masks = () => {
   ) });
 };
 
+// src/components/icons/trashSVG/index.tsx
+var import_jsx_runtime102 = require("react/jsx-runtime");
+var Trash = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "M22,4h-5V2c0-1.103-.897-2-2-2h-6c-1.103,0-2,.897-2,2v2H2v1h2V21.5c0,1.378,1.121,2.5,2.5,2.5h11c1.379,0,2.5-1.122,2.5-2.5V5h2v-1ZM8,2c0-.551,.448-1,1-1h6c.552,0,1,.449,1,1v2H8V2Zm11,19.5c0,.827-.673,1.5-1.5,1.5H6.5c-.827,0-1.5-.673-1.5-1.5V5h14V21.5Zm-9-3.5h-1V10h1v8Zm5,0h-1V10h1v8Z"
+    }
+  ) });
+};
+
 // src/components/icons/turtleSVG/index.tsx
-var import_jsx_runtime99 = require("react/jsx-runtime");
+var import_jsx_runtime103 = require("react/jsx-runtime");
 var Turtle = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime99.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime103.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1896,9 +1967,9 @@ var Turtle = () => {
 };
 
 // src/components/icons/ufoSVG/index.tsx
-var import_jsx_runtime100 = require("react/jsx-runtime");
+var import_jsx_runtime104 = require("react/jsx-runtime");
 var Ufo = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime100.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1910,9 +1981,9 @@ var Ufo = () => {
 };
 
 // src/components/icons/unlockSVG/index.tsx
-var import_jsx_runtime101 = require("react/jsx-runtime");
+var import_jsx_runtime105 = require("react/jsx-runtime");
 var Unlock = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime101.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1924,9 +1995,9 @@ var Unlock = () => {
 };
 
 // src/components/icons/coinSVG/index.tsx
-var import_jsx_runtime102 = require("react/jsx-runtime");
+var import_jsx_runtime106 = require("react/jsx-runtime");
 var Coin = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime106.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1938,9 +2009,9 @@ var Coin = () => {
 };
 
 // src/components/icons/alienUserSVG/index.tsx
-var import_jsx_runtime103 = require("react/jsx-runtime");
+var import_jsx_runtime107 = require("react/jsx-runtime");
 var AlienUser = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime103.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime107.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1952,9 +2023,9 @@ var AlienUser = () => {
 };
 
 // src/components/icons/astronautSVG/index.tsx
-var import_jsx_runtime104 = require("react/jsx-runtime");
+var import_jsx_runtime108 = require("react/jsx-runtime");
 var Astronaut = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime108.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1966,9 +2037,9 @@ var Astronaut = () => {
 };
 
 // src/components/icons/robotSVG/index.tsx
-var import_jsx_runtime105 = require("react/jsx-runtime");
+var import_jsx_runtime109 = require("react/jsx-runtime");
 var Robot = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime109.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1980,9 +2051,9 @@ var Robot = () => {
 };
 
 // src/components/icons/videoCamSVG/index.tsx
-var import_jsx_runtime106 = require("react/jsx-runtime");
+var import_jsx_runtime110 = require("react/jsx-runtime");
 var VideoCam = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime106.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime110.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -1994,9 +2065,9 @@ var VideoCam = () => {
 };
 
 // src/components/icons/walletSVG/index.tsx
-var import_jsx_runtime107 = require("react/jsx-runtime");
+var import_jsx_runtime111 = require("react/jsx-runtime");
 var Wallet = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime107.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime111.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -2008,9 +2079,9 @@ var Wallet = () => {
 };
 
 // src/components/icons/whaleSVG/index.tsx
-var import_jsx_runtime108 = require("react/jsx-runtime");
+var import_jsx_runtime112 = require("react/jsx-runtime");
 var Whale = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime108.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -2022,9 +2093,9 @@ var Whale = () => {
 };
 
 // src/components/icons/wifiSVG/index.tsx
-var import_jsx_runtime109 = require("react/jsx-runtime");
+var import_jsx_runtime113 = require("react/jsx-runtime");
 var Wifi = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime109.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -2036,9 +2107,9 @@ var Wifi = () => {
 };
 
 // src/components/icons/dotFillSVG/index.tsx
-var import_jsx_runtime110 = require("react/jsx-runtime");
+var import_jsx_runtime114 = require("react/jsx-runtime");
 var DotFill = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime110.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -2050,9 +2121,9 @@ var DotFill = () => {
 };
 
 // src/components/icons/squareFillSVG/index.tsx
-var import_jsx_runtime111 = require("react/jsx-runtime");
+var import_jsx_runtime115 = require("react/jsx-runtime");
 var SquareFill = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime111.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("svg", { viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ (0, import_jsx_runtime115.jsx)(
     "path",
     {
       fillRule: "evenodd",
@@ -2064,9 +2135,9 @@ var SquareFill = () => {
 };
 
 // src/components/icons/eclipseSVG/index.tsx
-var import_jsx_runtime112 = require("react/jsx-runtime");
+var import_jsx_runtime116 = require("react/jsx-runtime");
 var Eclipse = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(import_jsx_runtime112.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(import_jsx_runtime116.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
     "svg",
     {
       xmlns: "http://www.w3.org/2000/svg",
@@ -2074,75 +2145,127 @@ var Eclipse = () => {
       width: "40",
       height: "40",
       fill: "currentColor",
-      children: /* @__PURE__ */ (0, import_jsx_runtime112.jsxs)("g", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("circle", { cx: "256", cy: "42.667", r: "42.667" }),
-        /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("circle", { cx: "256", cy: "256", r: "42.667" }),
-        /* @__PURE__ */ (0, import_jsx_runtime112.jsx)("circle", { cx: "256", cy: "469.333", r: "42.667" })
+      children: /* @__PURE__ */ (0, import_jsx_runtime116.jsxs)("g", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("circle", { cx: "256", cy: "42.667", r: "42.667" }),
+        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("circle", { cx: "256", cy: "256", r: "42.667" }),
+        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("circle", { cx: "256", cy: "469.333", r: "42.667" })
       ] })
     }
   ) });
 };
 
+// src/components/icons/copySVG/index.tsx
+var import_jsx_runtime117 = require("react/jsx-runtime");
+var Copy = () => {
+  return /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
+    "path",
+    {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      fill: "currentColor",
+      d: "m16,18.5v1c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h1c.276,0,.5.224.5.5s-.224.5-.5.5h-1c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-1c0-.276.224-.5.5-.5s.5.224.5.5Zm8-14v7c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h7c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-7Z"
+    }
+  ) });
+};
+
 // src/components/checkbox/index.tsx
-var import_jsx_runtime113 = require("react/jsx-runtime");
+var import_jsx_runtime118 = require("react/jsx-runtime");
+var sizeMap = {
+  ["small" /* SMALL */]: {
+    box: "size-4",
+    icon: "size-3"
+  },
+  ["medium" /* MEDIUM */]: {
+    box: "size-5",
+    icon: "size-4"
+  },
+  ["large" /* LARGE */]: {
+    box: "size-6",
+    icon: "size-5"
+  }
+};
+var edgeMap = {
+  ["rounded" /* ROUNDED */]: "rounded-sm",
+  ["squared" /* SQUARED */]: "rounded-none"
+};
 var Checkbox = ({
   label,
   checked = false,
   onChange,
   className = "",
-  disabled = false
+  disabled = false,
+  size = "medium" /* MEDIUM */,
+  edges = "rounded" /* ROUNDED */
 }) => {
-  const [isChecked, setIsChecked] = (0, import_react3.useState)(checked);
-  const handleToggle = () => {
-    if (disabled) return;
-    setIsChecked(!isChecked);
-    if (onChange) {
-      onChange(!isChecked);
-    }
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime113.jsxs)("label", { className: `flex items-center gap-2 cursor-pointer ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""}`, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(
-      "input",
-      {
-        type: "checkbox",
-        checked: isChecked,
-        onChange: handleToggle,
-        disabled,
-        className: "hidden"
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(
-      "div",
-      {
-        className: `w-5 h-5 flex items-center justify-center border-2 rounded-md transition-all 
-          ${isChecked ? "bg-primary-300 border-primary-400" : "bg-white border-neutral-500"}
+  const { box, icon } = sizeMap[size];
+  const edgeStyle = edgeMap[edges];
+  return /* @__PURE__ */ (0, import_jsx_runtime118.jsxs)(
+    "label",
+    {
+      className: `flex items-center gap-2 cursor-pointer ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""}`,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
+          "input",
+          {
+            type: "checkbox",
+            checked,
+            onChange: () => !disabled && onChange(!checked),
+            disabled,
+            className: "hidden"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
+          "div",
+          {
+            className: `${box} ${edgeStyle} flex items-center justify-center border transition-all 
+          ${checked ? "bg-primary-300 border-primary-400" : "bg-white border-neutral-500"}
           ${disabled ? "bg-neutral-200 border-neutral-400" : ""}
         `,
-        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("div", { className: "size-4 text-black", children: /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(Check, {}) })
-      }
-    ),
-    label && /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("span", { className: "text-black", children: label })
-  ] });
+            children: checked && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("div", { className: `${icon} text-black`, children: /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(Check, {}) })
+          }
+        ),
+        label && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("span", { className: "text-black", children: label })
+      ]
+    }
+  );
 };
 var checkbox_default = Checkbox;
 
 // src/components/chip/index.tsx
-var import_jsx_runtime114 = require("react/jsx-runtime");
-var Chip = ({ label, onClear, className = "" }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime114.jsxs)(
+var import_jsx_runtime119 = require("react/jsx-runtime");
+var Chip = ({
+  label,
+  onClear,
+  className = "",
+  variant = "solid" /* SOLID */,
+  edges = "rounded" /* ROUNDED */
+}) => {
+  const getChipStyle = (variant2) => {
+    switch (variant2) {
+      case "outline" /* OUTLINE */:
+        return "bg-transparent border border-neutral-700 text-neutral-700 hover:text-neutral-900";
+      case "solid" /* SOLID */:
+      default:
+        return "bg-neutral-300 text-neutral-800 hover:text-neutral-900";
+    }
+  };
+  const getEdgesStyle = (edges2) => {
+    switch (edges2) {
+      case "squared" /* SQUARED */:
+        return "rounded-none";
+      case "pill" /* PILL */:
+        return "rounded-full";
+      default:
+        return "rounded-lg";
+    }
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
     "div",
     {
-      className: `flex flex-row gap-2 items-center bg-neutral-700 w-fit px-4 py-2 rounded-full ${className}`,
+      className: `flex flex-row gap-2 items-center ${getChipStyle(variant)} w-fit px-4 py-2 ${getEdgesStyle(edges)} ${className}`,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
-          "div",
-          {
-            className: "size-3 cursor-pointer text-neutral-200 hover:text-white",
-            onClick: onClear,
-            children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(Cross, {})
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("p", { className: "text-neutral-200 text-base font-semibold", children: label })
+        /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "size-4 cursor-pointer", onClick: onClear, children: /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(Cross, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("p", { className: "text-base", children: label })
       ]
     }
   );
@@ -2150,24 +2273,31 @@ var Chip = ({ label, onClear, className = "" }) => {
 var chip_default = Chip;
 
 // src/components/ellipsis/index.tsx
-var import_react4 = require("react");
-var import_jsx_runtime115 = require("react/jsx-runtime");
+var import_react3 = require("react");
+var import_jsx_runtime120 = require("react/jsx-runtime");
 var Ellipsis = ({
   label,
+  labelMaxWidth = "w-32",
   tooltipPosition = "right" /* RIGHT */,
   tooltipWidth = "w-40",
   className = ""
 }) => {
-  const [isTooltipVisible, setIsTooltipVisible] = (0, import_react4.useState)(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)(
+  const [isTooltipVisible, setIsTooltipVisible] = (0, import_react3.useState)(false);
+  return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
     "div",
     {
-      className: `relative ${className}`,
+      className: `relative inline-block ${className}`,
       onMouseEnter: () => setIsTooltipVisible(true),
       onMouseLeave: () => setIsTooltipVisible(false),
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("p", { className: "text-ellipsis w-32 overflow-hidden whitespace-nowrap", children: label }),
-        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+          "p",
+          {
+            className: `text-ellipsis ${labelMaxWidth} overflow-hidden whitespace-nowrap`,
+            children: label
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
           tooltip_default,
           {
             label,
@@ -2183,8 +2313,8 @@ var Ellipsis = ({
 var ellipsis_default = Ellipsis;
 
 // src/components/fileUploader/index.tsx
-var import_react5 = require("react");
-var import_jsx_runtime116 = require("react/jsx-runtime");
+var import_react4 = require("react");
+var import_jsx_runtime121 = require("react/jsx-runtime");
 var FileUploader = ({
   title,
   subTitle1 = "",
@@ -2193,19 +2323,19 @@ var FileUploader = ({
   accept = ".jpg,.jpeg,.png",
   className = ""
 }) => {
-  const fileInputRef = (0, import_react5.useRef)(null);
+  const fileInputRef = (0, import_react4.useRef)(null);
   const handleFileUpload = (event) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       handleAttachment(files[0]);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime116.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)(
     "div",
     {
       className: `flex flex-row gap-4 items-start border border-dashed border-neutral-200 p-4 rounded-lg ${className}`,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
           "div",
           {
             className: "bg-primary-500 hover:bg-primary-600 text-white px-6 py-8 rounded-lg cursor-pointer",
@@ -2213,10 +2343,10 @@ var FileUploader = ({
               var _a;
               return (_a = fileInputRef.current) == null ? void 0 : _a.click();
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("div", { className: "size-10", children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(Upload, {}) })
+            children: /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("div", { className: "size-10", children: /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(Upload, {}) })
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
           "input",
           {
             type: "file",
@@ -2226,10 +2356,10 @@ var FileUploader = ({
             onChange: handleFileUpload
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime116.jsxs)("div", { className: "flex-1 flex flex-col", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("p", { className: "text-lg", children: title }),
-          /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("p", { className: "text-sm text-neutral-400", children: subTitle1 }),
-          /* @__PURE__ */ (0, import_jsx_runtime116.jsx)("p", { className: "text-sm text-neutral-400", children: subTitle2 })
+        /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)("div", { className: "flex-1 flex flex-col", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("p", { className: "text-lg", children: title }),
+          /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("p", { className: "text-sm text-neutral-400", children: subTitle1 }),
+          /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("p", { className: "text-sm text-neutral-400", children: subTitle2 })
         ] })
       ]
     }
@@ -2238,31 +2368,31 @@ var FileUploader = ({
 var fileUploader_default = FileUploader;
 
 // src/components/filterDropdown/index.tsx
-var import_react6 = require("react");
-var import_jsx_runtime117 = require("react/jsx-runtime");
+var import_react5 = require("react");
+var import_jsx_runtime122 = require("react/jsx-runtime");
 var FilterDropdown = ({ children, className = "" }) => {
-  const [isChildrenVisible, setIsChildrenVisible] = (0, import_react6.useState)(false);
+  const [isChildrenVisible, setIsChildrenVisible] = (0, import_react5.useState)(false);
   const closeDropdown = () => setIsChildrenVisible(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)("div", { className: `relative ${className}`, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)("div", { className: `relative ${className}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)(
       "div",
       {
         className: "flex flex-row gap-4 items-center w-fit border border-neutral-300 group p-4 rounded-lg cursor-pointer",
         onClick: () => setIsChildrenVisible(!isChildrenVisible),
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "size-5 text-neutral-700", children: /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(Filter, {}) }),
-          /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("p", { className: "text-neutral-700 text-sm", children: "Filter" }),
-          /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "size-5 text-neutral-700", children: /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(ChevDown, {}) })
+          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { className: "size-5 text-neutral-700", children: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(Filter, {}) }),
+          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("p", { className: "text-neutral-700 text-sm", children: "Filter" }),
+          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { className: "size-5 text-neutral-700", children: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(ChevDown, {}) })
         ]
       }
     ),
-    isChildrenVisible && /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "border border-neutral-300 rounded-lg shadow-lg overflow-y-auto absolute top-[105%] bg-white z-10", children: children(closeDropdown) })
+    isChildrenVisible && /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { className: "border border-neutral-300 rounded-lg shadow-lg overflow-y-auto absolute top-[105%] bg-white z-10", children: children(closeDropdown) })
   ] });
 };
 var filterDropdown_default = FilterDropdown;
 
 // src/components/input/index.tsx
-var import_jsx_runtime118 = require("react/jsx-runtime");
+var import_jsx_runtime123 = require("react/jsx-runtime");
 var Input = (_a) => {
   var _b = _a, {
     label,
@@ -2273,7 +2403,12 @@ var Input = (_a) => {
     required = false,
     className = "",
     type = "text",
-    onClear
+    onClear,
+    isError = false,
+    errorMessage,
+    edges = "rounded" /* ROUNDED */,
+    onKeyDown,
+    onPaste
   } = _b, rest = __objRest(_b, [
     "label",
     "value",
@@ -2283,43 +2418,73 @@ var Input = (_a) => {
     "required",
     "className",
     "type",
-    "onClear"
+    "onClear",
+    "isError",
+    "errorMessage",
+    "edges",
+    "onKeyDown",
+    "onPaste"
   ]);
-  return /* @__PURE__ */ (0, import_jsx_runtime118.jsxs)("div", { className: `flex flex-col gap-1 relative ${className}`, children: [
-    label && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("label", { htmlFor: label, className: "text-sm text-neutral-600 mb-2", children: `${label}${required ? " *" : ""}` }),
-    /* @__PURE__ */ (0, import_jsx_runtime118.jsxs)("div", { className: "relative", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
+  const handleKeyDown = (e) => {
+    if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
+      e.preventDefault();
+    }
+    onKeyDown == null ? void 0 : onKeyDown(e);
+  };
+  const handlePaste = (e) => {
+    if (type === "number") {
+      const paste = e.clipboardData.getData("text");
+      if (/[eE+\-]/.test(paste)) {
+        e.preventDefault();
+      }
+    }
+    onPaste == null ? void 0 : onPaste(e);
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime123.jsxs)("div", { className: `flex flex-col relative ${className}`, children: [
+    label && /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+      "label",
+      {
+        htmlFor: label,
+        className: `text-sm ${isError ? "text-red-500" : "text-neutral-600"} mb-1`,
+        children: `${label}${required ? " *" : ""}`
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime123.jsxs)("div", { className: "relative", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
         "input",
         __spreadValues({
           id: label,
           placeholder,
           value,
           disabled,
-          className: `border border-neutral-300 outline-none py-4 pl-4 ${onClear ? "pr-8" : "pr-4"} rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-text"} text-sm w-full ${inputClassName}`,
+          className: `border ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} outline-none py-4 pl-4 ${onClear ? "pr-8" : "pr-4"} ${edges === "rounded" /* ROUNDED */ && "rounded-lg"} ${disabled ? "cursor-not-allowed" : "cursor-text"} text-sm w-full ${inputClassName}`,
           required,
-          type
+          type,
+          onKeyDown: handleKeyDown,
+          onPaste: handlePaste
         }, rest)
       ),
-      onClear && value && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
+      onClear && value && /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
         "div",
         {
           className: "size-3 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-900 cursor-pointer",
           onClick: onClear,
-          children: /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(Cross, {})
+          children: /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(Cross, {})
         }
       )
-    ] })
+    ] }),
+    isError && errorMessage && /* @__PURE__ */ (0, import_jsx_runtime123.jsx)("p", { className: "text-red-500 text-xs mt-1", children: errorMessage })
   ] });
 };
 var input_default = Input;
 
 // src/components/modal/index.tsx
-var import_react7 = require("react");
-var import_jsx_runtime119 = require("react/jsx-runtime");
+var import_react6 = require("react");
+var import_jsx_runtime124 = require("react/jsx-runtime");
 var MODAL_SIZE = /* @__PURE__ */ ((MODAL_SIZE2) => {
-  MODAL_SIZE2["SMALL"] = "w-[600px] h-60";
-  MODAL_SIZE2["MEDIUM"] = "w-[800px] h-96";
-  MODAL_SIZE2["LARGE"] = "w-[950px] h-[600px]";
+  MODAL_SIZE2["SMALL"] = "w-[600px]";
+  MODAL_SIZE2["MEDIUM"] = "w-[800px]";
+  MODAL_SIZE2["LARGE"] = "w-[950px]";
   MODAL_SIZE2["FULL"] = "w-full h-full";
   return MODAL_SIZE2;
 })(MODAL_SIZE || {});
@@ -2327,31 +2492,39 @@ var Modal = ({
   title,
   children,
   onClear,
-  size = "w-[800px] h-96" /* MEDIUM */,
+  size = "w-[600px]" /* SMALL */,
   className = ""
 }) => {
-  const modalRef = (0, import_react7.useRef)(null);
-  (0, import_react7.useEffect)(() => {
+  const modalRef = (0, import_react6.useRef)(null);
+  (0, import_react6.useEffect)(() => {
     var _a;
     (_a = modalRef.current) == null ? void 0 : _a.focus();
   }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+  (0, import_react6.useEffect)(() => {
+    const handler = (e) => {
+      if (e.key === "Escape") onClear();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClear]);
+  return /* @__PURE__ */ (0, import_jsx_runtime124.jsx)(
     "div",
     {
-      className: `fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`,
-      children: /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
+      className: `fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.4)] ${className}`,
+      onMouseDown: onClear,
+      children: /* @__PURE__ */ (0, import_jsx_runtime124.jsxs)(
         "div",
         {
           ref: modalRef,
           tabIndex: -1,
-          className: `bg-white p-4 ${size !== "w-full h-full" /* FULL */ && "rounded-lg"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`,
-          onBlur: () => onClear(),
+          className: `bg-white p-4 ${size !== "w-full h-full" /* FULL */ && "rounded-lg"} absolute flex flex-col gap-4 ${size}`,
+          onMouseDown: (e) => e.stopPropagation(),
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "flex-1 text-3xl", children: title }),
-              /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "size-4 cursor-pointer", onClick: () => onClear(), children: /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(Cross, {}) })
+            /* @__PURE__ */ (0, import_jsx_runtime124.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { className: "flex-1 text-3xl", children: title }),
+              /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { className: "size-4 cursor-pointer", onClick: () => onClear(), children: /* @__PURE__ */ (0, import_jsx_runtime124.jsx)(Cross, {}) })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("div", { className: "flex-1 flex justify-center items-center", children })
+            /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { className: "w-full h-full overflow-auto", children })
           ]
         }
       )
@@ -2362,9 +2535,9 @@ var modal_default = Modal;
 
 // src/components/navBar/index.tsx
 var import_image2 = __toESM(require("next/image"));
-var import_react8 = require("react");
+var import_react7 = require("react");
 var import_navigation = require("next/navigation");
-var import_jsx_runtime120 = require("react/jsx-runtime");
+var import_jsx_runtime125 = require("react/jsx-runtime");
 var NavBar = ({
   menuItems,
   logoShort,
@@ -2382,22 +2555,22 @@ var NavBar = ({
   isLoading = false
 }) => {
   const router = (0, import_navigation.useRouter)();
-  const [isActiveMenuItem, setIsActiveMenuItem] = (0, import_react8.useState)("");
-  const [isActiveSubMenuItem, setIsActiveSubMenuItem] = (0, import_react8.useState)("");
-  const [isMenuCollapsed, setIsMenuCollapsed] = (0, import_react8.useState)(isCollapsed);
-  const [isMenuItemsCollapsed, setIsMenuITemsCollapsed] = (0, import_react8.useState)(false);
-  const [showTooltip, setShowTooltip] = (0, import_react8.useState)(null);
-  const [showSubTooltip, setShowSubTooltip] = (0, import_react8.useState)(null);
+  const [isActiveMenuItem, setIsActiveMenuItem] = (0, import_react7.useState)("");
+  const [isActiveSubMenuItem, setIsActiveSubMenuItem] = (0, import_react7.useState)("");
+  const [isMenuCollapsed, setIsMenuCollapsed] = (0, import_react7.useState)(isCollapsed);
+  const [isMenuItemsCollapsed, setIsMenuITemsCollapsed] = (0, import_react7.useState)(false);
+  const [showTooltip, setShowTooltip] = (0, import_react7.useState)(null);
+  const [showSubTooltip, setShowSubTooltip] = (0, import_react7.useState)(null);
   const activeClass = "rounded-lg bg-white/35";
   const collapsedClass = "w-[6rem]";
-  (0, import_react8.useEffect)(() => {
+  (0, import_react7.useEffect)(() => {
     var _a;
     if (menuItems.length > 0) {
       const active = menuItems.find((item) => item.isActive === true);
       setIsActiveMenuItem((_a = active == null ? void 0 : active.title) != null ? _a : menuItems[0].title);
     }
   }, []);
-  (0, import_react8.useEffect)(() => {
+  (0, import_react7.useEffect)(() => {
     if (!isMenuCollapsed) {
       setTimeout(() => {
         setIsMenuITemsCollapsed(false);
@@ -2418,19 +2591,19 @@ var NavBar = ({
     }
     router.push(route);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
     "div",
     {
       className: `transition-[width] duration-300 ease-in-out ${isMenuCollapsed ? collapsedClass : menuWidthClass} ${menuHeightClass} ${className}`,
-      children: /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
         "div",
         {
           className: `w-full h-full flex flex-col gap-4 p-4 ${menuBackgroundColor}`,
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "flex flex-col gap-4", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "flex flex-row gap-2 items-center", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_image2.default, { src: logoShort, alt: "logo_short", width: 60, height: 60 }),
-                !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { className: "flex flex-col gap-4", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { className: "flex flex-row gap-2 items-center", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(import_image2.default, { src: logoShort, alt: "logo_short", width: 60, height: 60 }),
+                !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                   import_image2.default,
                   {
                     src: logoLong,
@@ -2441,8 +2614,8 @@ var NavBar = ({
                   }
                 )
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "relative", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { className: "relative", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                   avatar_default,
                   {
                     name: avatarName,
@@ -2452,22 +2625,22 @@ var NavBar = ({
                     isLoading
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                   "span",
                   {
                     onClick: () => setIsMenuCollapsed(!isMenuCollapsed),
                     className: `cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-neutral-50 absolute -right-8 flex items-center justify-center text-black`,
-                    children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "size-5", children: isMenuCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(ChevRight, {}) : /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(ChevLeft, {}) })
+                    children: /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("div", { className: "size-5", children: isMenuCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(ChevRight, {}) : /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(ChevLeft, {}) })
                   }
                 )
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "border-neutral-50 border-b" }),
-            !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "flex flex-col gap-1", children: menuItems.map((item, index) => {
+            /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("div", { className: "border-neutral-50 border-b" }),
+            !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("div", { className: "flex flex-col gap-1", children: menuItems.map((item, index) => {
               var _a;
               if (!item.isDivider) {
-                return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                return /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
                     "div",
                     {
                       className: `flex flex-row gap-4 items-center p-4 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${isActiveMenuItem === item.title ? activeClass : ""}`,
@@ -2475,13 +2648,13 @@ var NavBar = ({
                       onMouseEnter: () => setShowTooltip(index),
                       onMouseLeave: () => setShowTooltip(null),
                       children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                        /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
                           "div",
                           {
                             className: `w-6 h-6 ml-1 relative ${menuItemTextClass}`,
                             children: [
                               item.icon,
-                              isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                              isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                                 tooltip_default,
                                 {
                                   position: "right" /* RIGHT */,
@@ -2494,24 +2667,24 @@ var NavBar = ({
                             ]
                           }
                         ),
-                        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                           "span",
                           {
                             className: `text-nowrap flex-1 ${menuItemTextClass}`,
                             children: item.title
                           }
                         ),
-                        item.hasChildren && !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                        item.hasChildren && !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                           "div",
                           {
                             className: `size-5 transform transition-transform duration-300 ${isActiveMenuItem === item.title && item.hasChildren ? "rotate-180" : ""}`,
-                            children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(ChevDown, {})
+                            children: /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(ChevDown, {})
                           }
                         )
                       ]
                     }
                   ),
-                  isActiveMenuItem === item.title && item.hasChildren && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "flex flex-col gap-1 bg-white/15 pt-3 relative -top-2", children: (_a = item.children) == null ? void 0 : _a.map((subItem, subIndex) => /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                  isActiveMenuItem === item.title && item.hasChildren && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("div", { className: "flex flex-col gap-1 bg-white/15 pt-3 relative -top-2", children: (_a = item.children) == null ? void 0 : _a.map((subItem, subIndex) => /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
                     "div",
                     {
                       className: `flex flex-row gap-4 items-center p-4 h-14 rounded-lg hover:cursor-pointer hover:bg-white/35 hover:rounded-lg ${isActiveSubMenuItem === subItem.title ? activeClass : ""}`,
@@ -2522,9 +2695,9 @@ var NavBar = ({
                       onMouseEnter: () => setShowSubTooltip(subIndex),
                       onMouseLeave: () => setShowSubTooltip(null),
                       children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "size-6 ml-1 mt-1 relative text-neutral-600", children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(DotFill, {}),
-                          isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                        /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { className: "size-6 ml-1 mt-1 relative text-neutral-600", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(DotFill, {}),
+                          isMenuCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                             tooltip_default,
                             {
                               position: "right" /* RIGHT */,
@@ -2535,7 +2708,7 @@ var NavBar = ({
                             }
                           )
                         ] }),
-                        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+                        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                           "span",
                           {
                             className: `text-nowrap flex-1 ${menuItemTextClass}`,
@@ -2548,14 +2721,14 @@ var NavBar = ({
                   )) })
                 ] }, `menu_item_${index + 1}`);
               }
-              return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+              return /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
                 "div",
                 {
                   className: "border-neutral-50 border-b my-3"
                 },
                 `menu_item_${index + 1}`
               );
-            }) }) : /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(NavBarShimmer, { isMenuItemsCollapsed })
+            }) }) : /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(NavBarShimmer, { isMenuItemsCollapsed })
           ]
         }
       )
@@ -2565,13 +2738,13 @@ var NavBar = ({
 var NavBarShimmer = ({
   isMenuItemsCollapsed
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "flex flex-col gap-2 animate-pulse", children: [...Array(5)].map((_, index) => /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("div", { className: "flex flex-col gap-2 animate-pulse", children: [...Array(5)].map((_, index) => /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
     "div",
     {
       className: "flex flex-row gap-4 items-center p-4 rounded-lg bg-neutral-400",
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "w-6 h-6 ml-1 bg-neutral-200" }),
-        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("span", { className: "w-full h-4 bg-neutral-200 rounded" })
+        /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("div", { className: "w-6 h-6 ml-1 bg-neutral-200" }),
+        !isMenuItemsCollapsed && /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("span", { className: "w-full h-4 bg-neutral-200 rounded" })
       ]
     },
     index
@@ -2580,11 +2753,11 @@ var NavBarShimmer = ({
 var navBar_default = NavBar;
 
 // src/components/pagination/index.tsx
-var import_react10 = require("react");
+var import_react9 = require("react");
 
 // src/components/selectDropdown/index.tsx
-var import_react9 = require("react");
-var import_jsx_runtime121 = require("react/jsx-runtime");
+var import_react8 = require("react");
+var import_jsx_runtime126 = require("react/jsx-runtime");
 var SelectDropdown = ({
   options,
   label,
@@ -2593,22 +2766,28 @@ var SelectDropdown = ({
   value,
   onChange,
   inputClassName = "",
-  className = ""
+  className = "",
+  isError = false,
+  errorMessage,
+  required = false,
+  edges = "rounded" /* ROUNDED */
 }) => {
-  const [dropdownValue, setDropdownValue] = (0, import_react9.useState)("");
-  const [isOptionsVisible, setIsOptionsVisible] = (0, import_react9.useState)(false);
-  const [openUpward, setOpenUpward] = (0, import_react9.useState)(false);
-  const containerRef = (0, import_react9.useRef)(null);
-  (0, import_react9.useEffect)(() => {
-    const option = options.find((opt) => opt.label === value);
+  const [dropdownValue, setDropdownValue] = (0, import_react8.useState)("");
+  const [isOptionsVisible, setIsOptionsVisible] = (0, import_react8.useState)(false);
+  const [openUpward, setOpenUpward] = (0, import_react8.useState)(false);
+  const containerRef = (0, import_react8.useRef)(null);
+  (0, import_react8.useEffect)(() => {
+    const option = options.find((opt) => {
+      var _a;
+      return ((_a = opt.value) != null ? _a : opt.label) === value;
+    });
     if (option) {
       setDropdownValue(option.label);
-      onChange(option.label);
     } else {
-      setDropdownValue("");
+      setDropdownValue(value);
     }
-  }, []);
-  (0, import_react9.useEffect)(() => {
+  }, [value, options]);
+  (0, import_react8.useEffect)(() => {
     if (isOptionsVisible && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const dropdownHeight = Math.min(options.length * 56, 384);
@@ -2617,51 +2796,64 @@ var SelectDropdown = ({
       setOpenUpward(spaceBelow < dropdownHeight && spaceAbove > spaceBelow);
     }
   }, [isOptionsVisible, options.length]);
-  const handleMouseDown = (val) => {
-    setDropdownValue(val);
-    onChange(val);
+  const handleMouseDown = (option) => {
+    var _a;
+    const actualValue = (_a = option.value) != null ? _a : option.label;
+    setDropdownValue(option.label);
+    onChange(actualValue);
     setIsOptionsVisible(false);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)("div", { ref: containerRef, className: `flex flex-col gap-1 relative ${className}`, children: [
-    label && /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("label", { htmlFor: label, className: "text-sm text-neutral-600 mb-2", children: label }),
-    /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)("div", { className: "relative", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime121.jsx)("div", { className: "size-5 absolute inset-y-4 right-4 flex items-center text-neutral-600 pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(ChevDown, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
-        "input",
+  return /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)("div", { className: "flex flex-col", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)("div", { ref: containerRef, className: `flex flex-col relative ${className}`, children: [
+      label && /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+        "label",
         {
-          id: label,
-          type: "text",
-          className: `border border-neutral-300 outline-none p-4 rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-pointer"} text-sm w-full ${inputClassName}`,
-          placeholder,
-          onClick: () => setIsOptionsVisible(!isOptionsVisible),
-          value: dropdownValue,
-          onBlur: () => setIsOptionsVisible(false),
-          readOnly: true,
-          disabled
+          htmlFor: label,
+          className: `text-sm ${isError ? "text-red-500" : "text-neutral-600"} mb-1`,
+          children: `${label}${required ? " *" : ""}`
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)("div", { className: "relative", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("div", { className: "size-5 absolute inset-y-4 right-4 flex items-center text-neutral-600 pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(ChevDown, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+          "input",
+          {
+            id: label,
+            type: "text",
+            className: `border outline-none p-4 ${edges === "rounded" /* ROUNDED */ && "rounded-lg"} ${disabled ? "cursor-not-allowed" : "cursor-pointer"} ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} text-sm w-full ${inputClassName}`,
+            placeholder,
+            onClick: () => setIsOptionsVisible(!isOptionsVisible),
+            value: dropdownValue,
+            onBlur: () => setIsOptionsVisible(false),
+            readOnly: true,
+            disabled,
+            required
+          }
+        )
+      ] }),
+      isOptionsVisible && /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+        "div",
+        {
+          className: `border border-neutral-300 ${edges === "rounded" /* ROUNDED */ && "rounded-lg"} shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${openUpward ? "bottom-full mb-1" : "top-full"}`,
+          children: options.map(({ label: label2, value: val }, index) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+            "div",
+            {
+              className: "p-4 cursor-pointer hover:bg-neutral-50 text-sm",
+              onMouseDown: () => handleMouseDown({ label: label2, value: val }),
+              children: label2
+            },
+            `${label2}_${val}_${index + 1}`
+          ))
         }
       )
     ] }),
-    isOptionsVisible && /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
-      "div",
-      {
-        className: `border border-neutral-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${openUpward ? "bottom-full mb-1" : "top-full"}`,
-        children: options.map(({ label: label2, value: val }, index) => /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
-          "div",
-          {
-            className: "p-4 cursor-pointer hover:bg-neutral-50 text-sm",
-            onMouseDown: () => handleMouseDown(label2),
-            children: label2
-          },
-          `${label2}_${val}_${index + 1}`
-        ))
-      }
-    )
+    isError && errorMessage && /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("p", { className: "text-red-500 text-xs mt-1", children: errorMessage })
   ] });
 };
 var selectDropdown_default = SelectDropdown;
 
 // src/components/pagination/index.tsx
-var import_jsx_runtime122 = require("react/jsx-runtime");
+var import_jsx_runtime127 = require("react/jsx-runtime");
 var Pagination = ({
   total,
   page,
@@ -2670,7 +2862,7 @@ var Pagination = ({
   onChange,
   className = ""
 }) => {
-  const [optionDropdown, setOptionDropdown] = (0, import_react10.useState)(size.toString());
+  const [optionDropdown, setOptionDropdown] = (0, import_react9.useState)(size.toString());
   const onLeft = () => {
     if (page > 1) {
       onChange({ total, page: page - 1, size });
@@ -2685,43 +2877,46 @@ var Pagination = ({
     setOptionDropdown(size2);
     onChange({ total, page: 1, size: parseInt(size2) });
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime127.jsxs)(
     "div",
     {
-      className: `bg-neutral-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg ${className}`,
+      className: `bg-neutral-100 flex flex-row gap-4 items-center p-3 rounded-lg ${className}`,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)("div", { className: "flex-1", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime127.jsxs)("div", { className: "flex-1", children: [
           page,
           " of ",
           Math.ceil(total / size),
           " pages"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { className: "w-20", children: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime127.jsx)("div", { className: "w-20", children: /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(
           selectDropdown_default,
           {
             options,
             value: optionDropdown,
-            onChange: (option) => handlePageSize(option)
+            onChange: (option) => handlePageSize(option),
+            className: "[&>div>input]:py-2! [&>div>div]:inset-y-2!"
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime122.jsx)("div", { children: "items per page" }),
-        /* @__PURE__ */ (0, import_jsx_runtime122.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime127.jsx)("div", { children: "items per page" }),
+        /* @__PURE__ */ (0, import_jsx_runtime127.jsxs)("div", { className: "flex flex-row gap-4 items-center", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(
             button_default,
             {
               onClick: onLeft,
-              icon: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(ChevLeft, {}),
+              leftIcon: /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(ChevLeft, {}),
               variant: "tertiary" /* TERTIARY */,
-              disabled: page === 1
+              disabled: page === 1,
+              className: "py-2!"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(
             button_default,
             {
               onClick: onRight,
-              icon: /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(ChevRight, {}),
+              leftIcon: /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(ChevRight, {}),
               variant: "tertiary" /* TERTIARY */,
-              disabled: page === Math.ceil(total / size)
+              disabled: page === Math.ceil(total / size),
+              className: "py-2!"
             }
           )
         ] })
@@ -2732,7 +2927,7 @@ var Pagination = ({
 var pagination_default = Pagination;
 
 // src/components/radioButton/index.tsx
-var import_jsx_runtime123 = require("react/jsx-runtime");
+var import_jsx_runtime128 = require("react/jsx-runtime");
 var RadioButton = ({
   label,
   value,
@@ -2746,9 +2941,9 @@ var RadioButton = ({
     if (disabled) return;
     if (onChange) onChange(value);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime123.jsxs)("label", { className: `flex items-center gap-2 cursor-pointer ${className}
+  return /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("label", { className: `flex items-center gap-2 cursor-pointer ${className}
     ${disabled ? "cursor-not-allowed opacity-50" : ""}`, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(
       "div",
       {
         className: `w-5 h-5 flex items-center justify-center border-2 rounded-full transition-all
@@ -2756,11 +2951,11 @@ var RadioButton = ({
              ${disabled ? "bg-gray-200 border-gray-300" : ""}
           `,
         onClick: handleClick,
-        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime123.jsx)("div", { className: "w-2.5 h-2.5 bg-white rounded-full" })
+        children: isChecked && /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "w-2.5 h-2.5 bg-white rounded-full" })
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime123.jsx)("span", { className: "text-gray-700", children: label }),
-    /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("span", { className: "text-gray-700", children: label }),
+    /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(
       "input",
       {
         type: "radio",
@@ -2776,7 +2971,7 @@ var RadioButton = ({
 var radioButton_default = RadioButton;
 
 // src/components/snackBar/index.tsx
-var import_jsx_runtime124 = require("react/jsx-runtime");
+var import_jsx_runtime129 = require("react/jsx-runtime");
 var SNACK_BAR_TYPE = /* @__PURE__ */ ((SNACK_BAR_TYPE2) => {
   SNACK_BAR_TYPE2["DEFAULT"] = "default";
   SNACK_BAR_TYPE2["SUCCESS"] = "success";
@@ -2806,13 +3001,13 @@ var Snackbar = ({
         return "bg-neutral-50 text-neutral-800 border-neutral-500";
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime124.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime129.jsxs)(
     "div",
     {
       className: `${getClassName()} p-4 rounded-lg flex flex-row gap-4 items-center font-normal border ${className}`,
       children: [
-        icon && /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { className: "size-5", children: icon }),
-        /* @__PURE__ */ (0, import_jsx_runtime124.jsx)("div", { children: message })
+        icon && /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("div", { className: "size-5", children: icon }),
+        /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("div", { children: message })
       ]
     }
   );
@@ -2821,7 +3016,7 @@ var snackBar_default = Snackbar;
 
 // src/components/state/index.tsx
 var import_image3 = __toESM(require("next/image"));
-var import_jsx_runtime125 = require("react/jsx-runtime");
+var import_jsx_runtime130 = require("react/jsx-runtime");
 var STATE_TYPE = /* @__PURE__ */ ((STATE_TYPE2) => {
   STATE_TYPE2["EMPTY"] = "EMPTY";
   STATE_TYPE2["SUCCESS"] = "SUCCESS";
@@ -2852,12 +3047,12 @@ var State = ({
         return "/images/empty.png";
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime130.jsxs)(
     "div",
     {
       className: `w-full h-full flex flex-col gap-8 items-center justify-center ${className}`,
       children: [
-        stateImage ? /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
+        stateImage ? /* @__PURE__ */ (0, import_jsx_runtime130.jsx)(
           import_image3.default,
           {
             src: stateImage,
@@ -2865,7 +3060,7 @@ var State = ({
             width: imageWidth,
             height: imageHeight
           }
-        ) : /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(
+        ) : /* @__PURE__ */ (0, import_jsx_runtime130.jsx)(
           import_image3.default,
           {
             src: typeImage(),
@@ -2874,9 +3069,9 @@ var State = ({
             height: imageHeight
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime125.jsxs)("div", { className: "flex flex-col gap-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("p", { className: "text-3xl text-center font-semibold", children: title }),
-          /* @__PURE__ */ (0, import_jsx_runtime125.jsx)("p", { className: "w-[300px] text-center", children: subTitle })
+        /* @__PURE__ */ (0, import_jsx_runtime130.jsxs)("div", { className: "flex flex-col gap-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime130.jsx)("p", { className: "text-3xl text-center font-semibold", children: title }),
+          /* @__PURE__ */ (0, import_jsx_runtime130.jsx)("p", { className: "w-[300px] text-center", children: subTitle })
         ] })
       ]
     }
@@ -2885,14 +3080,20 @@ var State = ({
 var state_default = State;
 
 // src/components/table/index.tsx
-var import_jsx_runtime126 = require("react/jsx-runtime");
-var Table = ({ columns, data, className = "" }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+var import_jsx_runtime131 = require("react/jsx-runtime");
+var Table = ({
+  columns,
+  data,
+  className = "",
+  striped = false,
+  bordered = false
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
     "div",
     {
       className: `overflow-hidden rounded-lg border border-neutral-300 ${className}`,
-      children: /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)("table", { className: "w-full border-collapse", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("tr", { className: "bg-neutral-300 border border-neutral-300", children: columns.map(({ header, headerClassName }, index) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)("table", { className: "w-full border-collapse", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime131.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime131.jsx)("tr", { className: "bg-neutral-300 border border-neutral-300", children: columns.map(({ header, headerClassName }, index) => /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
           "th",
           {
             className: `text-left px-4 py-4 ${headerClassName}`,
@@ -2900,21 +3101,25 @@ var Table = ({ columns, data, className = "" }) => {
           },
           `column_${index}`
         )) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime126.jsx)("tbody", { children: data.map((row, rowIndex) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
-          "tr",
-          {
-            className: "bg-white hover:bg-neutral-100",
-            children: columns.map(({ render, cellClassName }, cellIndex) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
-              "td",
-              {
-                className: `text-left px-4 py-4 ${cellClassName}`,
-                children: render(row)
-              },
-              `cell_${cellIndex}`
-            ))
-          },
-          `row_${rowIndex}`
-        )) })
+        /* @__PURE__ */ (0, import_jsx_runtime131.jsx)("tbody", { children: data.map((row, rowIndex) => {
+          const stripedClass = striped && rowIndex % 2 === 1 ? "bg-neutral-50" : "bg-white";
+          const borderClass = bordered && rowIndex !== data.length - 1 ? "border-b border-neutral-200" : "";
+          return /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+            "tr",
+            {
+              className: `hover:bg-neutral-100 ${stripedClass} ${borderClass}`,
+              children: columns.map(({ render, cellClassName }, cellIndex) => /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+                "td",
+                {
+                  className: `text-left px-4 py-4 ${cellClassName}`,
+                  children: render(row)
+                },
+                `cell_${cellIndex}`
+              ))
+            },
+            `row_${rowIndex}`
+          );
+        }) })
       ] })
     }
   );
@@ -2922,7 +3127,7 @@ var Table = ({ columns, data, className = "" }) => {
 var table_default = Table;
 
 // src/components/tag/index.tsx
-var import_jsx_runtime127 = require("react/jsx-runtime");
+var import_jsx_runtime132 = require("react/jsx-runtime");
 var TAG_TYPE = /* @__PURE__ */ ((TAG_TYPE2) => {
   TAG_TYPE2["DEFAULT"] = "default";
   TAG_TYPE2["SUCCESS"] = "success";
@@ -2931,27 +3136,43 @@ var TAG_TYPE = /* @__PURE__ */ ((TAG_TYPE2) => {
   TAG_TYPE2["INFO"] = "info";
   return TAG_TYPE2;
 })(TAG_TYPE || {});
-var Tag = ({ type, label, className = "" }) => {
+var Tag = ({
+  type,
+  label,
+  variant = "solid" /* SOLID */,
+  edges = "rounded" /* ROUNDED */,
+  className = ""
+}) => {
   const getTagStyle = (type2) => {
     switch (type2) {
       case "success" /* SUCCESS */:
-        return "bg-green-50 text-green-600";
+        return `${variant === "solid" /* SOLID */ ? "bg-green-50" : "bg-transparent border border-green-600"} text-green-600`;
       case "danger" /* DANGER */:
-        return "bg-red-50 text-red-600";
+        return `${variant === "solid" /* SOLID */ ? "bg-red-50" : "bg-transparent border border-red-600"} text-red-600`;
       case "warning" /* WARNING */:
-        return "bg-yellow-50 text-yellow-600";
+        return `${variant === "solid" /* SOLID */ ? "bg-yellow-100" : "bg-transparent border border-yellow-500"} text-yellow-500`;
       case "info" /* INFO */:
-        return "bg-blue-50 text-blue-600";
+        return `${variant === "solid" /* SOLID */ ? "bg-blue-50" : "bg-transparent border border-blue-600"} text-blue-600`;
       default:
-        return "bg-neutral-50 text-neutral-600";
+        return `${variant === "solid" /* SOLID */ ? "bg-neutral-200" : "bg-transparent border border-neutral-800"} text-neutral-800`;
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(
+  const getEdgesStyle = (edges2) => {
+    switch (edges2) {
+      case "squared" /* SQUARED */:
+        return "rounded-none";
+      case "pill" /* PILL */:
+        return "rounded-full";
+      default:
+        return "rounded-lg";
+    }
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime132.jsx)(
     "div",
     {
-      className: `w-fit px-4 py-2 rounded-lg text-sm ${getTagStyle(
+      className: `w-fit px-4 py-2 text-sm ${getTagStyle(
         type
-      )} ${className}`,
+      )} ${getEdgesStyle(edges)} ${className}`,
       children: label
     }
   );
@@ -2959,51 +3180,68 @@ var Tag = ({ type, label, className = "" }) => {
 var tag_default = Tag;
 
 // src/components/timeLine/index.tsx
-var import_react11 = require("react");
-var import_jsx_runtime128 = require("react/jsx-runtime");
-var TimeLine = ({ logs, className = "" }) => {
-  const [steps, setSteps] = (0, import_react11.useState)([]);
-  (0, import_react11.useEffect)(() => {
-    if (logs[0].status !== "Failed" /* FAILED */ && logs[0].status !== "Finished" /* FINISHED */) {
-      setSteps([
+var import_react10 = require("react");
+var import_jsx_runtime133 = require("react/jsx-runtime");
+var TimeLine = ({
+  logs,
+  className = "",
+  direction = "downward" /* DOWNWARD */
+}) => {
+  const [steps, setSteps] = (0, import_react10.useState)([]);
+  (0, import_react10.useEffect)(() => {
+    if (logs[logs.length - 1].status !== "Failed" /* FAILED */ && logs[logs.length - 1].status !== "Finished" /* FINISHED */) {
+      const updatedLogs = direction === "downward" /* DOWNWARD */ ? [
+        ...logs,
         {
           title: "Pending",
           status: "Pending"
-        },
-        ...logs
-      ]);
+        }
+      ].reverse() : [
+        ...logs,
+        {
+          title: "Pending",
+          status: "Pending"
+        }
+      ];
+      setSteps([...updatedLogs]);
     } else {
-      setSteps(logs);
+      const updatedLogs = direction === "downward" /* DOWNWARD */ ? [...logs].reverse() : [...logs];
+      setSteps([...updatedLogs]);
     }
-  }, [logs]);
+  }, [logs, direction]);
   const getIcon = (status) => {
     switch (status) {
       case "Success" /* SUCCESS */:
       case "Finished" /* FINISHED */:
-        return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "size-4 bg-green-500 rounded-full text-white p-2" });
+        return /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("div", { className: "size-4 bg-green-500 rounded-full text-white", children: /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(Circle, {}) });
       case "Failed" /* FAILED */:
-        return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "size-4 bg-red-500 rounded-full text-white p-2" });
+        return /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("div", { className: "size-4 bg-red-500 rounded-full text-white", children: /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(Circle, {}) });
       default:
-        return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "size-4 bg-neutral-600 text-neutral-200 rounded-full p-1", children: /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(Circle, {}) });
+        return /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("div", { className: "size-4 bg-neutral-600 text-neutral-200 rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(Circle, {}) });
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className, children: steps.map(({ title, date, description, status }, index) => /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "flex flex-row gap-4", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "flex flex-col items-center", children: [
-      getIcon(status),
-      /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "w-0.5 h-full bg-neutral-100" })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "flex flex-col flex-1", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(
-        "p",
-        {
-          className: `text-base font-semibold relative top-[-2px] ${status === "Pending" ? "pb-8" : ""}`,
-          children: title
-        }
-      ),
-      title && /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("p", { className: "text-xs text-neutral-700", children: date }),
-      description && /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("p", { className: "p-4 text-xs bg-neutral-50 text-neutral-800 rounded-lg my-2 max-w-80", children: description })
-    ] })
-  ] }, `log_${index}`)) });
+  return /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("div", { className, children: steps.map(
+    ({ title, placeholderBottom, placeholderRight, description, status }, index) => /* @__PURE__ */ (0, import_jsx_runtime133.jsxs)("div", { className: "flex flex-row gap-4", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime133.jsxs)("div", { className: "flex flex-col items-center", children: [
+        getIcon(status),
+        /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("div", { className: "w-0.5 h-full bg-neutral-100" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime133.jsxs)("div", { className: "flex flex-col flex-1", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime133.jsxs)("div", { className: "flex flex-row gap-2 items-center", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(
+            "p",
+            {
+              className: `text-base font-semibold relative -top-0.5 ${status === "Pending" ? "pb-8" : ""}`,
+              children: title
+            }
+          ),
+          placeholderRight && /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("p", { className: "text-xs text-neutral-700 italic", children: placeholderRight })
+        ] }),
+        placeholderBottom && /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("p", { className: "text-sm text-neutral-800", children: placeholderBottom }),
+        description && /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("p", { className: "p-4 text-xs bg-neutral-300 text-black rounded-lg my-2 max-w-80", children: description })
+      ] })
+    ] }, `log_${index}`)
+  ) });
 };
 var timeLine_default = TimeLine;
 // Annotate the CommonJS export names for ESM import in node:

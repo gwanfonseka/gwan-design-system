@@ -34,14 +34,21 @@ declare enum BUTTON_VARIANTS {
     SECONDARY = "secondary",
     TERTIARY = "tertiary"
 }
+declare enum BUTTON_EDGE_STYLE {
+    ROUNDED = "rounded",
+    SQUARED = "squared",
+    PILL = "pill"
+}
 interface IButton {
     variant?: BUTTON_VARIANTS;
     label?: string;
     onClick: () => void;
-    icon?: ReactNode;
+    leftIcon?: ReactNode;
+    rightIcon?: ReactNode;
     type?: "button" | "submit";
     disabled?: boolean;
     className?: string;
+    edges?: BUTTON_EDGE_STYLE;
 }
 declare const Button: FC<IButton>;
 
@@ -52,12 +59,23 @@ interface ICarousel {
 }
 declare const Carousel: FC<ICarousel>;
 
+declare enum CHECKBOX_SIZE {
+    SMALL = "small",
+    MEDIUM = "medium",
+    LARGE = "large"
+}
+declare enum CHECKBOX_EDGE_STYLE {
+    ROUNDED = "rounded",
+    SQUARED = "squared"
+}
 interface ICheckbox {
     label: string;
     checked: boolean;
     onChange: (checked: boolean) => void;
     className?: string;
     disabled?: boolean;
+    size?: CHECKBOX_SIZE;
+    edges?: CHECKBOX_EDGE_STYLE;
 }
 declare const Checkbox: FC<ICheckbox>;
 
@@ -65,6 +83,17 @@ interface IChip {
     label: string;
     onClear: () => void;
     className?: string;
+    variant?: CHIP_VARIANT;
+    edges?: CHIP_EDGE_STYLE;
+}
+declare enum CHIP_VARIANT {
+    SOLID = "solid",
+    OUTLINE = "outline"
+}
+declare enum CHIP_EDGE_STYLE {
+    ROUNDED = "rounded",
+    SQUARED = "squared",
+    PILL = "pill"
 }
 declare const Chip: FC<IChip>;
 
@@ -86,6 +115,7 @@ declare const Tooltip: FC<ITooltip>;
 
 interface IEllipsis {
     label: string;
+    labelMaxWidth?: string;
     tooltipPosition?: TOOLTIP_POSITION;
     tooltipWidth?: string;
     className?: string;
@@ -117,6 +147,10 @@ interface IFilter {
 }
 declare const FilterDropdown: FC<IFilter>;
 
+declare enum FORM_ELEMENT_EDGE_STYLE {
+    ROUNDED = "rounded",
+    SQUARED = "squared"
+}
 interface IInput extends React.HTMLAttributes<HTMLInputElement> {
     label?: string;
     value: string;
@@ -127,13 +161,16 @@ interface IInput extends React.HTMLAttributes<HTMLInputElement> {
     className?: string;
     type?: string;
     onClear?: () => void;
+    isError?: boolean;
+    errorMessage?: string;
+    edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 declare const Input: FC<IInput>;
 
 declare enum MODAL_SIZE {
-    SMALL = "w-[600px] h-60",
-    MEDIUM = "w-[800px] h-96",
-    LARGE = "w-[950px] h-[600px]",
+    SMALL = "w-[600px]",
+    MEDIUM = "w-[800px]",
+    LARGE = "w-[950px]",
     FULL = "w-full h-full"
 }
 interface IModal {
@@ -191,6 +228,10 @@ interface ISelectDropdown {
     onChange: (option: string) => void;
     inputClassName?: string;
     className?: string;
+    isError?: boolean;
+    errorMessage?: string;
+    required?: boolean;
+    edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 declare const SelectDropdown: FC<ISelectDropdown>;
 
@@ -263,6 +304,8 @@ interface ITable {
     columns: ITableColumn[];
     data: any[];
     className?: string;
+    striped?: boolean;
+    bordered?: boolean;
 }
 declare const Table: FC<ITable>;
 
@@ -273,22 +316,39 @@ declare enum TAG_TYPE {
     WARNING = "warning",
     INFO = "info"
 }
+declare enum TAG_VARIANT {
+    SOLID = "solid",
+    OUTLINE = "outline"
+}
+declare enum TAG_EDGE_STYLE {
+    ROUNDED = "rounded",
+    SQUARED = "squared",
+    PILL = "pill"
+}
 interface ITag {
     type: TAG_TYPE;
     label: string;
+    variant?: TAG_VARIANT;
+    edges?: TAG_EDGE_STYLE;
     className?: string;
 }
 declare const Tag: FC<ITag>;
 
+declare enum STEP_DIRECTION {
+    UPWARD = "upward",
+    DOWNWARD = "downward"
+}
 interface ILog {
     title: string;
-    date?: string;
+    placeholderRight?: string;
+    placeholderBottom?: string;
     description?: string;
     status: string;
 }
 interface ITimeLine {
     logs: ILog[];
     className?: string;
+    direction?: STEP_DIRECTION;
 }
 declare const TimeLine: FC<ITimeLine>;
 
@@ -311,6 +371,12 @@ declare const SignOut: () => ReactNode;
 declare const Filter: () => ReactNode;
 
 declare const ChevDown: () => ReactNode;
+
+declare const Add: () => react_jsx_runtime.JSX.Element;
+
+declare const AddSquared: () => react_jsx_runtime.JSX.Element;
+
+declare const AddCircular: () => react_jsx_runtime.JSX.Element;
 
 declare const Cross: () => ReactNode;
 
@@ -478,6 +544,8 @@ declare const Tags: () => react_jsx_runtime.JSX.Element;
 
 declare const Masks: () => react_jsx_runtime.JSX.Element;
 
+declare const Trash: () => react_jsx_runtime.JSX.Element;
+
 declare const Turtle: () => react_jsx_runtime.JSX.Element;
 
 declare const Ufo: () => react_jsx_runtime.JSX.Element;
@@ -506,9 +574,11 @@ declare const SquareFill: () => ReactNode;
 
 declare const Eclipse: () => ReactNode;
 
+declare const Copy: () => react_jsx_runtime.JSX.Element;
+
 declare const index_BrightHigh: typeof BrightHigh;
 declare namespace index {
-  export { AlienFace as AlienFaceSVG, AlienUser as AlienUserSVG, ArrowLeft as ArrowLeftSVG, ArrowRight as ArrowRightSVG, Astronaut as AstronautSVG, Balance as BalanceSVG, Balloons as BalloonsSVG, Basket as BasketSVG, Bat as BatSVG, Battery as BatterySVG, Bee as BeeSVG, Binocular as BinocularSVG, Bird as BirdSVG, BoxFilled as BoxFilledSVG, Brain as BrainSVG, index_BrightHigh as BrightHigh, BrightLow as BrightLowSVG, Bucket as BucketSVG, Cabin as CabinSVG, Cake as CakeSVG, Chart as ChartSVG, Check as CheckSVG, ChevDown as ChevDownSVG, ChevLeft as ChevLeftSVG, ChevRight as ChevRightSVG, ChevUp as ChevUpSVG, Circle as CircleSVG, City as CitySVG, Clock as ClockSVG, Cocktail as CocktailSVG, Code as CodeSVG, Coin as CoinSVG, Coins as CoinsSVG, Colors as ColorsSVG, Connection as ConnectionSVG, Covers as CoversSVG, Cow as CowSVG, Crab as CrabSVG, Cross as CrossSVG, Csv as CsvSVG, Dashboard as DashboardSVG, Dice as DiceSVG, Dolphin as DolphinSVG, DoorOpen as DoorOpnSVG, DotFill as DotFillSVG, DownFolder as DownFolderSVG, Download as DownloadSVG, Eclipse as EclipseSVG, Edit as EditSVG, Elephant as ElephantSVG, Fence as FenceSVG, Filter as FilterSVG, Filters as FiltersSVG, Fox as FoxSVG, Ghost as GhostSVG, Helicopter as HelicopterSVG, Hospital as HospitalSVG, Image as ImageSVG, Joystick as JoystickSVG, Light as LightSVG, Lion as LionSVG, Lobster as LobsterSVG, Lock as LockSVG, Masks as MasksSVG, Mobile as MobileSVG, MoneyBag as MoneyBagSVG, Money as MoneySVG, Monkey as MonkeySVG, NewTab as NewTabSVG, OrderInfo as OrderInfoSVG, Orders as OrdersSVG, Pdf as PdfSVG, Percentage as PercentageSVG, Pin as PinSVG, Plane as PlaneSVG, Printer as PrinterSVG, Products as ProductsSVG, Radio as RadioSVG, Robot as RobotSVG, Rocket as RocketSVG, Sheep as SheepSVG, Shuttle as ShuttleSVG, SignIn as SignInSVG, SignOut as SignOutSVG, Signal as SignalSVG, Siren as SirenSVG, Snake as SnakeSVG, Sort as SortSVG, SquareFill as SquareFillSVG, Stars as StarsSVG, Steps as StepsSVG, Store as StoreSVG, Suitcase as SuitcaseSVG, Tags as TagsSVG, Templates as TemplatesSVG, Terminal as TerminalSVG, ToDo as ToDoSVG, Turtle as TurtleSVG, Ufo as UfoSVG, Unlock as UnlockSVG, UpFolder as UpFolderSVG, Upload as UploadSVG, Van as VanSVG, VideoCam as VideoCamSVG, Wallet as WalletSVG, Whale as WhaleSVG, Wifi as WifiSVG };
+  export { AddCircular as AddCircularSVG, Add as AddSVG, AddSquared as AddSquaredSVG, AlienFace as AlienFaceSVG, AlienUser as AlienUserSVG, ArrowLeft as ArrowLeftSVG, ArrowRight as ArrowRightSVG, Astronaut as AstronautSVG, Balance as BalanceSVG, Balloons as BalloonsSVG, Basket as BasketSVG, Bat as BatSVG, Battery as BatterySVG, Bee as BeeSVG, Binocular as BinocularSVG, Bird as BirdSVG, BoxFilled as BoxFilledSVG, Brain as BrainSVG, index_BrightHigh as BrightHigh, BrightLow as BrightLowSVG, Bucket as BucketSVG, Cabin as CabinSVG, Cake as CakeSVG, Chart as ChartSVG, Check as CheckSVG, ChevDown as ChevDownSVG, ChevLeft as ChevLeftSVG, ChevRight as ChevRightSVG, ChevUp as ChevUpSVG, Circle as CircleSVG, City as CitySVG, Clock as ClockSVG, Cocktail as CocktailSVG, Code as CodeSVG, Coin as CoinSVG, Coins as CoinsSVG, Colors as ColorsSVG, Connection as ConnectionSVG, Copy as CopySVG, Covers as CoversSVG, Cow as CowSVG, Crab as CrabSVG, Cross as CrossSVG, Csv as CsvSVG, Dashboard as DashboardSVG, Dice as DiceSVG, Dolphin as DolphinSVG, DoorOpen as DoorOpnSVG, DotFill as DotFillSVG, DownFolder as DownFolderSVG, Download as DownloadSVG, Eclipse as EclipseSVG, Edit as EditSVG, Elephant as ElephantSVG, Fence as FenceSVG, Filter as FilterSVG, Filters as FiltersSVG, Fox as FoxSVG, Ghost as GhostSVG, Helicopter as HelicopterSVG, Hospital as HospitalSVG, Image as ImageSVG, Joystick as JoystickSVG, Light as LightSVG, Lion as LionSVG, Lobster as LobsterSVG, Lock as LockSVG, Masks as MasksSVG, Mobile as MobileSVG, MoneyBag as MoneyBagSVG, Money as MoneySVG, Monkey as MonkeySVG, NewTab as NewTabSVG, OrderInfo as OrderInfoSVG, Orders as OrdersSVG, Pdf as PdfSVG, Percentage as PercentageSVG, Pin as PinSVG, Plane as PlaneSVG, Printer as PrinterSVG, Products as ProductsSVG, Radio as RadioSVG, Robot as RobotSVG, Rocket as RocketSVG, Sheep as SheepSVG, Shuttle as ShuttleSVG, SignIn as SignInSVG, SignOut as SignOutSVG, Signal as SignalSVG, Siren as SirenSVG, Snake as SnakeSVG, Sort as SortSVG, SquareFill as SquareFillSVG, Stars as StarsSVG, Steps as StepsSVG, Store as StoreSVG, Suitcase as SuitcaseSVG, Tags as TagsSVG, Templates as TemplatesSVG, Terminal as TerminalSVG, ToDo as ToDoSVG, Trash as TrashSVG, Turtle as TurtleSVG, Ufo as UfoSVG, Unlock as UnlockSVG, UpFolder as UpFolderSVG, Upload as UploadSVG, Van as VanSVG, VideoCam as VideoCamSVG, Wallet as WalletSVG, Whale as WhaleSVG, Wifi as WifiSVG };
 }
 
 interface ITextArea extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -520,6 +590,9 @@ interface ITextArea extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     required?: boolean;
     className?: string;
     onClear?: () => void;
+    isError?: boolean;
+    errorMessage?: string;
+    edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 
 export { AVATAR_VARIANT, Avatar, BUTTON_VARIANTS, Banner, Button, Carousel, Checkbox, Chip, Ellipsis, FileUploader, FilterDropdown, type IAvatar, type IBanner, type IButton, type ICarousel, type ICheckbox, type IChip, type IEllipsis, type IFileUploader, type IFilter, type IFilterCategory, type IFilterOption, type IInput, type ILog, type IMenuItem, type IModal, type INavBar, type IPagination, type IPaging, type IRadioButton, type ISelectDropdown, type ISelectDropdownOption, type ISnackBar, type IState, type IStateBase, type ITable, type ITableColumn, type ITag, type ITextArea, type ITimeLine, type ITooltip, index as Icons, Input, MODAL_SIZE, Modal, NavBar, Pagination, RadioButton, SNACK_BAR_TYPE, STATE_TYPE, SelectDropdown, Snackbar, State as States, TAG_TYPE, TOOLTIP_POSITION, Table, Tag, TimeLine, Tooltip };

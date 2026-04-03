@@ -39,8 +39,8 @@ const Button: FC<IButton> = ({
     switch (variant) {
       case BUTTON_VARIANTS.PRIMARY:
         return disabled
-          ? "bg-neutral-300 text-neutral-800 cursor-not-allowed"
-          : "bg-primary-500 text-white cursor-pointer hover:bg-primary-600 active:bg-primary-700";
+          ? "bg-primary-200 text-primary-500 cursor-not-allowed"
+          : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
 
       case BUTTON_VARIANTS.SECONDARY:
         return disabled
