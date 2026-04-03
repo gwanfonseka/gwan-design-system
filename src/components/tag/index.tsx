@@ -22,8 +22,8 @@ export enum TAG_EDGE_STYLE {
 export interface ITag {
   type: TAG_TYPE;
   label: string;
-  variant?: TAG_VARIANT; // optional, default is solid
-  edges?: TAG_EDGE_STYLE; // optional, default is rounded
+  variant?: TAG_VARIANT;
+  edges?: TAG_EDGE_STYLE;
   className?: string;
 }
 
@@ -37,15 +37,15 @@ const Tag: FC<ITag> = ({
   const getTagStyle = (type: TAG_TYPE) => {
     switch (type) {
       case TAG_TYPE.SUCCESS:
-        return `${variant === TAG_VARIANT.SOLID ? "bg-green-50" : "bg-transparent border border-green-600"} text-green-600`;
+        return `${variant === TAG_VARIANT.SOLID ? "bg-success-bg" : "bg-transparent border border-success"} text-success-fg`;
       case TAG_TYPE.DANGER:
-        return `${variant === TAG_VARIANT.SOLID ? "bg-red-50" : "bg-transparent border border-red-600"} text-red-600`;
+        return `${variant === TAG_VARIANT.SOLID ? "bg-danger-bg" : "bg-transparent border border-danger"} text-danger-fg`;
       case TAG_TYPE.WARNING:
-        return `${variant === TAG_VARIANT.SOLID ? "bg-yellow-100" : "bg-transparent border border-yellow-500"} text-yellow-500`;
+        return `${variant === TAG_VARIANT.SOLID ? "bg-warning-bg" : "bg-transparent border border-warning"} text-warning-fg`;
       case TAG_TYPE.INFO:
-        return `${variant === TAG_VARIANT.SOLID ? "bg-blue-50" : "bg-transparent border border-blue-600"} text-blue-600`;
+        return `${variant === TAG_VARIANT.SOLID ? "bg-accent/10" : "bg-transparent border border-accent"} text-accent`;
       default:
-        return `${variant === TAG_VARIANT.SOLID ? "bg-neutral-200" : "bg-transparent border border-neutral-800"} text-neutral-800`;
+        return `${variant === TAG_VARIANT.SOLID ? "bg-surface-raised" : "bg-transparent border border-border"} text-foreground`;
     }
   };
 
@@ -62,9 +62,7 @@ const Tag: FC<ITag> = ({
 
   return (
     <div
-      className={`w-fit px-4 py-2 text-sm ${getTagStyle(
-        type,
-      )} ${getEdgesStyle(edges)} ${className}`}
+      className={`w-fit px-4 py-2 text-sm ${getTagStyle(type)} ${getEdgesStyle(edges)} ${className}`}
     >
       {label}
     </div>

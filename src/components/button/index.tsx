@@ -40,16 +40,17 @@ const Button: FC<IButton> = ({
       case BUTTON_VARIANTS.PRIMARY:
         return disabled
           ? "bg-primary-200 text-primary-500 cursor-not-allowed"
-          : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700";
+          : "bg-primary-500 text-primary-default-fg hover:bg-primary-600 active:bg-primary-700";
 
       case BUTTON_VARIANTS.SECONDARY:
         return disabled
-          ? "bg-neutral-100 text-neutral-800 cursor-not-allowed"
+          ? "bg-surface text-muted-fg cursor-not-allowed"
           : "bg-primary-100 text-primary-800 cursor-pointer hover:bg-primary-200 active:bg-primary-300";
+
       case BUTTON_VARIANTS.TERTIARY:
         return disabled
-          ? "text-neutral-300 border border-neutral-300 cursor-not-allowed"
-          : "bg-transparent text-primary-500 border border-primary-500 cursor-pointer hover:bg-neutral-50 active:bg-neutral-100";
+          ? "text-muted-fg border border-border cursor-not-allowed"
+          : "bg-transparent text-primary-500 border border-primary-500 cursor-pointer hover:bg-surface active:bg-surface-raised";
     }
   };
 

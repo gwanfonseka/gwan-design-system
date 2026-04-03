@@ -25,16 +25,14 @@ const Table: FC<ITable> = ({
   bordered = false,
 }: ITable) => {
   return (
-    <div
-      className={`overflow-hidden rounded-lg border border-neutral-300 ${className}`}
-    >
+    <div className={`overflow-hidden rounded-lg border border-border ${className}`}>
       <table className="w-full border-collapse">
         <thead>
-          <tr className="bg-neutral-300 border border-neutral-300">
+          <tr className="bg-surface-raised border-b border-border">
             {columns.map(({ header, headerClassName }, index) => (
               <th
                 key={`column_${index}`}
-                className={`text-left px-4 py-4 ${headerClassName}`}
+                className={`text-left px-4 py-4 text-foreground ${headerClassName}`}
               >
                 {header}
               </th>
@@ -44,21 +42,20 @@ const Table: FC<ITable> = ({
         <tbody>
           {data.map((row, rowIndex) => {
             const stripedClass =
-              striped && rowIndex % 2 === 1 ? "bg-neutral-50" : "bg-white";
-
+              striped && rowIndex % 2 === 1 ? "bg-surface" : "bg-background";
             const borderClass =
               bordered && rowIndex !== data.length - 1
-                ? "border-b border-neutral-200"
+                ? "border-b border-border-subtle"
                 : "";
             return (
               <tr
                 key={`row_${rowIndex}`}
-                className={`hover:bg-neutral-100 ${stripedClass} ${borderClass}`}
+                className={`hover:bg-surface-raised transition-colors duration-100 ${stripedClass} ${borderClass}`}
               >
                 {columns.map(({ render, cellClassName }, cellIndex) => (
                   <td
                     key={`cell_${cellIndex}`}
-                    className={`text-left px-4 py-4 ${cellClassName}`}
+                    className={`text-left px-4 py-4 text-foreground ${cellClassName}`}
                   >
                     {render(row)}
                   </td>

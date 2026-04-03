@@ -1,5 +1,6 @@
 // Components
 export { default as Avatar } from "./components/avatar";
+export { default as Callout } from "./components/callout";
 export { default as Banner } from "./components/banner";
 export { default as Button } from "./components/button";
 export { default as Carousel } from "./components/carousel";
@@ -24,6 +25,7 @@ export * as Icons from "./components/icons";
 
 // Constants
 export { BUTTON_VARIANTS } from "./components/button";
+export { CALLOUT_TYPE } from "./components/callout";
 export { AVATAR_VARIANT } from "./components/avatar";
 export { MODAL_SIZE } from "./components/modal";
 export { SNACK_BAR_TYPE } from "./components/snackBar";
@@ -33,6 +35,7 @@ export { TOOLTIP_POSITION } from "./components/tooltip";
 
 // Types
 export type { IAvatar } from "./components/avatar";
+export type { ICallout } from "./components/callout";
 export type { IBanner } from "./components/banner";
 export type { IButton } from "./components/button";
 export type { ICarousel } from "./components/carousel";

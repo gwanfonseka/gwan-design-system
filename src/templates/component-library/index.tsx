@@ -26,6 +26,7 @@ import Carousels from "./carousels";
 import SnackBars from "./snackBars";
 import States from "./states";
 import TextAreas from "./textarea";
+import Callouts from "./callout";
 
 const menuItems = [
   {
@@ -119,6 +120,10 @@ const menuItems = [
   {
     name: "State",
     template: <States />,
+  },
+  {
+    name: "Callout",
+    template: <Callouts />,
   },
 ];
 

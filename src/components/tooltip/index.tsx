@@ -56,16 +56,13 @@ const Tooltip: FC<ITooltip> = ({
 
   return (
     <div
-      className={`bg-neutral-800 text-white text-sm py-1 px-2 rounded-lg absolute z-50 
-        ${isVisible ? "block" : "hidden"} ${getTooltipPosition(
-        position
-      )} ${toolTipWidth} ${toolTipClass} ${className}`}
+      className={`bg-foreground text-background text-sm py-1 px-2 rounded-lg absolute z-50
+        ${isVisible ? "block" : "hidden"} ${getTooltipPosition(position)}
+        ${toolTipWidth} ${toolTipClass} ${className}`}
     >
       <div>{label}</div>
       <div
-        className={`absolute w-2 h-2 bg-neutral-800 rotate-45 ${tipPosition(
-          position
-        )}`}
+        className={`absolute w-2 h-2 bg-foreground rotate-45 ${tipPosition(position)}`}
       ></div>
     </div>
   );

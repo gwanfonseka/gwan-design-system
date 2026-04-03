@@ -23,18 +23,9 @@ export interface ICheckbox {
 }
 
 const sizeMap = {
-  [CHECKBOX_SIZE.SMALL]: {
-    box: "size-4",
-    icon: "size-3",
-  },
-  [CHECKBOX_SIZE.MEDIUM]: {
-    box: "size-5",
-    icon: "size-4",
-  },
-  [CHECKBOX_SIZE.LARGE]: {
-    box: "size-6",
-    icon: "size-5",
-  },
+  [CHECKBOX_SIZE.SMALL]: { box: "size-4", icon: "size-3" },
+  [CHECKBOX_SIZE.MEDIUM]: { box: "size-5", icon: "size-4" },
+  [CHECKBOX_SIZE.LARGE]: { box: "size-6", icon: "size-5" },
 };
 
 const edgeMap = {
@@ -69,23 +60,23 @@ const Checkbox: FC<ICheckbox> = ({
       />
 
       <div
-        className={`${box} ${edgeStyle} flex items-center justify-center border transition-all 
+        className={`${box} ${edgeStyle} flex items-center justify-center border transition-all
           ${
             checked
               ? "bg-primary-300 border-primary-400"
-              : "bg-white border-neutral-500"
+              : "bg-background border-border"
           }
-          ${disabled ? "bg-neutral-200 border-neutral-400" : ""}
+          ${disabled ? "bg-surface-raised border-border" : ""}
         `}
       >
         {checked && (
-          <div className={`${icon} text-black`}>
+          <div className={`${icon} text-foreground`}>
             <CheckSVG />
           </div>
         )}
       </div>
 
-      {label && <span className="text-black">{label}</span>}
+      {label && <span className="text-foreground">{label}</span>}
     </label>
   );
 };

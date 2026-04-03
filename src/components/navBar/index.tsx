@@ -1,7 +1,5 @@
-import Image from "next/image";
 import Avatar, { AVATAR_VARIANT } from "../avatar";
 import { FC, ReactNode, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { ChevDownSVG, ChevLeftSVG, ChevRightSVG, DotFillSVG } from "../icons";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
@@ -37,6 +35,7 @@ export interface INavBar {
   className?: string;
   menuItemTextClass?: string;
   isLoading?: boolean;
+  onNavigate?: (route: string) => void;
 }
 
 const NavBar: FC<INavBar> = ({
@@ -54,8 +53,8 @@ const NavBar: FC<INavBar> = ({
   className = "",
   menuItemTextClass = "",
   isLoading = false,
+  onNavigate,
 }: INavBar) => {
-  const router = useRouter();
   const [isActiveMenuItem, setIsActiveMenuItem] = useState<string>("");
   const [isActiveSubMenuItem, setIsActiveSubMenuItem] = useState<string>("");
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(isCollapsed);
@@ -97,7 +96,7 @@ const NavBar: FC<INavBar> = ({
       setIsActiveSubMenuItem("");
       onClick();
     }
-    router.push(route);
+    onNavigate?.(route);
   };
 
   return (
@@ -112,9 +111,9 @@ const NavBar: FC<INavBar> = ({
         <div className="flex flex-col gap-4">
           {/* Logo */}
           <div className="flex flex-row gap-2 items-center">
-            <Image src={logoShort} alt="logo_short" width={60} height={60} />
+            <img src={logoShort} alt="logo_short" width={60} height={60} />
             {!isMenuItemsCollapsed && (
-              <Image
+              <img
                 src={logoLong}
                 alt="logo_long"
                 width={200}
@@ -137,7 +136,7 @@ const NavBar: FC<INavBar> = ({
             />
             <span
               onClick={() => setIsMenuCollapsed(!isMenuCollapsed)}
-              className={`cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-neutral-50 absolute -right-8 flex items-center justify-center text-black`}
+              className={`cursor-pointer w-8 h-8 rounded-full ${menuBackgroundColor} border border-white/30 absolute -right-8 flex items-center justify-center text-foreground`}
             >
               <div className="size-5">
                 {isMenuCollapsed ? <ChevRightSVG /> : <ChevLeftSVG />}
@@ -147,7 +146,7 @@ const NavBar: FC<INavBar> = ({
         </div>
 
         {/* Divider */}
-        <div className="border-neutral-50 border-b"></div>
+        <div className="border-white/20 border-b"></div>
 
         {/* Menu Items */}
         {!isLoading ? (
@@ -211,12 +210,12 @@ const NavBar: FC<INavBar> = ({
                             }`}
                             onClick={() => {
                               setIsActiveSubMenuItem(subItem.title);
-                              router.push(subItem.route);
+                              onNavigate?.(subItem.route);
                             }}
                             onMouseEnter={() => setShowSubTooltip(subIndex)}
                             onMouseLeave={() => setShowSubTooltip(null)}
                           >
-                            <div className="size-6 ml-1 mt-1 relative text-neutral-600">
+                            <div className="size-6 ml-1 mt-1 relative text-muted-fg">
                               <DotFillSVG />
                               {isMenuCollapsed && (
                                 <Tooltip
@@ -269,11 +268,11 @@ const NavBarShimmer = ({
       {[...Array(5)].map((_, index) => (
         <div
           key={index}
-          className="flex flex-row gap-4 items-center p-4 rounded-lg bg-neutral-400"
+          className="flex flex-row gap-4 items-center p-4 rounded-lg bg-white/20"
         >
-          <div className="w-6 h-6 ml-1 bg-neutral-200"></div>
+          <div className="w-6 h-6 ml-1 bg-white/30"></div>
           {!isMenuItemsCollapsed && (
-            <span className="w-full h-4 bg-neutral-200 rounded"></span>
+            <span className="w-full h-4 bg-white/30 rounded"></span>
           )}
         </div>
       ))}

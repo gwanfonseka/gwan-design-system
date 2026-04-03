@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Button, { BUTTON_VARIANTS } from "@/components/button";
-import Tag, { TAG_TYPE } from "@/components/tag";
+import Button, {
+  BUTTON_EDGE_STYLE,
+  BUTTON_VARIANTS,
+} from "@/components/button";
+import Tag, { TAG_EDGE_STYLE, TAG_TYPE } from "@/components/tag";
 import Avatar, { AVATAR_VARIANT } from "@/components/avatar";
 import Input from "@/components/input";
 import Snackbar, { SNACK_BAR_TYPE } from "@/components/snackBar";
@@ -66,11 +69,13 @@ const ComponentIntelligence = () => {
                   variant={BUTTON_VARIANTS.PRIMARY}
                   onClick={() => {}}
                   leftIcon={<CrabSVG />}
+                  edges={BUTTON_EDGE_STYLE.PILL}
                 />
                 <Button
                   variant={BUTTON_VARIANTS.SECONDARY}
                   onClick={() => {}}
                   leftIcon={<LobsterSVG />}
+                  edges={BUTTON_EDGE_STYLE.SQUARED}
                 />
                 <Button
                   variant={BUTTON_VARIANTS.TERTIARY}
@@ -82,6 +87,7 @@ const ComponentIntelligence = () => {
                   onClick={() => {}}
                   leftIcon={<AlienFaceSVG />}
                   disabled
+                  edges={BUTTON_EDGE_STYLE.PILL}
                 />
               </div>
               {/* Labeled buttons */}
@@ -90,18 +96,21 @@ const ComponentIntelligence = () => {
                 label="Get Started"
                 onClick={() => {}}
                 leftIcon={<DiceSVG />}
+                edges={BUTTON_EDGE_STYLE.PILL}
               />
               <Button
                 variant={BUTTON_VARIANTS.SECONDARY}
                 label="View Docs"
                 onClick={() => {}}
                 leftIcon={<CoversSVG />}
+                edges={BUTTON_EDGE_STYLE.ROUNDED}
               />
               <Button
                 variant={BUTTON_VARIANTS.TERTIARY}
                 label="Learn More"
                 onClick={() => {}}
                 leftIcon={<RocketSVG />}
+                edges={BUTTON_EDGE_STYLE.SQUARED}
               />
             </div>
           </ShowcaseCard>
@@ -115,6 +124,7 @@ const ComponentIntelligence = () => {
                   type={TAG_TYPE.SUCCESS}
                   label="Completed"
                   className="w-full text-center"
+                  edges={TAG_EDGE_STYLE.SQUARED}
                 />
                 <Tag
                   type={TAG_TYPE.WARNING}
@@ -130,6 +140,7 @@ const ComponentIntelligence = () => {
                   type={TAG_TYPE.INFO}
                   label="Forwarded"
                   className="w-full text-center"
+                  edges={TAG_EDGE_STYLE.PILL}
                 />
               </div>
               {/* 2 snack bars */}

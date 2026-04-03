@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FC } from "react";
 
 export enum STATE_TYPE {
@@ -48,21 +47,12 @@ const State: FC<IState> = ({
     <div
       className={`w-full h-full flex flex-col gap-8 items-center justify-center ${className}`}
     >
-      {stateImage ? (
-        <Image
-          src={stateImage}
-          alt="state image"
-          width={imageWidth}
-          height={imageHeight}
-        />
-      ) : (
-        <Image
-          src={typeImage()}
-          alt="state image"
-          width={imageWidth}
-          height={imageHeight}
-        />
-      )}
+      <img
+        src={stateImage ?? typeImage()}
+        alt="state image"
+        width={imageWidth}
+        height={imageHeight}
+      />
       <div className="flex flex-col gap-2">
         <p className="text-3xl text-center font-semibold">{title}</p>
         <p className="w-[300px] text-center">{subTitle}</p>

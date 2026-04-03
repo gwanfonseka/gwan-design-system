@@ -42,7 +42,6 @@ const Input: FC<IInput> = ({
     if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
       e.preventDefault();
     }
-
     onKeyDown?.(e);
   };
 
@@ -53,15 +52,15 @@ const Input: FC<IInput> = ({
         e.preventDefault();
       }
     }
-
     onPaste?.(e);
   };
+
   return (
     <div className={`flex flex-col relative ${className}`}>
       {label && (
         <label
           htmlFor={label}
-          className={`text-sm ${isError ? "text-red-500" : "text-neutral-600"} mb-1`}
+          className={`text-sm ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
         >
           {`${label}${required ? " *" : ""}`}
         </label>
@@ -72,11 +71,13 @@ const Input: FC<IInput> = ({
           placeholder={placeholder}
           value={value}
           disabled={disabled}
-          className={`border ${isError ? "border-red-500 focus:border-red-500" : "border-neutral-300"} outline-none py-4 pl-4 ${
+          className={`bg-background text-foreground border ${
+            isError ? "border-danger focus:border-danger" : "border-border"
+          } outline-none py-4 pl-4 ${
             onClear ? "pr-8" : "pr-4"
           } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
-            disabled ? "cursor-not-allowed" : "cursor-text"
-          } text-sm w-full ${inputClassName}`}
+            disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
+          } text-sm w-full placeholder:text-muted-fg ${inputClassName}`}
           required={required}
           type={type}
           onKeyDown={handleKeyDown}
@@ -85,7 +86,7 @@ const Input: FC<IInput> = ({
         />
         {onClear && value && (
           <div
-            className="size-3 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-900 cursor-pointer"
+            className="size-3 absolute right-3 top-1/2 -translate-y-1/2 text-muted-fg hover:text-foreground cursor-pointer"
             onClick={onClear}
           >
             <CrossSVG />
@@ -93,7 +94,7 @@ const Input: FC<IInput> = ({
         )}
       </div>
       {isError && errorMessage && (
-        <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
+        <p className="text-danger text-xs mt-1">{errorMessage}</p>
       )}
     </div>
   );
