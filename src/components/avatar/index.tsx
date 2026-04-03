@@ -123,7 +123,7 @@ const Avatar: FC<IAvatar> = ({
         variant === AVATAR_VARIANT.INITIALS_WITH_FULL) && (
         <div className="flex flex-col">
           <p className="text-base font-semibold">{name}</p>
-          <p className="text-sm text-neutral-700">{email}</p>
+          <p className="text-sm text-muted-fg">{email}</p>
         </div>
       )}
     </div>
