@@ -88,7 +88,7 @@ const menuItems = [
 
 const NavBars = () => {
   return (
-    <div className="flex flex-row items-start border border-neutral-200">
+    <div className="flex flex-row items-start border border-border">
       <NavBar
         menuItems={menuItems}
         logoShort="/images/logo_short.png"
@@ -99,7 +99,7 @@ const NavBars = () => {
         avatarType={AVATAR_VARIANT.IMAGE_WITH_FULL}
         menuWidthClass="w-[20rem]"
         menuHeightClass="h-[80vh]"
-        menuBackgroundColor="bg-primary-100"
+        menuBackgroundColor="bg-surface-raised"
         isLoading={false}
       />
       <div className="flex-1 p-4">Rest of the content</div>

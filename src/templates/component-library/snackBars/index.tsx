@@ -4,7 +4,7 @@ import Snackbar, { SNACK_BAR_TYPE } from "@/components/snackBar";
 const SnackBars = () => {
   return (
     <div className="flex flex-col items-center">
-      <div className="w-[50%] flex flex-col gap-4">
+      <div className="w-full sm:w-3/4 md:w-1/2 flex flex-col gap-4">
         <Snackbar message="Some text here" icon={<CircleSVG />} />
         <Snackbar
           message="Some text here"

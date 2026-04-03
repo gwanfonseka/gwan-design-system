@@ -4,7 +4,7 @@ import { ProductsSVG } from "@/components/icons";
 const Buttons = () => {
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row gap-4 items-center justify-center">
+      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
         <Button
           variant={BUTTON_VARIANTS.PRIMARY}
           label="Primary"
@@ -39,7 +39,7 @@ const Buttons = () => {
           icon={<ProductsSVG />}
         />
       </div>
-      <div className="flex flex-row gap-4 items-center justify-center">
+      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
         <Button
           variant={BUTTON_VARIANTS.PRIMARY}
           label=" Disabled primary"
@@ -80,7 +80,7 @@ const Buttons = () => {
           disabled
         />
       </div>
-      <div className="flex flex-row gap-4 items-center justify-center">
+      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
         <Button
           variant={BUTTON_VARIANTS.PRIMARY}
           onClick={() => {}}

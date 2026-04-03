@@ -3,7 +3,7 @@ import Avatar, { AVATAR_VARIANT } from "@/components/avatar";
 const Avatars = () => {
   const profilePicture = "/images/profile_picture.png";
   return (
-    <div className="w-[600px] mx-auto my-0">
+    <div className="w-full max-w-150 mx-auto my-0">
       <div className="grid grid-cols-2 gap-8 items-center">
         <p className="text-base font-semibold text-right">
           Avatar image with details
