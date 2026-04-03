@@ -65,22 +65,22 @@ const ComponentIntelligence = () => {
                 <Button
                   variant={BUTTON_VARIANTS.PRIMARY}
                   onClick={() => {}}
-                  icon={<CrabSVG />}
+                  leftIcon={<CrabSVG />}
                 />
                 <Button
                   variant={BUTTON_VARIANTS.SECONDARY}
                   onClick={() => {}}
-                  icon={<LobsterSVG />}
+                  leftIcon={<LobsterSVG />}
                 />
                 <Button
                   variant={BUTTON_VARIANTS.TERTIARY}
                   onClick={() => {}}
-                  icon={<AstronautSVG />}
+                  leftIcon={<AstronautSVG />}
                 />
                 <Button
                   variant={BUTTON_VARIANTS.PRIMARY}
                   onClick={() => {}}
-                  icon={<AlienFaceSVG />}
+                  leftIcon={<AlienFaceSVG />}
                   disabled
                 />
               </div>
@@ -89,19 +89,19 @@ const ComponentIntelligence = () => {
                 variant={BUTTON_VARIANTS.PRIMARY}
                 label="Get Started"
                 onClick={() => {}}
-                icon={<DiceSVG />}
+                leftIcon={<DiceSVG />}
               />
               <Button
                 variant={BUTTON_VARIANTS.SECONDARY}
                 label="View Docs"
                 onClick={() => {}}
-                icon={<CoversSVG />}
+                leftIcon={<CoversSVG />}
               />
               <Button
                 variant={BUTTON_VARIANTS.TERTIARY}
                 label="Learn More"
                 onClick={() => {}}
-                icon={<RocketSVG />}
+                leftIcon={<RocketSVG />}
               />
             </div>
           </ShowcaseCard>
@@ -209,7 +209,6 @@ const ComponentIntelligence = () => {
             Explore All Components
           </a>
         </div>
-
       </div>
     </section>
   );
