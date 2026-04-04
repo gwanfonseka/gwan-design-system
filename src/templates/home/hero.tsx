@@ -1,56 +1,63 @@
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-16">
-      {/* Background: concentric oval rings */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+      {/* Background: dot grid with radial fade */}
+      <div className="absolute inset-0 pointer-events-none select-none">
         <svg
-          className="absolute w-full h-full opacity-[0.07] dark:opacity-[0.06]"
+          className="absolute w-full h-full opacity-[0.70] dark:opacity-[0.40]"
           xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 900"
+          preserveAspectRatio="xMidYMid slice"
         >
-          <ellipse
-            cx="50%"
-            cy="50%"
-            rx="38%"
-            ry="52%"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            className="text-primary-700"
-          />
-          <ellipse
-            cx="50%"
-            cy="50%"
-            rx="28%"
-            ry="40%"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            className="text-primary-700"
-          />
-          <ellipse
-            cx="50%"
-            cy="50%"
-            rx="19%"
-            ry="28%"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            className="text-primary-700"
-          />
-          <ellipse
-            cx="50%"
-            cy="50%"
-            rx="11%"
-            ry="17%"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            className="text-primary-700"
-          />
+          <defs>
+            <pattern id="dotGrid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="2" fill="url(#waveGrad)" />
+            </pattern>
+            {/* Sweeping color wave — translates from -1440 to +1440 over 10s */}
+            <linearGradient id="waveGrad" x1="0" y1="0" x2="1440" y2="900" gradientUnits="userSpaceOnUse">
+              <animateTransform
+                attributeName="gradientTransform"
+                type="translate"
+                from="-1440 0"
+                to="1440 0"
+                dur="10s"
+                repeatCount="indefinite"
+              />
+              <stop offset="0%"   stopColor="#adc09e" /> {/* primary-300 sage */}
+              <stop offset="25%"  stopColor="#14b8a6" /> {/* teal-500 */}
+              <stop offset="50%"  stopColor="#34d399" /> {/* emerald-400 */}
+              <stop offset="75%"  stopColor="#0f766e" /> {/* teal-700 / accent */}
+              <stop offset="100%" stopColor="#adc09e" /> {/* back to sage */}
+            </linearGradient>
+            <radialGradient id="heroFade" cx="50%" cy="50%" r="55%">
+              <stop offset="0%"  stopColor="white" stopOpacity="0" />
+              <stop offset="65%" stopColor="white" stopOpacity="1" />
+            </radialGradient>
+            <mask id="heroMask">
+              <rect width="100%" height="100%" fill="url(#heroFade)" />
+            </mask>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#dotGrid)" mask="url(#heroMask)" />
         </svg>
 
-        {/* Central card outline */}
-        <div className="absolute w-[90vw] max-w-130 h-55 sm:h-70 md:h-85 rounded-2xl border border-primary-300/25 dark:border-primary-700/20" />
+        {/* Corner bracket accents */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-[0.20] dark:opacity-[0.12] text-primary-600"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Top-left */}
+          <line x1="5%" y1="6%" x2="11%" y2="6%" stroke="currentColor" strokeWidth="1.5" />
+          <line x1="5%" y1="6%" x2="5%" y2="14%" stroke="currentColor" strokeWidth="1.5" />
+          {/* Top-right */}
+          <line x1="95%" y1="6%" x2="89%" y2="6%" stroke="currentColor" strokeWidth="1.5" />
+          <line x1="95%" y1="6%" x2="95%" y2="14%" stroke="currentColor" strokeWidth="1.5" />
+          {/* Bottom-left */}
+          <line x1="5%" y1="94%" x2="11%" y2="94%" stroke="currentColor" strokeWidth="1.5" />
+          <line x1="5%" y1="94%" x2="5%" y2="86%" stroke="currentColor" strokeWidth="1.5" />
+          {/* Bottom-right */}
+          <line x1="95%" y1="94%" x2="89%" y2="94%" stroke="currentColor" strokeWidth="1.5" />
+          <line x1="95%" y1="94%" x2="95%" y2="86%" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
       </div>
 
       {/* Content */}

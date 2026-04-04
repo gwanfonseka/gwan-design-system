@@ -26,32 +26,109 @@ import Carousels from "./carousels";
 import SnackBars from "./snackBars";
 import States from "./states";
 import TextAreas from "./textarea";
+import Callouts from "./callout";
+import Badges from "./badge";
+import Switches from "./switches";
+import TabsTemplate from "./tabs";
+import AccordionTemplate from "./accordion";
+import SkeletonTemplate from "./skeleton";
+import ProgressBars from "./progressBar";
+import Breadcrumbs from "./breadcrumb";
+import DrawerTemplate from "./drawer";
+import Popovers from "./popover";
+import Alerts from "./alert";
+import StepperTemplate from "./stepper";
+import DatePickerTemplate from "./datePicker";
+import CommandPaletteTemplate from "./commandPalette";
+import ColorPickerTemplate from "./colorPicker";
 
-const menuItems = [
-  { name: "Icons", template: <Icons /> },
-  { name: "Tags", template: <Tags /> },
-  { name: "Buttons", template: <Buttons /> },
-  { name: "Chips", template: <Chips /> },
-  { name: "Timeline", template: <TimeLines /> },
-  { name: "Table", template: <Tables /> },
-  { name: "Pagination", template: <Paginations /> },
-  { name: "Filter Dropdown", template: <FilterDropdowns /> },
-  { name: "Select Dropdown", template: <SelectDropdowns /> },
-  { name: "Input", template: <Inputs /> },
-  { name: "Text Area", template: <TextAreas /> },
-  { name: "Modal", template: <Modals /> },
-  { name: "Avatar", template: <Avatars /> },
-  { name: "Tooltip", template: <Tooltips /> },
-  { name: "Ellipsis", template: <EllipsisTemplate /> },
-  { name: "Navigation", template: <NavBars /> },
-  { name: "File Uploader", template: <FileUploaders /> },
-  { name: "Checkbox", template: <Checkboxes /> },
-  { name: "Radio Button", template: <RadioButtons /> },
-  { name: "Banner", template: <Banners /> },
-  { name: "Carousel", template: <Carousels /> },
-  { name: "Snackbar", template: <SnackBars /> },
-  { name: "State", template: <States /> },
+const menuGroups = [
+  {
+    group: "Foundations",
+    items: [
+      { name: "Icons", template: <Icons /> },
+    ],
+  },
+  {
+    group: "Actions",
+    items: [
+      { name: "Buttons", template: <Buttons /> },
+    ],
+  },
+  {
+    group: "Form Controls",
+    items: [
+      { name: "Input", template: <Inputs /> },
+      { name: "Text Area", template: <TextAreas /> },
+      { name: "Select Dropdown", template: <SelectDropdowns /> },
+      { name: "Filter Dropdown", template: <FilterDropdowns /> },
+      { name: "Checkbox", template: <Checkboxes /> },
+      { name: "Radio Button", template: <RadioButtons /> },
+      { name: "Switch", template: <Switches /> },
+      { name: "Date Picker", template: <DatePickerTemplate /> },
+      { name: "File Uploader", template: <FileUploaders /> },
+      { name: "Color Picker", template: <ColorPickerTemplate /> },
+    ],
+  },
+  {
+    group: "Data Display",
+    items: [
+      { name: "Table", template: <Tables /> },
+      { name: "Pagination", template: <Paginations /> },
+      { name: "Progress Bar", template: <ProgressBars /> },
+    ],
+  },
+  {
+    group: "Navigation",
+    items: [
+      { name: "Navigation", template: <NavBars /> },
+      { name: "Tabs", template: <TabsTemplate /> },
+      { name: "Breadcrumb", template: <Breadcrumbs /> },
+      { name: "Ellipsis", template: <EllipsisTemplate /> },
+    ],
+  },
+  {
+    group: "Content & Layout",
+    items: [
+      { name: "Banner", template: <Banners /> },
+      { name: "Carousel", template: <Carousels /> },
+      { name: "Accordion", template: <AccordionTemplate /> },
+      { name: "Timeline", template: <TimeLines /> },
+      { name: "Stepper", template: <StepperTemplate /> },
+    ],
+  },
+  {
+    group: "Overlays",
+    items: [
+      { name: "Modal", template: <Modals /> },
+      { name: "Drawer", template: <DrawerTemplate /> },
+      { name: "Popover", template: <Popovers /> },
+      { name: "Command Palette", template: <CommandPaletteTemplate /> },
+    ],
+  },
+  {
+    group: "Indicators",
+    items: [
+      { name: "Tags", template: <Tags /> },
+      { name: "Chips", template: <Chips /> },
+      { name: "Badge", template: <Badges /> },
+      { name: "Avatar", template: <Avatars /> },
+      { name: "Tooltip", template: <Tooltips /> },
+      { name: "Skeleton", template: <SkeletonTemplate /> },
+    ],
+  },
+  {
+    group: "Feedback",
+    items: [
+      { name: "Snackbar", template: <SnackBars /> },
+      { name: "Alert", template: <Alerts /> },
+      { name: "Callout", template: <Callouts /> },
+      { name: "State", template: <States /> },
+    ],
+  },
 ];
+
+const menuItems = menuGroups.flatMap((g) => g.items);
 
 const ThemeToggleButton = () => {
   const { theme, setTheme } = useTheme();
@@ -168,7 +245,7 @@ const LibraryTemplate = () => {
           {/* Sidebar */}
           <div
             className={`
-              fixed md:relative top-0 md:top-auto left-0 z-50 md:z-auto
+              fixed md:relative top-0 md:top-auto left-0 z-60 md:z-auto
               h-full md:h-screen
               flex flex-col gap-4
               bg-white/80 dark:bg-black/30 backdrop-blur-md
@@ -291,25 +368,32 @@ const LibraryTemplate = () => {
 
             <hr className="border-border dark:border-white/30 border-2" />
 
-            {/* Component menu items */}
-            {menuItems.map((menuItem, index) => {
-              const menuItemClass =
-                activeMenuItem === menuItem.name
-                  ? "bg-primary-default/10 dark:bg-black/20"
-                  : "bg-transparent border-2 border-border dark:border-white/20";
-
-              return (
-                <div
-                  key={`menu_${menuItem.name}_${index}`}
-                  className={`p-3 lg:p-4 rounded-lg w-full cursor-pointer hover:bg-primary-default/10 dark:hover:bg-black/30 ${menuItemClass}`}
-                  onClick={() => handleTabChange(menuItem.name)}
-                >
-                  <p className="text-foreground dark:text-white text-sm lg:text-lg font-semibold">
-                    {menuItem.name}
-                  </p>
-                </div>
-              );
-            })}
+            {/* Component menu groups */}
+            {menuGroups.map((group) => (
+              <div key={group.group} className="flex flex-col gap-1">
+                <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-fg dark:text-white/30 px-1 pt-1">
+                  {group.group}
+                </p>
+                {group.items.map((menuItem) => {
+                  const isActive = activeMenuItem === menuItem.name;
+                  return (
+                    <div
+                      key={menuItem.name}
+                      className={`px-3 py-2 rounded-lg w-full cursor-pointer transition-colors duration-150 ${
+                        isActive
+                          ? "bg-primary-default/10 dark:bg-black/20"
+                          : "hover:bg-primary-default/10 dark:hover:bg-black/30"
+                      }`}
+                      onClick={() => handleTabChange(menuItem.name)}
+                    >
+                      <p className={`text-sm font-medium ${isActive ? "text-foreground dark:text-white" : "text-muted-fg dark:text-white/60"}`}>
+                        {menuItem.name}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
 
           {/* Content area */}

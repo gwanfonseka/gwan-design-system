@@ -24,16 +24,16 @@ const Snackbar: FC<ISnackBar> = ({
   const getClassName = () => {
     switch (type) {
       case SNACK_BAR_TYPE.SUCCESS:
-        return "bg-green-50 text-green-800 border-green-500";
+        return "bg-success-bg text-success-fg border-success";
       case SNACK_BAR_TYPE.DANGER:
-        return "bg-red-50 text-red-600 border-red-500";
+        return "bg-danger-bg text-danger-fg border-danger";
       case SNACK_BAR_TYPE.WARNING:
-        return "bg-yellow-50 text-yellow-800 border-yellow-600";
+        return "bg-warning-bg text-warning-fg border-warning";
       case SNACK_BAR_TYPE.INFO:
-        return "bg-blue-50 text-blue-800 border-blue-600";
+        return "bg-accent/10 text-accent border-accent";
       case SNACK_BAR_TYPE.DEFAULT:
       default:
-        return "bg-neutral-50 text-neutral-800 border-neutral-500";
+        return "bg-surface text-foreground border-border";
     }
   };
 

@@ -29,10 +29,10 @@ const FileUploader: FC<IFileUploader> = ({
 
   return (
     <div
-      className={`flex flex-row gap-4 items-start border border-dashed border-neutral-200 p-4 rounded-lg ${className}`}
+      className={`flex flex-row gap-4 items-start border border-dashed border-border p-4 rounded-lg ${className}`}
     >
       <div
-        className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-8 rounded-lg cursor-pointer"
+        className="bg-primary-500 hover:bg-primary-600 text-primary-default-fg px-6 py-8 rounded-lg cursor-pointer"
         onClick={() => fileInputRef.current?.click()}
       >
         <div className="size-10">
@@ -47,9 +47,9 @@ const FileUploader: FC<IFileUploader> = ({
         onChange={handleFileUpload}
       />
       <div className="flex-1 flex flex-col">
-        <p className="text-lg">{title}</p>
-        <p className="text-sm text-neutral-400">{subTitle1}</p>
-        <p className="text-sm text-neutral-400">{subTitle2}</p>
+        <p className="text-lg text-foreground">{title}</p>
+        <p className="text-sm text-muted-fg">{subTitle1}</p>
+        <p className="text-sm text-muted-fg">{subTitle2}</p>
       </div>
     </div>
   );

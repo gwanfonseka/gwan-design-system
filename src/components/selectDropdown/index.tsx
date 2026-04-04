@@ -1,5 +1,6 @@
 import { FC, useEffect, useState, useRef } from "react";
 import { ChevDownSVG } from "../icons";
+import { FORM_ELEMENT_EDGE_STYLE } from "../input";
 
 export interface ISelectDropdownOption {
   value?: string;
@@ -15,6 +16,10 @@ export interface ISelectDropdown {
   onChange: (option: string) => void;
   inputClassName?: string;
   className?: string;
+  isError?: boolean;
+  errorMessage?: string;
+  required?: boolean;
+  edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 
 const SelectDropdown: FC<ISelectDropdown> = ({
@@ -26,6 +31,10 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   onChange,
   inputClassName = "",
   className = "",
+  isError = false,
+  errorMessage,
+  required = false,
+  edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
 }: ISelectDropdown) => {
   const [dropdownValue, setDropdownValue] = useState<string>("");
   const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
@@ -33,75 +42,87 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const option = options.find((opt) => opt.label === value);
+    const option = options.find((opt) => (opt.value ?? opt.label) === value);
     if (option) {
       setDropdownValue(option.label);
-      onChange(option.label);
     } else {
-      setDropdownValue("");
+      setDropdownValue(value);
     }
-  }, []);
+  }, [value, options]);
 
   useEffect(() => {
     if (isOptionsVisible && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const dropdownHeight = Math.min(options.length * 56, 384); // max-h-96 = 384px
+      const dropdownHeight = Math.min(options.length * 56, 384);
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
-
-      // Open upward if not enough space below and more space above
       setOpenUpward(spaceBelow < dropdownHeight && spaceAbove > spaceBelow);
     }
   }, [isOptionsVisible, options.length]);
 
-  const handleMouseDown = (val: string) => {
-    setDropdownValue(val);
-    onChange(val);
+  const handleMouseDown = (option: ISelectDropdownOption) => {
+    const actualValue = option.value ?? option.label;
+    setDropdownValue(option.label);
+    onChange(actualValue);
     setIsOptionsVisible(false);
   };
 
   return (
-    <div ref={containerRef} className={`flex flex-col gap-1 relative ${className}`}>
-      {label && (
-        <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
-          {label}
-        </label>
-      )}
-      <div className="relative">
-        <div className="size-5 absolute inset-y-4 right-4 flex items-center text-neutral-600 pointer-events-none">
-          <ChevDownSVG />
+    <div className={`flex flex-col ${className}`}>
+      <div ref={containerRef} className="flex flex-col relative">
+        {label && (
+          <label
+            htmlFor={label}
+            className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
+          >
+            {`${label}${required ? " *" : ""}`}
+          </label>
+        )}
+        <div className="relative">
+          <div className="size-4 absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-muted-fg pointer-events-none">
+            <ChevDownSVG />
+          </div>
+          <input
+            id={label}
+            type="text"
+            className={`bg-surface text-foreground border outline-none py-2.5 pl-3 pr-9 ${
+              edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"
+            } ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${
+              isError
+                ? "border-danger focus:border-danger"
+                : "border-border hover:border-primary-500 focus:border-primary-500"
+            } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
+            placeholder={placeholder}
+            onClick={() => setIsOptionsVisible(!isOptionsVisible)}
+            value={dropdownValue}
+            onBlur={() => setIsOptionsVisible(false)}
+            readOnly
+            disabled={disabled}
+            required={required}
+          />
         </div>
-        <input
-          id={label}
-          type="text"
-          className={`border border-neutral-300 outline-none p-4 rounded-lg ${
-            disabled ? "cursor-not-allowed" : "cursor-pointer"
-          } text-sm w-full ${inputClassName}`}
-          placeholder={placeholder}
-          onClick={() => setIsOptionsVisible(!isOptionsVisible)}
-          value={dropdownValue}
-          onBlur={() => setIsOptionsVisible(false)}
-          readOnly
-          disabled={disabled}
-        ></input>
+        {isOptionsVisible && (
+          <div
+            className={`border border-border ${
+              edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"
+            } shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-surface z-10 ${
+              openUpward ? "bottom-full mb-1" : "top-full mt-1"
+            }`}
+          >
+            {options.map(({ label, value: val }, index) => (
+              <div
+                key={`${label}_${val}_${index + 1}`}
+                className="px-3 py-2.5 cursor-pointer hover:bg-surface-raised text-sm text-foreground"
+                onMouseDown={() => handleMouseDown({ label, value: val })}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      {isOptionsVisible && (
-        <div
-          className={`border border-neutral-300 rounded-lg shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-white z-10 ${
-            openUpward ? "bottom-full mb-1" : "top-full"
-          }`}
-        >
-          {options.map(({ label, value: val }, index) => (
-            <div
-              key={`${label}_${val}_${index + 1}`}
-              className="p-4 cursor-pointer hover:bg-neutral-50 text-sm"
-              onMouseDown={() => handleMouseDown(label)}
-            >
-              {label}
-            </div>
-          ))}
-        </div>
+      {isError && errorMessage && (
+        <p className="text-danger text-xs mt-1">{errorMessage}</p>
       )}
     </div>
   );
