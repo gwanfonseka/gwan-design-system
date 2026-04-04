@@ -58,8 +58,8 @@ const Example = () => (
         <SelectDropdown label="Type" options={typeOptions} value={type} onChange={setType} className="w-full sm:w-40" />
         <SelectDropdown label="Variant" options={variantOptions} value={variant} onChange={setVariant} className="w-full sm:w-40" />
         <SelectDropdown label="Dismissible" options={boolOptions} value={dismissible} onChange={(v) => { setDismissible(v); setKey((k) => k + 1); }} className="w-full sm:w-40" />
-        <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full sm:w-56" />
-        <Input label="Message" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full sm:w-72" />
+        <Input label="Title" value={title} onChange={(e) => setTitle((e.target as HTMLInputElement).value)} className="w-full sm:w-56" />
+        <Input label="Message" value={message} onChange={(e) => setMessage((e.target as HTMLInputElement).value)} className="w-full sm:w-72" />
       </div>
     </div>
   );
