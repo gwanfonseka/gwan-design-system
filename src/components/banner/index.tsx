@@ -36,7 +36,7 @@ const Banner: FC<IBanner> = ({
 
     return (
       <>
-        <div></div>
+        <div className="hidden md:block"></div>
         <div className="flex flex-col gap-2">
           <p className={titleClassName}>{title}</p>
           <p className={subTitleClassName}>{subTitle}</p>
@@ -47,7 +47,7 @@ const Banner: FC<IBanner> = ({
 
   return (
     <div
-      className={`w-full h-[484px] grid grid-cols-2 items-center px-16 ${backgroundColor} bg-no-repeat bg-cover bg-center ${className}`}
+      className={`w-full h-60 md:h-121 grid grid-cols-1 md:grid-cols-2 items-center px-6 md:px-16 ${backgroundColor} bg-no-repeat bg-cover bg-center ${className}`}
       style={
         backgroundImage !== ""
           ? { backgroundImage: `url(${backgroundImage})` }

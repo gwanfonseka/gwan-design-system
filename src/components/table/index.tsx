@@ -25,7 +25,8 @@ const Table: FC<ITable> = ({
   bordered = false,
 }: ITable) => {
   return (
-    <div className={`overflow-hidden rounded-lg border border-border ${className}`}>
+    <div className={`overflow-x-auto rounded-lg border border-border ${className}`}>
+      <div className="min-w-max">
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-surface-raised border-b border-border">
@@ -65,6 +66,7 @@ const Table: FC<ITable> = ({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

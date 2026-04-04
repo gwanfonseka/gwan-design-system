@@ -66,14 +66,14 @@ const SnackBars = () => {
           label="Message"
           value={message}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
-          className="w-64"
+          className="w-full sm:w-64"
         />
         <SelectDropdown
           label="Type"
           options={typeOptions}
           value={type}
           onChange={(val) => setType(val)}
-          className="w-48"
+          className="w-full sm:w-48"
         />
       </div>
     </div>

@@ -44,19 +44,19 @@ const FileUploaders = () => {
             label="Title"
             value={title}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-            className="w-72"
+            className="w-full sm:w-72"
           />
           <Input
             label="Subtitle 1"
             value={subTitle1}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setSubTitle1(e.target.value)}
-            className="w-72"
+            className="w-full sm:w-72"
           />
           <Input
             label="Subtitle 2"
             value={subTitle2}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setSubTitle2(e.target.value)}
-            className="w-72"
+            className="w-full sm:w-72"
           />
         </div>
       </div>

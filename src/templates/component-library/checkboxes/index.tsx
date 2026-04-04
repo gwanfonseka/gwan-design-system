@@ -65,7 +65,7 @@ const Example = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setLabel(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
           <SelectDropdown
@@ -73,7 +73,7 @@ const Example = () => {
             options={sizeOptions}
             value={size}
             onChange={(option) => setSize(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
           <SelectDropdown
@@ -81,7 +81,7 @@ const Example = () => {
             options={edgeOptions}
             value={edges}
             onChange={(option) => setEdges(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
           <Checkbox

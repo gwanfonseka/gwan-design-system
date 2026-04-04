@@ -64,7 +64,7 @@ const Example = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setLabel(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
           <SelectDropdown
@@ -72,7 +72,7 @@ const Example = () => {
             options={positionOptions}
             value={position}
             onChange={(option) => setPosition(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
       </div>

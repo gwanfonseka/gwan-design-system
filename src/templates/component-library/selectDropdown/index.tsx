@@ -94,14 +94,14 @@ const Example = () => {
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
-        <div className="flex flex-row justify-center gap-8 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
           <SelectDropdown
             options={options}
             label={dropdownLabel}
             placeholder={dropdownPlaceholder}
             value={selectedOption}
             onChange={(option) => setSelectedOption(option)}
-            className="w-80"
+            className="w-full sm:w-80"
             inputClassName="bg-white disabled:bg-gray-100 disabled:text-gray-500"
             disabled={isDisabled}
             isError={isError}
@@ -110,14 +110,14 @@ const Example = () => {
             edges={edges as FORM_ELEMENT_EDGE_STYLE}
           />
         </div>
-        <div className="flex flex-row justify-center gap-8 items-end">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-end">
           <Input
             label="Dropdown label"
             value={dropdownLabel}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setDropdownLabel(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <Input
             label="Dropdown placeholder"
@@ -125,17 +125,17 @@ const Example = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setDropdownPlaceholder(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Edges style"
             options={dropdownEdgesOptions}
             value={edges}
             onChange={(option) => setEdges(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
-          <div className="flex flex-col gap-2 w-64">
+          <div className="flex flex-col gap-2 w-full sm:w-64">
             <Checkbox
               label="Required dropdown"
               checked={isRequired}
@@ -148,17 +148,17 @@ const Example = () => {
             />
           </div>
         </div>
-        <div className="flex flex-row justify-center gap-8 items-end">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-end">
           <Input
             label="Error message"
             value={errorMessage}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setErrorMessage(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
             disabled={!isError}
           />
-          <div className="w-64">
+          <div className="w-full sm:w-64">
             <Checkbox
               label="Error state"
               checked={isError}
@@ -172,14 +172,14 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row justify-center gap-8 items-center">
+      <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
         <SelectDropdown
           options={options}
           label="Select dropdown"
           placeholder="This is a placeholder"
           value={selectedOption}
           onChange={(option) => setSelectedOption(option)}
-          className="w-80"
+          className="w-full sm:w-80"
         />
       </div>
       <Playground template={renderPlayground()} />

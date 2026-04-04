@@ -204,7 +204,7 @@ const Example = () => {
           striped={isStriped}
           bordered={isBordered}
         />
-        <div className="flex flex-row justify-center gap-8 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
           <Checkbox
             label="Striped"
             checked={isStriped}

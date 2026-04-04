@@ -2,9 +2,9 @@ import { FC, useEffect, useRef } from "react";
 import { CrossSVG } from "../icons";
 
 export enum MODAL_SIZE {
-  SMALL = "w-[600px]",
-  MEDIUM = "w-[800px]",
-  LARGE = "w-[950px]",
+  SMALL = "w-[calc(100vw-2rem)] sm:w-[600px]",
+  MEDIUM = "w-[calc(100vw-2rem)] sm:w-[800px]",
+  LARGE = "w-[calc(100vw-2rem)] sm:w-[950px]",
   FULL = "w-full h-full",
 }
 
@@ -47,7 +47,7 @@ const Modal: FC<IModal> = ({
         tabIndex={-1}
         className={`bg-surface border border-border p-4 ${
           size !== MODAL_SIZE.FULL && "rounded-lg"
-        } absolute flex flex-col gap-4 ${size}`}
+        } absolute flex flex-col gap-4 max-h-[90vh] ${size}`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex flex-row gap-4 items-center">

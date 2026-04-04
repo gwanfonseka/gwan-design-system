@@ -70,19 +70,19 @@ const RadioButtons = () => {
           label="Option 1 Label"
           value={option1Label}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setOption1Label(e.target.value)}
-          className="w-48"
+          className="w-full sm:w-48"
         />
         <Input
           label="Option 2 Label"
           value={option2Label}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setOption2Label(e.target.value)}
-          className="w-48"
+          className="w-full sm:w-48"
         />
         <Input
           label="Option 3 Label"
           value={option3Label}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setOption3Label(e.target.value)}
-          className="w-48"
+          className="w-full sm:w-48"
         />
       </div>
     </div>

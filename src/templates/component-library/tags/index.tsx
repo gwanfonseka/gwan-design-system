@@ -55,35 +55,35 @@ const Example = () => {
             edges={tagEdges as TAG_EDGE_STYLE}
           />
         </div>
-        <div className="flex flex-row justify-center gap-4 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
           <Input
             label="Tag label"
             value={tagLabel}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setTagLabel(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Tag type"
             options={tagTypeOptions}
             value={tagType}
             onChange={(option) => setTagType(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Variant"
             options={tagVariantOptions}
             value={tagVariant}
             onChange={(option) => setTagVariant(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Edges style"
             options={tagEdgesOptions}
             value={tagEdges}
             onChange={(option) => setTagEdges(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
       </div>
@@ -92,7 +92,7 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row justify-center gap-8 items-center">
+      <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
         <Tag type={TAG_TYPE.DEFAULT} label="Default" />
         <Tag type={TAG_TYPE.SUCCESS} label="Success" />
         <Tag type={TAG_TYPE.INFO} label="Info" />

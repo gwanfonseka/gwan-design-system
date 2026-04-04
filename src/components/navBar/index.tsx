@@ -24,6 +24,9 @@ export interface INavBar {
   menuItems: IMenuItem[];
   logoShort: string;
   logoLong: string;
+  logoShortWidth?: number;
+  logoShortHeight?: number;
+  logoLongWidth?: number | string;
   avatarName: string;
   avatarEmail: string;
   avatarImage: string;
@@ -42,6 +45,9 @@ const NavBar: FC<INavBar> = ({
   menuItems,
   logoShort,
   logoLong,
+  logoShortWidth = 60,
+  logoShortHeight = 60,
+  logoLongWidth = "60%",
   avatarName,
   avatarEmail,
   avatarImage,
@@ -59,7 +65,7 @@ const NavBar: FC<INavBar> = ({
   const [isActiveSubMenuItem, setIsActiveSubMenuItem] = useState<string>("");
   const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(isCollapsed);
   const [isMenuItemsCollapsed, setIsMenuITemsCollapsed] =
-    useState<boolean>(false);
+    useState<boolean>(isCollapsed);
   const [showTooltip, setShowTooltip] = useState<number | null>(null);
   const [showSubTooltip, setShowSubTooltip] = useState<number | null>(null);
   const activeClass = "rounded-lg bg-white/35";
@@ -111,13 +117,12 @@ const NavBar: FC<INavBar> = ({
         <div className="flex flex-col gap-4">
           {/* Logo */}
           <div className="flex flex-row gap-2 items-center">
-            <img src={logoShort} alt="logo_short" width={60} height={60} />
+            <img src={logoShort} alt="logo_short" width={logoShortWidth} height={logoShortHeight} />
             {!isMenuItemsCollapsed && (
               <img
                 src={logoLong}
                 alt="logo_long"
-                width={200}
-                height={48}
+                width={logoLongWidth}
                 className="transition-opacity duration-300"
               />
             )}

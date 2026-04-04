@@ -50,28 +50,28 @@ const Example = () => {
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
-        <div className="flex flex-row justify-center gap-8 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
           <Button
             label="Click the button"
             onClick={() => setIsPlayModalOpen(true)}
             variant={BUTTON_VARIANTS.PRIMARY}
           />
         </div>
-        <div className="flex flex-row justify-center gap-8 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
           <Input
             label="Modal title"
             value={modalTitle}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setModalTitle(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Edges style"
             options={modalSizeOptions}
             value={modalSize}
             onChange={(option) => setModalSize(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
       </div>

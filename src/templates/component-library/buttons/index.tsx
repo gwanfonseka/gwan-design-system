@@ -57,7 +57,7 @@ const Example = () => {
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
-        <div className="flex flex-row justify-center gap-4 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
           <Button
             variant={buttonVariant as BUTTON_VARIANTS}
             label={buttonLabel}
@@ -81,31 +81,31 @@ const Example = () => {
             onChange={() => setIsDisabled(!isDisabled)}
           />
         </div>
-        <div className="flex flex-row justify-center gap-4 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
           <Input
             label="Tag label"
             value={buttonLabel}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setButtonLabel(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Tag type"
             options={buttonVariantOptions}
             value={buttonVariant}
             onChange={(option) => setButtonVariant(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Tag edges"
             options={buttonEdgesOptions}
             value={buttonEdges}
             onChange={(option) => setButtonEdges(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
-        <div className="flex flex-row justify-center gap-4 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
           <SelectDropdown
             label="Left icon"
             options={[
@@ -114,7 +114,7 @@ const Example = () => {
             ]}
             value={leftIcon}
             onChange={(option) => setLeftIcon(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Right icon"
@@ -124,7 +124,7 @@ const Example = () => {
             ]}
             value={rightIcon}
             onChange={(option) => setRightIcon(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
       </div>

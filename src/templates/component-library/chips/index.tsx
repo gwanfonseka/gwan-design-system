@@ -23,9 +23,6 @@ const Chips = () => {
   const [label, setLabel] = useState<string>("Label");
   const [chipVariant, setChipVariant] = useState<string>(CHIP_VARIANT.SOLID);
   const [chipEdges, setChipEdges] = useState<string>(CHIP_EDGE_STYLE.ROUNDED);
-  const [chipList, setChipList] = useState<{ label: string }[]>([
-    chipsArray[0],
-  ]);
 
   const tagVariantOptions = [
     { value: CHIP_VARIANT.SOLID, label: "solid" },
@@ -63,28 +60,28 @@ const Example = () => {
             onClear={() => {}}
           />
         </div>
-        <div className="flex flex-row justify-center gap-4 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
           <Input
             label="Chip label"
             value={label}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setLabel(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Variant"
             options={tagVariantOptions}
             value={chipVariant}
             onChange={(option) => setChipVariant(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
           <SelectDropdown
             label="Edges style"
             options={tagEdgesOptions}
             value={chipEdges}
             onChange={(option) => setChipEdges(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
       </div>
@@ -93,7 +90,7 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row gap-8 items-center justify-center">
+      <div className="flex flex-col sm:flex-row  gap-8 items-center justify-center">
         <Chip
           label="This is a chip"
           edges={CHIP_EDGE_STYLE.PILL}

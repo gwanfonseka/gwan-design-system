@@ -242,7 +242,7 @@ const LibraryTemplate = () => {
           {/* Sidebar */}
           <div
             className={`
-              fixed md:relative top-0 md:top-auto left-0 z-50 md:z-auto
+              fixed md:relative top-0 md:top-auto left-0 z-[60] md:z-auto
               h-full md:h-screen
               flex flex-col gap-4
               bg-white/80 dark:bg-black/30 backdrop-blur-md

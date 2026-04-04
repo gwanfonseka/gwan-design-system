@@ -68,8 +68,8 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   return (
-    <div className="flex flex-col">
-      <div ref={containerRef} className={`flex flex-col relative ${className}`}>
+    <div className={`flex flex-col ${className}`}>
+      <div ref={containerRef} className="flex flex-col relative">
         {label && (
           <label
             htmlFor={label}

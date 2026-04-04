@@ -22,7 +22,7 @@ const Carousel: FC<ICarousel> = ({
   }, [slides.length, interval]);
 
   return (
-    <div className={`relative w-full h-121 overflow-hidden ${className}`}>
+    <div className={`relative w-full h-60 md:h-121 overflow-hidden ${className}`}>
       {slides.map(
         (
           {

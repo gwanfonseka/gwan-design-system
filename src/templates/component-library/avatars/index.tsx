@@ -40,7 +40,7 @@ const Example = () => {
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
-        <div className="flex flex-row justify-center gap-8 items-center">
+        <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
           <Avatar
             name={name}
             email={email}
@@ -62,7 +62,7 @@ const Example = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setName(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
           <Input
@@ -71,7 +71,7 @@ const Example = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
             }
-            className="w-64"
+            className="w-full sm:w-64"
           />
 
           <SelectDropdown
@@ -79,7 +79,7 @@ const Example = () => {
             options={variantOptions}
             value={variant}
             onChange={(option) => setVariant(option)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
       </div>

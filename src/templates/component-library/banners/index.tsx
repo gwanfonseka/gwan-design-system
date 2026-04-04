@@ -69,20 +69,20 @@ const Banners = () => {
           label="Title"
           value={title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-          className="w-64"
+          className="w-full sm:w-64"
         />
         <Input
           label="Subtitle"
           value={subTitle}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setSubTitle(e.target.value)}
-          className="w-64"
+          className="w-full sm:w-64"
         />
         <SelectDropdown
           label="Content Placement"
           options={placementOptions}
           value={placement}
           onChange={(val) => setPlacement(val)}
-          className="w-48"
+          className="w-full sm:w-48"
         />
       </div>
     </div>

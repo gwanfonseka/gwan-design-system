@@ -1,5 +1,4 @@
 import Button from "@/components/button";
-import Checkbox from "@/components/checkbox";
 import CodeSnippet from "@/components/codeSnippet";
 import { AddSVG, TrashSVG } from "@/components/icons";
 import Input from "@/components/input";
@@ -117,8 +116,8 @@ const Example = () => {
   const renderPlayground = () => {
     return (
       <div className="flex flex-col gap-8">
-        <div className="flex flex-row gap-8 items-center justify-center">
-          <div className="w-96">
+        <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
+          <div className="w-full sm:w-96">
             <TimeLine
               logs={playArray}
               direction={direction as STEP_DIRECTION}
@@ -126,7 +125,7 @@ const Example = () => {
           </div>
         </div>
         <div className="flex flex-col gap-8 items-center justify-center">
-          <div className="flex flex-row gap-8 items-center justify-center">
+          <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
             <Button
               leftIcon={<AddSVG />}
               onClick={() => setPlayArray([...playArray, { ...emptyLog }])}
@@ -137,14 +136,14 @@ const Example = () => {
               options={directionOptions}
               value={direction}
               onChange={(option) => setDirection(option)}
-              className="w-48"
+              className="w-full sm:w-48"
             />
           </div>
           {playArray.map((log, index) => {
             return (
               <div
                 key={`log_${index + 1}`}
-                className="flex flex-row gap-8 items-end justify-center"
+                className="flex flex-row flex-wrap gap-8 items-end justify-center"
               >
                 <Button
                   leftIcon={<TrashSVG />}
@@ -156,7 +155,7 @@ const Example = () => {
                   options={statusOptions}
                   value={log.status}
                   onChange={(option) => handleChange(index, "status", option)}
-                  className="w-48"
+                  className="w-full sm:w-48"
                 />
                 <Input
                   label="Log title"
@@ -164,7 +163,7 @@ const Example = () => {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     handleChange(index, "title", e.target.value)
                   }
-                  className="w-48"
+                  className="w-full sm:w-48"
                 />
                 <Input
                   label="Placeholder right"
@@ -172,7 +171,7 @@ const Example = () => {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     handleChange(index, "placeholderRight", e.target.value)
                   }
-                  className="w-48"
+                  className="w-full sm:w-48"
                 />
                 <Input
                   label="Placeholder bottom"
@@ -180,7 +179,7 @@ const Example = () => {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     handleChange(index, "placeholderBottom", e.target.value)
                   }
-                  className="w-48"
+                  className="w-full sm:w-48"
                 />
                 <Input
                   label="Description"
@@ -188,7 +187,7 @@ const Example = () => {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     handleChange(index, "description", e.target.value)
                   }
-                  className="w-48"
+                  className="w-full sm:w-48"
                 />
               </div>
             );
@@ -200,8 +199,8 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row gap-8 items-center justify-center">
-        <div className="w-96">
+      <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
+        <div className="w-full sm:w-96">
           <TimeLine logs={success} />
         </div>
       </div>

@@ -138,6 +138,9 @@ const Example = () => {
         menuItems={menuItems}
         logoShort="/logo-short.png"
         logoLong="/logo.png"
+        logoShortWidth={60}       // optional, default 60
+        logoShortHeight={60}      // optional, default 60
+        logoLongWidth="60%"       // optional, default "60%", accepts number (px) or string
         avatarName="John Doe"
         avatarEmail="john.doe@email.com"
         avatarImage="/avatar.png"
@@ -170,8 +173,12 @@ const NavBars = () => {
         menuHeightClass="h-[80vh]"
         menuBackgroundColor="bg-surface-raised"
         isLoading={false}
+        isCollapsed={true}
+        logoLongWidth="40%"
       />
-      <div className="flex-1 p-4 text-muted-fg text-sm">Rest of the content</div>
+      <div className="flex-1 p-4 text-muted-fg text-sm">
+        Rest of the content
+      </div>
     </div>
   );
 
