@@ -1,109 +1,209 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
 @import "tailwindcss";
 
+/* ─── Light theme (default) ─────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8f9f5;
+  --foreground: #1c2218;
+
+  --surface: #ffffff;
+  --surface-raised: #eef2e8;
+  --surface-overlay: #e3e9da;
+
+  --border: #c4cdb8;
+  --border-subtle: #d8dfce;
+
+  --primary-default: #435240;
+  --primary-default-fg: #f4f7f1;
+  --primary-muted: #adc09e;
+  --primary-muted-fg: #2c3629;
+
+  --muted: #e3e9da;
+  --muted-fg: #60705a;
+
+  --accent: #0f766e;
+  --accent-fg: #f0fdfb;
+
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-fg: #064e3b;
+
+  --danger: #e11d48;
+  --danger-bg: #fff1f2;
+  --danger-fg: #881337;
+
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-fg: #78350f;
+}
+
+/* ─── Dark theme ─────────────────────────────────────────────────── */
+.dark {
+  --background: #131a10;
+  --foreground: #e2eada;
+
+  --surface: #1c241a;
+  --surface-raised: #252e22;
+  --surface-overlay: #2d392a;
+
+  --border: #3c4d38;
+  --border-subtle: #2d392a;
+
+  --primary-default: #adc09e;
+  --primary-default-fg: #1c2218;
+  --primary-muted: #435240;
+  --primary-muted-fg: #e2eada;
+
+  --muted: #252e22;
+  --muted-fg: #9ea593;
+
+  --accent: #2dd4bf;
+  --accent-fg: #134e4a;
+
+  --success: #34d399;
+  --success-bg: #022c1e;
+  --success-fg: #a7f3d0;
+
+  --danger: #fb7185;
+  --danger-bg: #200a10;
+  --danger-fg: #fecdd3;
+
+  --warning: #fbbf24;
+  --warning-bg: #1c1300;
+  --warning-fg: #fde68a;
 }
 
 @theme {
-  /* Existing CSS variables */
+  /* ─── Semantic (theme-aware, read from CSS vars) ─────────────── */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Primary */
-  --color-primary-50: #f2f3ee;
-  --color-primary-100: #e1e3da;
-  --color-primary-200: #d0d3c6;
-  --color-primary-300: #bec3b2;
-  --color-primary-400: #adb39e;
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-primary-default: var(--primary-default);
+  --color-primary-default-fg: var(--primary-default-fg);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-muted-fg: var(--primary-muted-fg);
+
+  --color-muted: var(--muted);
+  --color-muted-fg: var(--muted-fg);
+
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-fg: var(--success-fg);
+
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-fg: var(--warning-fg);
+
+  /* ─── Primary scale (Sage Green — base: #9ea593) ────────────── */
+  --color-primary-50: #f4f7f1;
+  --color-primary-100: #e2eada;
+  --color-primary-200: #c8d5be;
+  --color-primary-300: #adc09e;
+  --color-primary-400: #a4b496;
   --color-primary-500: #9ea593;
-  --color-primary-600: #8c9382;
-  --color-primary-700: #787d6e;
-  --color-primary-800: #64675a;
-  --color-primary-900: #505146;
+  --color-primary-600: #7e8c73;
+  --color-primary-700: #60705a;
+  --color-primary-800: #435240;
+  --color-primary-900: #2c3629;
 
-  /* Green */
-  --color-green-50: #e6f7e6;
-  --color-green-100: #c0eac0;
-  --color-green-200: #99dc99;
-  --color-green-300: #73cf73;
-  --color-green-400: #4cc14c;
-  --color-green-500: #0ba803;
-  --color-green-600: #0a9602;
-  --color-green-700: #087f02;
-  --color-green-800: #066602;
-  --color-green-900: #044c01;
+  /* ─── Teal scale (Accent) ────────────────────────────────────── */
+  --color-teal-50: #f0fdfb;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
 
-  /* Red */
-  --color-red-50: #fde7e7;
-  --color-red-100: #fbc0c0;
-  --color-red-200: #f89999;
-  --color-red-300: #f47373;
-  --color-red-400: #f04c4c;
-  --color-red-500: #df0303;
-  --color-red-600: #c90202;
-  --color-red-700: #a50202;
-  --color-red-800: #800202;
-  --color-red-900: #5c0101;
+  /* ─── Emerald scale (Success) ───────────────────────────────── */
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
 
-  /* Blue */
-  --color-blue-50: #e6f3fa;
-  --color-blue-100: #bfe1f3;
-  --color-blue-200: #99ceeb;
-  --color-blue-300: #73bce4;
-  --color-blue-400: #4caadc;
-  --color-blue-500: #0369a8;
-  --color-blue-600: #025e97;
-  --color-blue-700: #024d7c;
-  --color-blue-800: #013c61;
-  --color-blue-900: #012b46;
+  /* ─── Rose scale (Danger) ───────────────────────────────────── */
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
 
-  /* Yellow */
-  --color-yellow-50: #f9f7e6;
-  --color-yellow-100: #f0efc0;
-  --color-yellow-200: #e6e699;
-  --color-yellow-300: #dcdc73;
-  --color-yellow-400: #d1d14c;
-  --color-yellow-500: #a8a203;
-  --color-yellow-600: #969002;
-  --color-yellow-700: #7c7602;
-  --color-yellow-800: #615c01;
-  --color-yellow-900: #464301;
+  /* ─── Amber scale (Warning) ─────────────────────────────────── */
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
 
-  /* Neutral */
-  --color-neutral-50: #f8f8f8;
-  --color-neutral-100: #f0f0f0;
-  --color-neutral-200: #e7e7e7;
-  --color-neutral-300: #dedede;
-  --color-neutral-400: #d9d9d9;
-  --color-neutral-500: #bfbfbf;
-  --color-neutral-600: #a6a6a6;
-  --color-neutral-700: #8c8c8c;
-  --color-neutral-800: #737373;
-  --color-neutral-900: #595959;
+  /* ─── Neutral scale ──────────────────────────────────────────── */
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
 }
 
 @layer utilities {
+  /* Light mode — pale sage through the primary scale */
   .custom-bg {
     background-image: linear-gradient(
       135deg,
-      #9ea593,
-      #93a594,
-      #93a59c,
-      #939fa5,
-      #9394a5,
-      #9c93a5,
-      #a593a4,
-      #a59393
+      #f4f7f1,
+      #e2eada,
+      #c8d5be,
+      #adc09e,
+      #9ea593
     );
   }
-}
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Dark mode — deep forest through the primary scale */
+  .dark .custom-bg {
+    background-image: linear-gradient(
+      135deg,
+      #131a10,
+      #2c3629,
+      #435240,
+      #60705a,
+      #7e8c73
+    );
   }
 }
 
@@ -113,4 +213,31 @@ body {
   font-family: "Roboto Flex", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Dark mode: prevent browser from overriding text colour on form elements */
+.dark input,
+.dark textarea {
+  color-scheme: dark;
+  -webkit-text-fill-color: var(--foreground);
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  transition: background-color 5000s ease-in-out 0s;
 }

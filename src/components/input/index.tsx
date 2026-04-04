@@ -1,5 +1,10 @@
-import { FC } from "react";
+import { ClipboardEvent, FC, KeyboardEvent } from "react";
 import { CrossSVG } from "../icons";
+
+export enum FORM_ELEMENT_EDGE_STYLE {
+  ROUNDED = "rounded",
+  SQUARED = "squared",
+}
 
 export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -11,6 +16,9 @@ export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   className?: string;
   type?: string;
   onClear?: () => void;
+  isError?: boolean;
+  errorMessage?: string;
+  edges?: FORM_ELEMENT_EDGE_STYLE;
 }
 
 const Input: FC<IInput> = ({
@@ -23,12 +31,37 @@ const Input: FC<IInput> = ({
   className = "",
   type = "text",
   onClear,
+  isError = false,
+  errorMessage,
+  edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
+  onKeyDown,
+  onPaste,
   ...rest
 }: IInput) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
+      e.preventDefault();
+    }
+    onKeyDown?.(e);
+  };
+
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    if (type === "number") {
+      const paste = e.clipboardData.getData("text");
+      if (/[eE+\-]/.test(paste)) {
+        e.preventDefault();
+      }
+    }
+    onPaste?.(e);
+  };
+
   return (
-    <div className={`flex flex-col gap-1 relative ${className}`}>
+    <div className={`flex flex-col relative ${className}`}>
       {label && (
-        <label htmlFor={label} className="text-sm text-neutral-600 mb-2">
+        <label
+          htmlFor={label}
+          className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
+        >
           {`${label}${required ? " *" : ""}`}
         </label>
       )}
@@ -38,24 +71,33 @@ const Input: FC<IInput> = ({
           placeholder={placeholder}
           value={value}
           disabled={disabled}
-          className={`border border-neutral-300 outline-none py-4 pl-4 ${
-            onClear ? "pr-8" : "pr-4"
-          } rounded-lg ${
-            disabled ? "cursor-not-allowed" : "cursor-text"
-          } text-sm w-full ${inputClassName}`}
+          className={`bg-surface text-foreground border ${
+            isError
+              ? "border-danger focus:border-danger"
+              : "border-border hover:border-primary-500 focus:border-primary-500"
+          } outline-none py-2.5 pl-3 ${
+            onClear ? "pr-8" : "pr-3"
+          } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"} ${
+            disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
+          } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
           required={required}
           type={type}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
           {...rest}
         />
         {onClear && value && (
           <div
-            className="size-3 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-900 cursor-pointer"
+            className="size-3 absolute right-3 top-1/2 -translate-y-1/2 text-muted-fg hover:text-foreground cursor-pointer"
             onClick={onClear}
           >
             <CrossSVG />
           </div>
         )}
       </div>
+      {isError && errorMessage && (
+        <p className="text-danger text-xs mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 };

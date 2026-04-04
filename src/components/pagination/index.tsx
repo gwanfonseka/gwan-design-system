@@ -45,32 +45,37 @@ const Pagination: FC<IPagination> = ({
 
   return (
     <div
-      className={`bg-neutral-50 flex flex-row gap-4 items-center px-4 py-2 rounded-lg ${className}`}
+      className={`bg-surface border border-border flex flex-row flex-wrap gap-3 items-center p-3 rounded-lg ${className}`}
     >
-      <div className="flex-1">
+      <div className="flex-1 text-foreground">
         {page} of {Math.ceil(total / size)} pages
       </div>
-      <div className="w-20">
-        <SelectDropdown
-          options={options}
-          value={optionDropdown}
-          onChange={(option) => handlePageSize(option)}
-        />
-      </div>
-      <div>items per page</div>
-      <div className="flex flex-row gap-4 items-center">
+      <div className="flex flex-row gap-2 items-center">
         <Button
           onClick={onLeft}
-          icon={<ChevLeft />}
+          leftIcon={<ChevLeft />}
           variant={BUTTON_VARIANTS.TERTIARY}
           disabled={page === 1}
+          className="py-2!"
         />
         <Button
           onClick={onRight}
-          icon={<ChevRight />}
+          leftIcon={<ChevRight />}
           variant={BUTTON_VARIANTS.TERTIARY}
           disabled={page === Math.ceil(total / size)}
+          className="py-2!"
         />
+      </div>
+      <div className="flex flex-row gap-2 items-center w-full sm:w-auto order-last sm:order-0">
+        <div className="w-20">
+          <SelectDropdown
+            options={options}
+            value={optionDropdown}
+            onChange={(option) => handlePageSize(option)}
+            className="[&>div>input]:py-2! [&>div>div]:inset-y-2!"
+          />
+        </div>
+        <div className="text-muted-fg text-sm">items per page</div>
       </div>
     </div>
   );

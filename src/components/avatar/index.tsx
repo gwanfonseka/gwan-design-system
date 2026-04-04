@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
@@ -22,7 +21,6 @@ const generatePastelColor = () => {
   const hue = Math.floor(Math.random() * 360);
   const saturation = 60 + Math.random() * 20;
   const lightness = 75 + Math.random() * 10;
-
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
@@ -56,7 +54,7 @@ const Avatar: FC<IAvatar> = ({
         label={
           <div className="flex flex-col">
             {name}
-            <p className="text-neutral-300 text-xs">{email}</p>
+            <p className="opacity-70 text-xs">{email}</p>
           </div>
         }
         isVisible={isVisible}
@@ -66,19 +64,21 @@ const Avatar: FC<IAvatar> = ({
   };
 
   const renderAvatarImage = () => {
-    if (image) {
+    if (
+      image &&
+      (variant === AVATAR_VARIANT.IMAGE_ONLY ||
+        variant === AVATAR_VARIANT.IMAGE_WITH_FULL)
+    ) {
       return (
         <div
           className="relative"
           onMouseEnter={() => setIsTooltipImageVisible(true)}
           onMouseLeave={() => setIsTooltipImageVisible(false)}
         >
-          <Image
-            className="rounded-full border border-neutral-400"
+          <img
+            className="rounded-full border border-border w-13.75 h-13.75 object-cover"
             src={image}
             alt="profile"
-            width={55}
-            height={55}
           />
           {variant === AVATAR_VARIANT.IMAGE_ONLY &&
             renderTooltip(name, email, isTooltipImageVisible)}
@@ -88,7 +88,7 @@ const Avatar: FC<IAvatar> = ({
 
     return (
       <div
-        className="size-[55px] flex items-center justify-center rounded-full font-semibold cursor-default relative"
+        className="size-13.75 flex items-center justify-center rounded-full font-semibold cursor-default relative"
         style={{ backgroundColor: bgColor }}
         onMouseEnter={() => setIsTooltipInitialVisible(true)}
         onMouseLeave={() => setIsTooltipInitialVisible(false)}
@@ -102,13 +102,13 @@ const Avatar: FC<IAvatar> = ({
 
   if (isLoading) {
     return (
-      <div className="flex flex-row items-center gap-2 pl-[5px] animate-pulse">
-        <div className="w-[55px] h-[55px] rounded-full bg-neutral-400"></div>
+      <div className="flex flex-row items-center gap-2 pl-1.25 animate-pulse">
+        <div className="w-13.75 h-13.75 rounded-full bg-surface-raised"></div>
         {(variant === AVATAR_VARIANT.IMAGE_WITH_FULL ||
           variant === AVATAR_VARIANT.INITIALS_WITH_FULL) && (
-          <div className="flex flex-col gap-2 flex-1">
-            <div className="w-full h-6 bg-neutral-400 rounded-lg"></div>
-            <div className="w-[70%] h-4 bg-neutral-400 rounded-lg"></div>
+          <div className="flex flex-col gap-2">
+            <div className="w-32 h-6 bg-surface-raised rounded-lg"></div>
+            <div className="w-24 h-4 bg-surface-raised rounded-lg"></div>
           </div>
         )}
       </div>
@@ -116,14 +116,13 @@ const Avatar: FC<IAvatar> = ({
   }
 
   return (
-    <div className={`flex flex-row items-center gap-2 pl-[5px] ${className}`}>
+    <div className={`flex flex-row items-center gap-2 pl-1.25 ${className}`}>
       {renderAvatarImage()}
-
       {(variant === AVATAR_VARIANT.IMAGE_WITH_FULL ||
         variant === AVATAR_VARIANT.INITIALS_WITH_FULL) && (
         <div className="flex flex-col">
-          <p className="text-base font-semibold">{name}</p>
-          <p className="text-sm text-neutral-700">{email}</p>
+          <p className="text-base font-semibold text-foreground">{name}</p>
+          <p className="text-sm text-muted-fg">{email}</p>
         </div>
       )}
     </div>

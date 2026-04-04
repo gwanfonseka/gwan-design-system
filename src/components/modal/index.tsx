@@ -2,9 +2,9 @@ import { FC, useEffect, useRef } from "react";
 import { CrossSVG } from "../icons";
 
 export enum MODAL_SIZE {
-  SMALL = "w-[600px]",
-  MEDIUM = "w-[800px]",
-  LARGE = "w-[950px]",
+  SMALL = "w-[calc(100vw-2rem)] sm:w-[600px]",
+  MEDIUM = "w-[calc(100vw-2rem)] sm:w-[800px]",
+  LARGE = "w-[calc(100vw-2rem)] sm:w-[950px]",
   FULL = "w-full h-full",
 }
 
@@ -20,7 +20,7 @@ const Modal: FC<IModal> = ({
   title,
   children,
   onClear,
-  size = MODAL_SIZE.MEDIUM,
+  size = MODAL_SIZE.SMALL,
   className = "",
 }: IModal) => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -33,27 +33,26 @@ const Modal: FC<IModal> = ({
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClear();
     };
-
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClear]);
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] ${className}`}
+      className={`fixed inset-0 flex items-center justify-center bg-black/40 ${className}`}
       onMouseDown={onClear}
     >
       <div
         ref={modalRef}
         tabIndex={-1}
-        className={`bg-white p-4 ${
+        className={`bg-surface border border-border p-4 ${
           size !== MODAL_SIZE.FULL && "rounded-lg"
-        } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 ${size}`}
+        } absolute flex flex-col gap-4 max-h-[90vh] ${size}`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex flex-row gap-4 items-center">
-          <div className="flex-1 text-3xl">{title}</div>
-          <div className="size-4 cursor-pointer" onClick={() => onClear()}>
+          <div className="flex-1 text-3xl text-foreground">{title}</div>
+          <div className="size-4 cursor-pointer text-muted-fg hover:text-foreground" onClick={() => onClear()}>
             <CrossSVG />
           </div>
         </div>

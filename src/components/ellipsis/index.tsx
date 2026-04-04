@@ -3,6 +3,7 @@ import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
 export interface IEllipsis {
   label: string;
+  labelMaxWidth?: string;
   tooltipPosition?: TOOLTIP_POSITION;
   tooltipWidth?: string;
   className?: string;
@@ -10,6 +11,7 @@ export interface IEllipsis {
 
 const Ellipsis: FC<IEllipsis> = ({
   label,
+  labelMaxWidth = "w-32",
   tooltipPosition = TOOLTIP_POSITION.RIGHT,
   tooltipWidth = "w-40",
   className = "",
@@ -18,11 +20,13 @@ const Ellipsis: FC<IEllipsis> = ({
 
   return (
     <div
-      className={`relative ${className}`}
+      className={`relative inline-block ${className}`}
       onMouseEnter={() => setIsTooltipVisible(true)}
       onMouseLeave={() => setIsTooltipVisible(false)}
     >
-      <p className="text-ellipsis w-32 overflow-hidden whitespace-nowrap">
+      <p
+        className={`text-ellipsis ${labelMaxWidth} overflow-hidden whitespace-nowrap`}
+      >
         {label}
       </p>
       <Tooltip
