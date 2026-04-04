@@ -73,23 +73,25 @@ const SelectDropdown: FC<ISelectDropdown> = ({
         {label && (
           <label
             htmlFor={label}
-            className={`text-sm ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
+            className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
           >
             {`${label}${required ? " *" : ""}`}
           </label>
         )}
         <div className="relative">
-          <div className="size-5 absolute inset-y-4 right-4 flex items-center text-muted-fg pointer-events-none">
+          <div className="size-4 absolute right-3 top-1/2 -translate-y-1/2 flex items-center text-muted-fg pointer-events-none">
             <ChevDownSVG />
           </div>
           <input
             id={label}
             type="text"
-            className={`bg-background text-foreground border outline-none p-4 ${
-              edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"
+            className={`bg-surface text-foreground border outline-none py-2.5 pl-3 pr-9 ${
+              edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"
             } ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${
-              isError ? "border-danger focus:border-danger" : "border-border"
-            } text-sm w-full placeholder:text-muted-fg ${inputClassName}`}
+              isError
+                ? "border-danger focus:border-danger"
+                : "border-border hover:border-primary-500 focus:border-primary-500"
+            } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
             placeholder={placeholder}
             onClick={() => setIsOptionsVisible(!isOptionsVisible)}
             value={dropdownValue}
@@ -102,15 +104,15 @@ const SelectDropdown: FC<ISelectDropdown> = ({
         {isOptionsVisible && (
           <div
             className={`border border-border ${
-              edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"
+              edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"
             } shadow-lg max-h-96 overflow-y-auto absolute min-w-full bg-surface z-10 ${
-              openUpward ? "bottom-full mb-1" : "top-full"
+              openUpward ? "bottom-full mb-1" : "top-full mt-1"
             }`}
           >
             {options.map(({ label, value: val }, index) => (
               <div
                 key={`${label}_${val}_${index + 1}`}
-                className="p-4 cursor-pointer hover:bg-surface-raised text-sm text-foreground"
+                className="px-3 py-2.5 cursor-pointer hover:bg-surface-raised text-sm text-foreground"
                 onMouseDown={() => handleMouseDown({ label, value: val })}
               >
                 {label}

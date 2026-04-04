@@ -64,7 +64,7 @@ const Checkbox: FC<ICheckbox> = ({
           ${
             checked
               ? "bg-primary-300 border-primary-400"
-              : "bg-background border-border"
+              : "bg-surface border-border hover:border-primary-500"
           }
           ${disabled ? "bg-surface-raised border-border" : ""}
         `}

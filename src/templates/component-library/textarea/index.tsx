@@ -67,7 +67,6 @@ const Example = () => {
             required={isRequired}
             edges={edges as FORM_ELEMENT_EDGE_STYLE}
             className="w-full sm:w-80"
-            inputClassName="bg-white disabled:bg-gray-100 disabled:text-gray-500"
             rows={4}
           />
         </div>

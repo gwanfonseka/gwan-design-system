@@ -12,7 +12,7 @@ const GettingStarted = () => (
     </P>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
       {[
-        { label: "Components", value: "23+" },
+        { label: "Components", value: "38+" },
         { label: "Version", value: "v0.1.17" },
         { label: "License", value: "MIT" },
       ].map((s) => (

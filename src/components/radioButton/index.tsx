@@ -35,7 +35,7 @@ const RadioButton: FC<IRadioButton> = ({
           ${
             isChecked
               ? "border-primary-500 bg-primary-500"
-              : "border-border bg-background"
+              : "border-border bg-surface hover:border-primary-500"
           }
           ${disabled ? "bg-surface-raised border-border" : ""}
         `}

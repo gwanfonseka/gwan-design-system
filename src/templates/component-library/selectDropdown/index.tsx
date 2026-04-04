@@ -102,7 +102,6 @@ const Example = () => {
             value={selectedOption}
             onChange={(option) => setSelectedOption(option)}
             className="w-full sm:w-80"
-            inputClassName="bg-white disabled:bg-gray-100 disabled:text-gray-500"
             disabled={isDisabled}
             isError={isError}
             errorMessage={errorMessage}

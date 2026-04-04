@@ -60,7 +60,7 @@ const Input: FC<IInput> = ({
       {label && (
         <label
           htmlFor={label}
-          className={`text-sm ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
+          className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
         >
           {`${label}${required ? " *" : ""}`}
         </label>
@@ -71,13 +71,15 @@ const Input: FC<IInput> = ({
           placeholder={placeholder}
           value={value}
           disabled={disabled}
-          className={`bg-background text-foreground border ${
-            isError ? "border-danger focus:border-danger" : "border-border"
-          } outline-none py-4 pl-4 ${
-            onClear ? "pr-8" : "pr-4"
-          } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded-lg"} ${
+          className={`bg-surface text-foreground border ${
+            isError
+              ? "border-danger focus:border-danger"
+              : "border-border hover:border-primary-500 focus:border-primary-500"
+          } outline-none py-2.5 pl-3 ${
+            onClear ? "pr-8" : "pr-3"
+          } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"} ${
             disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
-          } text-sm w-full placeholder:text-muted-fg ${inputClassName}`}
+          } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
           required={required}
           type={type}
           onKeyDown={handleKeyDown}
