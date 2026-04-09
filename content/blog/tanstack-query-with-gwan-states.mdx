@@ -1,0 +1,157 @@
+---
+title: "Async UI States with TanStack Query and Gwan"
+description: "Use TanStack Query's isLoading, isError, and isEmpty flags to drive Gwan's States component for consistent, zero-boilerplate async UI."
+date: "2026-04-11"
+author: "Nimesh Fonseka"
+tags: ["tanstack-query", "async", "states", "tutorial"]
+draft: true
+---
+
+Every data-fetching flow has three moments that need UI: loading, error, and empty. Most apps handle these inconsistently — a spinner here, an inline "No results" there, a generic error toast somewhere else. **TanStack Query** gives you a clean way to know which state you're in, and **Gwan's `States` component** gives you a consistent way to show it.
+
+## Installation
+
+```bash
+npm install @tanstack/react-query
+```
+
+Set up the provider in your root layout:
+
+```tsx
+// src/app/layout.tsx (or a client wrapper)
+"use client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+}
+```
+
+## The pattern
+
+```tsx
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { States, Table, STATE_TYPE } from "gwan-design-system";
+import type { ITableColumn } from "gwan-design-system";
+
+async function fetchProjects() {
+  const res = await fetch("/api/projects");
+  if (!res.ok) throw new Error("Failed to fetch");
+  return res.json() as Promise<Project[]>;
+}
+
+const columns: ITableColumn<Project>[] = [
+  { key: "name", label: "Project", sortable: true },
+  { key: "status", label: "Status" },
+  { key: "updatedAt", label: "Last updated" },
+];
+
+export default function ProjectsPage() {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["projects"],
+    queryFn: fetchProjects,
+  });
+
+  if (isLoading) {
+    return <States type={STATE_TYPE.LOADING} />;
+  }
+
+  if (isError) {
+    return (
+      <States
+        type={STATE_TYPE.ERROR}
+        title="Could not load projects"
+        description={error.message}
+      />
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <States
+        type={STATE_TYPE.EMPTY}
+        title="No projects yet"
+        description="Create your first project to get started."
+      />
+    );
+  }
+
+  return <Table columns={columns} data={data} />;
+}
+```
+
+Three states, zero bespoke UI, fully consistent across every page in your app.
+
+## Mutations + Snackbar feedback
+
+Pair `useMutation` with Gwan's `Snackbar` for feedback on create/update/delete:
+
+```tsx
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Snackbar, SNACK_BAR_TYPE } from "gwan-design-system";
+
+const queryClient = useQueryClient();
+const [snack, setSnack] = useState<{ message: string; type: typeof SNACK_BAR_TYPE[keyof typeof SNACK_BAR_TYPE] } | null>(null);
+
+const { mutate: deleteProject } = useMutation({
+  mutationFn: (id: string) => fetch(`/api/projects/${id}`, { method: "DELETE" }),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["projects"] });
+    setSnack({ message: "Project deleted", type: SNACK_BAR_TYPE.SUCCESS });
+  },
+  onError: () => {
+    setSnack({ message: "Failed to delete", type: SNACK_BAR_TYPE.ERROR });
+  },
+});
+
+// In JSX:
+{snack && (
+  <Snackbar
+    message={snack.message}
+    type={snack.type}
+    onClose={() => setSnack(null)}
+  />
+)}
+```
+
+## Stale-while-revalidate + loading shimmer
+
+When navigating between pages, TanStack Query returns cached data immediately while refetching in the background. Use `isFetching` (not `isLoading`) to show a subtle refresh indicator without replacing the whole table with a loading state:
+
+```tsx
+const { data, isLoading, isFetching } = useQuery({ ... });
+
+// isLoading = true only on the very first fetch (no cache yet)
+// isFetching = true on every background refresh
+
+return (
+  <div className="relative">
+    {isFetching && !isLoading && (
+      <div className="absolute top-0 right-0 p-2 text-xs text-muted-fg">
+        Refreshing…
+      </div>
+    )}
+    <Table columns={columns} data={data ?? []} />
+  </div>
+);
+```
+
+## Summary
+
+| TanStack Query flag | Gwan component |
+|---------------------|---------------|
+| `isLoading` | `<States type={STATE_TYPE.LOADING} />` |
+| `isError` | `<States type={STATE_TYPE.ERROR} />` |
+| `data.length === 0` | `<States type={STATE_TYPE.EMPTY} />` |
+| mutation `onSuccess` | `<Snackbar type={SNACK_BAR_TYPE.SUCCESS} />` |
+| mutation `onError` | `<Snackbar type={SNACK_BAR_TYPE.ERROR} />` |
+
+One convention, every page.

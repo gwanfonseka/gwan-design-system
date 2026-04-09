@@ -1,0 +1,142 @@
+---
+title: "Server-side Tables with TanStack Table and Gwan"
+description: "Wire up TanStack Table's sorting, filtering, and pagination logic to Gwan's Table and Pagination components for production-ready data grids."
+date: "2026-04-10"
+author: "Nimesh Fonseka"
+tags: ["tanstack", "tables", "data", "tutorial"]
+draft: true
+---
+
+Data tables are one of the hardest UI problems to get right. Sorting, filtering, pagination, column visibility, loading states — most libraries make you choose between flexibility and a good API. In this post I'll show how to combine **TanStack Table v8** (the headless logic engine) with **Gwan's `Table` and `Pagination` components** (the UI layer) to build server-driven data grids cleanly.
+
+## The idea
+
+TanStack Table handles zero UI. It gives you state and helpers for sorting, filtering, pagination and more. Gwan's `Table` component renders the actual HTML table. Connecting them is mostly a mapping exercise.
+
+## Installation
+
+```bash
+npm install @tanstack/react-table
+```
+
+## Defining columns
+
+```tsx
+import { createColumnHelper } from "@tanstack/react-table";
+
+type User = { id: string; name: string; email: string; role: string };
+
+const columnHelper = createColumnHelper<User>();
+
+const columns = [
+  columnHelper.accessor("name", {
+    header: "Name",
+    enableSorting: true,
+  }),
+  columnHelper.accessor("email", {
+    header: "Email",
+    enableSorting: false,
+  }),
+  columnHelper.accessor("role", {
+    header: "Role",
+    enableSorting: true,
+  }),
+];
+```
+
+## Wiring TanStack Table to Gwan's Table component
+
+Gwan's `Table` accepts `columns` (header definitions) and `data` (rows). We build those from TanStack's instance:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getPaginationRowModel,
+  type SortingState,
+} from "@tanstack/react-table";
+import { Table, Pagination } from "gwan-design-system";
+import type { ITableColumn } from "gwan-design-system";
+
+export default function UsersTable({ users }: { users: User[] }) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [pageIndex, setPageIndex] = useState(0);
+  const PAGE_SIZE = 10;
+
+  const table = useReactTable({
+    data: users,
+    columns,
+    state: { sorting, pagination: { pageIndex, pageSize: PAGE_SIZE } },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: false,
+  });
+
+  // Map TanStack column defs → Gwan ITableColumn[]
+  const gwanColumns: ITableColumn<User>[] = table
+    .getFlatHeaders()
+    .map((header) => ({
+      key: header.id as keyof User,
+      label: String(header.column.columnDef.header),
+      sortable: header.column.getCanSort(),
+    }));
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Table
+        columns={gwanColumns}
+        data={table.getRowModel().rows.map((row) => row.original)}
+      />
+
+      <Pagination
+        paging={{
+          page: pageIndex + 1,
+          pageSize: PAGE_SIZE,
+          total: users.length,
+        }}
+        onChange={(page) => setPageIndex(page - 1)}
+      />
+    </div>
+  );
+}
+```
+
+## Server-side pagination
+
+For large datasets, move `manualPagination: true` and fetch data per page from your API:
+
+```tsx
+const [data, setData] = useState<User[]>([]);
+const [total, setTotal] = useState(0);
+
+useEffect(() => {
+  fetch(`/api/users?page=${pageIndex + 1}&pageSize=${PAGE_SIZE}`)
+    .then((r) => r.json())
+    .then(({ users, total }) => {
+      setData(users);
+      setTotal(total);
+    });
+}, [pageIndex]);
+
+const table = useReactTable({
+  data,
+  columns,
+  manualPagination: true,
+  pageCount: Math.ceil(total / PAGE_SIZE),
+  // ...
+});
+```
+
+## Adding sort indicators
+
+Read `column.getIsSorted()` to show ↑/↓ in your column headers. Gwan's `Table` will render the sort state visually if you pass `sortable: true` and wire up the `onSort` callback.
+
+## Summary
+
+TanStack Table is the brain, Gwan Table is the face. You map one to the other via `getFlatHeaders()` and `getRowModel()`. Everything else — server pagination, row selection, column visibility — follows the same pattern.

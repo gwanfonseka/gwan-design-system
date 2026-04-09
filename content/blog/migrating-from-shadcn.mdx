@@ -1,0 +1,129 @@
+---
+title: "Migrating from shadcn/ui to Gwan"
+description: "A practical guide to replacing shadcn/ui components with Gwan equivalents — what maps directly, what needs adjustment, and what you gain from the switch."
+date: "2026-04-21"
+author: "Nimesh Fonseka"
+tags: ["migration", "shadcn", "comparison", "tutorial"]
+draft: true
+---
+
+shadcn/ui is a great starting point — copy-paste components, Tailwind-styled, Radix UI primitives underneath. But there are real trade-offs: components live in your codebase (not a package), there's no cohesive theming story across all of them, and keeping up with upstream changes is manual work. Gwan is a versioned npm package with a single theme system across all components. This guide covers the practical migration path.
+
+## Before you start
+
+Gwan and shadcn/ui share the same underlying philosophy (Tailwind, TypeScript, composable), so the migration is mostly a rename-and-rewire, not a rewrite. Expect 30–60 minutes for a typical page.
+
+## Component mapping
+
+| shadcn/ui | Gwan | Notes |
+|-----------|------|-------|
+| `Button` | `Button` | Add `variant` from `BUTTON_VARIANTS` |
+| `Input` | `Input` | Add `label` prop (required) |
+| `Textarea` | `TextArea` | Add `label` prop |
+| `Select` | `SelectDropdown` | Different option format |
+| `Checkbox` | `Checkbox` | Add `label` prop |
+| `RadioGroup` + `RadioGroupItem` | `RadioButton` | Single component |
+| `Dialog` | `Modal` | Different open/close API |
+| `Sheet` | `Drawer` | Different placement API |
+| `Popover` | `Popover` | Similar API |
+| `Table` | `Table` | Column definition format differs |
+| `Badge` | `Tag` | Use `TAG_TYPE` for variants |
+| `Avatar` | `Avatar` | Add `variant` from `AVATAR_VARIANT` |
+| `Tooltip` | `Tooltip` | Add `position` from `TOOLTIP_POSITION` |
+| `Alert` | `Callout` | Use `CALLOUT_TYPE` for variants |
+| `Skeleton` | `Skeleton` | Similar API |
+| `Progress` | `ProgressBar` | Add `type` and `size` props |
+| `Tabs` | `Tabs` | Add `variant` from `TABS_VARIANT` |
+| `Accordion` | `Accordion` | Add `variant` from `ACCORDION_VARIANT` |
+
+## Key API differences
+
+### Buttons
+
+```tsx
+// shadcn/ui
+<Button variant="destructive">Delete</Button>
+
+// Gwan
+<Button variant={BUTTON_VARIANTS.DANGER} label="Delete" />
+```
+
+Gwan uses `label` as a required prop instead of children for text buttons. For icon buttons or complex content, children are supported.
+
+### Inputs
+
+```tsx
+// shadcn/ui — no built-in label
+<div>
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" type="email" />
+</div>
+
+// Gwan — label is built in
+<Input label="Email" type="email" />
+```
+
+### Modals
+
+```tsx
+// shadcn/ui
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <DialogHeader><DialogTitle>Title</DialogTitle></DialogHeader>
+    content
+  </DialogContent>
+</Dialog>
+
+// Gwan
+<Modal isOpen={open} onClose={() => setOpen(false)} size={MODAL_SIZE.MD}>
+  content
+</Modal>
+```
+
+Gwan's `Modal` takes a single `children` prop for the content — no sub-components required.
+
+### Tables
+
+```tsx
+// shadcn/ui — markup-heavy
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {data.map(row => (
+      <TableRow key={row.id}>
+        <TableCell>{row.name}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+
+// Gwan — data-driven
+<Table
+  columns={[{ key: "name", label: "Name", sortable: true }]}
+  data={data}
+/>
+```
+
+## Theming migration
+
+shadcn/ui uses CSS variables too, but they're per-component and scattered across component files. Gwan has a single `@theme` block in `globals.css`. After migrating, you can delete all the individual shadcn CSS variable overrides and replace with the Gwan token set.
+
+## What you gain
+
+- **One import source** — `import { ... } from "gwan-design-system"` vs hunting across component files
+- **Versioned updates** — `npm update gwan-design-system` vs manually merging upstream shadcn changes
+- **Consistent theming** — dark mode and brand colours work identically across all components
+- **Smaller codebase** — no component source files in your `src/components/ui/` folder
+
+## What you give up
+
+- **Full source access** — you can't modify component internals directly (open a GitHub issue instead)
+- **Radix primitives** — Gwan components don't expose the underlying Radix API surface
+
+## Summary
+
+For most projects the migration is straightforward. Start with the most-used components (Button, Input, Modal, Table), verify the page works, then continue. The theming change is the biggest win — replace all your scattered CSS variable overrides with the Gwan `@theme` block and dark mode works everywhere at once.

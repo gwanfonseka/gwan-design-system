@@ -1,0 +1,126 @@
+---
+title: "Why Gwan Moved to Tailwind CSS v4"
+description: "What changed between Tailwind v3 and v4, why the new CSS-first approach is better for a component library, and what you need to update if you're upgrading."
+date: "2026-04-17"
+author: "Nimesh Fonseka"
+tags: ["tailwind", "css", "design-system", "upgrade"]
+draft: true
+---
+
+Gwan was built on Tailwind v3. When v4 landed in early 2025 with a completely redesigned configuration model, I rewrote the theme setup. This post covers what changed, why the new approach is strictly better for a component library, and what you need to know to use Gwan with Tailwind v4.
+
+## What changed in v4
+
+### 1. No more `tailwind.config.js` for theming
+
+In v3, your colour tokens lived in `tailwind.config.js`:
+
+```js
+// v3
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { 500: "#9ea593" },
+      },
+    },
+  },
+};
+```
+
+In v4, all theme tokens move to CSS inside an `@theme` block:
+
+```css
+/* v4 */
+@theme {
+  --color-primary-500: #9ea593;
+}
+```
+
+Tailwind reads this at build time and generates the utility classes from it. Same result, but now your design tokens are in CSS — where they belong.
+
+### 2. CSS custom properties everywhere
+
+Every `@theme` value becomes a CSS custom property at runtime. This is the key change for dark mode: you can override `@theme` values with CSS variable overrides inside `.dark {}` without any JavaScript involvement.
+
+```css
+:root {
+  --primary-default: #435240;
+}
+
+.dark {
+  --primary-default: #adc09e;
+}
+
+@theme {
+  --color-primary-default: var(--primary-default);
+}
+```
+
+In v3, dark mode required the `dark:` prefix on every utility. In v4, semantic tokens just *are* the right value for the current theme.
+
+### 3. `@import "tailwindcss"` replaces directives
+
+v3 required three directives in your CSS:
+
+```css
+/* v3 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+v4 collapses these to one import:
+
+```css
+/* v4 */
+@import "tailwindcss";
+```
+
+### 4. Plugins use `@plugin`
+
+```css
+/* v4 */
+@plugin "@tailwindcss/typography";
+```
+
+Instead of adding to the `plugins` array in config.
+
+### 5. Content scanning is mostly automatic
+
+In v4, Tailwind scans your project files automatically. You only need to configure `content` for packages that live outside your project root — like component libraries:
+
+```ts
+// tailwind.config.ts (still needed for content paths)
+content: [
+  "./src/**/*.{ts,tsx}",
+  join(dirname(require.resolve("gwan-design-system")), "**/*.{js,ts,tsx}"),
+],
+```
+
+## Why this is better for a component library
+
+In v3, library consumers had to add the library's source to their `content` array *and* extend the `theme` with the library's colour tokens. If they forgot either, components would render without styles or colours.
+
+In v4, the library ships pre-built CSS that uses CSS custom properties. Consumers only need to:
+1. Add the library source to `content` (so Tailwind scans class names)
+2. Define the CSS variables in their `globals.css`
+
+The token values are runtime CSS, not build-time Tailwind config. This makes theming more resilient and makes the library less tightly coupled to the consumer's build setup.
+
+## Upgrading from v3
+
+```bash
+npm install tailwindcss@latest @tailwindcss/postcss@latest
+```
+
+1. Replace the three `@tailwind` directives with `@import "tailwindcss"`
+2. Move `theme.extend.colors` from your config to `@theme {}` in your CSS
+3. Replace `plugins: [require(...)]` with `@plugin "..."` in your CSS
+4. Test — most utility classes are identical between v3 and v4
+
+The official [v4 upgrade guide](https://tailwindcss.com/docs/upgrade-guide) covers edge cases.
+
+## Summary
+
+Tailwind v4 is a better foundation for design systems because theming is pure CSS, not JavaScript config. Tokens are runtime properties that respond to class selectors, which makes dark mode and brand customisation work with zero JavaScript.

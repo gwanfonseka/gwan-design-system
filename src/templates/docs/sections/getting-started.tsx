@@ -1,4 +1,5 @@
 import { H2, H3, P, Code, Callout, InlineCode } from "../primitives";
+import pkg from "../../../../package.json";
 
 const GettingStarted = () => (
   <>
@@ -13,7 +14,7 @@ const GettingStarted = () => (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
       {[
         { label: "Components", value: "38+" },
-        { label: "Version", value: "v0.1.17" },
+        { label: "Version", value: `v${pkg.version}` },
         { label: "License", value: "MIT" },
       ].map((s) => (
         <div key={s.label} className="border border-border rounded-xl p-4 bg-surface text-center">

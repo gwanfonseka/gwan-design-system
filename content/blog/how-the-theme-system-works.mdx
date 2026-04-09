@@ -1,0 +1,111 @@
+---
+title: "How the Gwan Theme System Works"
+description: "A look under the hood at how Gwan uses CSS custom properties, Tailwind v4's @theme layer, and next-themes to make dark mode and brand theming work seamlessly."
+date: "2026-04-15"
+author: "Nimesh Fonseka"
+tags: ["theming", "tailwind", "dark-mode", "css"]
+draft: true
+---
+
+When you switch Gwan's theme from light to dark, every component changes — backgrounds, borders, text, icons — with no JavaScript repaints and no flash. When you swap the primary colour from sage green to your own brand colour, every button, tag, and active state updates at once. This post explains exactly how that works.
+
+## The three layers
+
+The theme system has three layers that work together:
+
+1. **CSS custom properties** — the actual colour values, defined per theme
+2. **Tailwind `@theme`** — maps those CSS vars to Tailwind utility class names
+3. **`next-themes`** — toggles the `.dark` class on `<html>` at runtime
+
+### Layer 1: CSS custom properties
+
+In `globals.css`, colours are defined as CSS variables on `:root` (light) and `.dark` (dark):
+
+```css
+:root {
+  --background: #f8f9f5;
+  --foreground: #1c2218;
+  --primary-default: #435240;
+  --border: #c4cdb8;
+  /* ... */
+}
+
+.dark {
+  --background: #131a10;
+  --foreground: #e2eada;
+  --primary-default: #adc09e;
+  --border: #3c4d38;
+  /* ... */
+}
+```
+
+When the browser sees `.dark` on `<html>`, every CSS variable overrides automatically. The browser does this — not JavaScript.
+
+### Layer 2: Tailwind `@theme`
+
+Tailwind v4 reads colour tokens from the `@theme` block in your CSS. We map the semantic CSS vars to Tailwind names:
+
+```css
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary-default: var(--primary-default);
+  --color-border: var(--border);
+}
+```
+
+Now `bg-background`, `text-foreground`, `text-primary-default`, `border-border` all resolve to the correct value for whichever theme is active. No `dark:` prefix needed for semantic tokens.
+
+### Layer 3: next-themes
+
+```tsx
+// src/app/layout.tsx
+<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+  {children}
+</ThemeProvider>
+```
+
+`next-themes` adds or removes `.dark` on `<html>` based on the user's preference. It reads `localStorage` to persist the choice and respects `prefers-color-scheme` for the system default. That's it — the CSS and Tailwind layers do everything else.
+
+## How to swap the primary colour
+
+Change the CSS variables and every component updates:
+
+```css
+:root {
+  --primary-default: #1d4ed8;    /* indigo-700 */
+  --primary-default-fg: #ffffff;
+  --primary-muted: #93c5fd;      /* indigo-300 */
+}
+```
+
+You don't touch any component code. Components only use semantic tokens (`bg-primary-default`, `text-primary-default-fg`), not hard-coded colour values.
+
+## Semantic vs scale tokens
+
+Gwan uses two types of tokens:
+
+**Semantic tokens** change between themes — they describe *intent*:
+- `background`, `foreground`, `border`, `muted`, `primary-default`
+
+**Scale tokens** stay fixed — they describe a *value*:
+- `primary-50` through `primary-900`, `teal-500`, `emerald-400`
+
+Use semantic tokens for component UI. Use scale tokens for decorative elements (gradients, illustrations) where you need a specific shade regardless of theme.
+
+## The theme explorer
+
+Visit [gwan.dev/themes](/themes) to edit token values live and export the CSS snippet for your own project.
+
+## Summary
+
+```
+User toggles dark mode
+  → next-themes adds .dark to <html>
+    → CSS vars on .dark override :root values
+      → Tailwind @theme reads the updated CSS vars
+        → All utility classes resolve to new values
+          → Components repaint via CSS, zero JS
+```
+
+No JS colour mapping. No theme context providers per component. Just CSS doing what CSS does.

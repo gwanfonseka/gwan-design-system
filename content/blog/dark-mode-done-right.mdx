@@ -1,0 +1,159 @@
+---
+title: "Dark Mode Done Right in Next.js"
+description: "No flash, system preference detection, localStorage persistence, and smooth transitions — how Gwan implements dark mode with next-themes and what you need to know to use it in your app."
+date: "2026-04-22"
+author: "Nimesh Fonseka"
+tags: ["dark-mode", "next.js", "css", "next-themes"]
+draft: true
+---
+
+Dark mode is one of those features that's easy to get 80% right and hard to get fully right. The missing 20% is a flash of the wrong theme on page load, or a toggle that ignores the system preference, or colours that work in dark but break in light. This post covers how Gwan does it and how to replicate the same approach in your Next.js app.
+
+## The three problems
+
+1. **Flash of unstyled content (FOUC)** — On SSR, the server renders HTML with no knowledge of the user's saved theme. If you apply the theme in `useEffect`, the page flashes the wrong colour before hydration.
+2. **System preference** — `prefers-color-scheme: dark` should be respected on first visit, before the user has set a preference.
+3. **Persistence** — The chosen theme should survive page refreshes and navigation.
+
+## The solution: next-themes
+
+`next-themes` solves all three by injecting a blocking script into `<head>` that reads `localStorage` and `prefers-color-scheme` before the page renders, and applies the `.dark` class synchronously. No flash.
+
+## Setup
+
+```bash
+npm install next-themes
+```
+
+```tsx
+// src/components/theme-provider.tsx
+"use client";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {children}
+    </NextThemesProvider>
+  );
+}
+```
+
+```tsx
+// src/app/layout.tsx
+import { ThemeProvider } from "@/components/theme-provider";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+`suppressHydrationWarning` on `<html>` is required because next-themes adds the class server/client mismatch is expected.
+
+## The theme toggle
+
+```tsx
+"use client";
+
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Avoid hydration mismatch — don't render until mounted
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return <div className="w-8 h-8 rounded-sm bg-border animate-pulse" />;
+
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label="Toggle theme"
+    >
+      {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+    </button>
+  );
+}
+```
+
+The `mounted` guard is the key insight — `useTheme()` returns `undefined` on the server, so you must wait for mount before rendering any theme-dependent UI.
+
+## How the CSS does the heavy lifting
+
+Once `.dark` is on `<html>`, everything updates via CSS — no JS re-renders:
+
+```css
+:root {
+  --background: #f8f9f5;
+  --foreground: #1c2218;
+}
+
+.dark {
+  --background: #131a10;
+  --foreground: #e2eada;
+}
+```
+
+```css
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+```
+
+All Tailwind utilities (`bg-background`, `text-foreground`) resolve to the correct CSS variable value for the active theme. The browser handles the cascade — zero JavaScript colour mapping.
+
+## Smooth transitions (optional)
+
+`disableTransitionOnChange` in the provider prevents colour transitions when the theme changes (avoids a flash of transition). If you want a smooth fade:
+
+Remove `disableTransitionOnChange` and add to your CSS:
+
+```css
+*, *::before, *::after {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.1s ease;
+}
+```
+
+Apply this carefully — some interactive elements (buttons, inputs) feel laggy with colour transitions on them. Target only layout elements if needed.
+
+## System → manual → system
+
+The three-way toggle (system → light → dark → system) gives users the best control:
+
+```tsx
+const themes = ["system", "light", "dark"];
+
+const next = themes[(themes.indexOf(theme ?? "system") + 1) % themes.length];
+setTheme(next);
+```
+
+Most apps only need light/dark toggle, but if you want the system option exposed, this is the pattern.
+
+## What not to do
+
+- Don't use `className={isDark ? "dark-class" : "light-class"}` — it won't work with SSR
+- Don't apply theme in `useEffect` without the mounted guard — you'll get hydration warnings
+- Don't use `@media (prefers-color-scheme: dark)` in CSS alongside `.dark {}` — they'll conflict
+
+## Summary
+
+| Problem | Solution |
+|---------|----------|
+| Flash of wrong theme | next-themes blocking script in `<head>` |
+| System preference | `defaultTheme: "system"` + `enableSystem` |
+| Persistence | next-themes writes to `localStorage` |
+| Hydration mismatch | `suppressHydrationWarning` on `<html>`, `mounted` guard on toggle |
+| Colour switching | CSS custom properties on `.dark` class — zero JS |
