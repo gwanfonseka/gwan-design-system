@@ -1,0 +1,127 @@
+---
+title: "Building the Gwan OG Image System with next/og"
+description: "How gwan.dev generates branded 1200×630 social preview images for every blog post automatically using Next.js's built-in ImageResponse API."
+date: "2026-04-16"
+author: "Nimesh Fonseka"
+tags: ["og-image", "next.js", "social", "linkedin"]
+draft: true
+---
+
+Every blog post on gwan.dev gets a branded Open Graph image automatically — no Figma exports, no manual uploads. When you share a post on LinkedIn or Twitter, the platform fetches the image from `/blog/[slug]/opengraph-image` and shows it as the link preview card. Here's exactly how it works.
+
+## What is an OG image?
+
+When you paste a URL into LinkedIn, LinkedIn's crawler fetches the page and looks for `<meta property="og:image">`. That URL points to an image that becomes the visual preview of your link. If the tag is missing or the image is generic, your post gets a low-engagement grey card. A good branded image increases click-through significantly.
+
+## next/og: zero-dependency image generation
+
+Next.js ships `next/og` which exposes an `ImageResponse` API. You write JSX, it renders to a PNG. No canvas, no puppeteer, no external service.
+
+```tsx
+// src/app/blog/[slug]/opengraph-image.tsx
+import { ImageResponse } from "next/og";
+import { getPostBySlug } from "@/lib/blog";
+
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+
+export default async function OgImage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "64px",
+          backgroundColor: "#131a10",
+        }}
+      >
+        <span style={{ color: "#adc09e", fontSize: 13, fontWeight: 900, letterSpacing: "0.3em" }}>
+          GWAN.DEV / Blog
+        </span>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <h1 style={{ fontSize: 52, fontWeight: 900, color: "#e2eada", margin: 0, lineHeight: 1.1 }}>
+            {post.title}
+          </h1>
+          <p style={{ fontSize: 22, color: "#9ea593", margin: 0 }}>
+            {post.description}
+          </p>
+        </div>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          {post.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                padding: "5px 12px",
+                borderRadius: 4,
+                backgroundColor: "#252e22",
+                color: "#adc09e",
+              }}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    ),
+    { ...size }
+  );
+}
+```
+
+The filename `opengraph-image.tsx` is a Next.js convention. It's automatically wired — no manual `<meta>` tag needed in `generateMetadata`.
+
+## How Next.js wires it up
+
+Next.js reads `opengraph-image.tsx` and inserts this into the page's `<head>` automatically:
+
+```html
+<meta property="og:image" content="https://gwan.dev/blog/my-post/opengraph-image" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+```
+
+## Per-post metadata via generateMetadata
+
+We also explicitly set all Open Graph fields in `generateMetadata` for the LinkedIn article format:
+
+```ts
+openGraph: {
+  type: "article",
+  publishedTime: post.date,
+  authors: [post.author],
+  images: [{ url: `/blog/${slug}/opengraph-image`, width: 1200, height: 630 }],
+}
+```
+
+The `type: "article"` tells LinkedIn this is editorial content, not a website link — it gets richer formatting in the feed.
+
+## Verifying your OG images
+
+After deploying, paste your post URL into the [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) to force a fresh crawl and see exactly what LinkedIn will show. If the image hasn't updated, hit "Inspect" to clear the cache.
+
+## Constraints
+
+- `ImageResponse` supports a subset of CSS — no grid, no `border-image`, limited `flex` properties
+- Font loading: use `fetch()` to load custom fonts as `ArrayBuffer` and pass to the `fonts` option
+- Images inside `ImageResponse` must be absolute URLs or loaded via `fetch`
+
+## Summary
+
+The file convention `opengraph-image.tsx` + `ImageResponse` is all you need. Every post gets a branded social card automatically, with zero manual work per post.

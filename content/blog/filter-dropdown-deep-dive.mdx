@@ -1,0 +1,168 @@
+---
+title: "The FilterDropdown Component: Design Decisions and URL State"
+description: "A deep-dive into Gwan's FilterDropdown — how multi-category filtering works, why it's designed this way, and how to sync filter state with URL params for shareable filtered views."
+date: "2026-04-19"
+author: "Nimesh Fonseka"
+tags: ["components", "filtering", "ux", "url-state"]
+draft: true
+---
+
+Filtering is one of those features that looks simple until you're three levels deep in edge cases. Single select or multi-select? Clear all vs clear per category? Where does the state live? Should the URL reflect the current filters? Gwan's `FilterDropdown` component was built with these decisions already made — this post explains the thinking and shows how to wire up URL-synced filtering.
+
+## The data model
+
+`FilterDropdown` takes a hierarchical structure: categories contain options.
+
+```tsx
+import { FilterDropdown } from "gwan-design-system";
+import type { IFilter } from "gwan-design-system";
+
+const filters: IFilter = {
+  categories: [
+    {
+      label: "Status",
+      key: "status",
+      options: [
+        { label: "Active", value: "active" },
+        { label: "Archived", value: "archived" },
+        { label: "Draft", value: "draft" },
+      ],
+    },
+    {
+      label: "Role",
+      key: "role",
+      options: [
+        { label: "Admin", value: "admin" },
+        { label: "Editor", value: "editor" },
+        { label: "Viewer", value: "viewer" },
+      ],
+    },
+  ],
+};
+```
+
+The separation of categories and options makes it easy to add new filter dimensions without changing any UI code.
+
+## Basic usage
+
+```tsx
+const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+
+<FilterDropdown
+  filter={filters}
+  value={activeFilters}
+  onChange={setActiveFilters}
+  label="Filter"
+/>
+```
+
+`value` is a map of `{ categoryKey: [selectedValues] }`. An empty object means no filters are active.
+
+## Applying filters to data
+
+```tsx
+const filteredUsers = users.filter((user) => {
+  return Object.entries(activeFilters).every(([key, values]) => {
+    if (values.length === 0) return true;
+    return values.includes(user[key as keyof User]);
+  });
+});
+```
+
+For each active category, the user must match at least one of the selected values (OR within a category). All categories must match (AND across categories). This is the most intuitive behaviour for end users.
+
+## Syncing filters to URL params
+
+Shareable filtered views are a UX win — users can copy the URL and send it to a colleague who sees the exact same filtered state.
+
+```tsx
+"use client";
+
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useCallback } from "react";
+import { FilterDropdown } from "gwan-design-system";
+
+export default function FilteredList() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Read filters from URL
+  const activeFilters: Record<string, string[]> = {};
+  searchParams.forEach((value, key) => {
+    activeFilters[key] = value.split(",").filter(Boolean);
+  });
+
+  // Write filters to URL
+  const handleFilterChange = useCallback(
+    (filters: Record<string, string[]>) => {
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, values]) => {
+        if (values.length > 0) params.set(key, values.join(","));
+      });
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [router, pathname]
+  );
+
+  return (
+    <FilterDropdown
+      filter={filters}
+      value={activeFilters}
+      onChange={handleFilterChange}
+      label="Filter"
+    />
+  );
+}
+```
+
+Now `/users?status=active,draft&role=admin` loads with those filters pre-applied, and the URL updates as the user changes filters.
+
+## Filter badge count
+
+Show how many filters are active in the trigger label:
+
+```tsx
+const activeCount = Object.values(activeFilters)
+  .flat()
+  .filter(Boolean).length;
+
+<FilterDropdown
+  filter={filters}
+  value={activeFilters}
+  onChange={setActiveFilters}
+  label={activeCount > 0 ? `Filter (${activeCount})` : "Filter"}
+/>
+```
+
+## Server-side filtering
+
+For large datasets, skip client-side filtering and pass the URL params directly to your API:
+
+```ts
+// src/app/api/users/route.ts
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const status = searchParams.get("status")?.split(",") ?? [];
+  const role = searchParams.get("role")?.split(",") ?? [];
+
+  const users = await db.users.findMany({
+    where: {
+      ...(status.length > 0 && { status: { in: status } }),
+      ...(role.length > 0 && { role: { in: role } }),
+    },
+  });
+
+  return Response.json(users);
+}
+```
+
+## Why multi-select within categories?
+
+Single-select per category (radio buttons) is simpler but limiting — "show me active OR archived" is a common real-world need. Multi-select lets users express OR conditions within a dimension without needing a separate "advanced filter" UI.
+
+The OR-within/AND-across model covers 95% of filtering use cases without any UI complexity.
+
+## Summary
+
+`FilterDropdown` gives you multi-category, multi-select filtering with a clean hierarchical data model. Sync it to URL search params for shareable views, and pair it with TanStack Query to trigger server-side fetches when filters change.
