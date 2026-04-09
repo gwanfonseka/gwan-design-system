@@ -364,6 +364,43 @@ const LibraryTemplate = () => {
                 </svg>
                 Themes
               </a>
+              <a
+                href="/blog"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg dark:text-white/60 hover:text-foreground dark:hover:text-white hover:bg-primary-default/10 dark:hover:bg-black/20 transition-colors duration-200"
+              >
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="w-4 h-4 shrink-0"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 2h12v10H2V2z"
+                    stroke="currentColor"
+                    strokeWidth="1.3"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5 5.5h6M5 8h4"
+                    stroke="currentColor"
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M5 14h6"
+                    stroke="currentColor"
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M8 12v2"
+                    stroke="currentColor"
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                Blog
+              </a>
             </div>
 
             <hr className="border-border dark:border-white/30 border-2" />

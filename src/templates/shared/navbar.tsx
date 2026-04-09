@@ -29,12 +29,13 @@ const ThemeToggleIcon = () => {
   );
 };
 
-type ActivePage = "components" | "docs" | "themes" | undefined;
+type ActivePage = "components" | "docs" | "themes" | "blog" | undefined;
 
 const navLinks = [
   { label: "Components", href: "/components-library", page: "components" as ActivePage },
   { label: "Documentation", href: "/docs", page: "docs" as ActivePage },
   { label: "Themes", href: "/themes", page: "themes" as ActivePage },
+  { label: "Blog", href: "/blog", page: "blog" as ActivePage },
 ];
 
 /**
