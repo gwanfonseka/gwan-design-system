@@ -184,7 +184,7 @@ const NavBars = () => {
         isCollapsed={true}
         logoLongWidth="40%"
       />
-      <div className="flex-1 p-4 h-full">
+      <div className="hidden sm:block flex-1 p-4 h-full">
         <SampleBody />
       </div>
     </div>
