@@ -17,7 +17,7 @@ const TokenEditor = ({
   onReset: () => void;
 }) => {
   return (
-    <div className="flex flex-col gap-0 rounded-xl border border-border overflow-hidden bg-surface sticky top-24">
+    <div className="flex flex-col gap-0 rounded-xl border border-border overflow-hidden bg-surface lg:sticky lg:top-24">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-surface-raised">
         <div className="flex rounded-md overflow-hidden border border-border">
@@ -53,11 +53,16 @@ const TokenEditor = ({
       </div>
 
       {/* Token groups */}
-      <div className="overflow-y-auto max-h-[calc(100vh-220px)]">
+      <div className="overflow-y-auto max-h-148">
         {TOKEN_GROUPS.map((group) => (
-          <div key={group.label} className="border-b border-border last:border-0">
+          <div
+            key={group.label}
+            className="border-b border-border last:border-0"
+          >
             <div className="px-5 py-3 bg-surface-overlay/50">
-              <span className="text-[9px] font-bold tracking-[0.25em] uppercase text-muted-fg">{group.label}</span>
+              <span className="text-[9px] font-bold tracking-[0.25em] uppercase text-muted-fg">
+                {group.label}
+              </span>
             </div>
             <div className="px-5 py-4 flex flex-col gap-4">
               {group.tokens.map((t) => (
@@ -77,7 +82,8 @@ const TokenEditor = ({
       {/* Tip */}
       <div className="px-5 py-3 border-t border-border bg-surface-raised">
         <p className="text-[10px] text-muted-fg leading-relaxed">
-          Click any colour swatch to open the picker. Toggle your site theme to edit the other mode.
+          Click any colour swatch to open the picker. Toggle your site theme to
+          edit the other mode.
         </p>
       </div>
     </div>

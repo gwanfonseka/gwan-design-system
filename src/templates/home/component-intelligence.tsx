@@ -7,6 +7,8 @@ import Button, {
 } from "@/components/button";
 import Tag, { TAG_EDGE_STYLE, TAG_TYPE } from "@/components/tag";
 import Avatar, { AVATAR_VARIANT } from "@/components/avatar";
+import Badge, { BADGE_TYPE, BADGE_VARIANT } from "@/components/badge";
+import Callout, { CALLOUT_TYPE } from "@/components/callout";
 import Input from "@/components/input";
 import Snackbar, { SNACK_BAR_TYPE } from "@/components/snackBar";
 import {
@@ -59,7 +61,7 @@ const ComponentIntelligence = () => {
         </div>
 
         {/* Cards row */}
-        <div className="flex flex-col sm:flex-row items-stretch gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           {/* Card 1 — Icons / Buttons */}
           <ShowcaseCard label="Icons / Buttons">
             <div className="flex flex-col gap-4">
@@ -159,31 +161,6 @@ const ComponentIntelligence = () => {
             </div>
           </ShowcaseCard>
 
-          {/* Card 3 — Identity / Avatars */}
-          <ShowcaseCard label="Identity / Avatars">
-            <div className="flex flex-col gap-4">
-              <Avatar
-                name="Alex Chon"
-                email="alex@gwan.dev"
-                image="/images/profile_picture.png"
-                variant={AVATAR_VARIANT.IMAGE_WITH_FULL}
-                isLoading={false}
-              />
-              <Avatar
-                name="Sam Rivera"
-                email="sam@gwan.dev"
-                variant={AVATAR_VARIANT.INITIALS_WITH_FULL}
-                isLoading={false}
-              />
-              <Avatar
-                name="Jordan Lee"
-                email="jordan@gwan.dev"
-                variant={AVATAR_VARIANT.INITIALS_WITH_FULL}
-                isLoading={false}
-              />
-            </div>
-          </ShowcaseCard>
-
           {/* Card 4 — Forms / Input */}
           <ShowcaseCard label="Forms / Input">
             <div className="flex flex-col gap-3">
@@ -207,6 +184,36 @@ const ComponentIntelligence = () => {
                 label="Search"
                 onClick={() => {}}
               />
+            </div>
+          </ShowcaseCard>
+
+          {/* Card 4 — Identity / Badges / Callout */}
+          <ShowcaseCard label="Identity / Badges / Callout">
+            <div className="flex flex-col gap-4">
+              <Avatar
+                name="Alex Chon"
+                email="alex@gwan.dev"
+                image="/images/profile_picture.png"
+                variant={AVATAR_VARIANT.IMAGE_WITH_FULL}
+                isLoading={false}
+              />
+              <div className="flex flex-wrap justify-between">
+                <Badge type={BADGE_TYPE.SUCCESS} label="Badge" />
+                <Badge
+                  type={BADGE_TYPE.INFO}
+                  label="Badge"
+                  variant={BADGE_VARIANT.OUTLINE}
+                />
+                <Badge type={BADGE_TYPE.WARNING} label="Badge" />
+                <Badge
+                  type={BADGE_TYPE.WARNING}
+                  label="Badge"
+                  variant={BADGE_VARIANT.OUTLINE}
+                />
+              </div>
+              <Callout type={CALLOUT_TYPE.WARNING}>
+                Components adapt to your theme tokens automatically.
+              </Callout>
             </div>
           </ShowcaseCard>
         </div>

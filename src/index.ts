@@ -21,7 +21,7 @@ export { default as Table } from "./components/table";
 export { default as Tag } from "./components/tag";
 export { default as TimeLine } from "./components/timeLine";
 export { default as Tooltip } from "./components/tooltip";
-export * as Icons from "./components/icons";
+export * from "./components/icons";
 // Tier 1
 export { default as Badge } from "./components/badge";
 export { default as Switch } from "./components/switch";
@@ -59,7 +59,11 @@ export { BREADCRUMB_SEPARATOR } from "./components/breadcrumb";
 export { DRAWER_PLACEMENT, DRAWER_SIZE } from "./components/drawer";
 export { POPOVER_PLACEMENT, POPOVER_TRIGGER } from "./components/popover";
 export { ALERT_TYPE, ALERT_VARIANT } from "./components/alert";
-export { STEPPER_ORIENTATION, STEPPER_VARIANT, STEP_STATUS } from "./components/stepper";
+export {
+  STEPPER_ORIENTATION,
+  STEPPER_VARIANT,
+  STEP_STATUS,
+} from "./components/stepper";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -104,5 +108,8 @@ export type { IPopover } from "./components/popover";
 export type { IAlert } from "./components/alert";
 export type { IStep, IStepper } from "./components/stepper";
 export type { IDatePicker } from "./components/datePicker";
-export type { ICommandItem, ICommandPalette } from "./components/commandPalette";
+export type {
+  ICommandItem,
+  ICommandPalette,
+} from "./components/commandPalette";
 export type { IColorPicker } from "./components/colorPicker";
