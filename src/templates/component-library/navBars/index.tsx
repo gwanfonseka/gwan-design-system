@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { AVATAR_VARIANT } from "@/components/avatar";
 import {
   ColorsSVG,
@@ -138,18 +139,19 @@ const Example = () => {
         menuItems={menuItems}
         logoShort="/logo-short.png"
         logoLong="/logo.png"
+        onNavigate={(route) => router.push(route)} // optional, or navigate(route) for React Router
         logoShortWidth={60}       // optional, default 60
         logoShortHeight={60}      // optional, default 60
         logoLongWidth="60%"       // optional, default "60%", accepts number (px) or string
-        avatarName="John Doe"
-        avatarEmail="john.doe@email.com"
-        avatarImage="/avatar.png"
-        avatarType={AVATAR_VARIANT.IMAGE_WITH_FULL}
-        menuWidthClass="w-[20rem]"
-        menuHeightClass="h-screen"
-        menuBackgroundColor="bg-surface-raised"
-        isLoading={false}
-        onNavigate={(route) => router.push(route)} // or navigate(route) for React Router
+        isAvatarVisible={true}    // optional, default true
+        avatarName="John Doe"     // optional, required if isAvatarVisible is true
+        avatarEmail="john.doe@email.com" // optional, required if isAvatarVisible is true
+        avatarImage="/avatar.png" // optional, required if isAvatarVisible is true
+        avatarType={AVATAR_VARIANT.IMAGE_WITH_FULL} // optional, default AVATAR_VARIANT.IMAGE_WITH_FULL
+        menuWidthClass="w-[20rem]" // optional, default "w-[20rem]", accepts any Tailwind width class
+        menuHeightClass="h-screen" // optional, default "h-[100vh]", accepts any Tailwind height class
+        menuBackgroundColor="bg-surface-raised" // optional, default "bg-surface-raised", accepts any Tailwind background color class
+        isLoading={false}       // optional, default false. When true, shows skeleton loaders instead of menu items and avatar
       />
       <main className="flex-1 p-6">
         {/* Page content */}
@@ -159,12 +161,18 @@ const Example = () => {
 };`;
 
 const NavBars = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const renderPlayground = () => (
-    <div className="flex flex-row items-start border border-border rounded-lg overflow-hidden">
+    <div
+      ref={containerRef}
+      className="relative flex flex-row gap-4 items-stretch border border-border rounded-lg overflow-hidden"
+    >
       <NavBar
         menuItems={menuItems}
         logoShort="/images/logo_short.png"
         logoLong="/images/logo.png"
+        isAvatarVisible={true}
         avatarName="John Doe"
         avatarEmail="john.doe@email.com"
         avatarImage="/images/profile_picture.png"
@@ -176,8 +184,8 @@ const NavBars = () => {
         isCollapsed={true}
         logoLongWidth="40%"
       />
-      <div className="flex-1 p-4 text-muted-fg text-sm">
-        Rest of the content
+      <div className="flex-1 p-4 h-full">
+        <SampleBody />
       </div>
     </div>
   );
@@ -186,6 +194,21 @@ const NavBars = () => {
     <div className="flex flex-col gap-8">
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />
+    </div>
+  );
+};
+
+const SampleBody = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="h-64 rounded-3xl border border-white/10 bg-teal-500/20" />
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-3xl border border-white/10 bg-violet-500/20 h-64" />
+        <div className="rounded-3xl border border-white/10 bg-amber-500/20 h-64" />
+        <div className=" rounded-3xl border border-white/10 bg-sky-500/20 h-64" />
+        <div className="rounded-3xl border border-white/10 bg-rose-500/20 h-64" />
+        <div className="rounded-3xl border border-white/10 bg-lime-500/20 h-64" />
+      </div>
     </div>
   );
 };
