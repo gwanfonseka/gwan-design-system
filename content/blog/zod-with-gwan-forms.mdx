@@ -1,0 +1,192 @@
+---
+title: "Schema-first Form Validation with Zod and Gwan"
+description: "Use Zod schemas with react-hook-form and Gwan form components to co-locate validation rules, infer TypeScript types, and eliminate duplicated error messages."
+date: "2026-04-14"
+author: "Nimesh Fonseka"
+tags: ["zod", "forms", "validation", "typescript"]
+draft: true
+---
+
+In the [react-hook-form post](/blog/react-hook-form-with-gwan) we wired validation rules inline with `register()`. That works well for simple forms. But once you have 10+ fields, cross-field validation, or reuse the same schema in an API route, inline rules become scattered and repetitive. **Zod** solves this by moving all validation into a single schema that doubles as your TypeScript type source of truth.
+
+## Installation
+
+```bash
+npm install zod @hookform/resolvers
+```
+
+## Defining the schema
+
+```ts
+// src/schemas/signup.ts
+import { z } from "zod";
+
+export const signupSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Minimum 8 characters"),
+    confirmPassword: z.string(),
+    role: z.enum(["developer", "designer", "pm"], {
+      required_error: "Please select a role",
+    }),
+    agreed: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the terms" }),
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type SignupForm = z.infer<typeof signupSchema>;
+```
+
+## Using it with react-hook-form + Gwan
+
+```tsx
+"use client";
+
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input, SelectDropdown, Checkbox, Button, BUTTON_VARIANTS } from "gwan-design-system";
+import { signupSchema, type SignupForm } from "@/schemas/signup";
+
+export default function SignupPage() {
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignupForm>({ resolver: zodResolver(signupSchema) });
+
+  const onSubmit = async (data: SignupForm) => {
+    await fetch("/api/signup", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 max-w-md">
+      <Input
+        label="Full name"
+        error={errors.name?.message}
+        {...register("name")}
+      />
+
+      <Input
+        label="Email"
+        type="email"
+        error={errors.email?.message}
+        {...register("email")}
+      />
+
+      <Input
+        label="Password"
+        type="password"
+        error={errors.password?.message}
+        {...register("password")}
+      />
+
+      <Input
+        label="Confirm password"
+        type="password"
+        error={errors.confirmPassword?.message}
+        {...register("confirmPassword")}
+      />
+
+      <Controller
+        name="role"
+        control={control}
+        render={({ field }) => (
+          <SelectDropdown
+            label="Role"
+            options={[
+              { label: "Developer", value: "developer" },
+              { label: "Designer", value: "designer" },
+              { label: "Product Manager", value: "pm" },
+            ]}
+            value={field.value}
+            onChange={field.onChange}
+            error={errors.role?.message}
+          />
+        )}
+      />
+
+      <Controller
+        name="agreed"
+        control={control}
+        render={({ field }) => (
+          <Checkbox
+            label="I agree to the terms"
+            checked={field.value}
+            onChange={field.onChange}
+            error={errors.agreed?.message}
+          />
+        )}
+      />
+
+      <Button
+        type="submit"
+        variant={BUTTON_VARIANTS.PRIMARY}
+        label={isSubmitting ? "Creating account…" : "Create account"}
+        disabled={isSubmitting}
+      />
+    </form>
+  );
+}
+```
+
+Notice there are no inline validation rules — they all live in the schema.
+
+## Reusing the schema in API routes
+
+This is the real win. Use the same Zod schema in your server-side route handler:
+
+```ts
+// src/app/api/signup/route.ts
+import { signupSchema } from "@/schemas/signup";
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  const result = signupSchema.safeParse(body);
+
+  if (!result.success) {
+    return Response.json({ errors: result.error.flatten() }, { status: 400 });
+  }
+
+  // result.data is fully typed
+  await createUser(result.data);
+  return Response.json({ success: true });
+}
+```
+
+One schema, validated in two places, zero duplication.
+
+## Async validation (e.g. email uniqueness)
+
+```ts
+const signupSchema = z.object({
+  email: z
+    .string()
+    .email()
+    .refine(
+      async (email) => {
+        const res = await fetch(`/api/check-email?email=${email}`);
+        const { available } = await res.json();
+        return available;
+      },
+      { message: "This email is already registered" }
+    ),
+});
+```
+
+## Summary
+
+| Without Zod | With Zod |
+|-------------|----------|
+| Validation rules inline with `register()` | All rules in one schema file |
+| TypeScript type defined separately | `z.infer<typeof schema>` — one source of truth |
+| Duplicated validation in API route | Same schema imported server-side |
+| Cross-field validation is awkward | `.refine()` handles it cleanly |

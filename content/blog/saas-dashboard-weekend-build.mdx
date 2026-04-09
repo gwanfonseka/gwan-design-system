@@ -1,0 +1,226 @@
+---
+title: "Build a SaaS Dashboard in a Weekend with Gwan"
+description: "A practical walkthrough of building a complete SaaS admin dashboard — NavBar, Table, Pagination, States, Snackbar, Modal, and FilterDropdown — wired up end-to-end."
+date: "2026-04-20"
+author: "Nimesh Fonseka"
+tags: ["tutorial", "dashboard", "saas", "next.js"]
+draft: true
+---
+
+This is a build log, not a theory post. We're going to wire up a real admin dashboard using Gwan components — the kind you'd ship to a paying customer. By the end you'll have: a data table with filters and pagination, inline actions with confirmation modals, toast notifications for feedback, and proper loading/error/empty states throughout.
+
+## What we're building
+
+A **Users** page for a SaaS product: list users, filter by role and status, paginate, confirm-before-delete, and show toast feedback on every action.
+
+## Setup
+
+```bash
+npx create-next-app@latest my-dashboard --typescript --tailwind --app
+cd my-dashboard
+npm install gwan-design-system @tanstack/react-query
+```
+
+Follow the [Getting Started](/docs) guide to configure Tailwind and your theme tokens.
+
+## 1. The page layout
+
+```tsx
+// src/app/dashboard/users/page.tsx
+import UsersTemplate from "@/templates/users";
+
+export default function UsersPage() {
+  return <UsersTemplate />;
+}
+```
+
+```tsx
+// src/templates/users/index.tsx
+"use client";
+
+import { useState } from "react";
+import { NavBar, Snackbar, SNACK_BAR_TYPE } from "gwan-design-system";
+import UsersTable from "./table";
+
+export default function UsersTemplate() {
+  const [snack, setSnack] = useState<{ message: string; type: string } | null>(null);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <NavBar menuItems={[{ label: "Users", href: "/dashboard/users" }]} />
+
+      <main className="pt-20 px-6 max-w-7xl mx-auto">
+        <div className="py-8 border-b border-border mb-8">
+          <h1 className="text-2xl font-black text-foreground">Users</h1>
+        </div>
+
+        <UsersTable onAction={(msg, type) => setSnack({ message: msg, type })} />
+      </main>
+
+      {snack && (
+        <Snackbar
+          message={snack.message}
+          type={snack.type as never}
+          onClose={() => setSnack(null)}
+        />
+      )}
+    </div>
+  );
+}
+```
+
+## 2. The data table with filters and pagination
+
+```tsx
+// src/templates/users/table.tsx
+"use client";
+
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Table, Pagination, FilterDropdown, States, Modal, Button,
+  STATE_TYPE, MODAL_SIZE, BUTTON_VARIANTS, SNACK_BAR_TYPE,
+} from "gwan-design-system";
+import type { ITableColumn, IFilter } from "gwan-design-system";
+
+type User = { id: string; name: string; email: string; role: string; status: string };
+
+const columns: ITableColumn<User>[] = [
+  { key: "name", label: "Name", sortable: true },
+  { key: "email", label: "Email" },
+  { key: "role", label: "Role" },
+  { key: "status", label: "Status" },
+];
+
+const filterConfig: IFilter = {
+  categories: [
+    {
+      key: "role",
+      label: "Role",
+      options: [
+        { label: "Admin", value: "admin" },
+        { label: "Editor", value: "editor" },
+        { label: "Viewer", value: "viewer" },
+      ],
+    },
+    {
+      key: "status",
+      label: "Status",
+      options: [
+        { label: "Active", value: "active" },
+        { label: "Suspended", value: "suspended" },
+      ],
+    },
+  ],
+};
+
+export default function UsersTable({
+  onAction,
+}: {
+  onAction: (message: string, type: string) => void;
+}) {
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["users", page, filters],
+    queryFn: () =>
+      fetch(`/api/users?page=${page}&filters=${JSON.stringify(filters)}`).then((r) =>
+        r.json()
+      ),
+  });
+
+  const { mutate: deleteUser, isPending: deleting } = useMutation({
+    mutationFn: (id: string) =>
+      fetch(`/api/users/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      onAction("User deleted", SNACK_BAR_TYPE.SUCCESS);
+      setDeleteTarget(null);
+    },
+    onError: () => {
+      onAction("Failed to delete user", SNACK_BAR_TYPE.ERROR);
+    },
+  });
+
+  if (isLoading) return <States type={STATE_TYPE.LOADING} />;
+  if (isError) return <States type={STATE_TYPE.ERROR} title="Could not load users" />;
+  if (!data?.users?.length)
+    return <States type={STATE_TYPE.EMPTY} title="No users found" />;
+
+  return (
+    <>
+      <div className="flex items-center justify-between mb-4">
+        <FilterDropdown
+          filter={filterConfig}
+          value={filters}
+          onChange={(f) => { setFilters(f); setPage(1); }}
+          label="Filter"
+        />
+      </div>
+
+      <Table
+        columns={columns}
+        data={data.users}
+        onRowAction={(user) => setDeleteTarget(user as User)}
+        rowActionLabel="Delete"
+      />
+
+      <div className="mt-4">
+        <Pagination
+          paging={{ page, pageSize: 10, total: data.total }}
+          onChange={setPage}
+        />
+      </div>
+
+      {/* Delete confirmation */}
+      <Modal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        size={MODAL_SIZE.SM}
+      >
+        <div className="p-6 flex flex-col gap-4">
+          <h2 className="text-base font-bold text-foreground">Delete user?</h2>
+          <p className="text-sm text-muted-fg">
+            <strong>{deleteTarget?.name}</strong> will be permanently removed. This cannot be undone.
+          </p>
+          <div className="flex gap-3 justify-end">
+            <Button
+              variant={BUTTON_VARIANTS.SECONDARY}
+              label="Cancel"
+              onClick={() => setDeleteTarget(null)}
+            />
+            <Button
+              variant={BUTTON_VARIANTS.PRIMARY}
+              label={deleting ? "Deleting…" : "Delete"}
+              onClick={() => deleteTarget && deleteUser(deleteTarget.id)}
+              disabled={deleting}
+            />
+          </div>
+        </div>
+      </Modal>
+    </>
+  );
+}
+```
+
+## What this covers
+
+- **Loading state** — `States` while TanStack Query fetches
+- **Error state** — `States` on fetch failure
+- **Empty state** — `States` when no results match
+- **Filtering** — `FilterDropdown` with instant re-fetch
+- **Pagination** — `Pagination` synced to query key
+- **Confirmation modal** — `Modal` before destructive action
+- **Toast feedback** — `Snackbar` on mutation success/error
+
+That's the full production pattern. Everything else in your dashboard is a variation of this.
+
+## What's next
+
+- Add a "Create user" drawer (`Drawer` component)
+- Add row selection for bulk actions
+- Add column visibility toggle
+- Export to CSV button

@@ -1,0 +1,155 @@
+---
+title: "Custom Animations in Gwan Modal and Drawer with Framer Motion"
+description: "Override the default enter/exit transitions of Gwan's Modal and Drawer with Framer Motion animations — without fighting the component internals."
+date: "2026-04-13"
+author: "Nimesh Fonseka"
+tags: ["framer-motion", "animation", "modal", "drawer"]
+draft: true
+---
+
+Gwan's `Modal` and `Drawer` components have sensible default transitions. But sometimes your brand calls for something different — a spring-based slide, a staggered fade, or a custom easing curve. **Framer Motion** gives you that control. The trick is knowing where to plug it in without breaking the component's focus-trap, aria, and close logic.
+
+## Installation
+
+```bash
+npm install framer-motion
+```
+
+## Animated Modal
+
+The cleanest approach is to wrap the modal's content with `motion.div` rather than replacing the modal itself. Gwan's `Modal` renders its children inside the overlay, so you animate the inner panel:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { Modal, Button, BUTTON_VARIANTS, MODAL_SIZE } from "gwan-design-system";
+import { motion } from "framer-motion";
+
+const panelVariants = {
+  hidden: { opacity: 0, scale: 0.96, y: 8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 400, damping: 30 },
+  },
+  exit: { opacity: 0, scale: 0.96, y: 8, transition: { duration: 0.15 } },
+};
+
+export default function AnimatedModalExample() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button
+        variant={BUTTON_VARIANTS.PRIMARY}
+        label="Open modal"
+        onClick={() => setOpen(true)}
+      />
+
+      <Modal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        size={MODAL_SIZE.MD}
+      >
+        <motion.div
+          variants={panelVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="p-6"
+        >
+          <h2 className="text-lg font-bold text-foreground mb-2">
+            Spring-animated modal
+          </h2>
+          <p className="text-sm text-muted-fg mb-6">
+            This panel enters with a spring and exits quickly.
+          </p>
+          <Button
+            variant={BUTTON_VARIANTS.SECONDARY}
+            label="Close"
+            onClick={() => setOpen(false)}
+          />
+        </motion.div>
+      </Modal>
+    </>
+  );
+}
+```
+
+## Animated Drawer
+
+For `Drawer`, a slide-in from the placement edge looks natural:
+
+```tsx
+const drawerVariants = {
+  hidden: { x: "100%" },
+  visible: {
+    x: 0,
+    transition: { type: "spring", stiffness: 300, damping: 28 },
+  },
+  exit: { x: "100%", transition: { duration: 0.2, ease: "easeIn" } },
+};
+
+// Inside Drawer children:
+<motion.div
+  variants={drawerVariants}
+  initial="hidden"
+  animate="visible"
+  exit="exit"
+  className="h-full p-6"
+>
+  {/* drawer content */}
+</motion.div>
+```
+
+Use `x: "-100%"` for left placement, `y: "100%"` for bottom.
+
+## Staggered list inside a modal
+
+Animate list items in one by one after the modal opens:
+
+```tsx
+const listVariants = {
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -8 },
+  visible: { opacity: 1, x: 0 },
+};
+
+<motion.ul variants={listVariants} initial="hidden" animate="visible">
+  {items.map((item) => (
+    <motion.li key={item.id} variants={itemVariants} className="py-2 border-b border-border">
+      {item.label}
+    </motion.li>
+  ))}
+</motion.ul>
+```
+
+## AnimatePresence for exit animations
+
+For exit animations to work, wrap the modal toggle with `AnimatePresence`:
+
+```tsx
+import { AnimatePresence } from "framer-motion";
+
+<AnimatePresence>
+  {open && (
+    <Modal isOpen={open} onClose={() => setOpen(false)}>
+      <motion.div variants={panelVariants} initial="hidden" animate="visible" exit="exit">
+        {/* content */}
+      </motion.div>
+    </Modal>
+  )}
+</AnimatePresence>
+```
+
+## Summary
+
+- Wrap children (not the component itself) in `motion.div`
+- Use `AnimatePresence` when you need exit animations
+- Spring transitions feel native on mobile; use `ease` curves for desktop-first UIs
+- Stagger children inside modals to direct the user's eye to what matters first

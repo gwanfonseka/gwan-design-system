@@ -1,0 +1,119 @@
+---
+title: "Building Accessible Forms with Gwan"
+description: "How Gwan's Input, Checkbox, RadioButton, and Select components handle ARIA attributes, keyboard navigation, error announcements, and focus management out of the box."
+date: "2026-04-18"
+author: "Nimesh Fonseka"
+tags: ["accessibility", "forms", "aria", "a11y"]
+draft: true
+---
+
+Accessible forms are harder to build than they look. Labels need to be associated with inputs. Errors need to be announced to screen readers. Keyboard users need to tab through fields in a logical order. Focus needs to be managed when modals open. Gwan's form components handle all of this by default — this post explains what's built in and what you still need to think about.
+
+## Labels and inputs
+
+Every Gwan input component (`Input`, `TextArea`, `SelectDropdown`, `Checkbox`, `RadioButton`) requires a `label` prop. The label is rendered as a `<label>` element and associated with the input via `htmlFor` / `id` pairing:
+
+```tsx
+<Input label="Email address" />
+// renders:
+// <label for="input-email">Email address</label>
+// <input id="input-email" type="text" />
+```
+
+This means screen readers announce the label when the input receives focus. Never pass an empty string to `label` — if the label is visually hidden, use `labelHidden` prop instead (the label still exists in the DOM for screen readers).
+
+## Error messages
+
+Errors use `aria-describedby` to associate the error message with the input, and `aria-invalid` to signal the invalid state:
+
+```tsx
+<Input
+  label="Email"
+  error="Invalid email address"
+/>
+// renders:
+// <input aria-invalid="true" aria-describedby="input-email-error" />
+// <span id="input-email-error" role="alert">Invalid email address</span>
+```
+
+The `role="alert"` causes screen readers to announce the error immediately when it appears — no focus required.
+
+## Keyboard navigation
+
+All Gwan form components are keyboard accessible:
+
+| Component | Keyboard behaviour |
+|-----------|-------------------|
+| `Input`, `TextArea` | Standard text input |
+| `Checkbox` | `Space` toggles checked state |
+| `RadioButton` | Arrow keys move between options in a group |
+| `SelectDropdown` | `Enter` opens, arrow keys navigate, `Enter` selects, `Escape` closes |
+| `FilterDropdown` | Same as SelectDropdown, `Space` toggles checkboxes |
+
+## Focus management in modals and drawers
+
+When a `Modal` or `Drawer` opens, focus is moved inside the component and trapped — Tab cycles only through focusable elements within the panel. When closed, focus returns to the element that triggered the open.
+
+This is critical for keyboard and screen reader users. Without it, focus remains outside the modal and users have to manually navigate into it.
+
+```tsx
+// Focus trap is automatic — just use the component
+<Modal isOpen={open} onClose={() => setOpen(false)}>
+  {/* Focus is trapped here while open */}
+  <Input label="Search" autoFocus />
+</Modal>
+```
+
+## Required fields
+
+```tsx
+<Input label="Name" required />
+// renders aria-required="true"
+```
+
+This tells screen readers the field is required without relying solely on a visual asterisk.
+
+## Fieldset and legend for radio groups
+
+Group related `RadioButton` components in a `<fieldset>` with a `<legend>` so screen readers announce the group name:
+
+```tsx
+<fieldset>
+  <legend className="text-sm font-semibold text-foreground mb-3">
+    Notification preference
+  </legend>
+  <RadioButton name="notifications" label="Email" value="email" />
+  <RadioButton name="notifications" label="SMS" value="sms" />
+  <RadioButton name="notifications" label="None" value="none" />
+</fieldset>
+```
+
+## What you still need to handle
+
+Gwan handles component-level accessibility. You still own:
+
+1. **Page structure** — use `<main>`, `<nav>`, `<header>` landmarks correctly
+2. **Heading hierarchy** — don't skip from `<h1>` to `<h3>`
+3. **Tab order** — don't use `tabIndex > 0`, let DOM order determine tab flow
+4. **Colour contrast** — the default Gwan palette passes WCAG AA, but if you swap tokens, verify with a contrast checker
+5. **Form submission errors** — after submit, move focus to the first errored field or to an error summary
+
+## Testing accessibility
+
+```bash
+npm install -D @axe-core/react
+```
+
+```tsx
+// In development only:
+if (process.env.NODE_ENV !== "production") {
+  const axe = await import("@axe-core/react");
+  axe.default(React, ReactDOM, 1000);
+}
+```
+
+This runs axe in your browser console and flags violations in real time.
+
+## Summary
+
+Gwan's form components are accessible by default because labels, ARIA attributes, keyboard handling, and focus management are built into the component — not bolted on. Your job is to use them correctly: always provide a `label`, always surface errors via the `error` prop, and structure your page with semantic HTML landmarks.
