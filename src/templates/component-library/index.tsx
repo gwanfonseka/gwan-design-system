@@ -42,6 +42,9 @@ import DatePickerTemplate from "./datePicker";
 import CommandPaletteTemplate from "./commandPalette";
 import ColorPickerTemplate from "./colorPicker";
 import MenuBarTemplate from "./menuBar";
+import CardTemplate from "./card";
+import DividerTemplate from "./divider";
+import SpinnerTemplate from "./spinner";
 
 const menuGroups = [
   {
@@ -92,6 +95,8 @@ const menuGroups = [
   {
     group: "Content & Layout",
     items: [
+      { name: "Card", template: <CardTemplate /> },
+      { name: "Divider", template: <DividerTemplate /> },
       { name: "Banner", template: <Banners /> },
       { name: "Carousel", template: <Carousels /> },
       { name: "Accordion", template: <AccordionTemplate /> },
@@ -117,6 +122,7 @@ const menuGroups = [
       { name: "Avatar", template: <Avatars /> },
       { name: "Tooltip", template: <Tooltips /> },
       { name: "Skeleton", template: <SkeletonTemplate /> },
+      { name: "Spinner", template: <SpinnerTemplate /> },
     ],
   },
   {
