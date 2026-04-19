@@ -10,6 +10,7 @@ export { default as Ellipsis } from "./components/ellipsis";
 export { default as FileUploader } from "./components/fileUploader";
 export { default as FilterDropdown } from "./components/filterDropdown";
 export { default as Input } from "./components/input";
+export { default as TextArea } from "./components/textarea";
 export { default as Modal } from "./components/modal";
 export { default as NavBar } from "./components/navBar";
 export { default as Pagination } from "./components/pagination";
@@ -39,11 +40,12 @@ export { default as Stepper } from "./components/stepper";
 export { default as DatePicker } from "./components/datePicker";
 export { default as CommandPalette } from "./components/commandPalette";
 export { default as ColorPicker } from "./components/colorPicker";
+export { default as MenuBar } from "./components/menuBar";
 
 // Constants
 export { BUTTON_VARIANTS } from "./components/button";
 export { CALLOUT_TYPE } from "./components/callout";
-export { AVATAR_VARIANT } from "./components/avatar";
+export { AVATAR_VARIANT, AVATAR_SIZE, AVATAR_LABEL_POSITION } from "./components/avatar";
 export { MODAL_SIZE } from "./components/modal";
 export { SNACK_BAR_TYPE } from "./components/snackBar";
 export { STATE_TYPE } from "./components/state";
@@ -64,6 +66,7 @@ export {
   STEPPER_VARIANT,
   STEP_STATUS,
 } from "./components/stepper";
+export { MENU_BAR_VARIANT } from "./components/menuBar";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -113,3 +116,4 @@ export type {
   ICommandPalette,
 } from "./components/commandPalette";
 export type { IColorPicker } from "./components/colorPicker";
+export type { IMenuBar } from "./components/menuBar";
