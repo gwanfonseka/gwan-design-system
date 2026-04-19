@@ -1,10 +1,11 @@
 ---
 title: "Dark Mode Done Right in Next.js"
 description: "No flash, system preference detection, localStorage persistence, and smooth transitions — how Gwan implements dark mode with next-themes and what you need to know to use it in your app."
-date: "2026-04-22"
+date: "2026-04-19"
 author: "Nimesh Fonseka"
 tags: ["dark-mode", "next.js", "css", "next-themes"]
-draft: true
+coverImage: "/blog/dark-mode-done-right-cover.jpg"
+draft: false
 ---
 
 Dark mode is one of those features that's easy to get 80% right and hard to get fully right. The missing 20% is a flash of the wrong theme on page load, or a toggle that ignores the system preference, or colours that work in dark but break in light. This post covers how Gwan does it and how to replicate the same approach in your Next.js app.
@@ -75,7 +76,8 @@ export function ThemeToggle() {
 
   // Avoid hydration mismatch — don't render until mounted
   useEffect(() => setMounted(true), []);
-  if (!mounted) return <div className="w-8 h-8 rounded-sm bg-border animate-pulse" />;
+  if (!mounted)
+    return <div className="w-8 h-8 rounded-sm bg-border animate-pulse" />;
 
   return (
     <button
@@ -115,6 +117,113 @@ Once `.dark` is on `<html>`, everything updates via CSS — no JS re-renders:
 
 All Tailwind utilities (`bg-background`, `text-foreground`) resolve to the correct CSS variable value for the active theme. The browser handles the cascade — zero JavaScript colour mapping.
 
+## A real-world token system
+
+Two variables is enough to prove the concept, but a production UI needs a full semantic palette — surfaces, borders, interactive states, status colours. Here is the complete token set used by [gwan.dev](https://gwan.dev):
+
+```css
+/* globals.css */
+
+:root {
+  --background: #f8f9f5;
+  --foreground: #1c2218;
+
+  --surface: #ffffff;
+  --surface-raised: #eef2e8;
+  --surface-overlay: #e3e9da;
+
+  --border: #c4cdb8;
+  --border-subtle: #d8dfce;
+
+  --primary-default: #435240;
+  --primary-default-fg: #f4f7f1;
+  --primary-muted: #adc09e;
+  --primary-muted-fg: #2c3629;
+
+  --muted: #e3e9da;
+  --muted-fg: #60705a;
+
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-fg: #064e3b;
+
+  --danger: #e11d48;
+  --danger-bg: #fff1f2;
+  --danger-fg: #881337;
+
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-fg: #78350f;
+}
+
+.dark {
+  --background: #131a10;
+  --foreground: #e2eada;
+
+  --surface: #1c241a;
+  --surface-raised: #252e22;
+  --surface-overlay: #2d392a;
+
+  --border: #3c4d38;
+  --border-subtle: #2d392a;
+
+  --primary-default: #adc09e;
+  --primary-default-fg: #1c2218;
+  --primary-muted: #435240;
+  --primary-muted-fg: #e2eada;
+
+  --muted: #252e22;
+  --muted-fg: #9ea593;
+
+  --success: #34d399;
+  --success-bg: #022c1e;
+  --success-fg: #a7f3d0;
+
+  --danger: #fb7185;
+  --danger-bg: #200a10;
+  --danger-fg: #fecdd3;
+
+  --warning: #fbbf24;
+  --warning-bg: #1c1300;
+  --warning-fg: #fde68a;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-primary-default: var(--primary-default);
+  --color-primary-default-fg: var(--primary-default-fg);
+  --color-muted: var(--muted);
+  --color-muted-fg: var(--muted-fg);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-fg: var(--success-fg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-fg: var(--warning-fg);
+}
+```
+
+A few design decisions worth noting:
+
+- **Semantic, not literal.** `--surface-raised` describes intent, not a colour value. If you rebrand, you change the value in one place.
+- **Foreground-background pairs.** Each status colour (`--success`) comes with a background (`--success-bg`) and a legible foreground (`--success-fg`). You never have to guess what text colour reads well on a success badge.
+- **The dark palette is not just inverted.** Background gets darker, but `--primary-default` flips to the lighter end of the scale so primary buttons remain accessible on dark surfaces.
+
+Swap the hex values for your own brand colours, keep the token names, and every component adapts automatically.
+
+## Don't want to write tokens by hand?
+
+The [gwan.dev/themes](https://gwan.dev/themes) configurator lets you build your entire palette visually — pick your brand colour, tweak light and dark surfaces, adjust status colours, and watch every component update in real time. When you're happy, hit **Export** and it generates the complete `:root`, `.dark`, and `@theme` CSS block ready to drop into your `globals.css`. No manual hex juggling required.
+
 ## Smooth transitions (optional)
 
 `disableTransitionOnChange` in the provider prevents colour transitions when the theme changes (avoids a flash of transition). If you want a smooth fade:
@@ -122,8 +231,13 @@ All Tailwind utilities (`bg-background`, `text-foreground`) resolve to the corre
 Remove `disableTransitionOnChange` and add to your CSS:
 
 ```css
-*, *::before, *::after {
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.1s ease;
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.1s ease;
 }
 ```
 
@@ -150,10 +264,10 @@ Most apps only need light/dark toggle, but if you want the system option exposed
 
 ## Summary
 
-| Problem | Solution |
-|---------|----------|
-| Flash of wrong theme | next-themes blocking script in `<head>` |
-| System preference | `defaultTheme: "system"` + `enableSystem` |
-| Persistence | next-themes writes to `localStorage` |
-| Hydration mismatch | `suppressHydrationWarning` on `<html>`, `mounted` guard on toggle |
-| Colour switching | CSS custom properties on `.dark` class — zero JS |
+| Problem              | Solution                                                          |
+| -------------------- | ----------------------------------------------------------------- |
+| Flash of wrong theme | next-themes blocking script in `<head>`                           |
+| System preference    | `defaultTheme: "system"` + `enableSystem`                         |
+| Persistence          | next-themes writes to `localStorage`                              |
+| Hydration mismatch   | `suppressHydrationWarning` on `<html>`, `mounted` guard on toggle |
+| Colour switching     | CSS custom properties on `.dark` class — zero JS                  |
