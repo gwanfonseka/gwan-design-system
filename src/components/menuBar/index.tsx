@@ -16,6 +16,12 @@ export enum MENU_BAR_VARIANT {
   TRANSPARENT = "TRANSPARENT",
 }
 
+export enum MENU_BAR_ITEMS_ALIGN {
+  LEFT = "LEFT",
+  CENTER = "CENTER",
+  RIGHT = "RIGHT",
+}
+
 type MenuBarSharedProps = {
   menuItems: IMenuItem[];
   logoShort: string;
@@ -24,6 +30,7 @@ type MenuBarSharedProps = {
   logoShortHeight?: number;
   sticky?: boolean;
   variant?: MENU_BAR_VARIANT;
+  itemsAlign?: MENU_BAR_ITEMS_ALIGN;
   className?: string;
   menuItemTextClass?: string;
   isLoading?: boolean;
@@ -79,6 +86,7 @@ const MenuBar: FC<IMenuBar> = ({
   avatarLabelPosition = AVATAR_LABEL_POSITION.RIGHT,
   sticky = false,
   variant = MENU_BAR_VARIANT.DEFAULT,
+  itemsAlign = MENU_BAR_ITEMS_ALIGN.LEFT,
   className = "",
   menuItemTextClass = "",
   isLoading = false,
@@ -178,6 +186,12 @@ const MenuBar: FC<IMenuBar> = ({
     </span>
   );
 
+  const alignClass: Record<MENU_BAR_ITEMS_ALIGN, string> = {
+    [MENU_BAR_ITEMS_ALIGN.LEFT]: "justify-start",
+    [MENU_BAR_ITEMS_ALIGN.CENTER]: "justify-center",
+    [MENU_BAR_ITEMS_ALIGN.RIGHT]: "justify-end",
+  };
+
   const visibleItems = menuItems.slice(0, visibleCount);
   const overflowItems = menuItems
     .slice(visibleCount)
@@ -275,7 +289,7 @@ const MenuBar: FC<IMenuBar> = ({
         {!isLoading ? (
           <div
             ref={itemsContainerRef}
-            className="hidden md:flex items-center flex-1 min-w-0"
+            className={`hidden md:flex items-center flex-1 min-w-0 ${alignClass[itemsAlign]}`}
           >
             {visibleItems.map((item, index) => {
               if (item.isDivider) {
