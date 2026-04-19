@@ -41,6 +41,7 @@ import StepperTemplate from "./stepper";
 import DatePickerTemplate from "./datePicker";
 import CommandPaletteTemplate from "./commandPalette";
 import ColorPickerTemplate from "./colorPicker";
+import MenuBarTemplate from "./menuBar";
 
 const menuGroups = [
   {
@@ -81,7 +82,8 @@ const menuGroups = [
   {
     group: "Navigation",
     items: [
-      { name: "Navigation", template: <NavBars /> },
+      { name: "Side Menu", template: <NavBars /> },
+      { name: "Menu Bar", template: <MenuBarTemplate /> },
       { name: "Tabs", template: <TabsTemplate /> },
       { name: "Breadcrumb", template: <Breadcrumbs /> },
       { name: "Ellipsis", template: <EllipsisTemplate /> },
