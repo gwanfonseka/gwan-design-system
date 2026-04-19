@@ -10,6 +10,7 @@ export { default as Ellipsis } from "./components/ellipsis";
 export { default as FileUploader } from "./components/fileUploader";
 export { default as FilterDropdown } from "./components/filterDropdown";
 export { default as Input } from "./components/input";
+export { default as TextArea } from "./components/textarea";
 export { default as Modal } from "./components/modal";
 export { default as NavBar } from "./components/navBar";
 export { default as Pagination } from "./components/pagination";
