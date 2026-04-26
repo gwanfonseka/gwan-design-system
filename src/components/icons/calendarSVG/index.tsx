@@ -5,7 +5,55 @@ const Calendar = () => {
         fillRule="evenodd"
         clipRule="evenodd"
         fill="currentColor"
-        d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1zM5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9H5zm14-2H5V7a1 1 0 0 1 1-1h1v1a1 1 0 1 0 2 0V6h6v1a1 1 0 1 0 2 0V6h1a1 1 0 0 1 1 1v1z"
+        d="M10.5,13h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M14.5,13h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M18.5,13h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M10.5,18h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M6.5,13h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M6.5,18h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M14.5,18h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M18.5,18h-1c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h1c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5Z"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M19.5,2h-1.5V.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v1.5H7V.5c0-.276-.224-.5-.5-.5s-.5,.224-.5,.5v1.5h-1.5C2.019,2,0,4.019,0,6.5v13c0,2.481,2.019,4.5,4.5,4.5h15c2.481,0,4.5-2.019,4.5-4.5V6.5c0-2.481-2.019-4.5-4.5-4.5ZM4.5,3h15c1.93,0,3.5,1.57,3.5,3.5v1.5H1v-1.5c0-1.93,1.57-3.5,3.5-3.5Zm15,20H4.5c-1.93,0-3.5-1.57-3.5-3.5V9H23v10.5c0,1.93-1.57,3.5-3.5,3.5Z"
       />
     </svg>
   );

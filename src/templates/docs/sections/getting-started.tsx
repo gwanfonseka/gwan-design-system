@@ -11,9 +11,10 @@ const GettingStarted = () => (
     <P>
       GWAN is designed with a <em>plug-and-play</em> philosophy. Drop it into any Next.js project, configure your tokens once, and every component automatically adapts to your brand and colour scheme.
     </P>
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
+    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 my-6">
       {[
-        { label: "Components", value: "39+" },
+        { label: "Components", value: "42+" },
+        { label: "Icons", value: "146+" },
         { label: "Version", value: `v${pkg.version}` },
         { label: "License", value: "MIT" },
       ].map((s) => (
