@@ -1,10 +1,11 @@
 ---
 title: "Why Gwan Moved to Tailwind CSS v4"
 description: "What changed between Tailwind v3 and v4, why the new CSS-first approach is better for a component library, and what you need to update if you're upgrading."
-date: "2026-04-17"
+date: "2026-04-26"
 author: "Nimesh Fonseka"
 tags: ["tailwind", "css", "design-system", "upgrade"]
-draft: true
+coverImage: "/blog/why-gwan-moved-to-tailwind-v4.jpg"
+draft: false
 ---
 
 Gwan was built on Tailwind v3. When v4 landed in early 2025 with a completely redesigned configuration model, I rewrote the theme setup. This post covers what changed, why the new approach is strictly better for a component library, and what you need to know to use Gwan with Tailwind v4.
@@ -57,7 +58,7 @@ Every `@theme` value becomes a CSS custom property at runtime. This is the key c
 }
 ```
 
-In v3, dark mode required the `dark:` prefix on every utility. In v4, semantic tokens just *are* the right value for the current theme.
+In v3, dark mode required the `dark:` prefix on every utility. In v4, semantic tokens just _are_ the right value for the current theme.
 
 ### 3. `@import "tailwindcss"` replaces directives
 
@@ -100,9 +101,10 @@ content: [
 
 ## Why this is better for a component library
 
-In v3, library consumers had to add the library's source to their `content` array *and* extend the `theme` with the library's colour tokens. If they forgot either, components would render without styles or colours.
+In v3, library consumers had to add the library's source to their `content` array _and_ extend the `theme` with the library's colour tokens. If they forgot either, components would render without styles or colours.
 
 In v4, the library ships pre-built CSS that uses CSS custom properties. Consumers only need to:
+
 1. Add the library source to `content` (so Tailwind scans class names)
 2. Define the CSS variables in their `globals.css`
 

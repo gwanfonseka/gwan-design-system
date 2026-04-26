@@ -14,7 +14,7 @@ import {
   SignOutSVG,
   TemplatesSVG,
 } from "@/components/icons";
-import MenuBar, { MENU_BAR_VARIANT } from "@/components/menuBar";
+import MenuBar, { MENU_BAR_VARIANT, MENU_BAR_ITEMS_ALIGN } from "@/components/menuBar";
 import CodeSnippet from "@/components/codeSnippet";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
@@ -96,7 +96,7 @@ const menuItems = [
   },
 ];
 
-const codeExample = `import { MenuBar, MENU_BAR_VARIANT, AVATAR_VARIANT, AVATAR_SIZE, AVATAR_LABEL_POSITION } from "gwan-design-system";
+const codeExample = `import { MenuBar, MENU_BAR_VARIANT, MENU_BAR_ITEMS_ALIGN, AVATAR_VARIANT, AVATAR_SIZE, AVATAR_LABEL_POSITION } from "gwan-design-system";
 
 // IMenuItem shape (same as NavBar — fully compatible):
 // {
@@ -148,8 +148,9 @@ const Example = () => {
       menuItems={menuItems}
       logoShort="/logo-short.png"       // required
       logoLong="/logo.png"              // required
-      variant={MENU_BAR_VARIANT.DEFAULT} // DEFAULT | BORDERED | ELEVATED | TRANSPARENT
-      sticky={false}                    // optional, sticks to top of viewport
+      variant={MENU_BAR_VARIANT.DEFAULT}           // DEFAULT | BORDERED | ELEVATED | TRANSPARENT
+      itemsAlign={MENU_BAR_ITEMS_ALIGN.LEFT}       // LEFT | CENTER | RIGHT  (default: LEFT)
+      sticky={false}                               // optional, sticks to top of viewport
       onNavigate={(route) => router.push(route)} // optional
       rightSlot={<SearchButton />}      // optional, renders in the right slot
       isLoading={false}                 // optional, shows shimmer when true
@@ -169,12 +170,17 @@ const Example = () => {
 
 const MenuBarTemplate = () => {
   const [variant, setVariant] = useState<string>(MENU_BAR_VARIANT.DEFAULT);
+  const [itemsAlign, setItemsAlign] = useState<string>(MENU_BAR_ITEMS_ALIGN.LEFT);
   const [avatarSize, setAvatarSize] = useState<string>(AVATAR_SIZE.MD);
   const [avatarLabelPosition, setAvatarLabelPosition] = useState<string>(
     AVATAR_LABEL_POSITION.LEFT,
   );
 
   const variantOptions = Object.values(MENU_BAR_VARIANT).map((v) => ({
+    value: v,
+    label: v,
+  }));
+  const itemsAlignOptions = Object.values(MENU_BAR_ITEMS_ALIGN).map((v) => ({
     value: v,
     label: v,
   }));
@@ -194,6 +200,7 @@ const MenuBarTemplate = () => {
           logoShort="/images/logo_short.png"
           logoLong="/images/logo.png"
           variant={variant as MENU_BAR_VARIANT}
+          itemsAlign={itemsAlign as MENU_BAR_ITEMS_ALIGN}
           isAvatarVisible={true}
           avatarName="John Doe"
           avatarEmail="john.doe@email.com"
@@ -212,6 +219,13 @@ const MenuBarTemplate = () => {
           value={variant}
           options={variantOptions}
           onChange={(val) => setVariant(val as string)}
+          className="w-full sm:w-40"
+        />
+        <SelectDropdown
+          label="Items align"
+          value={itemsAlign}
+          options={itemsAlignOptions}
+          onChange={(val) => setItemsAlign(val as string)}
           className="w-full sm:w-40"
         />
         <SelectDropdown

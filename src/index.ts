@@ -41,6 +41,9 @@ export { default as DatePicker } from "./components/datePicker";
 export { default as CommandPalette } from "./components/commandPalette";
 export { default as ColorPicker } from "./components/colorPicker";
 export { default as MenuBar } from "./components/menuBar";
+export { default as Card } from "./components/card";
+export { default as Divider } from "./components/divider";
+export { default as Spinner } from "./components/spinner";
 
 // Constants
 export { BUTTON_VARIANTS } from "./components/button";
@@ -66,7 +69,10 @@ export {
   STEPPER_VARIANT,
   STEP_STATUS,
 } from "./components/stepper";
-export { MENU_BAR_VARIANT } from "./components/menuBar";
+export { MENU_BAR_VARIANT, MENU_BAR_ITEMS_ALIGN } from "./components/menuBar";
+export { CARD_VARIANT, CARD_PADDING } from "./components/card";
+export { DIVIDER_ORIENTATION, DIVIDER_VARIANT } from "./components/divider";
+export { SPINNER_SIZE, SPINNER_COLOR } from "./components/spinner";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -117,3 +123,6 @@ export type {
 } from "./components/commandPalette";
 export type { IColorPicker } from "./components/colorPicker";
 export type { IMenuBar } from "./components/menuBar";
+export type { ICard } from "./components/card";
+export type { IDivider } from "./components/divider";
+export type { ISpinner } from "./components/spinner";
