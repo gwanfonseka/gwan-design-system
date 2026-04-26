@@ -43,7 +43,7 @@ const config = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     join(
       dirname(require.resolve("gwan-design-system")),
-      "**/*.{js,ts,jsx,tsx}"
+      "**/*.{js,ts,jsx,tsx}",
     ),
   ],
 };
@@ -201,77 +201,85 @@ export default function MyPage() {
 > **`S` = Server Component** (pure render, no hooks — safe to use in React Server Components)
 
 ### Actions
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Button` | `S` | Primary, secondary, ghost, danger, and more variants |
+
+| Component | Type | Description                                          |
+| --------- | ---- | ---------------------------------------------------- |
+| `Button`  | `S`  | Primary, secondary, ghost, danger, and more variants |
 
 ### Form Controls
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Input` | `S` | Text input with label, validation states, and clear button |
-| `TextArea` | `S` | Multi-line text input with label and validation |
-| `SelectDropdown` | `C` | Single-select dropdown with search |
-| `FilterDropdown` | `C` | Multi-category checkbox filter dropdown |
-| `Checkbox` | `S` | Accessible checkbox with size and edge-style variants |
-| `RadioButton` | `S` | Accessible radio input |
-| `Switch` | `S` | Toggle switch with sizes and disabled state |
-| `DatePicker` | `C` | Calendar date picker with min/max and keyboard support |
-| `FileUploader` | `C` | Drag-and-drop and click-to-upload file input |
-| `ColorPicker` | `C` | Swatch + hex input with preset palette |
+
+| Component        | Type | Description                                                |
+| ---------------- | ---- | ---------------------------------------------------------- |
+| `Input`          | `S`  | Text input with label, validation states, and clear button |
+| `TextArea`       | `S`  | Multi-line text input with label and validation            |
+| `SelectDropdown` | `C`  | Single-select dropdown with search                         |
+| `FilterDropdown` | `C`  | Multi-category checkbox filter dropdown                    |
+| `Checkbox`       | `S`  | Accessible checkbox with size and edge-style variants      |
+| `RadioButton`    | `S`  | Accessible radio input                                     |
+| `Switch`         | `S`  | Toggle switch with sizes and disabled state                |
+| `DatePicker`     | `C`  | Calendar date picker with min/max and keyboard support     |
+| `FileUploader`   | `C`  | Drag-and-drop and click-to-upload file input               |
+| `ColorPicker`    | `C`  | Swatch + hex input with preset palette                     |
 
 ### Data Display
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Table` | `S` | Sortable, typed data table |
-| `Pagination` | `C` | Page navigation controls |
-| `ProgressBar` | `S` | Striped and solid progress bars with size variants |
+
+| Component     | Type | Description                                        |
+| ------------- | ---- | -------------------------------------------------- |
+| `Table`       | `S`  | Sortable, typed data table                         |
+| `Pagination`  | `C`  | Page navigation controls                           |
+| `ProgressBar` | `S`  | Striped and solid progress bars with size variants |
 
 ### Navigation
-| Component | Type | Description |
-|-----------|------|-------------|
-| `NavBar` | `C` | Vertical side navigation with sub-menus and avatar |
-| `MenuBar` | `C` | Horizontal top navigation bar with overflow and avatar |
-| `Tabs` | `S` | Tab panels with underline, pill, and boxed variants |
-| `Breadcrumb` | `S` | Breadcrumb trail with slash, chevron, and dot separators |
-| `Ellipsis` | `C` | Text overflow with tooltip |
+
+| Component    | Type | Description                                              |
+| ------------ | ---- | -------------------------------------------------------- |
+| `NavBar`     | `C`  | Vertical side navigation with sub-menus and avatar       |
+| `MenuBar`    | `C`  | Horizontal top navigation bar with overflow and avatar   |
+| `Tabs`       | `S`  | Tab panels with underline, pill, and boxed variants      |
+| `Breadcrumb` | `S`  | Breadcrumb trail with slash, chevron, and dot separators |
+| `Ellipsis`   | `C`  | Text overflow with tooltip                               |
 
 ### Content & Layout
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Card` | `S` | Surface container with optional header/footer slots and variants |
-| `Divider` | `S` | Horizontal/vertical separator — solid, dashed, or dotted |
-| `Banner` | `S` | Page-level announcement banners |
-| `Carousel` | `C` | Image and content carousels |
-| `Accordion` | `C` | Collapsible panels with single/multi-open modes |
-| `TimeLine` | `C` | Vertical timeline / activity log |
-| `Stepper` | `S` | Horizontal and vertical step indicators |
+
+| Component   | Type | Description                                                      |
+| ----------- | ---- | ---------------------------------------------------------------- |
+| `Card`      | `S`  | Surface container with optional header/footer slots and variants |
+| `Divider`   | `S`  | Horizontal/vertical separator — solid, dashed, or dotted         |
+| `Banner`    | `S`  | Page-level announcement banners                                  |
+| `Carousel`  | `C`  | Image and content carousels                                      |
+| `Accordion` | `C`  | Collapsible panels with single/multi-open modes                  |
+| `TimeLine`  | `C`  | Vertical timeline / activity log                                 |
+| `Stepper`   | `S`  | Horizontal and vertical step indicators                          |
 
 ### Overlays
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Modal` | `C` | Dialog modals in multiple sizes |
-| `Drawer` | `C` | Slide-in panels from any edge |
-| `Popover` | `C` | Anchored overlay with click or hover trigger |
-| `CommandPalette` | `C` | Full-screen command launcher with keyboard navigation |
+
+| Component        | Type | Description                                           |
+| ---------------- | ---- | ----------------------------------------------------- |
+| `Modal`          | `C`  | Dialog modals in multiple sizes                       |
+| `Drawer`         | `C`  | Slide-in panels from any edge                         |
+| `Popover`        | `C`  | Anchored overlay with click or hover trigger          |
+| `CommandPalette` | `C`  | Full-screen command launcher with keyboard navigation |
 
 ### Indicators
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Tag` | `S` | Categorization tags with color variants |
-| `Chip` | `S` | Small selectable/filterable labels |
-| `Badge` | `S` | Dot, dot+label, and label-only status badges |
-| `Avatar` | `C` | User avatars with sizes, variants, and label positioning |
-| `Tooltip` | `S` | Hover tooltips with configurable position |
-| `Skeleton` | `S` | Loading placeholders for text, circles, and rects |
-| `Spinner` | `S` | Animated loading ring with size and color variants |
+
+| Component  | Type | Description                                              |
+| ---------- | ---- | -------------------------------------------------------- |
+| `Tag`      | `S`  | Categorization tags with color variants                  |
+| `Chip`     | `S`  | Small selectable/filterable labels                       |
+| `Badge`    | `S`  | Dot, dot+label, and label-only status badges             |
+| `Avatar`   | `C`  | User avatars with sizes, variants, and label positioning |
+| `Tooltip`  | `S`  | Hover tooltips with configurable position                |
+| `Skeleton` | `S`  | Loading placeholders for text, circles, and rects        |
+| `Spinner`  | `S`  | Animated loading ring with size and color variants       |
 
 ### Feedback
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Snackbar` | `S` | Toast-style notifications |
-| `Alert` | `C` | Inline alerts with solid, outline, and subtle variants |
-| `Callout` | `S` | Inline info, warning, success, and error messages |
-| `States` | `S` | Empty, error, and loading state screens |
+
+| Component  | Type | Description                                            |
+| ---------- | ---- | ------------------------------------------------------ |
+| `Snackbar` | `S`  | Toast-style notifications                              |
+| `Alert`    | `C`  | Inline alerts with solid, outline, and subtle variants |
+| `Callout`  | `S`  | Inline info, warning, success, and error messages      |
+| `States`   | `S`  | Empty, error, and loading state screens                |
 
 ---
 
@@ -283,8 +291,8 @@ export default function MyPage() {
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";
 
 // Use like any React element — size and color via className
-<SearchSVG className="size-5 text-muted-fg" />
-<BellSVG className="size-4 text-primary-default" />
+<div className="size-5 text-muted-fg"><SearchSVG /></div>
+<div className="size-4 text-primary-default"><BellSVG /></div>
 ```
 
 Browse the full icon catalogue at [gwan.dev/components?item=Icons](https://gwan.dev/components?item=Icons) — click any icon to get its import name, sizes preview, and ready-to-copy code snippet.
@@ -300,33 +308,48 @@ import {
   // Actions
   BUTTON_VARIANTS,
   // Form Controls
-  CHECKBOX_SIZE, CHECKBOX_EDGE_STYLE,
+  CHECKBOX_SIZE,
+  CHECKBOX_EDGE_STYLE,
   SWITCH_SIZE,
   // Data Display
-  PROGRESS_BAR_TYPE, PROGRESS_BAR_SIZE,
+  PROGRESS_BAR_TYPE,
+  PROGRESS_BAR_SIZE,
   // Navigation
   TABS_VARIANT,
   BREADCRUMB_SEPARATOR,
-  MENU_BAR_VARIANT, MENU_BAR_ITEMS_ALIGN,
+  MENU_BAR_VARIANT,
+  MENU_BAR_ITEMS_ALIGN,
   // Content & Layout
-  CARD_VARIANT, CARD_PADDING,
-  DIVIDER_ORIENTATION, DIVIDER_VARIANT,
+  CARD_VARIANT,
+  CARD_PADDING,
+  DIVIDER_ORIENTATION,
+  DIVIDER_VARIANT,
   ACCORDION_VARIANT,
-  STEPPER_ORIENTATION, STEPPER_VARIANT, STEP_STATUS,
+  STEPPER_ORIENTATION,
+  STEPPER_VARIANT,
+  STEP_STATUS,
   // Overlays
   MODAL_SIZE,
-  DRAWER_PLACEMENT, DRAWER_SIZE,
-  POPOVER_PLACEMENT, POPOVER_TRIGGER,
+  DRAWER_PLACEMENT,
+  DRAWER_SIZE,
+  POPOVER_PLACEMENT,
+  POPOVER_TRIGGER,
   // Indicators
   TAG_TYPE,
-  BADGE_TYPE, BADGE_VARIANT, BADGE_SIZE,
-  AVATAR_VARIANT, AVATAR_SIZE, AVATAR_LABEL_POSITION,
+  BADGE_TYPE,
+  BADGE_VARIANT,
+  BADGE_SIZE,
+  AVATAR_VARIANT,
+  AVATAR_SIZE,
+  AVATAR_LABEL_POSITION,
   TOOLTIP_POSITION,
   SKELETON_VARIANT,
-  SPINNER_SIZE, SPINNER_COLOR,
+  SPINNER_SIZE,
+  SPINNER_COLOR,
   // Feedback
   SNACK_BAR_TYPE,
-  ALERT_TYPE, ALERT_VARIANT,
+  ALERT_TYPE,
+  ALERT_VARIANT,
   CALLOUT_TYPE,
   STATE_TYPE,
 } from "gwan-design-system";
@@ -334,16 +357,59 @@ import {
 // TypeScript interfaces
 import type {
   IButton,
-  IInput, ITextArea, ISelectDropdown, ISelectDropdownOption,
-  IFilter, IFilterOption, IFilterCategory,
-  ICheckbox, IRadioButton, ISwitch, IDatePicker, IFileUploader, IColorPicker,
-  ITable, ITableColumn, IPagination, IPaging, IProgressBar,
-  INavBar, IMenuItem, IMenuBar, ITabs, ITabItem, IBreadcrumb, IBreadcrumbItem, IEllipsis,
-  ICard, IDivider,
-  IBanner, ICarousel, IAccordion, IAccordionItem, ITimeLine, ILog, IStepper, IStep,
-  IModal, IDrawer, IPopover, ICommandPalette, ICommandItem,
-  ITag, IChip, IBadge, IAvatar, ITooltip, ISkeleton, ISpinner,
-  ISnackBar, IAlert, ICallout, IState, IStateBase,
+  IInput,
+  ITextArea,
+  ISelectDropdown,
+  ISelectDropdownOption,
+  IFilter,
+  IFilterOption,
+  IFilterCategory,
+  ICheckbox,
+  IRadioButton,
+  ISwitch,
+  IDatePicker,
+  IFileUploader,
+  IColorPicker,
+  ITable,
+  ITableColumn,
+  IPagination,
+  IPaging,
+  IProgressBar,
+  INavBar,
+  IMenuItem,
+  IMenuBar,
+  ITabs,
+  ITabItem,
+  IBreadcrumb,
+  IBreadcrumbItem,
+  IEllipsis,
+  ICard,
+  IDivider,
+  IBanner,
+  ICarousel,
+  IAccordion,
+  IAccordionItem,
+  ITimeLine,
+  ILog,
+  IStepper,
+  IStep,
+  IModal,
+  IDrawer,
+  IPopover,
+  ICommandPalette,
+  ICommandItem,
+  ITag,
+  IChip,
+  IBadge,
+  IAvatar,
+  ITooltip,
+  ISkeleton,
+  ISpinner,
+  ISnackBar,
+  IAlert,
+  ICallout,
+  IState,
+  IStateBase,
 } from "gwan-design-system";
 ```
 
