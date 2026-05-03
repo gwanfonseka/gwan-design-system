@@ -44,9 +44,12 @@ export { default as MenuBar } from "./components/menuBar";
 export { default as Card } from "./components/card";
 export { default as Divider } from "./components/divider";
 export { default as Spinner } from "./components/spinner";
+export { default as StatCard } from "./components/statCard";
+export { default as AvatarGroup } from "./components/avatarGroup";
+export { default as CircularProgress } from "./components/circularProgress";
 
 // Constants
-export { BUTTON_VARIANTS } from "./components/button";
+export { BUTTON_VARIANTS, BUTTON_EDGE_STYLE } from "./components/button";
 export { CALLOUT_TYPE } from "./components/callout";
 export { AVATAR_VARIANT, AVATAR_SIZE, AVATAR_LABEL_POSITION } from "./components/avatar";
 export { MODAL_SIZE } from "./components/modal";
@@ -56,6 +59,11 @@ export { TAG_TYPE } from "./components/tag";
 export { TOOLTIP_POSITION } from "./components/tooltip";
 export { BADGE_TYPE, BADGE_VARIANT, BADGE_SIZE } from "./components/badge";
 export { SWITCH_SIZE } from "./components/switch";
+export { CHECKBOX_SIZE, CHECKBOX_EDGE_STYLE } from "./components/checkbox";
+export { CHIP_VARIANT, CHIP_EDGE_STYLE } from "./components/chip";
+export { FORM_ELEMENT_EDGE_STYLE } from "./components/input";
+export { TAG_VARIANT, TAG_EDGE_STYLE } from "./components/tag";
+export { STEP_DIRECTION } from "./components/timeLine";
 export { TABS_VARIANT } from "./components/tabs";
 export { ACCORDION_VARIANT } from "./components/accordion";
 export { SKELETON_VARIANT } from "./components/skeleton";
@@ -73,6 +81,8 @@ export { MENU_BAR_VARIANT, MENU_BAR_ITEMS_ALIGN } from "./components/menuBar";
 export { CARD_VARIANT, CARD_PADDING } from "./components/card";
 export { DIVIDER_ORIENTATION, DIVIDER_VARIANT } from "./components/divider";
 export { SPINNER_SIZE, SPINNER_COLOR } from "./components/spinner";
+export { STAT_TREND } from "./components/statCard";
+export { CIRCULAR_PROGRESS_SIZE, CIRCULAR_PROGRESS_TYPE } from "./components/circularProgress";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -126,3 +136,6 @@ export type { IMenuBar } from "./components/menuBar";
 export type { ICard } from "./components/card";
 export type { IDivider } from "./components/divider";
 export type { ISpinner } from "./components/spinner";
+export type { IStatCard } from "./components/statCard";
+export type { IAvatarGroup, IAvatarGroupItem } from "./components/avatarGroup";
+export type { ICircularProgress } from "./components/circularProgress";
