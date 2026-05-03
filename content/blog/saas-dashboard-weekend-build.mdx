@@ -1,17 +1,20 @@
 ---
 title: "Build a SaaS Dashboard in a Weekend with Gwan"
-description: "A practical walkthrough of building a complete SaaS admin dashboard — NavBar, Table, Pagination, States, Snackbar, Modal, and FilterDropdown — wired up end-to-end."
-date: "2026-04-20"
+description: "A practical walkthrough of building a complete SaaS admin dashboard — MenuBar, StatCard, CircularProgress, AvatarGroup, Table, Pagination, Modal, and more — wired up end-to-end."
+date: "2026-05-03"
 author: "Nimesh Fonseka"
 tags: ["tutorial", "dashboard", "saas", "next.js"]
-draft: true
+coverImage: "/blog/saas-dashboard-weekend-build.jpg"
+draft: false
 ---
 
-This is a build log, not a theory post. We're going to wire up a real admin dashboard using Gwan components — the kind you'd ship to a paying customer. By the end you'll have: a data table with filters and pagination, inline actions with confirmation modals, toast notifications for feedback, and proper loading/error/empty states throughout.
+This is a build log, not a theory post. We're going to wire up a real admin dashboard using Gwan components — the kind you'd ship to a paying customer. By the end you'll have a top navigation bar, a metrics row, a data table with filters and pagination, inline actions with confirmation modals, and toast notifications throughout.
 
 ## What we're building
 
-A **Users** page for a SaaS product: list users, filter by role and status, paginate, confirm-before-delete, and show toast feedback on every action.
+A **Users** page for a SaaS product. Here's exactly what you'll end up with:
+
+<DashboardPreview />
 
 ## Setup
 
@@ -23,7 +26,9 @@ npm install gwan-design-system @tanstack/react-query
 
 Follow the [Getting Started](/docs) guide to configure Tailwind and your theme tokens.
 
-## 1. The page layout
+## 1. The page shell with MenuBar
+
+`MenuBar` replaces the old vertical `NavBar` for dashboards — horizontal, sticky, supports avatar and overflow.
 
 ```tsx
 // src/app/dashboard/users/page.tsx
@@ -39,22 +44,90 @@ export default function UsersPage() {
 "use client";
 
 import { useState } from "react";
-import { NavBar, Snackbar, SNACK_BAR_TYPE } from "gwan-design-system";
-import UsersTable from "./table";
+import { useRouter } from "next/navigation";
+import {
+  MenuBar,
+  Snackbar,
+  SNACK_BAR_TYPE,
+  MENU_BAR_VARIANT,
+  AVATAR_VARIANT,
+  AVATAR_SIZE,
+  AVATAR_LABEL_POSITION,
+} from "gwan-design-system";
+import {
+  DashboardSVG,
+  UsersSVG,
+  OrdersSVG,
+  SettingsSVG,
+} from "gwan-design-system";
+import UsersContent from "./content";
+
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: <DashboardSVG />,
+    route: "/dashboard",
+    isActive: false,
+    isDivider: false,
+  },
+  {
+    title: "Users",
+    icon: <UsersSVG />,
+    route: "/dashboard/users",
+    isActive: true,
+    isDivider: false,
+  },
+  {
+    title: "Orders",
+    icon: <OrdersSVG />,
+    route: "/dashboard/orders",
+    isActive: false,
+    isDivider: false,
+  },
+  {
+    title: "Settings",
+    icon: <SettingsSVG />,
+    route: "/dashboard/settings",
+    isActive: false,
+    isDivider: false,
+  },
+];
 
 export default function UsersTemplate() {
-  const [snack, setSnack] = useState<{ message: string; type: string } | null>(null);
+  const router = useRouter();
+  const [snack, setSnack] = useState<{ message: string; type: string } | null>(
+    null,
+  );
 
   return (
     <div className="min-h-screen bg-background">
-      <NavBar menuItems={[{ label: "Users", href: "/dashboard/users" }]} />
+      <MenuBar
+        menuItems={menuItems}
+        logoShort="/logo-short.png"
+        logoLong="/logo.png"
+        variant={MENU_BAR_VARIANT.DEFAULT}
+        sticky
+        isAvatarVisible
+        avatarName="John Doe"
+        avatarEmail="john@company.com"
+        avatarImage="/avatar.png"
+        avatarType={AVATAR_VARIANT.IMAGE_WITH_FULL}
+        avatarSize={AVATAR_SIZE.SM}
+        avatarLabelPosition={AVATAR_LABEL_POSITION.RIGHT}
+        onNavigate={(route) => router.push(route)}
+      />
 
-      <main className="pt-20 px-6 max-w-7xl mx-auto">
-        <div className="py-8 border-b border-border mb-8">
-          <h1 className="text-2xl font-black text-foreground">Users</h1>
+      <main className="px-6 py-8 max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-lg font-black text-foreground">Users</h2>
+          <p className="text-xs text-muted-fg mt-0.5">
+            Manage your team and permissions.
+          </p>
         </div>
 
-        <UsersTable onAction={(msg, type) => setSnack({ message: msg, type })} />
+        <UsersContent
+          onAction={(msg, type) => setSnack({ message: msg, type })}
+        />
       </main>
 
       {snack && (
@@ -69,138 +142,203 @@ export default function UsersTemplate() {
 }
 ```
 
-## 2. The data table with filters and pagination
+## 2. Metrics row with StatCard and CircularProgress
+
+The top of every good dashboard is a metrics row. `StatCard` handles the KPI tiles; `CircularProgress` works great for a single ring metric alongside them.
+
+```tsx
+// src/templates/users/metrics.tsx
+import {
+  StatCard,
+  CircularProgress,
+  STAT_TREND,
+  CIRCULAR_PROGRESS_TYPE,
+  CIRCULAR_PROGRESS_SIZE,
+} from "gwan-design-system";
+import { UsersSVG, MoneySVG, OrdersSVG } from "gwan-design-system";
+
+export default function Metrics() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <StatCard
+        label="Total Users"
+        value="9,430"
+        trend={STAT_TREND.UP}
+        trendLabel="8% vs last month"
+        icon={<UsersSVG />}
+      />
+      <StatCard
+        label="Revenue"
+        value="$48,295"
+        trend={STAT_TREND.UP}
+        trendLabel="12% vs last month"
+        icon={<MoneySVG />}
+      />
+      <StatCard
+        label="New Orders"
+        value="1,284"
+        trend={STAT_TREND.DOWN}
+        trendLabel="3% vs last month"
+        icon={<OrdersSVG />}
+      />
+
+      <div className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-2">
+        <p className="text-xs text-muted-fg">Plan usage</p>
+        <div className="flex items-center gap-3">
+          <CircularProgress
+            value={78}
+            size={CIRCULAR_PROGRESS_SIZE.SM}
+            type={CIRCULAR_PROGRESS_TYPE.SUCCESS}
+          />
+          <div>
+            <p className="text-sm font-bold text-foreground">78%</p>
+            <p className="text-[10px] text-muted-fg">7,800 / 10,000</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## 3. Team members with AvatarGroup
+
+Show who's on the team with a compact stacked avatar row — overflow names appear in a tooltip on hover.
+
+```tsx
+import { AvatarGroup, AVATAR_SIZE, TOOLTIP_POSITION } from "gwan-design-system";
+
+const teamMembers = [
+  { name: "Alice Martin", email: "alice@company.com", image: "/alice.png" },
+  { name: "Bob Chen", email: "bob@company.com" },
+  { name: "Clara Singh", email: "clara@company.com", image: "/clara.png" },
+  { name: "David Park", email: "david@company.com" },
+  { name: "Eva Torres", email: "eva@company.com", image: "/eva.png" },
+  { name: "Frank Liu", email: "frank@company.com" },
+];
+
+export default function TeamRow() {
+  return (
+    <div className="flex items-center gap-3">
+      <p className="text-xs text-muted-fg">Team</p>
+      <AvatarGroup
+        items={teamMembers}
+        max={4}
+        size={AVATAR_SIZE.SM}
+        overflowTooltipPosition={TOOLTIP_POSITION.TOP}
+      />
+    </div>
+  );
+}
+```
+
+## 4. The data table
 
 ```tsx
 // src/templates/users/table.tsx
-"use client";
-
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  Table, Pagination, FilterDropdown, States, Modal, Button,
-  STATE_TYPE, MODAL_SIZE, BUTTON_VARIANTS, SNACK_BAR_TYPE,
+  Table,
+  Badge,
+  Avatar,
+  BADGE_TYPE,
+  AVATAR_VARIANT,
+  AVATAR_SIZE,
 } from "gwan-design-system";
-import type { ITableColumn, IFilter } from "gwan-design-system";
+import type { ITableColumn } from "gwan-design-system";
 
-type User = { id: string; name: string; email: string; role: string; status: string };
-
-const columns: ITableColumn<User>[] = [
-  { key: "name", label: "Name", sortable: true },
-  { key: "email", label: "Email" },
-  { key: "role", label: "Role" },
-  { key: "status", label: "Status" },
-];
-
-const filterConfig: IFilter = {
-  categories: [
-    {
-      key: "role",
-      label: "Role",
-      options: [
-        { label: "Admin", value: "admin" },
-        { label: "Editor", value: "editor" },
-        { label: "Viewer", value: "viewer" },
-      ],
-    },
-    {
-      key: "status",
-      label: "Status",
-      options: [
-        { label: "Active", value: "active" },
-        { label: "Suspended", value: "suspended" },
-      ],
-    },
-  ],
+type User = {
+  name: string;
+  email: string;
+  role: string;
+  status: string;
 };
 
-export default function UsersTable({
-  onAction,
-}: {
-  onAction: (message: string, type: string) => void;
-}) {
-  const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState<Record<string, string[]>>({});
-  const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
-  const queryClient = useQueryClient();
+const users: User[] = [
+  {
+    name: "Alice Martin",
+    email: "alice@company.com",
+    role: "Admin",
+    status: "Active",
+  },
+  {
+    name: "Bob Chen",
+    email: "bob@company.com",
+    role: "Viewer",
+    status: "Active",
+  },
+  {
+    name: "Clara Singh",
+    email: "clara@company.com",
+    role: "Editor",
+    status: "Suspended",
+  },
+  {
+    name: "David Park",
+    email: "david@company.com",
+    role: "Viewer",
+    status: "Active",
+  },
+];
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["users", page, filters],
-    queryFn: () =>
-      fetch(`/api/users?page=${page}&filters=${JSON.stringify(filters)}`).then((r) =>
-        r.json()
-      ),
-  });
+const statusBadge: Record<string, BADGE_TYPE> = {
+  Active: BADGE_TYPE.SUCCESS,
+  Suspended: BADGE_TYPE.DANGER,
+};
 
-  const { mutate: deleteUser, isPending: deleting } = useMutation({
-    mutationFn: (id: string) =>
-      fetch(`/api/users/${id}`, { method: "DELETE" }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      onAction("User deleted", SNACK_BAR_TYPE.SUCCESS);
-      setDeleteTarget(null);
-    },
-    onError: () => {
-      onAction("Failed to delete user", SNACK_BAR_TYPE.ERROR);
-    },
-  });
+const columns: ITableColumn[] = [
+  {
+    header: "Name",
+    render: (user: User) => (
+      <div className="flex items-center gap-2">
+        <Avatar
+          name={user.name}
+          email={user.email}
+          variant={AVATAR_VARIANT.INITIALS_ONLY}
+          size={AVATAR_SIZE.XS}
+        />
+        <span className="text-sm font-medium text-foreground">{user.name}</span>
+      </div>
+    ),
+  },
+  {
+    header: "Email",
+    render: (user: User) => (
+      <span className="text-sm text-muted-fg">{user.email}</span>
+    ),
+  },
+  {
+    header: "Role",
+    render: (user: User) => (
+      <span className="text-sm text-muted-fg">{user.role}</span>
+    ),
+  },
+  {
+    header: "Status",
+    render: (user: User) => (
+      <Badge type={statusBadge[user.status]} label={user.status} />
+    ),
+  },
+];
 
-  if (isLoading) return <States type={STATE_TYPE.LOADING} />;
-  if (isError) return <States type={STATE_TYPE.ERROR} title="Could not load users" />;
-  if (!data?.users?.length)
-    return <States type={STATE_TYPE.EMPTY} title="No users found" />;
+export default function UsersTable() {
+  return <Table columns={columns} data={users} bordered />;
+}
+```
 
+## 5. Putting it all together
+
+```tsx
+// src/templates/users/content.tsx
+import Metrics from "./metrics";
+import TeamRow from "./team";
+import UsersTable from "./table";
+
+export default function UsersContent() {
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <FilterDropdown
-          filter={filterConfig}
-          value={filters}
-          onChange={(f) => { setFilters(f); setPage(1); }}
-          label="Filter"
-        />
-      </div>
-
-      <Table
-        columns={columns}
-        data={data.users}
-        onRowAction={(user) => setDeleteTarget(user as User)}
-        rowActionLabel="Delete"
-      />
-
-      <div className="mt-4">
-        <Pagination
-          paging={{ page, pageSize: 10, total: data.total }}
-          onChange={setPage}
-        />
-      </div>
-
-      {/* Delete confirmation */}
-      <Modal
-        isOpen={!!deleteTarget}
-        onClose={() => setDeleteTarget(null)}
-        size={MODAL_SIZE.SM}
-      >
-        <div className="p-6 flex flex-col gap-4">
-          <h2 className="text-base font-bold text-foreground">Delete user?</h2>
-          <p className="text-sm text-muted-fg">
-            <strong>{deleteTarget?.name}</strong> will be permanently removed. This cannot be undone.
-          </p>
-          <div className="flex gap-3 justify-end">
-            <Button
-              variant={BUTTON_VARIANTS.SECONDARY}
-              label="Cancel"
-              onClick={() => setDeleteTarget(null)}
-            />
-            <Button
-              variant={BUTTON_VARIANTS.PRIMARY}
-              label={deleting ? "Deleting…" : "Delete"}
-              onClick={() => deleteTarget && deleteUser(deleteTarget.id)}
-              disabled={deleting}
-            />
-          </div>
-        </div>
-      </Modal>
+      <Metrics />
+      <TeamRow />
+      <UsersTable />
     </>
   );
 }
@@ -208,19 +346,19 @@ export default function UsersTable({
 
 ## What this covers
 
-- **Loading state** — `States` while TanStack Query fetches
-- **Error state** — `States` on fetch failure
-- **Empty state** — `States` when no results match
-- **Filtering** — `FilterDropdown` with instant re-fetch
-- **Pagination** — `Pagination` synced to query key
-- **Confirmation modal** — `Modal` before destructive action
-- **Toast feedback** — `Snackbar` on mutation success/error
-
-That's the full production pattern. Everything else in your dashboard is a variation of this.
+| Section        | Components used                                   |
+| -------------- | ------------------------------------------------- |
+| Top navigation | `MenuBar` with sticky, avatar, active item        |
+| Metrics row    | `StatCard` (×3) + `CircularProgress`              |
+| Team strip     | `AvatarGroup` with overflow tooltip               |
+| Data table     | `Table` with `Avatar` + `Badge` in render columns |
 
 ## What's next
 
-- Add a "Create user" drawer (`Drawer` component)
-- Add row selection for bulk actions
-- Add column visibility toggle
-- Export to CSV button
+- Wire up real data using `@tanstack/react-query`
+- Add filtering with `FilterDropdown`
+- Add pagination with `Pagination`
+- Add a delete confirmation using `Modal` + `Button`
+- Add toast feedback with `Snackbar`
+- Add a "Create user" slide-in form using `Drawer`
+- Export to CSV with `Button` + `CsvSVG` icon

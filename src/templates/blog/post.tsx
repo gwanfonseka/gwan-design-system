@@ -1,13 +1,14 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
 import { BlogPostMeta } from "@/lib/blog";
 import SharedNavbar from "@/templates/shared/navbar";
 import SharedFooter from "@/templates/shared/footer";
 import ShareButtons from "./share-buttons";
+import DashboardPreview from "./mocks/dashboard-preview";
 
 const mdxComponents = {
-  // Map any MDX element to a Gwan component here.
-  // e.g. pre: CustomCodeBlock
+  DashboardPreview,
 };
 
 const PostTemplate = ({
@@ -47,14 +48,24 @@ const PostTemplate = ({
 
       <main className="pt-20 pb-24 max-w-7xl mx-auto px-5 md:px-10">
         <div className="max-w-3xl mx-auto">
-
           {/* Back link */}
           <a
             href="/blog"
             className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.15em] uppercase text-muted-fg hover:text-foreground transition-colors duration-200 mt-8 mb-10"
           >
-            <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              className="w-3 h-3"
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7.5 2L3.5 6L7.5 10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             All posts
           </a>
@@ -107,11 +118,15 @@ const PostTemplate = ({
               components={mdxComponents}
               options={{
                 mdxOptions: {
+                  remarkPlugins: [remarkGfm],
                   rehypePlugins: [
                     [
                       rehypePrettyCode as never,
                       {
-                        theme: { dark: "github-dark-dimmed", light: "github-light" },
+                        theme: {
+                          dark: "github-dark-dimmed",
+                          light: "github-light",
+                        },
                         keepBackground: false,
                       },
                     ],
@@ -127,7 +142,9 @@ const PostTemplate = ({
           {/* Footer CTA */}
           <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-fg mb-1">Written by</p>
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-fg mb-1">
+                Written by
+              </p>
               <p className="text-sm font-bold text-foreground">{post.author}</p>
             </div>
             <a
