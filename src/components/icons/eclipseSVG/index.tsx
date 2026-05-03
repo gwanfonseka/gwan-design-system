@@ -2,21 +2,14 @@ import { ReactNode } from "react";
 
 const Eclipse = (): ReactNode => {
   return (
-    <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 550 600"
-        width="40"
-        height="40"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
         fill="currentColor"
-      >
-        <g>
-          <circle cx="256" cy="42.667" r="42.667" />
-          <circle cx="256" cy="256" r="42.667" />
-          <circle cx="256" cy="469.333" r="42.667" />
-        </g>
-      </svg>
-    </>
+        d="M12 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM12 20a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+      />
+    </svg>
   );
 };
 

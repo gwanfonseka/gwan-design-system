@@ -67,24 +67,18 @@ jobs:
 
       - name: Create and merge PR to main
         run: |
-          gh pr create \
+          PR_URL=$(gh pr create \
             --base main \
             --head release/v${{ needs.publish.outputs.version }} \
             --title "Release v${{ needs.publish.outputs.version }} → main" \
-            --body "This PR merges release v${{ needs.publish.outputs.version }} into **main**"
-          gh pr merge release/v${{ needs.publish.outputs.version }} \
-            --base main \
-            --merge \
-            --admin
+            --body "This PR merges release v${{ needs.publish.outputs.version }} into **main**")
+          gh pr merge "$PR_URL" --merge --admin
 
       - name: Create and merge PR to develop
         run: |
-          gh pr create \
+          PR_URL=$(gh pr create \
             --base develop \
             --head release/v${{ needs.publish.outputs.version }} \
             --title "Release v${{ needs.publish.outputs.version }} → develop" \
-            --body "This PR merges release v${{ needs.publish.outputs.version }} into **develop**"
-          gh pr merge release/v${{ needs.publish.outputs.version }} \
-            --base develop \
-            --merge \
-            --admin
+            --body "This PR merges release v${{ needs.publish.outputs.version }} into **develop**")
+          gh pr merge "$PR_URL" --merge --admin
