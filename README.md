@@ -195,7 +195,7 @@ export default function MyPage() {
 
 ## Components
 
-**42+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
+**45+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
 
 > **`C` = Client Component** (uses React hooks — add `"use client"` to the importing file if needed)  
 > **`S` = Server Component** (pure render, no hooks — safe to use in React Server Components)
@@ -225,9 +225,11 @@ export default function MyPage() {
 
 | Component     | Type | Description                                        |
 | ------------- | ---- | -------------------------------------------------- |
-| `Table`       | `S`  | Sortable, typed data table                         |
-| `Pagination`  | `C`  | Page navigation controls                           |
-| `ProgressBar` | `S`  | Striped and solid progress bars with size variants |
+| `Table`              | `S`  | Sortable, typed data table                                      |
+| `Pagination`         | `C`  | Page navigation controls                                        |
+| `ProgressBar`        | `S`  | Striped and solid progress bars with size variants              |
+| `StatCard`           | `S`  | Metric tile with value, label, trend indicator, and icon slot   |
+| `CircularProgress`   | `S`  | SVG ring progress with size and color type variants             |
 
 ### Navigation
 
@@ -267,8 +269,9 @@ export default function MyPage() {
 | `Tag`      | `S`  | Categorization tags with color variants                  |
 | `Chip`     | `S`  | Small selectable/filterable labels                       |
 | `Badge`    | `S`  | Dot, dot+label, and label-only status badges             |
-| `Avatar`   | `C`  | User avatars with sizes, variants, and label positioning |
-| `Tooltip`  | `S`  | Hover tooltips with configurable position                |
+| `Avatar`        | `C`  | User avatars with sizes, variants, and label positioning          |
+| `AvatarGroup`   | `C`  | Stacked avatar stack with overflow count and hover tooltip        |
+| `Tooltip`       | `S`  | Hover tooltips with configurable position                         |
 | `Skeleton` | `S`  | Loading placeholders for text, circles, and rects        |
 | `Spinner`  | `S`  | Animated loading ring with size and color variants       |
 
@@ -285,7 +288,7 @@ export default function MyPage() {
 
 ## Icons
 
-**146 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
+**160 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";

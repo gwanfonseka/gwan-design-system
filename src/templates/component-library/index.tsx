@@ -45,6 +45,9 @@ import MenuBarTemplate from "./menuBar";
 import CardTemplate from "./card";
 import DividerTemplate from "./divider";
 import SpinnerTemplate from "./spinner";
+import StatCardTemplate from "./statCard";
+import AvatarGroupTemplate from "./avatarGroup";
+import CircularProgressTemplate from "./circularProgress";
 
 const menuGroups = [
   {
@@ -80,6 +83,8 @@ const menuGroups = [
       { name: "Table", template: <Tables /> },
       { name: "Pagination", template: <Paginations /> },
       { name: "Progress Bar", template: <ProgressBars /> },
+      { name: "Stat Card", template: <StatCardTemplate /> },
+      { name: "Circular Progress", template: <CircularProgressTemplate /> },
     ],
   },
   {
@@ -120,6 +125,7 @@ const menuGroups = [
       { name: "Chips", template: <Chips /> },
       { name: "Badge", template: <Badges /> },
       { name: "Avatar", template: <Avatars /> },
+      { name: "Avatar Group", template: <AvatarGroupTemplate /> },
       { name: "Tooltip", template: <Tooltips /> },
       { name: "Skeleton", template: <SkeletonTemplate /> },
       { name: "Spinner", template: <SpinnerTemplate /> },
