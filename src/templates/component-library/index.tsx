@@ -42,6 +42,8 @@ import DatePickerTemplate from "./datePicker";
 import CommandPaletteTemplate from "./commandPalette";
 import ColorPickerTemplate from "./colorPicker";
 import MenuBarTemplate from "./menuBar";
+import DropdownMenuTemplate from "./dropdownMenu";
+import ContextMenuTemplate from "./contextMenu";
 import CardTemplate from "./card";
 import DividerTemplate from "./divider";
 import SpinnerTemplate from "./spinner";
@@ -116,6 +118,8 @@ const menuGroups = [
       { name: "Drawer", template: <DrawerTemplate /> },
       { name: "Popover", template: <Popovers /> },
       { name: "Command Palette", template: <CommandPaletteTemplate /> },
+      { name: "Dropdown Menu", template: <DropdownMenuTemplate /> },
+      { name: "Context Menu", template: <ContextMenuTemplate /> },
     ],
   },
   {
@@ -154,7 +158,7 @@ const ThemeToggleButton = () => {
 
   if (!mounted)
     return (
-      <div className="w-8 h-8 rounded-sm bg-border dark:bg-white/10 animate-pulse" />
+      <div className="w-8 h-8 rounded-sm bg-surface-raised animate-pulse" />
     );
 
   const isDark = theme === "dark";
@@ -163,7 +167,7 @@ const ThemeToggleButton = () => {
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Toggle theme"
-      className="w-8 h-8 flex items-center justify-center rounded-sm border border-border dark:border-white/20 text-muted-fg dark:text-white/60 hover:text-foreground dark:hover:text-white hover:border-foreground dark:hover:border-white/40 transition-colors duration-200"
+      className="w-8 h-8 flex items-center justify-center rounded-sm border border-border text-muted-fg hover:text-foreground hover:border-foreground transition-colors duration-200"
     >
       {isDark ? (
         <svg
@@ -216,17 +220,17 @@ const LibraryTemplate = () => {
 
   return (
     <div className="custom-bg h-screen overflow-hidden">
-      <div className="bg-transparent dark:bg-black/20 h-screen flex flex-col">
+      <div className="bg-transparent h-screen flex flex-col">
         {/* Mobile top bar */}
-        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white/80 dark:bg-black/30 border-b border-border dark:border-white/20 shrink-0">
-          <span className="font-black text-sm tracking-[0.25em] uppercase text-foreground dark:text-white">
+        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-surface/80 border-b border-border shrink-0">
+          <span className="font-black text-sm tracking-[0.25em] uppercase text-foreground">
             GWAN.DEV
           </span>
           <div className="flex items-center gap-3">
             <ThemeToggleButton />
             <button
               onClick={() => setSidebarOpen((v) => !v)}
-              className="p-1.5 text-foreground dark:text-white"
+              className="p-1.5 text-foreground"
               aria-label="Toggle menu"
             >
               <svg
@@ -262,7 +266,7 @@ const LibraryTemplate = () => {
               fixed md:relative top-0 md:top-auto left-0 z-60 md:z-auto
               h-full md:h-screen
               flex flex-col gap-4
-              bg-white/80 dark:bg-black/30 backdrop-blur-md
+              bg-surface/80 backdrop-blur-md
               py-4 px-6 md:px-8
               overflow-y-auto
               w-full md:w-68 lg:w-72 xl:w-87.5
@@ -274,7 +278,7 @@ const LibraryTemplate = () => {
             <div className="flex items-center justify-between">
               <a
                 href="/home"
-                className="font-black text-sm tracking-[0.25em] uppercase text-foreground dark:text-white hover:opacity-70 transition-opacity duration-200"
+                className="font-black text-sm tracking-[0.25em] uppercase text-foreground hover:opacity-70 transition-opacity duration-200"
               >
                 GWAN.DEV
               </a>
@@ -282,7 +286,7 @@ const LibraryTemplate = () => {
                 <ThemeToggleButton />
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="p-1.5 text-foreground dark:text-white md:hidden"
+                  className="p-1.5 text-foreground md:hidden"
                   aria-label="Close menu"
                 >
                   <svg
@@ -302,13 +306,13 @@ const LibraryTemplate = () => {
               </div>
             </div>
 
-            <hr className="border-border dark:border-white/30 border-2" />
+            <hr className="border-border border-2" />
 
             {/* Nav links */}
             <div className="flex flex-col gap-1">
               <a
                 href="/home"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg dark:text-white/60 hover:text-foreground dark:hover:text-white hover:bg-primary-default/10 dark:hover:bg-black/20 transition-colors duration-200"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg hover:text-foreground hover:bg-surface-raised transition-colors duration-200"
               >
                 <svg
                   viewBox="0 0 16 16"
@@ -327,7 +331,7 @@ const LibraryTemplate = () => {
               </a>
               <a
                 href="/docs"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg dark:text-white/60 hover:text-foreground dark:hover:text-white hover:bg-primary-default/10 dark:hover:bg-black/20 transition-colors duration-200"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg hover:text-foreground hover:bg-surface-raised transition-colors duration-200"
               >
                 <svg
                   viewBox="0 0 16 16"
@@ -355,7 +359,7 @@ const LibraryTemplate = () => {
               </a>
               <a
                 href="/themes"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg dark:text-white/60 hover:text-foreground dark:hover:text-white hover:bg-primary-default/10 dark:hover:bg-black/20 transition-colors duration-200"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg hover:text-foreground hover:bg-surface-raised transition-colors duration-200"
               >
                 <svg
                   viewBox="0 0 16 16"
@@ -380,7 +384,7 @@ const LibraryTemplate = () => {
               </a>
               <a
                 href="/blog"
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg dark:text-white/60 hover:text-foreground dark:hover:text-white hover:bg-primary-default/10 dark:hover:bg-black/20 transition-colors duration-200"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg hover:text-foreground hover:bg-surface-raised transition-colors duration-200"
               >
                 <svg
                   viewBox="0 0 16 16"
@@ -417,12 +421,12 @@ const LibraryTemplate = () => {
               </a>
             </div>
 
-            <hr className="border-border dark:border-white/30 border-2" />
+            <hr className="border-border border-2" />
 
             {/* Component menu groups */}
             {menuGroups.map((group) => (
               <div key={group.group} className="flex flex-col gap-1">
-                <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-fg dark:text-white/30 px-1 pt-1">
+                <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-fg px-1 pt-1">
                   {group.group}
                 </p>
                 {group.items.map((menuItem) => {
@@ -432,12 +436,12 @@ const LibraryTemplate = () => {
                       key={menuItem.name}
                       className={`px-3 py-2 rounded-lg w-full cursor-pointer transition-colors duration-150 ${
                         isActive
-                          ? "bg-primary-default/10 dark:bg-black/20"
-                          : "hover:bg-primary-default/10 dark:hover:bg-black/30"
+                          ? "bg-surface-raised"
+                          : "hover:bg-surface-raised"
                       }`}
                       onClick={() => handleTabChange(menuItem.name)}
                     >
-                      <p className={`text-sm font-medium ${isActive ? "text-foreground dark:text-white" : "text-muted-fg dark:text-white/60"}`}>
+                      <p className={`text-sm font-medium ${isActive ? "text-foreground" : "text-muted-fg"}`}>
                         {menuItem.name}
                       </p>
                     </div>
