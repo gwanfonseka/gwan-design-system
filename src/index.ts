@@ -47,6 +47,8 @@ export { default as Spinner } from "./components/spinner";
 export { default as StatCard } from "./components/statCard";
 export { default as AvatarGroup } from "./components/avatarGroup";
 export { default as CircularProgress } from "./components/circularProgress";
+export { default as DropdownMenu } from "./components/dropdownMenu";
+export { default as ContextMenu } from "./components/contextMenu";
 
 // Constants
 export { BUTTON_VARIANTS, BUTTON_EDGE_STYLE } from "./components/button";
@@ -83,6 +85,7 @@ export { DIVIDER_ORIENTATION, DIVIDER_VARIANT } from "./components/divider";
 export { SPINNER_SIZE, SPINNER_COLOR } from "./components/spinner";
 export { STAT_TREND } from "./components/statCard";
 export { CIRCULAR_PROGRESS_SIZE, CIRCULAR_PROGRESS_TYPE } from "./components/circularProgress";
+export { DROPDOWN_PLACEMENT } from "./components/dropdownMenu";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -139,3 +142,5 @@ export type { ISpinner } from "./components/spinner";
 export type { IStatCard } from "./components/statCard";
 export type { IAvatarGroup, IAvatarGroupItem } from "./components/avatarGroup";
 export type { ICircularProgress } from "./components/circularProgress";
+export type { IDropdownMenuItem, IDropdownMenu } from "./components/dropdownMenu";
+export type { IContextMenu } from "./components/contextMenu";

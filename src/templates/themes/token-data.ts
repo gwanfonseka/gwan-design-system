@@ -82,10 +82,25 @@ export const TOKEN_GROUPS: { label: string; tokens: { key: TokenKey; label: stri
   },
 ];
 
-export const generateCSS = (light: TokenMap, dark: TokenMap): string => {
+export const generateCSS = (
+  light: TokenMap,
+  dark: TokenMap,
+  scale: Record<string, string>,
+): string => {
   const lines = (vars: TokenMap) =>
     Object.entries(vars)
       .map(([k, v]) => `  ${k}: ${v};`)
       .join("\n");
-  return `:root {\n${lines(light)}\n}\n\n.dark {\n${lines(dark)}\n}`;
+
+  const scaleLines = Object.entries(scale)
+    .map(([step, hex]) => `  --color-primary-${step}: ${hex};`)
+    .join("\n");
+
+  return (
+    `:root {\n${lines(light)}\n}\n\n.dark {\n${lines(dark)}\n}` +
+    `\n\n/* ─── Primary colour scale ─────────────────────────────────────────\n` +
+    `   Components use these steps for hover, disabled, and active states.\n` +
+    `   ─────────────────────────────────────────────────────────────────── */\n` +
+    `@theme {\n${scaleLines}\n}`
+  );
 };

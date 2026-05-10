@@ -8,6 +8,7 @@ import TokenEditor from "./token-editor";
 import ComponentPreview from "./component-preview";
 import CssOutput from "./css-output";
 import TokenReference from "./token-reference";
+import ScaleBuilder, { DEFAULT_SCALE, ScaleMap } from "./scale-builder";
 import { LIGHT_DEFAULTS, DARK_DEFAULTS, TokenMap, TokenKey, generateCSS } from "./token-data";
 
 const ThemesTemplate = () => {
@@ -15,6 +16,7 @@ const ThemesTemplate = () => {
   const [activeTab, setActiveTab] = useState<"light" | "dark">("light");
   const [lightTokens, setLightTokens] = useState<TokenMap>({ ...LIGHT_DEFAULTS });
   const [darkTokens, setDarkTokens] = useState<TokenMap>({ ...DARK_DEFAULTS });
+  const [scaleTokens, setScaleTokens] = useState<ScaleMap>(DEFAULT_SCALE);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
@@ -39,7 +41,7 @@ const ThemesTemplate = () => {
   };
 
   const currentTokens = activeTab === "light" ? lightTokens : darkTokens;
-  const cssOutput = generateCSS(lightTokens, darkTokens);
+  const cssOutput = generateCSS(lightTokens, darkTokens, scaleTokens);
 
   const hasChanges =
     activeTab === "light"
@@ -84,6 +86,7 @@ const ThemesTemplate = () => {
             <ComponentPreview vars={previewVars} />
           </div>
 
+          <ScaleBuilder onScaleChange={setScaleTokens} />
           <CssOutput cssOutput={cssOutput} />
           <TokenReference lightTokens={lightTokens} darkTokens={darkTokens} />
 
