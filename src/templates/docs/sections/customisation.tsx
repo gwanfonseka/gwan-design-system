@@ -95,6 +95,81 @@ const Customisation = () => (
       </table>
     </div>
 
+    {/* Primary Colour Scale */}
+    <H2 id="primary-scale">Primary Colour Scale</H2>
+    <P>
+      The three semantic primary tokens (<InlineCode>--primary-default</InlineCode>,{" "}
+      <InlineCode>--primary-default-fg</InlineCode>,{" "}
+      <InlineCode>--primary-muted</InlineCode>) control the main brand colour at
+      a high level. However, many components also reference fixed steps on the
+      primary palette — <InlineCode>primary-100</InlineCode> through{" "}
+      <InlineCode>primary-900</InlineCode> — for interactive states such as
+      hover, focus rings, disabled backgrounds, and active fills.
+    </P>
+    <P>
+      These scale steps are registered once in <InlineCode>@theme {"{}"}</InlineCode> and
+      do <strong>not</strong> change between light and dark mode. If you rebrand
+      to a different hue, you must replace the entire scale so that
+      button hover states, switch tracks, checkbox fills, stepper indicators,
+      tabs, and progress bars all match your brand.
+    </P>
+
+    <H3>Components that use the primary scale</H3>
+    <div className="overflow-x-auto my-4">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b-2 border-border text-left">
+            <th className="pb-3 pr-6 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">Component</th>
+            <th className="pb-3 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">Scale steps used</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-border">
+          {[
+            ["Button",       "100, 200, 300 (secondary); 500, 600, 700 (primary)"],
+            ["Tabs",         "500 (active underline / pill)"],
+            ["Stepper",      "500 (active & complete step, connector)"],
+            ["Switch",       "500 (active track)"],
+            ["Progress Bar", "500 (default fill)"],
+            ["Radio Button", "500 (checked ring + fill)"],
+            ["Checkbox",     "300, 400 (checked state)"],
+            ["Date Picker",  "500 (selected date, today ring)"],
+          ].map(([comp, steps]) => (
+            <tr key={comp}>
+              <td className="py-2.5 pr-6 font-medium text-foreground">{comp}</td>
+              <td className="py-2.5 font-mono text-xs text-muted-fg">{steps}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <H3>Replacing the scale when rebranding</H3>
+    <P>
+      The <a href="/themes" className="underline underline-offset-2 hover:text-foreground transition-colors">Theme Generator</a> includes a built-in scale builder — pick a seed colour and
+      it auto-generates the full 10-step scale. Copy the output directly into your{" "}
+      <InlineCode>globals.css</InlineCode>. To override manually, replace the values below.
+    </P>
+    <Code lang="css">{`/* In globals.css — replace ALL steps to match your brand hue */
+@theme {
+  --color-primary-50:  #f4f7f1;  /* lightest tint  */
+  --color-primary-100: #e2eada;
+  --color-primary-200: #c8d5be;
+  --color-primary-300: #adc09e;
+  --color-primary-400: #a4b496;
+  --color-primary-500: #9ea593;  /* mid-point      */
+  --color-primary-600: #7e8c73;
+  --color-primary-700: #60705a;
+  --color-primary-800: #435240;
+  --color-primary-900: #2c3629;  /* darkest shade  */
+}`}</Code>
+
+    <Callout type="tip">
+      Always replace all 10 steps together. Using only a few steps from a
+      different hue creates inconsistent hover and disabled states across
+      components. Use the <a href="/themes" className="underline underline-offset-2">Theme Generator</a> to
+      generate a matched scale from a single seed colour.
+    </Callout>
+
     {/* Extending */}
     <H2 id="extending">Extending Themes</H2>
     <P>

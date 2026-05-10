@@ -1,25 +1,26 @@
 ---
 title: "How the Gwan Theme System Works"
-description: "A look under the hood at how Gwan uses CSS custom properties, Tailwind v4's @theme layer, and next-themes to make dark mode and brand theming work seamlessly."
-date: "2026-04-15"
+description: "A practical guide to Gwan's two-layer token system — semantic tokens for light/dark mode and scale tokens for component states — and how to use the built-in Theme Generator to rebrand in minutes."
+date: "2026-05-11"
 author: "Nimesh Fonseka"
 tags: ["theming", "tailwind", "dark-mode", "css"]
-draft: true
+coverImage: "/blog/how-the-theme-system-works.jpg"
+draft: false
 ---
 
-When you switch Gwan's theme from light to dark, every component changes — backgrounds, borders, text, icons — with no JavaScript repaints and no flash. When you swap the primary colour from sage green to your own brand colour, every button, tag, and active state updates at once. This post explains exactly how that works.
+When you switch Gwan's theme from light to dark, every component changes — backgrounds, borders, text, icons — with no JavaScript repaints and no flash. When you swap the primary color to your own brand color, every button, tab, stepper, and active state updates at once. This post explains how that works, and how to use the built-in **Theme Generator** at [gwan.dev/themes](/themes) to generate a complete, ready-to-paste CSS block in minutes.
 
 ## The three layers
 
 The theme system has three layers that work together:
 
-1. **CSS custom properties** — the actual colour values, defined per theme
+1. **CSS custom properties** — the actual color values, defined per theme
 2. **Tailwind `@theme`** — maps those CSS vars to Tailwind utility class names
 3. **`next-themes`** — toggles the `.dark` class on `<html>` at runtime
 
 ### Layer 1: CSS custom properties
 
-In `globals.css`, colours are defined as CSS variables on `:root` (light) and `.dark` (dark):
+In `globals.css`, colors are defined as CSS variables on `:root` (light) and `.dark` (dark):
 
 ```css
 :root {
@@ -27,7 +28,6 @@ In `globals.css`, colours are defined as CSS variables on `:root` (light) and `.
   --foreground: #1c2218;
   --primary-default: #435240;
   --border: #c4cdb8;
-  /* ... */
 }
 
 .dark {
@@ -35,7 +35,6 @@ In `globals.css`, colours are defined as CSS variables on `:root` (light) and `.
   --foreground: #e2eada;
   --primary-default: #adc09e;
   --border: #3c4d38;
-  /* ... */
 }
 ```
 
@@ -43,7 +42,7 @@ When the browser sees `.dark` on `<html>`, every CSS variable overrides automati
 
 ### Layer 2: Tailwind `@theme`
 
-Tailwind v4 reads colour tokens from the `@theme` block in your CSS. We map the semantic CSS vars to Tailwind names:
+Tailwind v4 reads color tokens from the `@theme` block in your CSS. Semantic CSS vars are mapped to Tailwind utility names:
 
 ```css
 @theme {
@@ -54,58 +53,169 @@ Tailwind v4 reads colour tokens from the `@theme` block in your CSS. We map the 
 }
 ```
 
-Now `bg-background`, `text-foreground`, `text-primary-default`, `border-border` all resolve to the correct value for whichever theme is active. No `dark:` prefix needed for semantic tokens.
+Now `bg-background`, `text-foreground`, `border-border` all resolve to whichever theme is active. No `dark:` prefix needed for semantic tokens.
 
 ### Layer 3: next-themes
 
 ```tsx
-// src/app/layout.tsx
+// app/layout.tsx
 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
   {children}
 </ThemeProvider>
 ```
 
-`next-themes` adds or removes `.dark` on `<html>` based on the user's preference. It reads `localStorage` to persist the choice and respects `prefers-color-scheme` for the system default. That's it — the CSS and Tailwind layers do everything else.
+`next-themes` adds or removes `.dark` on `<html>` based on user preference, persists it to `localStorage`, and respects `prefers-color-scheme` for the system default. The CSS and Tailwind layers do the rest — zero JS color mapping.
 
-## How to swap the primary colour
+---
 
-Change the CSS variables and every component updates:
+## Two types of tokens
+
+Gwan uses two types of tokens, and understanding the difference is key to a successful rebrand.
+
+### Semantic tokens — change with the theme
+
+These describe _intent_, not a specific shade. They live in `:root` / `.dark` and flip automatically:
+
+| Token               | Light     | Dark      | Used for        |
+| ------------------- | --------- | --------- | --------------- |
+| `--background`      | `#f8f9f5` | `#131a10` | Page background |
+| `--foreground`      | `#1c2218` | `#e2eada` | All text        |
+| `--primary-default` | `#435240` | `#adc09e` | CTA color       |
+| `--border`          | `#c4cdb8` | `#3c4d38` | All borders     |
+| `--surface`         | `#ffffff` | `#1c241a` | Cards, panels   |
+| `--muted-fg`        | `#60705a` | `#9ea593` | Secondary text  |
+
+### Scale tokens — fixed values
+
+These describe a _specific shade_ on a palette. They live in `@theme {}` and never change between light and dark mode. They're used by components for interactive states:
 
 ```css
-:root {
-  --primary-default: #1d4ed8;    /* indigo-700 */
-  --primary-default-fg: #ffffff;
-  --primary-muted: #93c5fd;      /* indigo-300 */
+@theme {
+  --color-primary-50: #f4f7f1;
+  --color-primary-100: #e2eada;
+  --color-primary-500: #9ea593;
+  --color-primary-900: #2c3629;
+  /* ... all 10 steps */
 }
 ```
 
-You don't touch any component code. Components only use semantic tokens (`bg-primary-default`, `text-primary-default-fg`), not hard-coded colour values.
+**Which components use the scale?**
 
-## Semantic vs scale tokens
+| Component    | Scale steps used                                    |
+| ------------ | --------------------------------------------------- |
+| Button       | 100, 200, 300 (secondary) · 500, 600, 700 (primary) |
+| Tabs         | 500 (active underline / pill)                       |
+| Stepper      | 500 (active and complete steps)                     |
+| Switch       | 500 (active track)                                  |
+| Progress Bar | 500 (default fill)                                  |
+| Radio Button | 500 (checked state)                                 |
+| Checkbox     | 300, 400 (checked state)                            |
+| Date Picker  | 500 (selected date, today ring)                     |
 
-Gwan uses two types of tokens:
+This is why you need to update **both** token types when rebranding. If you only change `--primary-default`, buttons and tabs will use the wrong shade for hover and active states.
 
-**Semantic tokens** change between themes — they describe *intent*:
-- `background`, `foreground`, `border`, `muted`, `primary-default`
+---
 
-**Scale tokens** stay fixed — they describe a *value*:
-- `primary-50` through `primary-900`, `teal-500`, `emerald-400`
+## Using the Theme Generator
 
-Use semantic tokens for component UI. Use scale tokens for decorative elements (gradients, illustrations) where you need a specific shade regardless of theme.
+The [Theme Generator](/themes) at gwan.dev/themes does three things in one page:
 
-## The theme explorer
+1. **Edits semantic tokens** — live color pickers for all 21 semantic tokens across light and dark modes
+2. **Generates the primary color scale** — a seed color auto-generates all 10 steps
+3. **Outputs the final CSS** — one block, ready to paste into `globals.css`
 
-Visit [gwan.dev/themes](/themes) to edit token values live and export the CSS snippet for your own project.
+### Step 1 — Set your semantic tokens
 
-## Summary
+Open the Theme Generator. On the left you'll see three groups: **Surfaces & Text**, **Primary Brand**, and **Status**. There are two tabs — Light and Dark — so you can configure each mode separately.
+
+Click any color swatch to open the native color picker and set your brand value. The component preview on the right updates in real time so you can see the effect immediately.
+
+**Recommended order:**
+
+1. Set `Background` and `Foreground` first — these establish your overall tone
+2. Set `Surface` and `Surface Raised` — used by cards, panels, dropdowns
+3. Set `Primary`, `Primary Foreground`, and `Primary Muted` — your brand action color
+4. Set `Border` and `Muted Text` — supporting colors
+5. Adjust `Status` colors (success, danger, warning) if your brand needs different shades
+6. Switch to the **Dark** tab and repeat
+
+**Tips:**
+
+- For `Primary Foreground`, use a color that has high contrast against your `Primary` — it's applied as text on primary-colored backgrounds (buttons, badges, active states)
+- `Surface Raised` should be just slightly different from `Surface` — a subtle elevation signal
+- In dark mode, `Primary` should be a lighter shade of the same hue used in light mode, so it reads well against dark backgrounds
+
+### Step 2 — Generate your primary color scale
+
+Scroll down to the **Primary Color Scale** section. This is a separate panel with a seed color picker and 10 swatches (steps 50–900).
+
+**How it works:** Pick a mid-tone seed color (your brand's 500-level shade). The generator holds the hue constant and produces a perceptually uniform range — lighter steps get reduced saturation for soft tints, darker steps maintain full saturation for rich darks.
+
+**To use it:**
+
+1. Click the **Seed** color picker
+2. Pick a mid-range shade of your brand color — not your darkest or lightest, somewhere in the middle
+3. Watch all 10 swatches update instantly
+4. If a specific step looks off, click that swatch to override it individually
+5. Click **Reset to seed** at any time to discard individual overrides and regenerate the full scale from the current seed
+
+**Tips:**
+
+- If your brand uses a specific primary shade as the main CTA (e.g. your brand blue), start with that as the seed and adjust around it
+- Check that step 800 is dark enough to look like a readable, high-contrast button in light mode
+- Check that step 200 is light enough to be a subtle disabled-state background
+- The scale steps replace the Gwan sage green throughout all interactive component states — make sure the full range looks coherent
+
+### Step 3 — Copy the generated CSS
+
+At the bottom of the page, the **Generated CSS** panel shows a single complete block. It includes:
+
+- `:root { }` — your light semantic tokens
+- `.dark { }` — your dark semantic tokens
+- `@theme { }` — your primary color scale
+
+Click **Copy CSS** and paste the entire block into your project's `globals.css`, after your Tailwind import:
+
+```css
+@import "tailwindcss";
+
+/* Paste here */
+:root { ... }
+.dark { ... }
+@theme { ... }
+```
+
+That's it. Every Gwan component will immediately reflect your brand.
+
+---
+
+## Complete rebrand checklist
+
+Here's what to verify after applying your custom theme:
+
+- [ ] Button primary variant — correct background, readable foreground text
+- [ ] Button secondary variant — subtle tinted background, no harsh contrast
+- [ ] Button disabled state — visibly muted but legible
+- [ ] Active tab (underline and pill variants)
+- [ ] Switch in on state
+- [ ] Checked checkbox and radio button
+- [ ] Stepper active and completed steps
+- [ ] Progress bar default fill
+- [ ] Date picker selected date
+- [ ] Badge and Tag colors
+- [ ] Toggle between light and dark mode — every token should flip cleanly
+
+---
+
+## The flow, end to end
 
 ```
-User toggles dark mode
-  → next-themes adds .dark to <html>
-    → CSS vars on .dark override :root values
-      → Tailwind @theme reads the updated CSS vars
-        → All utility classes resolve to new values
-          → Components repaint via CSS, zero JS
+gwan.dev/themes
+  → Set 21 semantic tokens (light + dark)
+    → Set primary scale (10 steps from seed)
+      → Copy generated CSS
+        → Paste into globals.css
+          → Components pick up your brand immediately
 ```
 
-No JS colour mapping. No theme context providers per component. Just CSS doing what CSS does.
+No forking. No patching. No touching component code.

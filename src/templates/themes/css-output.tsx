@@ -47,7 +47,7 @@ const CssOutput = ({ cssOutput }: { cssOutput: string }) => {
         </button>
       </div>
 
-      <div className="rounded-xl border border-border overflow-hidden bg-primary-900 dark:bg-black/40">
+      <div className="rounded-xl border border-border overflow-hidden bg-primary-900">
         <div className="flex items-center justify-between px-5 py-3 border-b border-primary-700/40 bg-primary-800/40">
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
