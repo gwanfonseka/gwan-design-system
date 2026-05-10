@@ -13,7 +13,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-9 w-full rounded-lg bg-border dark:bg-white/10 animate-pulse" />
+      <div className="h-9 w-full rounded-lg bg-surface-raised animate-pulse" />
     );
   }
 
@@ -22,7 +22,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="flex items-center gap-2.5 w-full rounded-lg border border-border dark:border-white/20 bg-surface/70 dark:bg-white/10 px-3.5 py-2 text-sm font-medium text-foreground dark:text-white transition-all duration-200 hover:bg-surface dark:hover:bg-white/20 hover:border-border-subtle dark:hover:border-white/30 active:scale-[0.98]"
+      className="flex items-center gap-2.5 w-full rounded-lg border border-border bg-surface/70 px-3.5 py-2 text-sm font-medium text-foreground transition-all duration-200 hover:bg-surface hover:border-border active:scale-[0.98]"
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">
         {isDark ? (

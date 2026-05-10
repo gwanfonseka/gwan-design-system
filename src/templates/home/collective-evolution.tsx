@@ -119,12 +119,12 @@ const CollectiveEvolution = () => {
             href="https://github.com/gwanfonseka/gwan-design-system"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative overflow-hidden flex items-start gap-5 p-6 md:p-8 rounded-xl border border-border bg-surface hover:border-foreground/30 dark:hover:border-white/20 transition-all duration-300 text-left"
+            className="group relative overflow-hidden flex items-start gap-5 p-6 md:p-8 rounded-xl border border-border bg-surface hover:border-foreground/30 transition-all duration-300 text-left"
           >
             {/* Subtle bg glow */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-foreground/[0.03] to-transparent pointer-events-none" />
 
-            <div className="shrink-0 w-12 h-12 rounded-xl bg-neutral-100 dark:bg-white/8 flex items-center justify-center text-neutral-900 dark:text-white group-hover:bg-neutral-200 dark:group-hover:bg-white/12 transition-colors duration-300">
+            <div className="shrink-0 w-12 h-12 rounded-xl bg-surface-raised flex items-center justify-center text-foreground group-hover:bg-surface-overlay transition-colors duration-300">
               <GitHubIcon />
             </div>
             <div className="flex flex-col gap-1.5 min-w-0">
