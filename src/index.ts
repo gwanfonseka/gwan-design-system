@@ -49,9 +49,12 @@ export { default as AvatarGroup } from "./components/avatarGroup";
 export { default as CircularProgress } from "./components/circularProgress";
 export { default as DropdownMenu } from "./components/dropdownMenu";
 export { default as ContextMenu } from "./components/contextMenu";
+export { default as MultiSelect } from "./components/multiSelect";
+export { default as SearchInput } from "./components/searchInput";
 
 // Constants
-export { BUTTON_VARIANTS, BUTTON_EDGE_STYLE } from "./components/button";
+export { BUTTON_VARIANTS, BUTTON_EDGE_STYLE, BUTTON_SIZE } from "./components/button";
+export { FORM_ELEMENT_SIZE } from "./components/input";
 export { CALLOUT_TYPE } from "./components/callout";
 export { AVATAR_VARIANT, AVATAR_SIZE, AVATAR_LABEL_POSITION } from "./components/avatar";
 export { MODAL_SIZE } from "./components/modal";
@@ -86,6 +89,7 @@ export { SPINNER_SIZE, SPINNER_COLOR } from "./components/spinner";
 export { STAT_TREND } from "./components/statCard";
 export { CIRCULAR_PROGRESS_SIZE, CIRCULAR_PROGRESS_TYPE } from "./components/circularProgress";
 export { DROPDOWN_PLACEMENT } from "./components/dropdownMenu";
+export { MULTI_SELECT_SIZE } from "./components/multiSelect";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -144,3 +148,5 @@ export type { IAvatarGroup, IAvatarGroupItem } from "./components/avatarGroup";
 export type { ICircularProgress } from "./components/circularProgress";
 export type { IDropdownMenuItem, IDropdownMenu } from "./components/dropdownMenu";
 export type { IContextMenu } from "./components/contextMenu";
+export type { IMultiSelectOption, IMultiSelect } from "./components/multiSelect";
+export type { ISearchInput } from "./components/searchInput";

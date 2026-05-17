@@ -6,6 +6,11 @@ export enum FORM_ELEMENT_EDGE_STYLE {
   SQUARED = "squared",
 }
 
+export enum FORM_ELEMENT_SIZE {
+  SM = "SM",
+  MD = "MD",
+}
+
 export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   label?: string;
   value: string;
@@ -19,6 +24,7 @@ export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   isError?: boolean;
   errorMessage?: string;
   edges?: FORM_ELEMENT_EDGE_STYLE;
+  size?: FORM_ELEMENT_SIZE;
 }
 
 const Input: FC<IInput> = ({
@@ -34,10 +40,19 @@ const Input: FC<IInput> = ({
   isError = false,
   errorMessage,
   edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
+  size = FORM_ELEMENT_SIZE.MD,
+  id: idProp,
   onKeyDown,
   onPaste,
   ...rest
 }: IInput) => {
+  const isSM = size === FORM_ELEMENT_SIZE.SM;
+  const inputId = idProp ?? (label ? `gwan-input-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}` : undefined);
+  const errorId = inputId ? `${inputId}-error` : undefined;
+  const sizeClass = isSM ? "py-1.5 text-xs" : "py-2.5 text-sm";
+  const plClass   = isSM ? "pl-2.5" : "pl-3";
+  const prClass   = onClear ? (isSM ? "pr-7" : "pr-8") : (isSM ? "pr-2.5" : "pr-3");
+  const clearSize = isSM ? "size-2.5" : "size-3";
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
       e.preventDefault();
@@ -59,7 +74,7 @@ const Input: FC<IInput> = ({
     <div className={`flex flex-col relative ${className}`}>
       {label && (
         <label
-          htmlFor={label}
+          htmlFor={inputId}
           className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"} mb-1`}
         >
           {`${label}${required ? " *" : ""}`}
@@ -67,7 +82,10 @@ const Input: FC<IInput> = ({
       )}
       <div className="relative">
         <input
-          id={label}
+          id={inputId}
+          aria-invalid={isError || undefined}
+          aria-describedby={isError && errorMessage && errorId ? errorId : undefined}
+          aria-required={required || undefined}
           placeholder={placeholder}
           value={value}
           disabled={disabled}
@@ -75,11 +93,11 @@ const Input: FC<IInput> = ({
             isError
               ? "border-danger focus:border-danger"
               : "border-border hover:border-primary-500 focus:border-primary-500"
-          } outline-none py-2.5 pl-3 ${
-            onClear ? "pr-8" : "pr-3"
-          } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"} ${
+          } outline-none ${sizeClass} ${plClass} ${prClass} ${
+            edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"
+          } ${
             disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
-          } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
+          } w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
           required={required}
           type={type}
           onKeyDown={handleKeyDown}
@@ -88,7 +106,7 @@ const Input: FC<IInput> = ({
         />
         {onClear && value && (
           <div
-            className="size-3 absolute right-3 top-1/2 -translate-y-1/2 text-muted-fg hover:text-foreground cursor-pointer"
+            className={`${clearSize} absolute right-3 top-1/2 -translate-y-1/2 text-muted-fg hover:text-foreground cursor-pointer`}
             onClick={onClear}
           >
             <CrossSVG />
@@ -96,7 +114,7 @@ const Input: FC<IInput> = ({
         )}
       </div>
       {isError && errorMessage && (
-        <p className="text-danger text-xs mt-1">{errorMessage}</p>
+        <p id={errorId} role="alert" className="text-danger text-xs mt-1">{errorMessage}</p>
       )}
     </div>
   );

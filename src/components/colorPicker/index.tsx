@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useEffect, useRef, useState } from "react";
+import { FORM_ELEMENT_SIZE } from "../input";
 
 export interface IColorPicker {
   value?: string;
@@ -8,6 +9,7 @@ export interface IColorPicker {
   label?: string;
   presets?: string[];
   disabled?: boolean;
+  size?: FORM_ELEMENT_SIZE;
   className?: string;
 }
 
@@ -25,8 +27,13 @@ const ColorPicker: FC<IColorPicker> = ({
   label,
   presets = DEFAULT_PRESETS,
   disabled = false,
+  size = FORM_ELEMENT_SIZE.MD,
   className = "",
 }) => {
+  const isSM = size === FORM_ELEMENT_SIZE.SM;
+  const sizeClass  = isSM ? "px-2.5 py-1.5 gap-2 text-xs" : "px-3 py-2.5 gap-2.5 text-sm";
+  const swatchSize = isSM ? "w-4 h-4" : "w-5 h-5";
+  const chevSize   = isSM ? "w-3 h-3" : "w-3.5 h-3.5";
   const [open, setOpen] = useState(false);
   const [inputVal, setInputVal] = useState(value);
   const ref = useRef<HTMLDivElement>(null);
@@ -59,18 +66,18 @@ const ColorPicker: FC<IColorPicker> = ({
         type="button"
         disabled={disabled}
         onClick={() => !disabled && setOpen((v) => !v)}
-        className={`flex items-center gap-2.5 px-3 py-2 border rounded text-sm transition-colors duration-200 ${
+        className={`flex items-center ${sizeClass} border rounded transition-colors duration-200 ${
           disabled
             ? "border-border bg-surface-raised opacity-60 cursor-not-allowed"
             : "border-border bg-surface hover:border-primary-500 cursor-pointer focus:outline-none"
         }`}
       >
         <span
-          className="w-5 h-5 rounded border border-border/60 shrink-0"
+          className={`${swatchSize} rounded border border-border/60 shrink-0`}
           style={{ backgroundColor: value }}
         />
         <span className="text-foreground font-mono text-xs">{value.toUpperCase()}</span>
-        <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 text-muted-fg" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 16 16" fill="none" className={`${chevSize} text-muted-fg`} xmlns="http://www.w3.org/2000/svg">
           <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
