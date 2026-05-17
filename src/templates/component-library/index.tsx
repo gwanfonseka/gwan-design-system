@@ -44,6 +44,8 @@ import ColorPickerTemplate from "./colorPicker";
 import MenuBarTemplate from "./menuBar";
 import DropdownMenuTemplate from "./dropdownMenu";
 import ContextMenuTemplate from "./contextMenu";
+import MultiSelectTemplate from "./multiSelect";
+import SearchInputTemplate from "./searchInput";
 import CardTemplate from "./card";
 import DividerTemplate from "./divider";
 import SpinnerTemplate from "./spinner";
@@ -77,6 +79,8 @@ const menuGroups = [
       { name: "Date Picker", template: <DatePickerTemplate /> },
       { name: "File Uploader", template: <FileUploaders /> },
       { name: "Color Picker", template: <ColorPickerTemplate /> },
+      { name: "Multi Select", template: <MultiSelectTemplate /> },
+      { name: "Search Input", template: <SearchInputTemplate /> },
     ],
   },
   {
