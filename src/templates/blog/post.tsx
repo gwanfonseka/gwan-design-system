@@ -6,9 +6,66 @@ import SharedNavbar from "@/templates/shared/navbar";
 import SharedFooter from "@/templates/shared/footer";
 import ShareButtons from "./share-buttons";
 import DashboardPreview from "./mocks/dashboard-preview";
+import Callout, { CALLOUT_TYPE } from "@/components/callout";
+
+const A11yCallout = () => (
+  <Callout type={CALLOUT_TYPE.TIP} title="What is Accessibility (a11y)?">
+    <p>
+      <strong>Accessibility</strong> means building products that everyone can use — including people
+      who rely on screen readers, keyboard-only navigation, switch controls, or other assistive
+      technologies. It covers visual, motor, auditory, and cognitive impairments.
+    </p>
+    <p className="mt-2">
+      The shorthand <strong>a11y</strong> is a numeronym: there are 11 letters between the{" "}
+      <em>a</em> and the <em>y</em> in &quot;accessibility&quot;. You&apos;ll see it widely used in
+      the developer community alongside <strong>i18n</strong> (internationalisation) and{" "}
+      <strong>l10n</strong> (localisation).
+    </p>
+    <p className="mt-2">
+      The web standard for accessibility is{" "}
+      <strong>WCAG (Web Content Accessibility Guidelines)</strong>, published by the W3C. Most
+      products aim for <strong>WCAG 2.1 AA</strong> compliance as the baseline.
+    </p>
+    <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+      <a
+        href="https://www.w3.org/WAI/fundamentals/accessibility-intro/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2 hover:opacity-70"
+      >
+        W3C — Intro to Accessibility →
+      </a>
+      <a
+        href="https://www.w3.org/WAI/WCAG21/quickref/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2 hover:opacity-70"
+      >
+        WCAG 2.1 Quick Reference →
+      </a>
+      <a
+        href="https://www.a11yproject.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2 hover:opacity-70"
+      >
+        The A11y Project →
+      </a>
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Learn/Accessibility"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2 hover:opacity-70"
+      >
+        MDN Accessibility Guide →
+      </a>
+    </p>
+  </Callout>
+);
 
 const mdxComponents = {
   DashboardPreview,
+  A11yCallout,
 };
 
 const PostTemplate = ({
