@@ -292,7 +292,7 @@ export default function MyPage() {
 
 ## Icons
 
-**160 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
+**191 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";

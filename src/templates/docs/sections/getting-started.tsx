@@ -14,7 +14,7 @@ const GettingStarted = () => (
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 my-6">
       {[
         { label: "Components", value: "49+" },
-        { label: "Icons", value: "182+" },
+        { label: "Icons", value: "191+" },
         { label: "Version", value: `v${pkg.version}` },
         { label: "License", value: "MIT" },
       ].map((s) => (
