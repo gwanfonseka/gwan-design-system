@@ -1,6 +1,6 @@
 import Checkbox from "@/components/checkbox";
 import CodeSnippet from "@/components/codeSnippet";
-import Input, { FORM_ELEMENT_EDGE_STYLE } from "@/components/input";
+import Input, { FORM_ELEMENT_EDGE_STYLE, FORM_ELEMENT_SIZE } from "@/components/input";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
 import { ChangeEvent, useState } from "react";
@@ -18,6 +18,7 @@ const Inputs = () => {
     "This is an error message",
   );
   const [edges, setEdges] = useState<string>(FORM_ELEMENT_EDGE_STYLE.ROUNDED);
+  const [size, setSize] = useState<FORM_ELEMENT_SIZE>(FORM_ELEMENT_SIZE.MD);
   const [inputType, setInputType] = useState<string>("text");
 
   const inputEdgesOptions = [
@@ -40,25 +41,26 @@ const Inputs = () => {
     { value: "file", label: "file" },
   ];
 
-  const codeExample = `import { Input, FORM_ELEMENT_EDGE_STYLE } from "gwan-design-system";
+  const sizeOptions = Object.values(FORM_ELEMENT_SIZE).map((v) => ({ value: v, label: v }));
+
+  const codeExample = `import { Input, FORM_ELEMENT_EDGE_STYLE, FORM_ELEMENT_SIZE } from "gwan-design-system";
 
 const Example = () => {
   const [inputText, setInputText] = useState<string>("");
 
   return (
     <Input
-      label="Input" // optional, you can add a label
+      label="Input"                            // optional label
       placeholder="This is an input"
       value={inputText}
       onChange={(e) => setInputText(e.target.value)}
-      onClear={() => setInputText("")}
-      required={false} // optional, you can make the input required
-      disabled={false} // optional, you can disable the input
-      isError={false} // optional, you can show error state
-      errorMessage="Error message" // optional, you can add an error message
-      className="custom-class" // optional, you can add your own styles
-      inputClassName="custom-class" // optional, you can add your own styles to the input
-      edges={FORM_ELEMENT_EDGE_STYLE.ROUNDED} // optional, you can choose rounded or squared
+      onClear={() => setInputText("")}         // shows clear button when value exists
+      size={FORM_ELEMENT_SIZE.MD}              // MD | SM
+      edges={FORM_ELEMENT_EDGE_STYLE.ROUNDED}  // ROUNDED | SQUARED
+      required={false}
+      disabled={false}
+      isError={false}
+      errorMessage="Error message"
     />
   );
 }`;
@@ -81,6 +83,7 @@ const Example = () => {
             disabled={isDisabled}
             required={isRequired}
             edges={edges as FORM_ELEMENT_EDGE_STYLE}
+            size={size}
             className="w-full sm:w-80"
           />
         </div>
@@ -106,6 +109,13 @@ const Example = () => {
             options={inputEdgesOptions}
             value={edges}
             onChange={(option) => setEdges(option)}
+            className="w-full sm:w-64"
+          />
+          <SelectDropdown
+            label="Size"
+            options={sizeOptions}
+            value={size}
+            onChange={(v) => setSize(v as FORM_ELEMENT_SIZE)}
             className="w-full sm:w-64"
           />
           <div className="flex flex-col gap-2 w-full sm:w-64">

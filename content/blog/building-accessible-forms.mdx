@@ -1,92 +1,288 @@
 ---
 title: "Building Accessible Forms with Gwan"
-description: "How Gwan's Input, Checkbox, RadioButton, and Select components handle ARIA attributes, keyboard navigation, error announcements, and focus management out of the box."
-date: "2026-04-18"
+description: "How Gwan's form components handle ARIA attributes, keyboard navigation, error announcements, and focus management — and how to use them correctly so every user can complete your forms."
+date: "2026-05-17"
 author: "Nimesh Fonseka"
 tags: ["accessibility", "forms", "aria", "a11y"]
-draft: true
+coverImage: "/blog/building-accessible-forms.jpg"
+draft: false
 ---
 
-Accessible forms are harder to build than they look. Labels need to be associated with inputs. Errors need to be announced to screen readers. Keyboard users need to tab through fields in a logical order. Focus needs to be managed when modals open. Gwan's form components handle all of this by default — this post explains what's built in and what you still need to think about.
+Accessible forms are harder to build than they look. Labels need to be wired to inputs. Errors need to be announced to screen readers the moment they appear. Keyboard users need to navigate dropdowns without a mouse. Focus needs to be trapped inside modals. Gwan's form components handle all of this automatically — this post walks through what's built in, how it works, and how to get the most out of it.
+
+<A11yCallout />
 
 ## Labels and inputs
 
-Every Gwan input component (`Input`, `TextArea`, `SelectDropdown`, `Checkbox`, `RadioButton`) requires a `label` prop. The label is rendered as a `<label>` element and associated with the input via `htmlFor` / `id` pairing:
+Every Gwan form component — `Input`, `TextArea`, `SelectDropdown`, `MultiSelect`, `SearchInput`, `DatePicker`, `ColorPicker`, `Checkbox`, `RadioButton` — wires up the label automatically. You pass a `label` prop and the component creates a `<label>` element with the correct `htmlFor`/`id` pair:
 
 ```tsx
-<Input label="Email address" />
-// renders:
-// <label for="input-email">Email address</label>
-// <input id="input-email" type="text" />
+<Input
+  label="Email address"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+/>
 ```
 
-This means screen readers announce the label when the input receives focus. Never pass an empty string to `label` — if the label is visually hidden, use `labelHidden` prop instead (the label still exists in the DOM for screen readers).
+The `id` is derived from the label text, so `label="Email address"` becomes `id="gwan-input-email-address"`. Screen readers announce the label when the input receives focus — no manual plumbing required.
 
-## Error messages
+## Error announcements
 
-Errors use `aria-describedby` to associate the error message with the input, and `aria-invalid` to signal the invalid state:
+When `isError={true}` is set, three things happen at once:
+
+1. `aria-invalid="true"` is added to the input — signals the invalid state to assistive tech
+2. `aria-describedby` links the input to the error message element
+3. The error element gets `role="alert"` — screen readers announce it immediately, without the user having to re-focus the field
 
 ```tsx
 <Input
   label="Email"
-  error="Invalid email address"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  isError={!isValidEmail(email)}
+  errorMessage="Please enter a valid email address."
 />
-// renders:
-// <input aria-invalid="true" aria-describedby="input-email-error" />
-// <span id="input-email-error" role="alert">Invalid email address</span>
 ```
 
-The `role="alert"` causes screen readers to announce the error immediately when it appears — no focus required.
+```html
+<!-- What renders -->
+<input
+  id="gwan-input-email"
+  aria-invalid="true"
+  aria-describedby="gwan-input-email-error"
+/>
+<p id="gwan-input-email-error" role="alert">
+  Please enter a valid email address.
+</p>
+```
+
+The `role="alert"` means a screen reader user typing in the field hears the error as soon as it appears — they don't need to Tab away and back.
+
+## Required fields
+
+```tsx
+<Input
+  label="Full name"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  required
+/>
+```
+
+Both `required` (native HTML validation) and `aria-required="true"` are applied to the input. The label also renders a ` *` suffix. Screen readers announce "Full name, required, edit text."
 
 ## Keyboard navigation
 
 All Gwan form components are keyboard accessible:
 
-| Component | Keyboard behaviour |
-|-----------|-------------------|
-| `Input`, `TextArea` | Standard text input |
-| `Checkbox` | `Space` toggles checked state |
-| `RadioButton` | Arrow keys move between options in a group |
-| `SelectDropdown` | `Enter` opens, arrow keys navigate, `Enter` selects, `Escape` closes |
-| `FilterDropdown` | Same as SelectDropdown, `Space` toggles checkboxes |
+| Component           | Keyboard behaviour                                                              |
+| ------------------- | ------------------------------------------------------------------------------- |
+| `Input`, `TextArea` | Standard text input; Tab moves focus                                            |
+| `Checkbox`          | `Space` toggles checked state                                                   |
+| `RadioButton`       | `Space` selects; use `name` prop to enable arrow-key group navigation           |
+| `SelectDropdown`    | `Enter`/`Space` opens; `↑↓` navigate options; `Enter` confirms; `Escape` closes |
+| `MultiSelect`       | `Enter`/`Space` opens; `↑↓` navigate options; `Enter` toggles; `Escape` closes  |
+| `DatePicker`        | `Tab` into trigger, `Enter` opens calendar                                      |
+| `Modal`             | `Escape` closes; `Tab`/`Shift+Tab` cycle only through elements inside the modal |
 
-## Focus management in modals and drawers
-
-When a `Modal` or `Drawer` opens, focus is moved inside the component and trapped — Tab cycles only through focusable elements within the panel. When closed, focus returns to the element that triggered the open.
-
-This is critical for keyboard and screen reader users. Without it, focus remains outside the modal and users have to manually navigate into it.
+### SelectDropdown in action
 
 ```tsx
-// Focus trap is automatic — just use the component
-<Modal isOpen={open} onClose={() => setOpen(false)}>
-  {/* Focus is trapped here while open */}
-  <Input label="Search" autoFocus />
-</Modal>
+<SelectDropdown
+  label="Country"
+  options={countries}
+  value={country}
+  onChange={setCountry}
+/>
 ```
 
-## Required fields
+When focused, pressing `↓` opens the dropdown and highlights the first option. Arrow keys move the highlight. `Enter` selects. `Escape` dismisses. The trigger carries `role="combobox"`, `aria-expanded`, `aria-haspopup="listbox"`, and `aria-activedescendant` so screen readers announce the currently highlighted option as you navigate.
+
+### MultiSelect in action
 
 ```tsx
-<Input label="Name" required />
-// renders aria-required="true"
+<MultiSelect
+  label="Skills"
+  options={skillOptions}
+  value={selectedSkills}
+  onChange={setSelectedSkills}
+  placeholder="Select skills…"
+/>
 ```
 
-This tells screen readers the field is required without relying solely on a visual asterisk.
+The trigger has `role="combobox"` and `aria-multiselectable="true"` on the listbox. Each option carries `role="option"` and `aria-selected`. The built-in search field auto-focuses when the dropdown opens, so keyboard users can type to filter immediately.
 
-## Fieldset and legend for radio groups
+### RadioButton groups
 
-Group related `RadioButton` components in a `<fieldset>` with a `<legend>` so screen readers announce the group name:
+Use the `name` prop to group radio buttons. This enables arrow-key navigation between options — a browser-native behaviour that only works when all radios in the group share the same `name`:
 
 ```tsx
 <fieldset>
   <legend className="text-sm font-semibold text-foreground mb-3">
     Notification preference
   </legend>
-  <RadioButton name="notifications" label="Email" value="email" />
-  <RadioButton name="notifications" label="SMS" value="sms" />
-  <RadioButton name="notifications" label="None" value="none" />
+  <RadioButton
+    name="notifications"
+    label="Email"
+    value="email"
+    selectedValue={pref}
+    onChange={setPref}
+  />
+  <RadioButton
+    name="notifications"
+    label="SMS"
+    value="sms"
+    selectedValue={pref}
+    onChange={setPref}
+  />
+  <RadioButton
+    name="notifications"
+    label="None"
+    value="none"
+    selectedValue={pref}
+    onChange={setPref}
+  />
 </fieldset>
 ```
+
+The `<fieldset>` + `<legend>` combination means a screen reader user hears "Notification preference — Email, radio button, 1 of 3" when they focus the first option.
+
+## Focus management in modals
+
+When a `Modal` opens, focus automatically moves to the first focusable element inside it. Tab and Shift+Tab cycle only through elements within the modal — focus cannot escape. When the modal closes, focus returns to the element that triggered the open.
+
+```tsx
+function DeleteUserModal({ open, onClose, userName }) {
+  return open ? (
+    <Modal title="Delete user?" onClear={onClose}>
+      <p className="text-sm text-muted-fg mb-4">
+        <strong>{userName}</strong> will be permanently removed.
+      </p>
+      <div className="flex gap-3 justify-end">
+        <Button
+          variant={BUTTON_VARIANTS.SECONDARY}
+          label="Cancel"
+          onClick={onClose}
+        />
+        <Button
+          variant={BUTTON_VARIANTS.PRIMARY}
+          label="Delete"
+          onClick={handleDelete}
+        />
+      </div>
+    </Modal>
+  ) : null;
+}
+```
+
+The modal carries `role="dialog"`, `aria-modal="true"`, and `aria-labelledby` pointing to the title. Screen readers announce "Delete user?, dialog" when it opens.
+
+## A complete accessible form
+
+Putting it together — a sign-up form that a keyboard or screen reader user can complete entirely without a mouse:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import {
+  Input,
+  TextArea,
+  SelectDropdown,
+  Checkbox,
+  Button,
+  BUTTON_VARIANTS,
+} from "gwan-design-system";
+
+const roles = [
+  { value: "engineer", label: "Engineer" },
+  { value: "designer", label: "Designer" },
+  { value: "pm", label: "Product Manager" },
+];
+
+export default function SignUpForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [bio, setBio] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!name.trim()) e.name = "Name is required.";
+    if (!email.includes("@")) e.email = "Enter a valid email address.";
+    if (!role) e.role = "Please select a role.";
+    if (!agreed) e.terms = "You must accept the terms.";
+    return e;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
+    // submit…
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-md">
+      <Input
+        label="Full name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        isError={!!errors.name}
+        errorMessage={errors.name}
+      />
+      <Input
+        label="Work email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        isError={!!errors.email}
+        errorMessage={errors.email}
+      />
+      <SelectDropdown
+        label="Role"
+        options={roles}
+        value={role}
+        onChange={setRole}
+        required
+        isError={!!errors.role}
+        errorMessage={errors.role}
+      />
+      <TextArea
+        label="Short bio"
+        value={bio}
+        onChange={(e) => setBio(e.target.value)}
+        placeholder="Tell us a little about yourself…"
+      />
+      <Checkbox
+        label="I accept the terms and conditions"
+        checked={agreed}
+        onChange={setAgreed}
+      />
+      {errors.terms && (
+        <p role="alert" className="text-danger text-xs">
+          {errors.terms}
+        </p>
+      )}
+      <Button
+        type="submit"
+        variant={BUTTON_VARIANTS.PRIMARY}
+        label="Create account"
+        onClick={() => {}}
+      />
+    </form>
+  );
+}
+```
+
+Every field is labelled, every error is announced, and the submit button is reachable via Tab.
 
 ## What you still need to handle
 
@@ -94,26 +290,50 @@ Gwan handles component-level accessibility. You still own:
 
 1. **Page structure** — use `<main>`, `<nav>`, `<header>` landmarks correctly
 2. **Heading hierarchy** — don't skip from `<h1>` to `<h3>`
-3. **Tab order** — don't use `tabIndex > 0`, let DOM order determine tab flow
-4. **Colour contrast** — the default Gwan palette passes WCAG AA, but if you swap tokens, verify with a contrast checker
-5. **Form submission errors** — after submit, move focus to the first errored field or to an error summary
+3. **Tab order** — never use `tabIndex > 0`; let DOM order control tab flow
+4. **Color contrast** — the default Gwan palette passes WCAG AA, but verify with a contrast checker after any token changes
+5. **Post-submit focus** — after a failed submission, move focus to the first errored field or an error summary at the top:
+
+```tsx
+const firstErrorRef = useRef<HTMLDivElement>(null);
+
+// After validation fails:
+firstErrorRef.current?.focus();
+```
+
+6. **Form-level errors** — for multi-step or complex flows, add a summary region:
+
+```tsx
+{
+  hasErrors && (
+    <div
+      role="alert"
+      aria-live="assertive"
+      className="p-4 bg-danger-bg border border-danger rounded text-danger-fg text-sm"
+    >
+      Please fix the {errorCount} error{errorCount > 1 ? "s" : ""} below before
+      continuing.
+    </div>
+  );
+}
+```
 
 ## Testing accessibility
+
+The fastest way to catch issues before they reach users:
 
 ```bash
 npm install -D @axe-core/react
 ```
 
 ```tsx
-// In development only:
+// In your root layout or _app.tsx — development only
 if (process.env.NODE_ENV !== "production") {
   const axe = await import("@axe-core/react");
   axe.default(React, ReactDOM, 1000);
 }
 ```
 
-This runs axe in your browser console and flags violations in real time.
+Axe logs violations directly to the browser console in real time. Run it alongside your existing test suite and it will catch missing labels, incorrect ARIA roles, and contrast failures automatically.
 
-## Summary
-
-Gwan's form components are accessible by default because labels, ARIA attributes, keyboard handling, and focus management are built into the component — not bolted on. Your job is to use them correctly: always provide a `label`, always surface errors via the `error` prop, and structure your page with semantic HTML landmarks.
+Beyond axe, the most valuable test is to unplug your mouse and complete a form entirely with keyboard alone. If you can Tab to every field, enter values, trigger errors, and submit — your form is accessible.

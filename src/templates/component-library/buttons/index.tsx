@@ -1,5 +1,6 @@
 import Button, {
   BUTTON_EDGE_STYLE,
+  BUTTON_SIZE,
   BUTTON_VARIANTS,
 } from "@/components/button";
 import Checkbox from "@/components/checkbox";
@@ -19,6 +20,13 @@ const Buttons = () => {
     BUTTON_EDGE_STYLE.ROUNDED,
   );
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [buttonSize, setButtonSize] = useState<string>(BUTTON_SIZE.MD);
+
+  const buttonSizeOptions = [
+    { value: BUTTON_SIZE.SM, label: "SM" },
+    { value: BUTTON_SIZE.MD, label: "MD" },
+    { value: BUTTON_SIZE.LG, label: "LG" },
+  ];
   const [leftIcon, setLeftIcon] = useState<string>("None");
   const [rightIcon, setRightIcon] = useState<string>("None");
   const list = Object.keys(svgList);
@@ -35,7 +43,7 @@ const Buttons = () => {
     { value: BUTTON_EDGE_STYLE.PILL, label: "pill" },
   ];
 
-  const codeExample = `import { Button, BUTTON_VARIANTS, BUTTON_EDGE_STYLE } from "gwan-design-system";
+  const codeExample = `import { Button, BUTTON_VARIANTS, BUTTON_EDGE_STYLE, BUTTON_SIZE } from "gwan-design-system";
 import { ProductsSVG } from "gwan-design-system";
 
 const Example = () => {
@@ -43,13 +51,13 @@ const Example = () => {
     <Button
       label="Label"
       onClick={() => {}}
-      variant={BUTTON_VARIANTS.PRIMARY} // optional, default is primary
-      edges={BUTTON_EDGE_STYLE.ROUNDED} // optional, default is rounded
-      leftIcon={<ProductsSVG />} // optional, you can add an icon
-      rightIcon={<ProductsSVG />} // optional, you can add an icon
-      disabled={false} // optional, default is false
-      type="button" // optional, default is "button"
-      className="custom-class" // optional, you can add your own styles
+      variant={BUTTON_VARIANTS.PRIMARY}  // PRIMARY | SECONDARY | TERTIARY
+      size={BUTTON_SIZE.MD}              // SM | MD | LG — MD matches form element height
+      edges={BUTTON_EDGE_STYLE.ROUNDED}  // ROUNDED | SQUARED | PILL
+      leftIcon={<ProductsSVG />}         // optional left icon
+      rightIcon={<ProductsSVG />}        // optional right icon
+      disabled={false}
+      type="button"
     />
   );
 };`;
@@ -62,6 +70,7 @@ const Example = () => {
             variant={buttonVariant as BUTTON_VARIANTS}
             label={buttonLabel}
             edges={buttonEdges as BUTTON_EDGE_STYLE}
+            size={buttonSize as BUTTON_SIZE}
             disabled={isDisabled}
             leftIcon={
               leftIcon !== "None"
@@ -104,6 +113,13 @@ const Example = () => {
             onChange={(option) => setButtonEdges(option)}
             className="w-full sm:w-64"
           />
+          <SelectDropdown
+            label="Size"
+            options={buttonSizeOptions}
+            value={buttonSize}
+            onChange={(option) => setButtonSize(option)}
+            className="w-full sm:w-64"
+          />
         </div>
         <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
           <SelectDropdown
@@ -134,21 +150,14 @@ const Example = () => {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
-        <Button
-          variant={BUTTON_VARIANTS.PRIMARY}
-          label="Primary"
-          onClick={() => {}}
-        />
-        <Button
-          variant={BUTTON_VARIANTS.SECONDARY}
-          label="Secondary"
-          onClick={() => {}}
-        />
-        <Button
-          variant={BUTTON_VARIANTS.TERTIARY}
-          label="Tertiary"
-          onClick={() => {}}
-        />
+        <Button variant={BUTTON_VARIANTS.PRIMARY}   label="Primary"   onClick={() => {}} />
+        <Button variant={BUTTON_VARIANTS.SECONDARY} label="Secondary" onClick={() => {}} />
+        <Button variant={BUTTON_VARIANTS.TERTIARY}  label="Tertiary"  onClick={() => {}} />
+      </div>
+      <div className="flex flex-row flex-wrap gap-4 items-end justify-center">
+        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Small"  size={BUTTON_SIZE.SM} onClick={() => {}} />
+        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Medium" size={BUTTON_SIZE.MD} onClick={() => {}} />
+        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Large"  size={BUTTON_SIZE.LG} onClick={() => {}} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

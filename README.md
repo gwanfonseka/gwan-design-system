@@ -195,7 +195,7 @@ export default function MyPage() {
 
 ## Components
 
-**45+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
+**49+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
 
 > **`C` = Client Component** (uses React hooks — add `"use client"` to the importing file if needed)  
 > **`S` = Server Component** (pure render, no hooks — safe to use in React Server Components)
@@ -220,6 +220,8 @@ export default function MyPage() {
 | `DatePicker`     | `C`  | Calendar date picker with min/max and keyboard support     |
 | `FileUploader`   | `C`  | Drag-and-drop and click-to-upload file input               |
 | `ColorPicker`    | `C`  | Swatch + hex input with preset palette                     |
+| `MultiSelect`    | `C`  | Checkbox multi-option dropdown with chips, search, and keyboard nav |
+| `SearchInput`    | `C`  | Search field with debounced callback, clear button, and loading state |
 
 ### Data Display
 
@@ -261,6 +263,8 @@ export default function MyPage() {
 | `Drawer`         | `C`  | Slide-in panels from any edge                         |
 | `Popover`        | `C`  | Anchored overlay with click or hover trigger          |
 | `CommandPalette` | `C`  | Full-screen command launcher with keyboard navigation |
+| `DropdownMenu`   | `C`  | Button-triggered action list with icons, dividers, and destructive items |
+| `ContextMenu`    | `C`  | Right-click triggered action list positioned at cursor |
 
 ### Indicators
 
@@ -288,7 +292,7 @@ export default function MyPage() {
 
 ## Icons
 
-**160 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
+**191 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";

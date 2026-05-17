@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useEffect, useRef, useState } from "react";
+import { FORM_ELEMENT_SIZE } from "../input";
 
 export interface IDatePicker {
   value?: Date | null;
@@ -10,6 +11,7 @@ export interface IDatePicker {
   minDate?: Date;
   maxDate?: Date;
   disabled?: boolean;
+  size?: FORM_ELEMENT_SIZE;
   className?: string;
 }
 
@@ -41,8 +43,13 @@ const DatePicker: FC<IDatePicker> = ({
   minDate,
   maxDate,
   disabled = false,
+  size = FORM_ELEMENT_SIZE.MD,
   className = "",
 }) => {
+  const isSM = size === FORM_ELEMENT_SIZE.SM;
+  const sizeClass  = isSM ? "px-2.5 py-1.5 text-xs" : "px-3 py-2.5 text-sm";
+  const iconSize   = isSM ? "w-3.5 h-3.5" : "w-4 h-4";
+  const minWidth   = isSM ? "min-w-[160px]" : "min-w-[180px]";
   const [open, setOpen] = useState(false);
   const [viewDate, setViewDate] = useState(value ?? new Date());
   const ref = useRef<HTMLDivElement>(null);
@@ -84,7 +91,7 @@ const DatePicker: FC<IDatePicker> = ({
         type="button"
         disabled={disabled}
         onClick={() => !disabled && setOpen((v) => !v)}
-        className={`flex items-center justify-between gap-2 px-3 py-2.5 border rounded text-sm transition-colors duration-200 min-w-[180px] ${
+        className={`flex items-center justify-between gap-2 ${sizeClass} ${minWidth} border rounded transition-colors duration-200 ${
           disabled
             ? "border-border bg-surface-raised text-muted-fg cursor-not-allowed opacity-60"
             : "border-border bg-surface text-foreground hover:border-primary-500 focus:outline-none focus:border-primary-500 cursor-pointer"
@@ -93,7 +100,7 @@ const DatePicker: FC<IDatePicker> = ({
         <span className={value ? "text-foreground" : "text-muted-fg/60"}>
           {value ? formatDate(value) : placeholder}
         </span>
-        <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4 text-muted-fg shrink-0" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 16 16" fill="none" className={`${iconSize} text-muted-fg shrink-0`} xmlns="http://www.w3.org/2000/svg">
           <rect x="1" y="3" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.3" />
           <path d="M5 1v2M11 1v2M1 7h14" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
         </svg>

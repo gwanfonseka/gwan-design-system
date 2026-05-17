@@ -1,18 +1,23 @@
 import CodeSnippet from "@/components/codeSnippet";
 import Playground from "@/components/playground";
+import SelectDropdown from "@/components/selectDropdown";
 import DatePicker from "@/components/datePicker";
+import { FORM_ELEMENT_SIZE } from "@/components/input";
 import { useState } from "react";
+
+const sizeOptions = Object.values(FORM_ELEMENT_SIZE).map((v) => ({ value: v, label: v }));
 
 const DatePickerTemplate = () => {
   const [date1, setDate1] = useState<Date | null>(null);
   const [date2, setDate2] = useState<Date | null>(new Date());
   const [date3, setDate3] = useState<Date | null>(null);
+  const [size, setSize] = useState<FORM_ELEMENT_SIZE>(FORM_ELEMENT_SIZE.MD);
 
   const today = new Date();
   const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const maxDate = new Date(today.getFullYear(), today.getMonth() + 3, 0);
 
-  const codeExample = `import { DatePicker } from "gwan-design-system";
+  const codeExample = `import { DatePicker, FORM_ELEMENT_SIZE } from "gwan-design-system";
 import { useState } from "react";
 
 const Example = () => {
@@ -20,12 +25,12 @@ const Example = () => {
 
   return (
     <>
-      {/* Basic */}
       <DatePicker
         value={date}
         onChange={setDate}
         label="Select date"
         placeholder="DD MMM YYYY"
+        size={FORM_ELEMENT_SIZE.MD}    // MD | SM
       />
 
       {/* With min/max range */}
@@ -34,7 +39,7 @@ const Example = () => {
         onChange={setDate}
         label="Available dates"
         minDate={new Date()}
-        maxDate={new Date(2025, 11, 31)}
+        maxDate={new Date(2026, 11, 31)}
       />
 
       {/* Disabled */}
@@ -51,6 +56,16 @@ const Example = () => {
           onChange={setDate3}
           label="Select a date"
           placeholder="DD MMM YYYY"
+          size={size}
+        />
+      </div>
+      <div className="flex justify-center">
+        <SelectDropdown
+          label="Size"
+          options={sizeOptions}
+          value={size}
+          onChange={(v) => setSize(v as FORM_ELEMENT_SIZE)}
+          className="w-36"
         />
       </div>
     </div>
