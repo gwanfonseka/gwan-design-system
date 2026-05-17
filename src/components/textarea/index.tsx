@@ -31,8 +31,8 @@ const TextArea: FC<ITextArea> = ({
   id,
   ...rest
 }) => {
-  const textareaId =
-    id || label?.toLowerCase().replace(/\s+/g, "-") || "textarea";
+  const textareaId = id || (label ? `gwan-textarea-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}` : "gwan-textarea");
+  const errorId = `${textareaId}-error`;
 
   return (
     <div className={`flex flex-col relative ${className}`}>
@@ -61,6 +61,9 @@ const TextArea: FC<ITextArea> = ({
             disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
           } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 resize-none ${inputClassName}`}
           required={required}
+          aria-invalid={isError || undefined}
+          aria-describedby={isError && errorMessage ? errorId : undefined}
+          aria-required={required || undefined}
           {...rest}
         />
 
@@ -74,7 +77,7 @@ const TextArea: FC<ITextArea> = ({
         )}
       </div>
       {isError && errorMessage && (
-        <p className="text-danger text-xs mt-1">{errorMessage}</p>
+        <p id={errorId} role="alert" className="text-danger text-xs mt-1">{errorMessage}</p>
       )}
     </div>
   );

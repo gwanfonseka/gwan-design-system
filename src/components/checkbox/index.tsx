@@ -44,38 +44,30 @@ const Checkbox: FC<ICheckbox> = ({
 }: ICheckbox) => {
   const { box, icon } = sizeMap[size];
   const edgeStyle = edgeMap[edges];
+  const inputId = `gwan-checkbox-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
   return (
     <label
+      htmlFor={inputId}
       className={`flex items-center gap-2 cursor-pointer ${className} ${
         disabled ? "cursor-not-allowed opacity-50" : ""
       }`}
     >
       <input
+        id={inputId}
         type="checkbox"
         checked={checked}
         onChange={() => !disabled && onChange(!checked)}
         disabled={disabled}
-        className="hidden"
+        className="sr-only"
       />
 
-      <div
-        className={`${box} ${edgeStyle} flex items-center justify-center border transition-all
-          ${
-            checked
-              ? "bg-primary-300 border-primary-400"
-              : "bg-surface border-border hover:border-primary-500"
-          }
-          ${disabled ? "bg-surface-raised border-border" : ""}
-        `}
+      <div aria-hidden="true" className={`${box} ${edgeStyle} flex items-center justify-center border transition-all
+          ${checked ? "bg-primary-default border-primary-default" : "bg-surface border-border hover:border-primary-default"}
+          ${disabled ? "bg-surface-raised border-border" : ""}`}
       >
-        {checked && (
-          <div className={`${icon} text-foreground`}>
-            <CheckSVG />
-          </div>
-        )}
+        {checked && <div className={`${icon} text-primary-default-fg`}><CheckSVG /></div>}
       </div>
-
       {label && <span className="text-foreground">{label}</span>}
     </label>
   );

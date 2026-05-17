@@ -1,6 +1,6 @@
 import Checkbox from "@/components/checkbox";
 import CodeSnippet from "@/components/codeSnippet";
-import Input, { FORM_ELEMENT_EDGE_STYLE } from "@/components/input";
+import Input, { FORM_ELEMENT_EDGE_STYLE, FORM_ELEMENT_SIZE } from "@/components/input";
 import Playground from "@/components/playground";
 import SelectDropdown, {
   type ISelectDropdownOption,
@@ -56,6 +56,8 @@ const SelectDropdowns = () => {
     "This is an error message",
   );
   const [edges, setEdges] = useState<string>(FORM_ELEMENT_EDGE_STYLE.ROUNDED);
+  const [size, setSize] = useState<FORM_ELEMENT_SIZE>(FORM_ELEMENT_SIZE.MD);
+  const sizeOptions = Object.values(FORM_ELEMENT_SIZE).map((v) => ({ value: v, label: v }));
 
   const dropdownEdgesOptions = [
     { value: FORM_ELEMENT_EDGE_STYLE.ROUNDED, label: "rounded" },
@@ -86,7 +88,8 @@ const Example = () => {
       errorMessage="Error message" // optional, you can add an error message
       className="custom-class" // optional, you can add your own styles
       inputClassName="custom-input-class" // optional, you can add your own styles to the read-only input
-      edges={FORM_ELEMENT_EDGE_STYLE.ROUNDED} // optional, you can choose rounded or squared
+      size={FORM_ELEMENT_SIZE.MD}              // MD | SM
+      edges={FORM_ELEMENT_EDGE_STYLE.ROUNDED}  // ROUNDED | SQUARED
     />
   );
 }`;
@@ -107,6 +110,7 @@ const Example = () => {
             errorMessage={errorMessage}
             required={isRequired}
             edges={edges as FORM_ELEMENT_EDGE_STYLE}
+            size={size}
           />
         </div>
         <div className="flex flex-row flex-wrap justify-center gap-8 items-end">
@@ -131,6 +135,13 @@ const Example = () => {
             options={dropdownEdgesOptions}
             value={edges}
             onChange={(option) => setEdges(option)}
+            className="w-full sm:w-64"
+          />
+          <SelectDropdown
+            label="Size"
+            options={sizeOptions}
+            value={size}
+            onChange={(v) => setSize(v as FORM_ELEMENT_SIZE)}
             className="w-full sm:w-64"
           />
 

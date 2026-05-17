@@ -1,14 +1,19 @@
 import CodeSnippet from "@/components/codeSnippet";
 import Playground from "@/components/playground";
+import SelectDropdown from "@/components/selectDropdown";
 import ColorPicker from "@/components/colorPicker";
+import { FORM_ELEMENT_SIZE } from "@/components/input";
 import { useState } from "react";
+
+const sizeOptions = Object.values(FORM_ELEMENT_SIZE).map((v) => ({ value: v, label: v }));
 
 const ColorPickerTemplate = () => {
   const [color1, setColor1] = useState("#3b82f6");
   const [color2, setColor2] = useState("#22c55e");
   const [color3, setColor3] = useState("#ec4899");
+  const [size, setSize] = useState<FORM_ELEMENT_SIZE>(FORM_ELEMENT_SIZE.MD);
 
-  const codeExample = `import { ColorPicker } from "gwan-design-system";
+  const codeExample = `import { ColorPicker, FORM_ELEMENT_SIZE } from "gwan-design-system";
 import { useState } from "react";
 
 const Example = () => {
@@ -16,8 +21,12 @@ const Example = () => {
 
   return (
     <>
-      {/* Basic */}
-      <ColorPicker value={color} onChange={setColor} label="Pick a colour" />
+      <ColorPicker
+        value={color}
+        onChange={setColor}
+        label="Pick a color"
+        size={FORM_ELEMENT_SIZE.MD}    // MD | SM
+      />
 
       {/* Custom presets */}
       <ColorPicker
@@ -35,7 +44,16 @@ const Example = () => {
   const renderPlayground = () => (
     <div className="flex flex-col gap-8 py-4">
       <div className="mx-auto">
-        <ColorPicker value={color1} onChange={setColor1} label="Primary colour" />
+        <ColorPicker value={color1} onChange={setColor1} label="Primary color" size={size} />
+      </div>
+      <div className="flex justify-center">
+        <SelectDropdown
+          label="Size"
+          options={sizeOptions}
+          value={size}
+          onChange={(v) => setSize(v as FORM_ELEMENT_SIZE)}
+          className="w-36"
+        />
       </div>
       <div
         className="w-full max-w-xs h-16 rounded-lg border border-border transition-colors duration-200 mx-auto"
