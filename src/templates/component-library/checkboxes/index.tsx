@@ -104,43 +104,13 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-8 items-center">
-        <div className="flex flex-row gap-4 items-center">
-          <Checkbox
-            label="Small"
-            checked
-            size={CHECKBOX_SIZE.SMALL}
-            onChange={() => {}}
-          />
-          <Checkbox
-            label="Medium"
-            checked
-            size={CHECKBOX_SIZE.MEDIUM}
-            onChange={() => {}}
-          />
-          <Checkbox
-            label="Large"
-            checked
-            size={CHECKBOX_SIZE.LARGE}
-            onChange={() => {}}
-          />
-        </div>
-        <div className="flex gap-6 mt-4">
-          <Checkbox
-            label="Disabled"
-            checked={false}
-            disabled
-            size={CHECKBOX_SIZE.MEDIUM}
-            onChange={() => {}}
-          />
-          <Checkbox
-            label="Checked Disabled"
-            checked
-            disabled
-            size={CHECKBOX_SIZE.MEDIUM}
-            onChange={() => {}}
-          />
-        </div>
+      <div className="flex justify-center py-4">
+        <Checkbox
+          label="Accept terms and conditions"
+          checked={false}
+          size={CHECKBOX_SIZE.MEDIUM}
+          onChange={() => {}}
+        />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

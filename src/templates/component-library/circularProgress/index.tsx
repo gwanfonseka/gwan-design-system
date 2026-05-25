@@ -52,23 +52,8 @@ const CircularProgressTemplate = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* All types at MD size */}
-      <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
-        {Object.values(CIRCULAR_PROGRESS_TYPE).map((t) => (
-          <div key={t} className="flex flex-col items-center gap-2">
-            <CircularProgress value={70} type={t} size={CIRCULAR_PROGRESS_SIZE.MD} />
-            <span className="text-xs text-muted-fg">{t}</span>
-          </div>
-        ))}
-      </div>
-      {/* All sizes */}
-      <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
-        {Object.values(CIRCULAR_PROGRESS_SIZE).map((s) => (
-          <div key={s} className="flex flex-col items-center gap-2">
-            <CircularProgress value={65} size={s} />
-            <span className="text-xs text-muted-fg">{s}</span>
-          </div>
-        ))}
+      <div className="flex justify-center py-4">
+        <CircularProgress value={75} size={CIRCULAR_PROGRESS_SIZE.MD} type={CIRCULAR_PROGRESS_TYPE.DEFAULT} showLabel />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

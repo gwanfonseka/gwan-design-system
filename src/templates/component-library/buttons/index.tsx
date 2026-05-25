@@ -149,15 +149,8 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
-        <Button variant={BUTTON_VARIANTS.PRIMARY}   label="Primary"   onClick={() => {}} />
-        <Button variant={BUTTON_VARIANTS.SECONDARY} label="Secondary" onClick={() => {}} />
-        <Button variant={BUTTON_VARIANTS.TERTIARY}  label="Tertiary"  onClick={() => {}} />
-      </div>
-      <div className="flex flex-row flex-wrap gap-4 items-end justify-center">
-        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Small"  size={BUTTON_SIZE.SM} onClick={() => {}} />
-        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Medium" size={BUTTON_SIZE.MD} onClick={() => {}} />
-        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Large"  size={BUTTON_SIZE.LG} onClick={() => {}} />
+      <div className="flex justify-center py-4">
+        <Button variant={BUTTON_VARIANTS.PRIMARY} label="Get Started" size={BUTTON_SIZE.MD} onClick={() => {}} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

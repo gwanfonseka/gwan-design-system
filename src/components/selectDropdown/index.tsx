@@ -157,7 +157,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
               isError
                 ? "border-danger focus:border-danger"
                 : "border-border hover:border-primary-default focus:border-primary-default"
-            } w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
+            } w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200 ${inputClassName}`}
             placeholder={placeholder}
             onClick={() => !disabled && setIsOptionsVisible((v) => !v)}
             onKeyDown={handleKeyDown}

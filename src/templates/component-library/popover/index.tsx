@@ -61,16 +61,13 @@ const Example = () => (
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row flex-wrap justify-center gap-6 py-8">
-        {Object.values(POPOVER_PLACEMENT).map((p) => (
-          <Popover
-            key={p}
-            trigger={<Button label={p} onClick={() => {}} />}
-            title={`${p} placement`}
-            content="Popover positioned relative to the trigger."
-            placement={p}
-          />
-        ))}
+      <div className="flex justify-center py-8">
+        <Popover
+          trigger={<Button label="Open Popover" onClick={() => {}} />}
+          title="Popover Title"
+          content="Click-triggered overlay. Useful for contextual info, confirmations, or quick actions."
+          placement={POPOVER_PLACEMENT.BOTTOM}
+        />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

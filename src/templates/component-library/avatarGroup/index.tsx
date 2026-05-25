@@ -62,13 +62,8 @@ const AvatarGroupTemplate = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col items-center gap-6">
-        {Object.values(AVATAR_SIZE).map((s) => (
-          <div key={s} className="flex items-center gap-4">
-            <span className="text-xs text-muted-fg w-6">{s}</span>
-            <AvatarGroup items={sampleItems} max={4} size={s} />
-          </div>
-        ))}
+      <div className="flex justify-center py-4">
+        <AvatarGroup items={sampleItems} max={4} size={AVATAR_SIZE.SM} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

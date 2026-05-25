@@ -103,7 +103,7 @@ const CommandPalette: FC<ICommandPalette> = ({
             value={query}
             onChange={(e) => { setQuery(e.target.value); setActiveIndex(0); }}
             placeholder={placeholder}
-            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-fg/60 focus:outline-none"
+            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 focus:outline-none"
           />
           <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded border border-border text-[10px] text-muted-fg font-mono">
             ESC

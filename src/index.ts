@@ -51,6 +51,7 @@ export { default as DropdownMenu } from "./components/dropdownMenu";
 export { default as ContextMenu } from "./components/contextMenu";
 export { default as MultiSelect } from "./components/multiSelect";
 export { default as SearchInput } from "./components/searchInput";
+export { default as Slider } from "./components/slider";
 
 // Constants
 export { BUTTON_VARIANTS, BUTTON_EDGE_STYLE, BUTTON_SIZE } from "./components/button";
@@ -90,6 +91,7 @@ export { STAT_TREND } from "./components/statCard";
 export { CIRCULAR_PROGRESS_SIZE, CIRCULAR_PROGRESS_TYPE } from "./components/circularProgress";
 export { DROPDOWN_PLACEMENT } from "./components/dropdownMenu";
 export { MULTI_SELECT_SIZE } from "./components/multiSelect";
+export { SLIDER_SIZE } from "./components/slider";
 
 // Types
 export type { IAvatar } from "./components/avatar";
@@ -134,6 +136,7 @@ export type { IPopover } from "./components/popover";
 export type { IAlert } from "./components/alert";
 export type { IStep, IStepper } from "./components/stepper";
 export type { IDatePicker } from "./components/datePicker";
+export { DATE_PICKER_FORMAT } from "./components/datePicker";
 export type {
   ICommandItem,
   ICommandPalette,
@@ -150,3 +153,4 @@ export type { IDropdownMenuItem, IDropdownMenu } from "./components/dropdownMenu
 export type { IContextMenu } from "./components/contextMenu";
 export type { IMultiSelectOption, IMultiSelect } from "./components/multiSelect";
 export type { ISearchInput } from "./components/searchInput";
+export type { ISlider } from "./components/slider";

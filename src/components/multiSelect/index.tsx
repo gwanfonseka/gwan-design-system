@@ -200,7 +200,7 @@ const MultiSelect: FC<IMultiSelect> = ({
                 onKeyDown={handleSearchKeyDown}
                 placeholder="Search…"
                 aria-label="Search options"
-                className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-fg"
+                className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40"
               />
               {search && (
                 <span

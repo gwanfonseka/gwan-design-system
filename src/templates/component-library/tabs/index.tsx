@@ -92,14 +92,12 @@ const Example = () => {
     </div>
   );
 
-  const [demoKey, setDemoKey] = useState("overview");
-  const [demoKey2, setDemoKey2] = useState("overview");
+  const [staticKey, setStaticKey] = useState("overview");
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-6">
-        <Tabs items={tabItems} activeKey={demoKey} onChange={setDemoKey} variant={TABS_VARIANT.UNDERLINE} />
-        <Tabs items={tabItems} activeKey={demoKey2} onChange={setDemoKey2} variant={TABS_VARIANT.PILL} />
+      <div className="py-4">
+        <Tabs items={tabItems} activeKey={staticKey} onChange={setStaticKey} variant={TABS_VARIANT.UNDERLINE} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

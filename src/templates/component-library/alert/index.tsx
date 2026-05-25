@@ -66,11 +66,8 @@ const Example = () => (
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3">
-        <Alert type={ALERT_TYPE.INFO} title="Information" message="Here is something you should know." />
-        <Alert type={ALERT_TYPE.SUCCESS} title="Success" message="Your changes have been saved successfully." dismissible />
-        <Alert type={ALERT_TYPE.WARNING} title="Warning" message="This action may have unintended consequences." />
-        <Alert type={ALERT_TYPE.DANGER} title="Error" message="Failed to process the request. Please try again." dismissible />
+      <div className="flex justify-center py-4 max-w-lg mx-auto w-full">
+        <Alert type={ALERT_TYPE.INFO} title="Information" message="Here is something you should know." className="w-full" />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

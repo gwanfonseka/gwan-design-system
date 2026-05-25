@@ -89,33 +89,13 @@ const SearchInputTemplate = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col sm:flex-row gap-6 justify-center items-end py-4">
+      <div className="flex justify-center py-4">
         <SearchInput
-          label="Default"
+          label="Search"
           value=""
           onChange={() => {}}
           placeholder="Search…"
-          className="w-64"
-        />
-        <SearchInput
-          label="With value"
-          value="react components"
-          onChange={() => {}}
-          className="w-64"
-        />
-        <SearchInput
-          label="Loading"
-          value="gwan design"
-          onChange={() => {}}
-          isLoading
-          className="w-64"
-        />
-        <SearchInput
-          label="Disabled"
-          value=""
-          onChange={() => {}}
-          disabled
-          className="w-64"
+          className="w-72"
         />
       </div>
 

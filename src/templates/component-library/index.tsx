@@ -52,6 +52,7 @@ import SpinnerTemplate from "./spinner";
 import StatCardTemplate from "./statCard";
 import AvatarGroupTemplate from "./avatarGroup";
 import CircularProgressTemplate from "./circularProgress";
+import SliderTemplate from "./slider";
 
 const menuGroups = [
   {
@@ -81,6 +82,7 @@ const menuGroups = [
       { name: "Color Picker", template: <ColorPickerTemplate /> },
       { name: "Multi Select", template: <MultiSelectTemplate /> },
       { name: "Search Input", template: <SearchInputTemplate /> },
+      { name: "Slider", template: <SliderTemplate /> },
     ],
   },
   {

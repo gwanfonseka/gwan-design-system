@@ -81,14 +81,9 @@ const SnackBars = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* All variants display */}
-      <div className="flex items-center justify-center">
-        <div className="w-full sm:w-3/4 md:w-1/2 flex flex-col gap-4">
-          <Snackbar message="Default notification" icon={<CircleSVG />} />
-          <Snackbar message="Informational message" type={SNACK_BAR_TYPE.INFO} icon={<CircleSVG />} />
-          <Snackbar message="Action completed successfully" type={SNACK_BAR_TYPE.SUCCESS} icon={<CircleSVG />} />
-          <Snackbar message="Proceed with caution" type={SNACK_BAR_TYPE.WARNING} icon={<CircleSVG />} />
-          <Snackbar message="Something went wrong" type={SNACK_BAR_TYPE.DANGER} icon={<CircleSVG />} />
+      <div className="flex justify-center py-4">
+        <div className="w-full max-w-sm">
+          <Snackbar message="Your changes have been saved." type={SNACK_BAR_TYPE.SUCCESS} icon={<CircleSVG />} />
         </div>
       </div>
 

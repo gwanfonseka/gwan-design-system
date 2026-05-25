@@ -58,11 +58,8 @@ const StatCardTemplate = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row flex-wrap justify-center gap-4">
-        <StatCard label="Total Revenue" value="$48,295" trend={STAT_TREND.UP} trendLabel="12% vs last month" icon={<MoneySVG />} className="w-52" />
-        <StatCard label="New Orders" value="1,284" trend={STAT_TREND.DOWN} trendLabel="3% vs last month" icon={<OrdersSVG />} className="w-52" />
-        <StatCard label="Active Users" value="9,430" trend={STAT_TREND.NEUTRAL} trendLabel="No change" icon={<UsersSVG />} className="w-52" />
-        <StatCard label="Conversion" value="3.6%" icon={<ChartSVG />} className="w-52" />
+      <div className="flex justify-center py-4">
+        <StatCard label="Total Revenue" value="$48,295" trend={STAT_TREND.UP} trendLabel="12% vs last month" icon={<ChartSVG />} className="w-64" />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

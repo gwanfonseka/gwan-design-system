@@ -59,7 +59,7 @@ const TextArea: FC<ITextArea> = ({
             onClear ? "pr-8" : "pr-3"
           } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"} ${
             disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
-          } text-sm w-full placeholder:text-muted-fg transition-colors duration-200 resize-none ${inputClassName}`}
+          } text-sm w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200 resize-none ${inputClassName}`}
           required={required}
           aria-invalid={isError || undefined}
           aria-describedby={isError && errorMessage ? errorId : undefined}
