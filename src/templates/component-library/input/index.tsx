@@ -27,18 +27,12 @@ const Inputs = () => {
   ];
 
   const inputTypes = [
-    { value: "text", label: "text" },
-    { value: "number", label: "number" },
+    { value: "text",     label: "text"     },
+    { value: "number",   label: "number"   },
+    { value: "email",    label: "email"    },
+    { value: "tel",      label: "tel"      },
+    { value: "url",      label: "url"      },
     { value: "password", label: "password" },
-    { value: "email", label: "email" },
-    { value: "tel", label: "tel" },
-    { value: "url", label: "url" },
-    { value: "search", label: "search" },
-    { value: "date", label: "date" },
-    { value: "week", label: "week" },
-    { value: "month", label: "month" },
-    { value: "time", label: "time" },
-    { value: "file", label: "file" },
   ];
 
   const sizeOptions = Object.values(FORM_ELEMENT_SIZE).map((v) => ({ value: v, label: v }));

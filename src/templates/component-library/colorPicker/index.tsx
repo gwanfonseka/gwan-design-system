@@ -64,18 +64,9 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row flex-wrap gap-6 items-end justify-center">
-        <ColorPicker value={color1} onChange={setColor1} label="Primary" />
-        <ColorPicker value={color2} onChange={setColor2} label="Secondary" />
-        <ColorPicker value={color3} onChange={setColor3} label="Accent" />
-        <ColorPicker value="#3b82f6" onChange={() => {}} label="Disabled" disabled />
+      <div className="flex justify-center py-4">
+        <ColorPicker value={color1} onChange={setColor1} label="Pick a colour" />
       </div>
-      <div
-        className="w-full h-16 rounded-lg border border-border transition-colors duration-200"
-        style={{
-          background: `linear-gradient(135deg, ${color1}, ${color2}, ${color3})`,
-        }}
-      />
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />
     </div>

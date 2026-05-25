@@ -25,6 +25,9 @@ export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
   edges?: FORM_ELEMENT_EDGE_STYLE;
   size?: FORM_ELEMENT_SIZE;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 const Input: FC<IInput> = ({
@@ -41,6 +44,9 @@ const Input: FC<IInput> = ({
   errorMessage,
   edges = FORM_ELEMENT_EDGE_STYLE.ROUNDED,
   size = FORM_ELEMENT_SIZE.MD,
+  min,
+  max,
+  step,
   id: idProp,
   onKeyDown,
   onPaste,
@@ -54,8 +60,10 @@ const Input: FC<IInput> = ({
   const prClass   = onClear ? (isSM ? "pr-7" : "pr-8") : (isSM ? "pr-2.5" : "pr-3");
   const clearSize = isSM ? "size-2.5" : "size-3";
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
-      e.preventDefault();
+    if (type === "number") {
+      const blocked = ["e", "E", "+"];
+      if (min !== undefined && min >= 0) blocked.push("-");
+      if (blocked.includes(e.key)) e.preventDefault();
     }
     onKeyDown?.(e);
   };
@@ -63,9 +71,8 @@ const Input: FC<IInput> = ({
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     if (type === "number") {
       const paste = e.clipboardData.getData("text");
-      if (/[eE+\-]/.test(paste)) {
-        e.preventDefault();
-      }
+      const pattern = min !== undefined && min >= 0 ? /[eE+\-]/ : /[eE+]/;
+      if (pattern.test(paste)) e.preventDefault();
     }
     onPaste?.(e);
   };
@@ -92,14 +99,21 @@ const Input: FC<IInput> = ({
           className={`bg-surface text-foreground border ${
             isError
               ? "border-danger focus:border-danger"
-              : "border-border hover:border-primary-500 focus:border-primary-500"
+              : "border-border hover:border-primary-default focus:border-primary-default"
           } outline-none ${sizeClass} ${plClass} ${prClass} ${
             edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"
           } ${
             disabled ? "cursor-not-allowed opacity-50" : "cursor-text"
-          } w-full placeholder:text-muted-fg transition-colors duration-200 ${inputClassName}`}
+          } w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200 ${
+            type === "number"
+              ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              : ""
+          } ${inputClassName}`}
           required={required}
           type={type}
+          min={min}
+          max={max}
+          step={step}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           {...rest}

@@ -47,10 +47,8 @@ const Example = () => (
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4 p-4 border border-border rounded-lg w-full max-w-lg mx-auto">
+      <div className="flex justify-center py-4">
         <Breadcrumb items={demoItems} separator={BREADCRUMB_SEPARATOR.CHEVRON} />
-        <Breadcrumb items={demoItems} separator={BREADCRUMB_SEPARATOR.SLASH} />
-        <Breadcrumb items={demoItems} separator={BREADCRUMB_SEPARATOR.DOT} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

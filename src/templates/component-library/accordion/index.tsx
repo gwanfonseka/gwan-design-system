@@ -106,9 +106,8 @@ const Example = () => (
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Accordion items={faqItems.slice(0, 3)} defaultOpenKey="q1" variant={ACCORDION_VARIANT.DEFAULT} />
-        <Accordion items={faqItems.slice(0, 3)} defaultOpenKey="q1" variant={ACCORDION_VARIANT.BORDERED} />
+      <div className="flex justify-center py-4 max-w-lg mx-auto w-full">
+        <Accordion items={faqItems.slice(0, 3)} defaultOpenKey="q1" variant={ACCORDION_VARIANT.DEFAULT} className="w-full" />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

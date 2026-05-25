@@ -78,32 +78,10 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Static examples */}
-      <div className="flex flex-row flex-wrap justify-center gap-4 items-start">
-        <Card className="w-52">
-          <p className="text-sm font-medium text-foreground">Default</p>
-          <p className="text-xs text-muted-fg mt-1">Standard bordered surface.</p>
-        </Card>
-        <Card variant={CARD_VARIANT.BORDERED} className="w-52">
-          <p className="text-sm font-medium text-foreground">Bordered</p>
-          <p className="text-xs text-muted-fg mt-1">Thicker border emphasis.</p>
-        </Card>
-        <Card variant={CARD_VARIANT.ELEVATED} className="w-52">
-          <p className="text-sm font-medium text-foreground">Elevated</p>
-          <p className="text-xs text-muted-fg mt-1">Shadow for depth.</p>
-        </Card>
-        <Card variant={CARD_VARIANT.FLAT} className="w-52">
-          <p className="text-sm font-medium text-foreground">Flat</p>
-          <p className="text-xs text-muted-fg mt-1">Subtle background, no border.</p>
-        </Card>
-        <Card
-          variant={CARD_VARIANT.DEFAULT}
-          padding={CARD_PADDING.MD}
-          header={<p className="text-sm font-semibold text-foreground">Header Slot</p>}
-          footer={<p className="text-xs text-muted-fg">Footer Slot</p>}
-          className="w-52"
-        >
-          <p className="text-xs text-muted-fg">With header and footer.</p>
+      <div className="flex justify-center py-4">
+        <Card variant={CARD_VARIANT.DEFAULT} padding={CARD_PADDING.MD} className="w-72">
+          <p className="text-sm font-semibold text-foreground mb-1">Card Title</p>
+          <p className="text-sm text-muted-fg">Card body content goes here.</p>
         </Card>
       </div>
       <Playground template={renderPlayground()} />

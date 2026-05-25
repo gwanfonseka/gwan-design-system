@@ -139,35 +139,14 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Size showcase */}
-      <div className="flex flex-row flex-wrap justify-center gap-6 items-center">
-        {Object.values(AVATAR_SIZE).map((s) => (
-          <Avatar
-            key={s}
-            name="John Doe"
-            email="john.doe@email.com"
-            image={image}
-            variant={AVATAR_VARIANT.IMAGE_ONLY}
-            size={s}
-          />
-        ))}
-      </div>
-
-      {/* Label position showcase */}
-      <div className="flex flex-row flex-wrap justify-center gap-8 items-center">
+      <div className="flex justify-center py-4">
         <Avatar
           name="John Doe"
           email="john.doe@email.com"
           image={image}
           variant={AVATAR_VARIANT.IMAGE_WITH_FULL}
+          size={AVATAR_SIZE.LG}
           labelPosition={AVATAR_LABEL_POSITION.RIGHT}
-        />
-        <Avatar
-          name="John Doe"
-          email="john.doe@email.com"
-          image={image}
-          variant={AVATAR_VARIANT.IMAGE_WITH_FULL}
-          labelPosition={AVATAR_LABEL_POSITION.LEFT}
         />
       </div>
 

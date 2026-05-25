@@ -92,31 +92,13 @@ const MultiSelectTemplate = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col sm:flex-row gap-6 justify-center items-start py-4">
+      <div className="flex justify-center py-4">
         <MultiSelect
-          label="MD — some selected"
+          label="Frameworks"
           options={frameworkOptions}
           value={["react", "next"]}
           onChange={() => {}}
           size={MULTI_SELECT_SIZE.MD}
-          className="w-72"
-        />
-        <MultiSelect
-          label="SM — empty"
-          options={frameworkOptions}
-          value={[]}
-          onChange={() => {}}
-          placeholder="Select frameworks…"
-          size={MULTI_SELECT_SIZE.SM}
-          className="w-72"
-        />
-        <MultiSelect
-          label="Error state"
-          options={frameworkOptions}
-          value={[]}
-          onChange={() => {}}
-          isError
-          errorMessage="This field is required."
           className="w-72"
         />
       </div>

@@ -63,23 +63,20 @@ const Example = () => (
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Card skeleton demo */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {[0, 1].map((i) => (
-          <div key={i} className="p-4 border border-border rounded-lg flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <Skeleton variant={SKELETON_VARIANT.CIRCLE} width={40} />
-              <div className="flex-1">
-                <Skeleton variant={SKELETON_VARIANT.TEXT} width="60%" />
-                <div className="mt-1.5">
-                  <Skeleton variant={SKELETON_VARIANT.TEXT} width="40%" />
-                </div>
+      <div className="flex justify-center py-4">
+        <div className="p-4 border border-border rounded-lg flex flex-col gap-3 w-72">
+          <div className="flex items-center gap-3">
+            <Skeleton variant={SKELETON_VARIANT.CIRCLE} width={40} />
+            <div className="flex-1">
+              <Skeleton variant={SKELETON_VARIANT.TEXT} width="60%" />
+              <div className="mt-1.5">
+                <Skeleton variant={SKELETON_VARIANT.TEXT} width="40%" />
               </div>
             </div>
-            <Skeleton variant={SKELETON_VARIANT.RECT} width="100%" height={100} />
-            <Skeleton variant={SKELETON_VARIANT.TEXT} lines={3} />
           </div>
-        ))}
+          <Skeleton variant={SKELETON_VARIANT.RECT} width="100%" height={100} />
+          <Skeleton variant={SKELETON_VARIANT.TEXT} lines={3} />
+        </div>
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

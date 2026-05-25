@@ -71,20 +71,9 @@ const Callouts = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3">
-        <Callout type={CALLOUT_TYPE.INFO}>
-          This is an informational callout. Use it to highlight notes or
-          context.
-        </Callout>
-        <Callout type={CALLOUT_TYPE.WARNING}>
-          This is a warning callout. Use it to flag potential issues.
-        </Callout>
-        <Callout type={CALLOUT_TYPE.TIP}>
-          This is a tip callout. Use it to share best practices or shortcuts.
-        </Callout>
-        <Callout type={CALLOUT_TYPE.DANGER}>
-          This is a danger callout. Use it to warn about destructive or
-          irreversible actions.
+      <div className="flex justify-center py-4 max-w-lg mx-auto w-full">
+        <Callout type={CALLOUT_TYPE.INFO} className="w-full">
+          This is an informational callout. Use it to highlight notes or context.
         </Callout>
       </div>
       <Playground template={renderPlayground()} />

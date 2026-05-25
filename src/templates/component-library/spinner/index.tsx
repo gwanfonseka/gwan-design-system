@@ -39,25 +39,8 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Static examples — all sizes */}
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-row flex-wrap justify-center items-end gap-6">
-          {Object.values(SPINNER_SIZE).map((s) => (
-            <div key={s} className="flex flex-col items-center gap-2">
-              <Spinner size={s} />
-              <span className="text-xs text-muted-fg">{s}</span>
-            </div>
-          ))}
-        </div>
-        {/* All colors */}
-        <div className="flex flex-row flex-wrap justify-center items-center gap-6">
-          {Object.values(SPINNER_COLOR).map((c) => (
-            <div key={c} className="flex flex-col items-center gap-2">
-              <Spinner color={c} />
-              <span className="text-xs text-muted-fg">{c}</span>
-            </div>
-          ))}
-        </div>
+      <div className="flex justify-center py-4">
+        <Spinner size={SPINNER_SIZE.MD} color={SPINNER_COLOR.DEFAULT} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

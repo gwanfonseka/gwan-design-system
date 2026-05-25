@@ -83,25 +83,10 @@ const Example = () => {
     </div>
   );
 
-  const [demoKey, setDemoKey] = useState("billing");
-  const demoIndex = stepData.findIndex((s) => s.key === demoKey);
-
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-6">
-        <Stepper steps={stepData} activeKey={demoKey} />
-        <div className="flex justify-center gap-3">
-          <Button label="← Back" onClick={() => setDemoKey(stepData[Math.max(0, demoIndex - 1)].key)} disabled={demoIndex === 0} />
-          <Button label="Next →" onClick={() => setDemoKey(stepData[Math.min(stepData.length - 1, demoIndex + 1)].key)} disabled={demoIndex === stepData.length - 1} />
-        </div>
-        <Stepper
-          steps={[
-            { key: "s1", title: "Done", description: "Completed", status: STEP_STATUS.COMPLETE },
-            { key: "s2", title: "Active", description: "In progress", status: STEP_STATUS.ACTIVE },
-            { key: "s3", title: "Error", description: "Needs attention", status: STEP_STATUS.ERROR },
-            { key: "s4", title: "Pending", description: "Upcoming", status: STEP_STATUS.PENDING },
-          ]}
-        />
+      <div className="flex justify-center py-4 max-w-2xl mx-auto w-full">
+        <Stepper steps={stepData} activeKey="profile" className="w-full" />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />
