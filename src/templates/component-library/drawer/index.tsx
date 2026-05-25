@@ -63,21 +63,16 @@ const Example = () => {
     </div>
   );
 
-  const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
+  const [openStatic, setOpenStatic] = useState(false);
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row flex-wrap justify-center gap-4">
-        <Button label="Right Drawer" onClick={() => setOpen2(true)} />
-        <Button label="Bottom Drawer" onClick={() => setOpen3(true)} />
+      <div className="flex justify-center py-4">
+        <Button label="Open Drawer" onClick={() => setOpenStatic(true)} />
       </div>
 
-      <Drawer open={open2} onClose={() => setOpen2(false)} title="Right Panel" placement={DRAWER_PLACEMENT.RIGHT}>
+      <Drawer open={openStatic} onClose={() => setOpenStatic(false)} title="Right Panel" placement={DRAWER_PLACEMENT.RIGHT}>
         <p className="text-sm text-muted-fg">Right-side drawer content. Great for detail panels and settings.</p>
-      </Drawer>
-      <Drawer open={open3} onClose={() => setOpen3(false)} title="Bottom Sheet" placement={DRAWER_PLACEMENT.BOTTOM} size={DRAWER_SIZE.SMALL}>
-        <p className="text-sm text-muted-fg">Bottom sheet — common on mobile for action menus and filters.</p>
       </Drawer>
 
       <Playground template={renderPlayground()} />

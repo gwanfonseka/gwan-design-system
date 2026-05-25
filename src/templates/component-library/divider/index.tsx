@@ -65,32 +65,8 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Static examples */}
-      <div className="flex flex-col gap-5 px-4 max-w-md mx-auto w-full">
-        <div>
-          <p className="text-xs text-muted-fg mb-2">Solid</p>
-          <Divider />
-        </div>
-        <div>
-          <p className="text-xs text-muted-fg mb-2">Dashed</p>
-          <Divider variant={DIVIDER_VARIANT.DASHED} />
-        </div>
-        <div>
-          <p className="text-xs text-muted-fg mb-2">Dotted</p>
-          <Divider variant={DIVIDER_VARIANT.DOTTED} />
-        </div>
-        <div>
-          <p className="text-xs text-muted-fg mb-2">With label</p>
-          <Divider label="or continue with" />
-        </div>
-        <div>
-          <p className="text-xs text-muted-fg mb-2">Vertical</p>
-          <div className="flex items-center h-10 gap-4">
-            <span className="text-sm text-muted-fg">Left</span>
-            <Divider orientation={DIVIDER_ORIENTATION.VERTICAL} />
-            <span className="text-sm text-muted-fg">Right</span>
-          </div>
-        </div>
+      <div className="px-4 max-w-md mx-auto w-full py-4">
+        <Divider />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

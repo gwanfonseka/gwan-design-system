@@ -90,18 +90,8 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col sm:flex-row  gap-8 items-center justify-center">
-        <Chip
-          label="This is a chip"
-          edges={CHIP_EDGE_STYLE.PILL}
-          onClear={() => {}}
-        />
-        <Chip label="This is a chip" onClear={() => {}} />
-        <Chip
-          label="This is a chip"
-          edges={CHIP_EDGE_STYLE.SQUARED}
-          onClear={() => {}}
-        />
+      <div className="flex justify-center py-4">
+        <Chip label="Design System" onClear={() => {}} />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

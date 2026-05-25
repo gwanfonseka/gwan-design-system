@@ -195,7 +195,7 @@ export default function MyPage() {
 
 ## Components
 
-**49+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
+**50+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
 
 > **`C` = Client Component** (uses React hooks — add `"use client"` to the importing file if needed)  
 > **`S` = Server Component** (pure render, no hooks — safe to use in React Server Components)
@@ -222,6 +222,7 @@ export default function MyPage() {
 | `ColorPicker`    | `C`  | Swatch + hex input with preset palette                     |
 | `MultiSelect`    | `C`  | Checkbox multi-option dropdown with chips, search, and keyboard nav |
 | `SearchInput`    | `C`  | Search field with debounced callback, clear button, and loading state |
+| `Slider`         | `C`  | Single-thumb and dual-thumb range slider with size variants and tooltip |
 
 ### Data Display
 
@@ -292,7 +293,7 @@ export default function MyPage() {
 
 ## Icons
 
-**191 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
+**201 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";

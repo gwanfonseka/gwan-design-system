@@ -78,7 +78,7 @@ const SearchInput: FC<ISearchInput> = ({
           placeholder={placeholder}
           disabled={disabled}
           aria-busy={isLoading || undefined}
-          className={`w-full bg-surface text-foreground border border-border rounded ${plClass} ${prClass} ${sizeClass} outline-none placeholder:text-muted-fg transition-colors duration-200 hover:border-primary-default focus:border-primary-default ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+          className={`w-full bg-surface text-foreground border border-border rounded ${plClass} ${prClass} ${sizeClass} outline-none placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200 hover:border-primary-default focus:border-primary-default ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         />
 
         {isLoading ? (

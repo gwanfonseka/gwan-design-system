@@ -105,38 +105,8 @@ const Example = () => (
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
-        <ProgressBar
-          value={90}
-          type={PROGRESS_BAR_TYPE.SUCCESS}
-          label="Completed"
-          showValue
-        />
-        <ProgressBar
-          value={65}
-          type={PROGRESS_BAR_TYPE.DEFAULT}
-          label="In progress"
-          showValue
-        />
-        <ProgressBar
-          value={30}
-          type={PROGRESS_BAR_TYPE.WARNING}
-          label="Pending"
-          showValue
-        />
-        <ProgressBar
-          value={15}
-          type={PROGRESS_BAR_TYPE.DANGER}
-          label="Critical"
-          showValue
-        />
-        <ProgressBar
-          value={50}
-          striped
-          size={PROGRESS_BAR_SIZE.LARGE}
-          label="Striped"
-          showValue
-        />
+      <div className="w-full max-w-lg mx-auto py-4">
+        <ProgressBar value={65} type={PROGRESS_BAR_TYPE.DEFAULT} label="Upload progress" showValue />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />

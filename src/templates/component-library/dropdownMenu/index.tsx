@@ -105,26 +105,19 @@ const DropdownMenuTemplate = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Static examples — four placements */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center py-4">
-        {Object.values(DROPDOWN_PLACEMENT).map((p) => (
-          <div key={p} className="flex flex-col items-center gap-2">
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-fg">
-              {p.replace("_", " ")}
-            </p>
-            <DropdownMenu
-              trigger={
-                <Button
-                  variant={BUTTON_VARIANTS.TERTIARY}
-                  label="Options"
-                  onClick={() => {}}
-                />
-              }
-              items={baseItems}
-              placement={p}
+      <div className="flex justify-center py-8">
+        <DropdownMenu
+          trigger={
+            <Button
+              variant={BUTTON_VARIANTS.TERTIARY}
+              label="Options"
+              onClick={() => {}}
+              rightIcon={<ChevDownSVG />}
             />
-          </div>
-        ))}
+          }
+          items={baseItems}
+          placement={DROPDOWN_PLACEMENT.BOTTOM_LEFT}
+        />
       </div>
 
       <Playground template={renderPlayground()} />

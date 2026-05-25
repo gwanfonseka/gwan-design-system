@@ -259,6 +259,12 @@ input[type="number"] {
   -webkit-text-fill-color: var(--foreground);
 }
 
+/* Restore muted placeholder colour — overrides the inherited -webkit-text-fill-color above */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  -webkit-text-fill-color: color-mix(in srgb, var(--muted-fg) 45%, transparent);
+}
+
 .dark input:-webkit-autofill,
 .dark input:-webkit-autofill:hover,
 .dark input:-webkit-autofill:focus,

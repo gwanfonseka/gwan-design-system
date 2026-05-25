@@ -112,15 +112,8 @@ const Example = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-row flex-wrap justify-center gap-4 items-center">
-        <Badge type={BADGE_TYPE.DEFAULT} label="Default" />
-        <Badge type={BADGE_TYPE.SUCCESS} label="Success" />
-        <Badge type={BADGE_TYPE.INFO} label="Info" />
-        <Badge type={BADGE_TYPE.WARNING} label="Warning" />
-        <Badge type={BADGE_TYPE.DANGER} label="Danger" />
-        <Badge type={BADGE_TYPE.SUCCESS} dot label="Online" />
-        <Badge type={BADGE_TYPE.DANGER} dot />
-        <Badge type={BADGE_TYPE.INFO} label="v1.0" size={BADGE_SIZE.SMALL} />
+      <div className="flex justify-center py-4">
+        <Badge type={BADGE_TYPE.SUCCESS} label="Active" />
       </div>
       <Playground template={renderPlayground()} />
       <CodeSnippet code={codeExample} />
