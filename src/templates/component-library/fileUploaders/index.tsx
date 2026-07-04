@@ -1,63 +1,102 @@
+"use client";
+
 import FileUploader from "@/components/fileUploader";
 import CodeSnippet from "@/components/codeSnippet";
 import Playground from "@/components/playground";
 import Input from "@/components/input";
+import Checkbox from "@/components/checkbox";
+import Switch from "@/components/switch";
 import { useState, ChangeEvent } from "react";
 
 const codeExample = `import { FileUploader } from "gwan-design-system";
 
-const Example = () => {
+// ── Basic (single file, backward-compatible) ──────────────────
+const BasicExample = () => {
   const [file, setFile] = useState<File | null>(null);
 
   return (
     <FileUploader
-      title="Upload your documents here"
-      subTitle1="Please make sure the image is in better quality"
-      subTitle2="Max file size 2 MB and we accept .jpg .jpeg .png files"
+      title="Upload your document"
+      subTitle1="or click to browse"
+      subTitle2="Accepts .jpg .jpeg .png — max 2 MB"
       handleAttachment={(file) => setFile(file)}
+      accept=".jpg,.jpeg,.png"
+      maxSize={2 * 1024 * 1024}
+    />
+  );
+};
+
+// ── Multi-file with size limit ────────────────────────────────
+const MultiFileExample = () => {
+  const [files, setFiles] = useState<File[]>([]);
+
+  return (
+    <FileUploader
+      title="Drag & drop files here"
+      subTitle1="or click to browse"
+      handleAttachment={(file) => console.log("latest:", file.name)}
+      onFilesChange={(all) => setFiles(all)}
+      accept=".pdf,.docx,.jpg,.png"
+      multiple
+      maxFiles={5}
+      maxSize={5 * 1024 * 1024}
     />
   );
 };`;
 
 const FileUploaders = () => {
-  const [, setFile] = useState<File | null>(null);
-  const [title, setTitle] = useState("Upload your documents here");
-  const [subTitle1, setSubTitle1] = useState("Please make sure the image is in better quality");
-  const [subTitle2, setSubTitle2] = useState("Max file size 2 MB and we accept .jpg .jpeg .png files");
+  const [title, setTitle]         = useState("Drag & drop files here");
+  const [subTitle1, setSubTitle1] = useState("or click to browse");
+  const [subTitle2, setSubTitle2] = useState("");
+  const [multiple, setMultiple]   = useState(false);
+  const [disabled, setDisabled]   = useState(false);
+  const [sizeLimit, setSizeLimit] = useState(false);
 
   const renderPlayground = () => (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4 items-center">
-        <div className="w-full max-w-150">
+      {/* Preview */}
+      <div className="flex flex-col items-center">
+        <div className="w-full max-w-lg">
           <FileUploader
             title={title}
             subTitle1={subTitle1}
-            subTitle2={subTitle2}
-            handleAttachment={setFile}
+            subTitle2={subTitle2 || undefined}
+            handleAttachment={() => {}}
+            accept=".jpg,.jpeg,.png,.pdf,.docx"
+            multiple={multiple}
+            disabled={disabled}
+            maxSize={sizeLimit ? 1 * 1024 * 1024 : undefined}
+            maxFiles={multiple ? 4 : undefined}
           />
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 items-center">
+      {/* Controls */}
+      <div className="flex flex-col gap-6 items-center">
         <div className="flex flex-row justify-center gap-4 flex-wrap">
           <Input
             label="Title"
             value={title}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-            className="w-full sm:w-72"
+            className="w-full sm:w-64"
           />
           <Input
             label="Subtitle 1"
             value={subTitle1}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setSubTitle1(e.target.value)}
-            className="w-full sm:w-72"
+            className="w-full sm:w-64"
           />
           <Input
             label="Subtitle 2"
             value={subTitle2}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setSubTitle2(e.target.value)}
-            className="w-full sm:w-72"
+            className="w-full sm:w-64"
           />
+        </div>
+        <div className="flex flex-row flex-wrap justify-center gap-6">
+          <Switch label="Multiple files" checked={multiple} onChange={setMultiple} />
+          <Checkbox label="1 MB size limit" checked={sizeLimit} onChange={setSizeLimit} />
+          <Checkbox label="Disabled" checked={disabled} onChange={setDisabled} />
         </div>
       </div>
     </div>
