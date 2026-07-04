@@ -129,10 +129,12 @@ const DatePicker: FC<IDatePicker> = ({
   const iconSize  = isSM ? "w-3.5 h-3.5" : "w-4 h-4";
   const minWidth  = isSM ? "min-w-[160px]" : "min-w-[200px]";
 
-  const [open, setOpen]         = useState(false);
-  const [viewDate, setViewDate] = useState(value ?? new Date());
-  const [hours, setHours]       = useState(() => value ? value.getHours()   : new Date().getHours());
-  const [minutes, setMinutes]   = useState(() => value ? value.getMinutes() : new Date().getMinutes());
+  const [open, setOpen]               = useState(false);
+  const [viewDate, setViewDate]       = useState(value ?? new Date());
+  const [hours, setHours]             = useState(() => value ? value.getHours()   : new Date().getHours());
+  const [minutes, setMinutes]         = useState(() => value ? value.getMinutes() : new Date().getMinutes());
+  const [alignRight, setAlignRight]   = useState(false);
+  const [openUpward, setOpenUpward]   = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const use12h = is12hFormat(format);
@@ -145,6 +147,16 @@ const DatePicker: FC<IDatePicker> = ({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  useEffect(() => {
+    if (open && ref.current) {
+      const rect        = ref.current.getBoundingClientRect();
+      const panelWidth  = 256;
+      const panelHeight = 320;
+      setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
+      setOpenUpward(window.innerHeight - rect.bottom < panelHeight && rect.top > panelHeight);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (value) {
@@ -253,7 +265,7 @@ const DatePicker: FC<IDatePicker> = ({
       )}
 
       {open && (
-        <div className="absolute top-full mt-1.5 left-0 z-50 bg-surface border border-border rounded-lg shadow-lg p-3 w-64">
+        <div className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-3 w-64 ${openUpward ? "bottom-full mb-1.5" : "top-full mt-1.5"} ${alignRight ? "right-0" : "left-0"}`}>
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-3">
             <button type="button" onClick={prevMonth} className="p-1 rounded hover:bg-surface-raised text-muted-fg hover:text-foreground transition-colors">

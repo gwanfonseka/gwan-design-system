@@ -53,6 +53,10 @@ import StatCardTemplate from "./statCard";
 import AvatarGroupTemplate from "./avatarGroup";
 import CircularProgressTemplate from "./circularProgress";
 import SliderTemplate from "./slider";
+import OtpInputTemplate from "./otpInput";
+import TimePickerTemplate from "./timePicker";
+import DateRangePickerTemplate from "./dateRangePicker";
+import ListTemplate from "./list";
 
 const menuGroups = [
   {
@@ -77,12 +81,15 @@ const menuGroups = [
       { name: "Checkbox", template: <Checkboxes /> },
       { name: "Radio Button", template: <RadioButtons /> },
       { name: "Switch", template: <Switches /> },
-      { name: "Date Picker", template: <DatePickerTemplate /> },
       { name: "File Uploader", template: <FileUploaders /> },
       { name: "Color Picker", template: <ColorPickerTemplate /> },
       { name: "Multi Select", template: <MultiSelectTemplate /> },
       { name: "Search Input", template: <SearchInputTemplate /> },
       { name: "Slider", template: <SliderTemplate /> },
+      { name: "OTP Input", template: <OtpInputTemplate /> },
+      { name: "Date Picker", template: <DatePickerTemplate /> },
+      { name: "Time Picker", template: <TimePickerTemplate /> },
+      { name: "Date Range Picker", template: <DateRangePickerTemplate /> },
     ],
   },
   {
@@ -115,6 +122,7 @@ const menuGroups = [
       { name: "Accordion", template: <AccordionTemplate /> },
       { name: "Timeline", template: <TimeLines /> },
       { name: "Stepper", template: <StepperTemplate /> },
+      { name: "List", template: <ListTemplate /> },
     ],
   },
   {
