@@ -195,7 +195,7 @@ export default function MyPage() {
 
 ## Components
 
-**50+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
+**53+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
 
 > **`C` = Client Component** (uses React hooks — add `"use client"` to the importing file if needed)  
 > **`S` = Server Component** (pure render, no hooks — safe to use in React Server Components)
@@ -218,11 +218,14 @@ export default function MyPage() {
 | `RadioButton`    | `S`  | Accessible radio input                                     |
 | `Switch`         | `S`  | Toggle switch with sizes and disabled state                |
 | `DatePicker`     | `C`  | Calendar date picker with min/max and keyboard support     |
-| `FileUploader`   | `C`  | Drag-and-drop and click-to-upload file input               |
+| `FileUploader`   | `C`  | Drag-and-drop or click-to-upload — file list with type badges, size, and remove |
 | `ColorPicker`    | `C`  | Swatch + hex input with preset palette                     |
 | `MultiSelect`    | `C`  | Checkbox multi-option dropdown with chips, search, and keyboard nav |
 | `SearchInput`    | `C`  | Search field with debounced callback, clear button, and loading state |
 | `Slider`         | `C`  | Single-thumb and dual-thumb range slider with size variants and tooltip |
+| `OtpInput`       | `C`  | n-digit OTP/PIN input with auto-focus-next, paste, and mask support     |
+| `TimePicker`     | `C`  | Scroll-column time picker with 12h/24h and optional seconds             |
+| `DateRangePicker`| `C`  | Dual-calendar start/end date range picker with hover preview            |
 
 ### Data Display
 
@@ -255,6 +258,7 @@ export default function MyPage() {
 | `Accordion` | `C`  | Collapsible panels with single/multi-open modes                  |
 | `TimeLine`  | `C`  | Vertical timeline / activity log                                 |
 | `Stepper`   | `S`  | Horizontal and vertical step indicators                          |
+| `List`      | `S`  | Styled vertical list with icon/avatar slot, right slot, and variants     |
 
 ### Overlays
 
@@ -293,7 +297,7 @@ export default function MyPage() {
 
 ## Icons
 
-**201 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
+**216 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";
