@@ -624,8 +624,9 @@ describe("remaining exported components", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Switch checked={false} onChange={onChange} label="Alerts" description="Email" size={SWITCH_SIZE.LARGE} />);
-    // Label and description are concatenated into one accessible name.
-    await user.click(screen.getByRole("switch", { name: "AlertsEmail" }));
+    const toggle = screen.getByRole("switch", { name: "Alerts" });
+    expect(toggle).toHaveAccessibleDescription("Email");
+    await user.click(toggle);
     expect(onChange).toHaveBeenCalledWith(true);
     render(<Switch checked disabled onChange={onChange} label="Locked" />);
     expect(screen.getByRole("switch", { name: "Locked" })).toBeDisabled();
