@@ -135,6 +135,7 @@ const DatePicker: FC<IDatePicker> = ({
   const [minutes, setMinutes]         = useState(() => value ? value.getMinutes() : new Date().getMinutes());
   const [alignRight, setAlignRight]   = useState(false);
   const [openUpward, setOpenUpward]   = useState(false);
+  const [prevValue, setPrevValue]     = useState(value);
   const ref = useRef<HTMLDivElement>(null);
 
   const use12h = is12hFormat(format);
@@ -148,17 +149,9 @@ const DatePicker: FC<IDatePicker> = ({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  useEffect(() => {
-    if (open && ref.current) {
-      const rect        = ref.current.getBoundingClientRect();
-      const panelWidth  = 256;
-      const panelHeight = 320;
-      setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
-      setOpenUpward(window.innerHeight - rect.bottom < panelHeight && rect.top > panelHeight);
-    }
-  }, [open]);
-
-  useEffect(() => {
+  // Clearing to null resets the calendar to the clock, same as the previous effect.
+  if (value !== prevValue) {
+    setPrevValue(value);
     if (value) {
       setViewDate(value);
       setHours(value.getHours());
@@ -169,7 +162,23 @@ const DatePicker: FC<IDatePicker> = ({
       setHours(now.getHours());
       setMinutes(now.getMinutes());
     }
-  }, [value]);
+  }
+
+  const updatePlacement = () => {
+    const el = ref.current;
+    if (!el) return;
+    const rect        = el.getBoundingClientRect();
+    const panelWidth  = 256;
+    const panelHeight = 320;
+    setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
+    setOpenUpward(window.innerHeight - rect.bottom < panelHeight && rect.top > panelHeight);
+  };
+
+  const toggleOpen = () => {
+    if (disabled) return;
+    if (!open) updatePlacement();
+    setOpen((v) => !v);
+  };
 
   const year        = viewDate.getFullYear();
   const month       = viewDate.getMonth();
@@ -247,7 +256,7 @@ const DatePicker: FC<IDatePicker> = ({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setOpen((v) => !v)}
+        onClick={toggleOpen}
         className={`flex items-center justify-between gap-2 ${sizeClass} ${minWidth} border rounded transition-colors duration-200 ${
           disabled
             ? "border-border bg-surface-raised text-muted-fg cursor-not-allowed opacity-60"

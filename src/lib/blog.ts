@@ -18,7 +18,7 @@ export interface BlogPost {
   content: string;
 }
 
-export interface BlogPostMeta extends Omit<BlogPost, "content"> {}
+export type BlogPostMeta = Omit<BlogPost, "content">;
 
 function parseFrontmatter(slug: string): BlogPost {
   const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
@@ -50,7 +50,18 @@ export function getAllPosts(): BlogPostMeta[] {
   return files
     .map((file) => {
       const slug = file.replace(/\.mdx$/, "");
-      const { content: _content, ...meta } = parseFrontmatter(slug);
+      const post = parseFrontmatter(slug);
+      const meta: BlogPostMeta = {
+        slug: post.slug,
+        title: post.title,
+        description: post.description,
+        date: post.date,
+        author: post.author,
+        tags: post.tags,
+        coverImage: post.coverImage,
+        readingTime: post.readingTime,
+        draft: post.draft,
+      };
       return meta;
     })
     .filter((post) => !post.draft)

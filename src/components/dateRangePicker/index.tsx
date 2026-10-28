@@ -160,15 +160,17 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   const sizeClass = isSM ? "px-2.5 py-1.5 text-xs" : "px-3 py-2.5 text-sm";
   const iconSize  = isSM ? "w-3.5 h-3.5" : "w-4 h-4";
 
+  const startMonthKey = startDate ? `${startDate.getFullYear()}-${startDate.getMonth()}` : "";
+
   const [open, setOpen]           = useState(false);
   const [leftView, setLeftView]   = useState(() => startDate ?? new Date());
+  const [syncedMonth, setSyncedMonth] = useState(startMonthKey);
   const [hover, setHover]         = useState<Date | null>(null);
   const [alignRight, setAlignRight] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const rightView = new Date(leftView.getFullYear(), leftView.getMonth() + 1, 1);
-  const startMonthKey = startDate ? `${startDate.getFullYear()}-${startDate.getMonth()}` : "";
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -179,24 +181,31 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   }, []);
 
   // Follow a controlled startDate onto the calendars. Day-only edits in the
-  // same month do not reset a month the user has paged to.
-  useEffect(() => {
-    if (!startDate) return;
-    setLeftView(new Date(startDate.getFullYear(), startDate.getMonth(), 1));
-  }, [startMonthKey]);
-
-  // Reposition the panel whenever it opens
-  useEffect(() => {
-    if (open && ref.current) {
-      const rect           = ref.current.getBoundingClientRect();
-      const panelWidth     = 496; // 2 × 220px calendars + gap-6 (24px) + p-4 (32px)
-      const panelHeight    = 320;
-      const spaceRight     = window.innerWidth  - rect.left;
-      const spaceBelow     = window.innerHeight - rect.bottom;
-      setAlignRight(spaceRight < panelWidth  && rect.right > panelWidth);
-      setOpenUpward(spaceBelow < panelHeight && rect.top   > panelHeight);
+  // same month do not reset a month the user has paged to. Null does not move it.
+  if (startMonthKey !== syncedMonth) {
+    setSyncedMonth(startMonthKey);
+    if (startDate) {
+      setLeftView(new Date(startDate.getFullYear(), startDate.getMonth(), 1));
     }
-  }, [open]);
+  }
+
+  const updatePlacement = () => {
+    const el = ref.current;
+    if (!el) return;
+    const rect           = el.getBoundingClientRect();
+    const panelWidth     = 496; // 2 × 220px calendars + gap-6 (24px) + p-4 (32px)
+    const panelHeight    = 320;
+    const spaceRight     = window.innerWidth  - rect.left;
+    const spaceBelow     = window.innerHeight - rect.bottom;
+    setAlignRight(spaceRight < panelWidth  && rect.right > panelWidth);
+    setOpenUpward(spaceBelow < panelHeight && rect.top   > panelHeight);
+  };
+
+  const toggleOpen = () => {
+    if (disabled) return;
+    if (!open) updatePlacement();
+    setOpen((v) => !v);
+  };
 
   const handleSelect = (date: Date) => {
     if (!startDate || (startDate && endDate)) {
@@ -235,7 +244,7 @@ const DateRangePicker: FC<IDateRangePicker> = ({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setOpen((v) => !v)}
+        onClick={toggleOpen}
         className={`flex items-center justify-between gap-2 ${sizeClass} border rounded transition-colors duration-200 ${
           disabled
             ? "border-border bg-surface-raised text-muted-fg cursor-not-allowed opacity-60"
