@@ -72,3 +72,14 @@ Files that differ: index.d.mts, index.d.ts, index.js, index.js.map, index.mjs, i
 - The published library emits no CSS and no style-dictionary / iOS / Android token artifacts. Tokens are the source CSS custom properties. The docs site Tailwind bundle is saved as css-tokens/docs-site.normalized.css.
 - @microsoft/api-extractor and react-docgen-typescript are not installed. The capture writes types/api-report.md from the TypeScript compiler instead (api-extractor style, sorted exports). Props come from the checker plus destructuring defaults.
 
+## Re-run
+
+From a checkout of the scripts (this does not modify library source or package.json):
+
+```bash
+bash qa-baseline/capture.sh --repo /path/to/checkout --out /tmp/qa-capture-upgrade
+bash qa-baseline/compare.sh /path/to/this-baseline /tmp/qa-capture-upgrade /tmp/qa-compare-report
+```
+
+compare.sh exits 0 when every category matches and 1 when any category differs. Behavior-contract differences are separate from audit, lockfile, and toolchain differences.
+
