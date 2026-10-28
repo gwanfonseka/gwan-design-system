@@ -41,25 +41,31 @@ const TimePicker: FC<ITimePicker> = ({
   const isSM = size === FORM_ELEMENT_SIZE.SM;
 
   const parseValue = (v?: string | null) => {
-    if (!v) return { h: 12, m: 0, s: 0, period: "AM" as "AM" | "PM" };
+    const fallback = { h: 12, m: 0, s: 0, period: "AM" as "AM" | "PM", valid: false };
+    if (!v || !v.trim()) return fallback;
     const parts = v.split(":");
-    let h = parseInt(parts[0] ?? "12", 10);
-    const m = parseInt(parts[1] ?? "0", 10);
-    const s = parseInt(parts[2] ?? "0", 10);
+    const read = (raw: string | undefined) => (raw == null ? Number.NaN : parseInt(raw, 10));
+    const h24 = read(parts[0]);
+    const m = parts.length < 2 ? 0 : read(parts[1]);
+    const s = parts.length < 3 ? 0 : read(parts[2]);
+    const inRange = (n: number, min: number, max: number) => Number.isFinite(n) && n >= min && n <= max;
+    if (!inRange(h24, 0, 23) || !inRange(m, 0, 59) || !inRange(s, 0, 59)) return fallback;
+    let h = h24;
     let period: "AM" | "PM" = "AM";
     if (is12h) {
       period = h >= 12 ? "PM" : "AM";
       if (h === 0) h = 12;
       else if (h > 12) h -= 12;
     }
-    return { h, m, s, period };
+    return { h, m, s, period, valid: true };
   };
 
-  const { h: initH, m: initM, s: initS, period: initP } = parseValue(value);
-  const [hours, setHours] = useState(initH);
-  const [minutes, setMinutes] = useState(initM);
-  const [seconds, setSeconds] = useState(initS);
-  const [period, setPeriod] = useState<"AM" | "PM">(initP);
+  const initial = parseValue(value);
+  const [hours, setHours] = useState(initial.h);
+  const [minutes, setMinutes] = useState(initial.m);
+  const [seconds, setSeconds] = useState(initial.s);
+  const [period, setPeriod] = useState<"AM" | "PM">(initial.period);
+  const [valid, setValid] = useState(initial.valid);
   const [open, setOpen]             = useState(false);
   const [alignRight, setAlignRight] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
@@ -85,16 +91,20 @@ const TimePicker: FC<ITimePicker> = ({
   const handlePeriod = (p: "AM" | "PM") => { setPeriod(p); emitChange(hours, minutes, seconds, p); };
 
   const displayHour = is12h ? hours : hours;
-  const displayValue = value
+  const displayValue = value && valid
     ? is12h
       ? `${pad(displayHour)}:${pad(minutes)}${withSeconds ? `:${pad(seconds)}` : ""} ${period}`
       : `${pad(hours)}:${pad(minutes)}${withSeconds ? `:${pad(seconds)}` : ""}`
     : "";
 
   useEffect(() => {
-    const { h, m, s, period: p } = parseValue(value);
-    setHours(h); setMinutes(m); setSeconds(s); setPeriod(p);
-  }, [value]);
+    const next = parseValue(value);
+    setHours(next.h);
+    setMinutes(next.m);
+    setSeconds(next.s);
+    setPeriod(next.period);
+    setValid(next.valid);
+  }, [value, format]);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {

@@ -60,19 +60,18 @@ describe("TimePicker", () => {
     expect(screen.getByRole("button", { name: display })).toBeInTheDocument();
   });
 
-  // SUSPECTED BUG: invalid segments are parsed with parseInt and rendered as NaN / out-of-range numbers.
   it.each([
-    ["abc", TIME_FORMAT.H12, false, "NaN:00 AM"],
-    ["14:xx", TIME_FORMAT.H12, false, "02:NaN PM"],
-    ["::", TIME_FORMAT.H24, false, "NaN:NaN"],
-    ["99:99", TIME_FORMAT.H24, false, "99:99"],
-    ["99:99", TIME_FORMAT.H12, false, "87:99 PM"],
-    ["-3:15", TIME_FORMAT.H12, false, "-3:15 AM"],
-    ["24:00", TIME_FORMAT.H24, false, "24:00"],
-    ["", TIME_FORMAT.H12, false, "Select time"],
-  ])("keeps today's rendering of invalid value %j", (value, format, withSeconds, display) => {
+    ["abc", TIME_FORMAT.H12, false],
+    ["14:xx", TIME_FORMAT.H12, false],
+    ["::", TIME_FORMAT.H24, false],
+    ["99:99", TIME_FORMAT.H24, false],
+    ["99:99", TIME_FORMAT.H12, false],
+    ["-3:15", TIME_FORMAT.H12, false],
+    ["24:00", TIME_FORMAT.H24, false],
+    ["", TIME_FORMAT.H12, false],
+  ])("shows the placeholder for invalid value %j", (value, format, withSeconds) => {
     renderPicker({ value, format, withSeconds });
-    expect(screen.getByRole("button", { name: display })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Select time" })).toBeInTheDocument();
   });
 
   it("updates the displayed time when the controlled value changes", () => {
@@ -87,14 +86,19 @@ describe("TimePicker", () => {
     expect(screen.getByRole("button", { name: "Select time" })).toBeInTheDocument();
   });
 
-  // SUSPECTED BUG: changing `format` does not re-parse `value`, so the label and columns go stale.
-  it("does not re-parse when only the format changes", () => {
+  it("re-parses when only the format changes", async () => {
+    const user = userEvent.setup();
     const onChange = vi.fn();
-    const { rerender } = render(
+    const { rerender, container } = render(
       <TimePicker value="14:30" onChange={onChange} format={TIME_FORMAT.H24} />,
     );
     rerender(<TimePicker value="14:30" onChange={onChange} format={TIME_FORMAT.H12} />);
-    expect(screen.getByRole("button", { name: "14:30 AM" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "02:30 PM" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "02:30 PM" }));
+    const [hours, minutes] = columns(container);
+    expect(activeText(hours)).toEqual(["02"]);
+    expect(activeText(minutes)).toEqual(["30"]);
+    expect(screen.getByRole("button", { name: "PM" }).className).toContain("bg-primary-default");
   });
 
   it("highlights the parsed column values and scrolls them into view on open", async () => {
