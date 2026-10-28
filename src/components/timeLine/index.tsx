@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { CircleSVG } from "../icons";
 
 export enum STEP_STATUS {
@@ -38,25 +38,15 @@ const TimeLine: FC<ITimeLine> = ({
   className = "",
   direction = STEP_DIRECTION.DOWNWARD,
 }: ITimeLine) => {
-  const [steps, setSteps] = useState<ILog[]>([]);
-
-  useEffect(() => {
-    if (logs.length === 0) {
-      setSteps([]);
-      return;
-    }
-    if (!isTerminal(logs[logs.length - 1].status)) {
-      const updatedLogs =
-        direction === STEP_DIRECTION.DOWNWARD
-          ? [...logs, { title: "Pending", status: "Pending" }].reverse()
-          : [...logs, { title: "Pending", status: "Pending" }];
-      setSteps([...updatedLogs]);
-    } else {
-      const updatedLogs =
-        direction === STEP_DIRECTION.DOWNWARD ? [...logs].reverse() : [...logs];
-      setSteps([...updatedLogs]);
-    }
-  }, [logs, direction]);
+  const steps = logs.length === 0
+    ? []
+    : !isTerminal(logs[logs.length - 1].status)
+      ? direction === STEP_DIRECTION.DOWNWARD
+        ? [...logs, { title: "Pending", status: "Pending" }].reverse()
+        : [...logs, { title: "Pending", status: "Pending" }]
+      : direction === STEP_DIRECTION.DOWNWARD
+        ? [...logs].reverse()
+        : [...logs];
 
   const getIcon = (status?: string) => {
     switch (canonicalStatus(status)) {

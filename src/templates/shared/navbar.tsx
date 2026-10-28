@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTheme } from "next-themes";
+import { useIsClient } from "@/lib/useIsClient";
 
 const ThemeToggleIcon = () => {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const mounted = useIsClient();
   if (!mounted) return <div className="w-8 h-8 rounded-sm bg-border animate-pulse" />;
   const isDark = theme === "dark";
   return (

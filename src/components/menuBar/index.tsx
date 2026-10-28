@@ -94,7 +94,8 @@ const MenuBar: FC<IMenuBar> = ({
   onNavigate,
   rightSlot,
 }) => {
-  const [activeItem, setActiveItem] = useState<string>("");
+  const [activeItem, setActiveItem] = useState(() => menuItems.find((i) => i.isActive)?.title ?? "");
+  const [prevMenuItems, setPrevMenuItems] = useState(menuItems);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [rovingId, setRovingId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -103,14 +104,6 @@ const MenuBar: FC<IMenuBar> = ({
   const navRef = useRef<HTMLDivElement>(null);
   const itemsContainerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Reset item refs when menu changes
-  itemRefs.current = itemRefs.current.slice(0, menuItems.length);
-
-  useEffect(() => {
-    const active = menuItems.find((i) => i.isActive);
-    setActiveItem(active?.title ?? "");
-  }, [menuItems]);
 
   // Click-outside closes all dropdowns
   useEffect(() => {
@@ -128,6 +121,9 @@ const MenuBar: FC<IMenuBar> = ({
     const calculate = () => {
       const container = itemsContainerRef.current;
       if (!container) return;
+
+      // Drop refs for items that unmounted. Done here, not during render.
+      itemRefs.current = itemRefs.current.slice(0, menuItems.length);
 
       const available = container.offsetWidth;
       const items = itemRefs.current;
@@ -200,19 +196,24 @@ const MenuBar: FC<IMenuBar> = ({
     .filter((i) => !i.isDivider);
   const hasOverflow = overflowItems.length > 0;
 
-  useEffect(() => {
+  // Clicks override the highlight until the parent passes a new menuItems array.
+  if (menuItems !== prevMenuItems) {
+    setPrevMenuItems(menuItems);
+    setActiveItem(menuItems.find((i) => i.isActive)?.title ?? "");
+  }
+
+  // Keep roving tabindex on a visible item. Arrows update rovingId directly;
+  // this only repairs it when the menu or the overflow set changes.
+  const rovingTitles = menuItems
+    .slice(0, visibleCount)
+    .filter((item) => !item.isDivider)
+    .map((item) => item.title);
+  if (hasOverflow) rovingTitles.push("__more__");
+  if (!rovingId || !rovingTitles.includes(rovingId)) {
     const active = menuItems.find((item) => item.isActive && !item.isDivider);
-    setRovingId((current) => {
-      const titles = menuItems
-        .slice(0, visibleCount)
-        .filter((item) => !item.isDivider)
-        .map((item) => item.title);
-      if (hasOverflow) titles.push("__more__");
-      if (current && titles.includes(current)) return current;
-      if (active && titles.includes(active.title)) return active.title;
-      return titles[0] ?? "";
-    });
-  }, [menuItems, visibleCount, hasOverflow]);
+    const next = active && rovingTitles.includes(active.title) ? active.title : (rovingTitles[0] ?? "");
+    if (next !== rovingId) setRovingId(next);
+  }
 
   const topLevelButtons = () => {
     const container = itemsContainerRef.current;
