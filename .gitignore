@@ -20,6 +20,9 @@
 # production
 /build
 
+# tsup library output (`npm run build:lib`). Rebuilt by the prepack/prepare scripts.
+/dist
+
 # misc
 .DS_Store
 *.pem
