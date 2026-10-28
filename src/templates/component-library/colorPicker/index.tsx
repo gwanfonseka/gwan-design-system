@@ -9,8 +9,6 @@ const sizeOptions = Object.values(FORM_ELEMENT_SIZE).map((v) => ({ value: v, lab
 
 const ColorPickerTemplate = () => {
   const [color1, setColor1] = useState("#3b82f6");
-  const [color2, setColor2] = useState("#22c55e");
-  const [color3, setColor3] = useState("#ec4899");
   const [size, setSize] = useState<FORM_ELEMENT_SIZE>(FORM_ELEMENT_SIZE.MD);
 
   const codeExample = `import { ColorPicker, FORM_ELEMENT_SIZE } from "gwan-design-system";

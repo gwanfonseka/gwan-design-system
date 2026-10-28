@@ -1,23 +1,9 @@
-import Button from "@/components/button";
 import Chip, { CHIP_EDGE_STYLE, CHIP_VARIANT } from "@/components/chip";
 import CodeSnippet from "@/components/codeSnippet";
 import Input from "@/components/input";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
 import { ChangeEvent, useState } from "react";
-
-const chipsArray = [
-  { label: "Chip 1" },
-  { label: "Chip 2" },
-  { label: "Chip 3" },
-  { label: "Chip 4" },
-  { label: "Chip 5" },
-  { label: "Chip 6" },
-  { label: "Chip 7" },
-  { label: "Chip 8" },
-  { label: "Chip 9" },
-  { label: "Chip 10" },
-];
 
 const Chips = () => {
   const [label, setLabel] = useState<string>("Label");
