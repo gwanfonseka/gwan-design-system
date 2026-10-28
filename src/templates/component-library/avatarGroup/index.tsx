@@ -4,7 +4,6 @@ import { useState } from "react";
 import CodeSnippet from "@/components/codeSnippet";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
-import Input from "@/components/input";
 import AvatarGroup from "@/components/avatarGroup";
 import { AVATAR_SIZE } from "@/components/avatar";
 import { TOOLTIP_POSITION } from "@/components/tooltip";

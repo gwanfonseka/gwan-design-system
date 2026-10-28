@@ -71,7 +71,7 @@ const SelectDropdowns = () => {
   const [isRequired, setIsRequired] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("This is an error message");
+  const [errorMessage] = useState("This is an error message");
   const [edges, setEdges] = useState<string>(FORM_ELEMENT_EDGE_STYLE.ROUNDED);
   const [size, setSize] = useState<FORM_ELEMENT_SIZE>(FORM_ELEMENT_SIZE.MD);
   const [searchable, setSearchable] = useState(false);
