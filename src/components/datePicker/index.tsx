@@ -163,6 +163,11 @@ const DatePicker: FC<IDatePicker> = ({
       setViewDate(value);
       setHours(value.getHours());
       setMinutes(value.getMinutes());
+    } else {
+      const now = new Date();
+      setViewDate(now);
+      setHours(now.getHours());
+      setMinutes(now.getMinutes());
     }
   }, [value]);
 
@@ -365,7 +370,7 @@ const DatePicker: FC<IDatePicker> = ({
               {value && (
                 <button
                   type="button"
-                  onClick={() => onChange(null)}
+                  onClick={() => { onChange(null); setOpen(false); }}
                   className="w-full text-xs text-muted-fg hover:text-foreground text-center py-1 hover:bg-surface-raised rounded transition-colors mb-1"
                 >
                   Clear selection
