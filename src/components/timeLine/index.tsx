@@ -26,6 +26,13 @@ export interface ITimeLine {
   direction?: STEP_DIRECTION;
 }
 
+const canonicalStatus = (status?: string) => status?.trim().toLowerCase() ?? "";
+
+const isTerminal = (status?: string) => {
+  const normalized = canonicalStatus(status);
+  return normalized === STEP_STATUS.FAILED.toLowerCase() || normalized === STEP_STATUS.FINISHED.toLowerCase();
+};
+
 const TimeLine: FC<ITimeLine> = ({
   logs,
   className = "",
@@ -34,10 +41,11 @@ const TimeLine: FC<ITimeLine> = ({
   const [steps, setSteps] = useState<ILog[]>([]);
 
   useEffect(() => {
-    if (
-      logs[logs.length - 1].status !== STEP_STATUS.FAILED &&
-      logs[logs.length - 1].status !== STEP_STATUS.FINISHED
-    ) {
+    if (logs.length === 0) {
+      setSteps([]);
+      return;
+    }
+    if (!isTerminal(logs[logs.length - 1].status)) {
       const updatedLogs =
         direction === STEP_DIRECTION.DOWNWARD
           ? [...logs, { title: "Pending", status: "Pending" }].reverse()
@@ -51,15 +59,15 @@ const TimeLine: FC<ITimeLine> = ({
   }, [logs, direction]);
 
   const getIcon = (status?: string) => {
-    switch (status) {
-      case STEP_STATUS.SUCCESS:
-      case STEP_STATUS.FINISHED:
+    switch (canonicalStatus(status)) {
+      case STEP_STATUS.SUCCESS.toLowerCase():
+      case STEP_STATUS.FINISHED.toLowerCase():
         return (
           <div className="size-4 bg-success rounded-full text-success-fg">
             <CircleSVG />
           </div>
         );
-      case STEP_STATUS.FAILED:
+      case STEP_STATUS.FAILED.toLowerCase():
         return (
           <div className="size-4 bg-danger rounded-full text-danger-fg">
             <CircleSVG />
