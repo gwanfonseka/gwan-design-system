@@ -168,6 +168,7 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   const ref = useRef<HTMLDivElement>(null);
 
   const rightView = new Date(leftView.getFullYear(), leftView.getMonth() + 1, 1);
+  const startMonthKey = startDate ? `${startDate.getFullYear()}-${startDate.getMonth()}` : "";
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -176,6 +177,13 @@ const DateRangePicker: FC<IDateRangePicker> = ({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  // Follow a controlled startDate onto the calendars. Day-only edits in the
+  // same month do not reset a month the user has paged to.
+  useEffect(() => {
+    if (!startDate) return;
+    setLeftView(new Date(startDate.getFullYear(), startDate.getMonth(), 1));
+  }, [startMonthKey]);
 
   // Reposition the panel whenever it opens
   useEffect(() => {
@@ -282,7 +290,7 @@ const DateRangePicker: FC<IDateRangePicker> = ({
             <div className="mt-3 pt-3 border-t border-border flex justify-between items-center">
               <button
                 type="button"
-                onClick={() => { onChange({ startDate: null, endDate: null }); }}
+                onClick={() => { onChange({ startDate: null, endDate: null }); setOpen(false); }}
                 className="text-xs text-muted-fg hover:text-foreground py-1 px-2 hover:bg-surface-raised rounded transition-colors"
               >
                 Clear

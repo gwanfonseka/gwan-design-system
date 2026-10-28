@@ -187,7 +187,7 @@ describe("DateRangePicker", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("clears without closing", async () => {
+  it("clears and closes the panel", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const view = render(
@@ -200,12 +200,11 @@ describe("DateRangePicker", () => {
     await user.click(screen.getByRole("button", { name: "10 Mar 2026 → 12 Mar 2026" }));
     await user.click(within(panel(view.container)).getByRole("button", { name: "Clear" }));
     expect(onChange).toHaveBeenCalledWith({ startDate: null, endDate: null });
-    expect(view.container.querySelector(".absolute.z-50")).toBeTruthy();
+    expect(view.container.querySelector(".absolute.z-50")).toBeNull();
 
     view.rerender(<DateRangePicker onChange={onChange} startDate={null} endDate={null} />);
     expect(screen.getByRole("button", { name: "Start date → End date" })).toBeInTheDocument();
-    expect(view.container.querySelector(".absolute.z-50")).toBeTruthy();
-    expect(within(panel(view.container)).queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+    expect(view.container.querySelector(".absolute.z-50")).toBeNull();
   });
 
   it("Done closes a partial range", async () => {
@@ -217,8 +216,7 @@ describe("DateRangePicker", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  // SUSPECTED BUG: the visible month is captured on mount and does not follow later startDate changes.
-  it("keeps the mounted month when startDate changes", async () => {
+  it("follows a later startDate onto the visible calendars", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const { container, rerender } = render(
@@ -233,8 +231,8 @@ describe("DateRangePicker", () => {
     );
     expect(screen.getByRole("button", { name: "03 Aug 2026 → 09 Aug 2026" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "03 Aug 2026 → 09 Aug 2026" }));
-    expect(monthTitle(months(container)[0])).toBe("January 2026");
-    expect(monthTitle(months(container)[1])).toBe("February 2026");
+    expect(monthTitle(months(container)[0])).toBe("August 2026");
+    expect(monthTitle(months(container)[1])).toBe("September 2026");
   });
 
   it("does not open when disabled, closes on an outside press, and shows errors", async () => {
