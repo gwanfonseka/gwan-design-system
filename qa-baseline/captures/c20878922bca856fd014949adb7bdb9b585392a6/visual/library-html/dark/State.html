@@ -1,0 +1,25 @@
+<p class="text-foreground text-xl font-medium">State</p><div><div class="flex flex-col gap-8"><div class="flex flex-col gap-8"><div class="border border-border rounded-lg min-h-96 md:h-215"><div class="w-full h-full flex flex-col gap-8 items-center justify-center "><img src="/images/empty.png" alt="state image" width="526" height="526"><div class="flex flex-col gap-2"><p class="text-3xl text-center font-semibold">Uhh.. ehh.. it's empty !!!</p><p class="w-[300px] text-center">Looks like you haven't add any items to your shopping cart.</p></div></div></div><div class="border border-border rounded-lg min-h-96 md:h-215"><div class="w-full h-full flex flex-col gap-8 items-center justify-center "><img src="/images/success.png" alt="state image" width="526" height="526"><div class="flex flex-col gap-2"><p class="text-3xl text-center font-semibold">Your planner is printing !!!</p><p class="w-[300px] text-center">You have successfully placed the order and we are getting your order ready.</p></div></div></div></div><div class="border border-border rounded-xl overflow-hidden"><div class="flex items-center justify-between px-4 py-2.5 bg-neutral-950 border-b border-neutral-800"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-neutral-400">Usage</span><button class="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md transition-colors duration-150" aria-label="Copy code"><div class="size-3.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="m16,18.5v1c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h1c.276,0,.5.224.5.5s-.224.5-.5.5h-1c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-1c0-.276.224-.5.5-.5s.5.224.5.5Zm8-14v7c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h7c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-7Z"></path></svg></div><span>Copy</span></button></div><pre class="bg-neutral-950 p-5 overflow-x-auto"><code class="text-neutral-100 font-mono text-xs leading-relaxed">import { State, STATE_TYPE } from "gwan-design-system";
+
+const Example = () =&gt; {
+  return (
+    &lt;div className="flex flex-col gap-4"&gt;
+      {/* Empty state — built-in illustration */}
+      &lt;div className="border border-border rounded-lg min-h-96"&gt;
+        &lt;State
+          type={STATE_TYPE.EMPTY}
+          title="Nothing here yet"
+          subTitle="Add some items to get started."
+        /&gt;
+      &lt;/div&gt;
+
+      {/* Custom state — with your own image */}
+      &lt;div className="border border-border rounded-lg min-h-96"&gt;
+        &lt;State
+          stateImage="/images/success.png"
+          title="All done!"
+          subTitle="Your order has been placed successfully."
+        /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};</code></pre></div></div></div>

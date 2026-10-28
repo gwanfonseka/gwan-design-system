@@ -1,0 +1,100 @@
+{
+  "suites": [
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "status": "fail",
+      "exitCode": 1,
+      "testCount": 0,
+      "failedCount": 0,
+      "warningCount": 0,
+      "tests": [],
+      "warnings": [],
+      "note": "package.json script is next lint. Next 16 has no lint command, so the CLI treats lint as a project directory (/workspace/lint) and exits 1. Pre-existing on develop.",
+      "logBytes": 117
+    },
+    {
+      "name": "eslint",
+      "command": "npx eslint . -f json -o eslint-report.json",
+      "status": "fail",
+      "exitCode": 2,
+      "testCount": 0,
+      "failedCount": 0,
+      "warningCount": 0,
+      "tests": [],
+      "warnings": [],
+      "note": "Direct ESLint run, not used by CI. ESLint 9.39.2 crashes while loading eslint.config.mjs (FlatCompat circular JSON in config validation) before any file is linted. No per-rule results exist.",
+      "logBytes": 1499
+    },
+    {
+      "name": "typecheck",
+      "command": "npx tsc --noEmit --pretty false --incremental false",
+      "status": "pass",
+      "exitCode": 0,
+      "testCount": 0,
+      "failedCount": 0,
+      "warningCount": 0,
+      "tests": [],
+      "warnings": [],
+      "note": "No typecheck script. tsconfig noEmit is already true.",
+      "logBytes": 0
+    },
+    {
+      "name": "build-lib",
+      "command": "npm run build:lib",
+      "status": "pass",
+      "exitCode": 0,
+      "testCount": 0,
+      "failedCount": 0,
+      "warningCount": 0,
+      "tests": [],
+      "warnings": [],
+      "note": "Library build used by CI before publish.",
+      "logBytes": 570
+    },
+    {
+      "name": "site-build",
+      "command": "npm run build",
+      "status": "pass",
+      "exitCode": 0,
+      "testCount": 0,
+      "failedCount": 0,
+      "warningCount": 0,
+      "tests": [],
+      "warnings": [],
+      "note": "Next.js docs site. Not run in CI. Required to emit Tailwind CSS for visual snapshots.",
+      "logBytes": 1205
+    },
+    {
+      "name": "unit",
+      "command": null,
+      "status": "not-present",
+      "exitCode": null,
+      "tests": [],
+      "warnings": [],
+      "note": "No test script and no *.test.* or *.spec.* files."
+    },
+    {
+      "name": "storybook",
+      "command": null,
+      "status": "not-present",
+      "exitCode": null,
+      "tests": [],
+      "warnings": [],
+      "note": "No Storybook, no stories, no test-runner."
+    },
+    {
+      "name": "publish-dry-run",
+      "command": "npm publish --dry-run --json",
+      "status": "pass",
+      "exitCode": 0,
+      "testCount": 0,
+      "failedCount": 0,
+      "warningCount": 0,
+      "tests": [],
+      "warnings": [],
+      "note": "Same command CI uses before npm publish.",
+      "logBytes": 322
+    }
+  ]
+}

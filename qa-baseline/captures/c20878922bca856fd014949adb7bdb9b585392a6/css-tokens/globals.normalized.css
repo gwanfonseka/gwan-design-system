@@ -1,0 +1,281 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ─── Light theme (default) ─────────────────────────────────────── */
+:root {
+  --background: #f8f9f5;
+  --foreground: #1c2218;
+
+  --surface: #ffffff;
+  --surface-raised: #eef2e8;
+  --surface-overlay: #e3e9da;
+
+  --border: #c4cdb8;
+  --border-subtle: #d8dfce;
+
+  --primary-default: #435240;
+  --primary-default-fg: #f4f7f1;
+  --primary-muted: #adc09e;
+  --primary-muted-fg: #2c3629;
+
+  --muted: #e3e9da;
+  --muted-fg: #60705a;
+
+  --accent: #0f766e;
+  --accent-fg: #f0fdfb;
+
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-fg: #064e3b;
+
+  --danger: #e11d48;
+  --danger-bg: #fff1f2;
+  --danger-fg: #881337;
+
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-fg: #78350f;
+}
+
+/* ─── Dark theme ─────────────────────────────────────────────────── */
+.dark {
+  --background: #131a10;
+  --foreground: #e2eada;
+
+  --surface: #1c241a;
+  --surface-raised: #252e22;
+  --surface-overlay: #2d392a;
+
+  --border: #3c4d38;
+  --border-subtle: #2d392a;
+
+  --primary-default: #adc09e;
+  --primary-default-fg: #1c2218;
+  --primary-muted: #435240;
+  --primary-muted-fg: #e2eada;
+
+  --muted: #252e22;
+  --muted-fg: #9ea593;
+
+  --accent: #2dd4bf;
+  --accent-fg: #134e4a;
+
+  --success: #34d399;
+  --success-bg: #022c1e;
+  --success-fg: #a7f3d0;
+
+  --danger: #fb7185;
+  --danger-bg: #200a10;
+  --danger-fg: #fecdd3;
+
+  --warning: #fbbf24;
+  --warning-bg: #1c1300;
+  --warning-fg: #fde68a;
+}
+
+@theme {
+  /* ─── Semantic (theme-aware, read from CSS vars) ─────────────── */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-primary-default: var(--primary-default);
+  --color-primary-default-fg: var(--primary-default-fg);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-muted-fg: var(--primary-muted-fg);
+
+  --color-muted: var(--muted);
+  --color-muted-fg: var(--muted-fg);
+
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-fg: var(--success-fg);
+
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-fg: var(--warning-fg);
+
+  /* ─── Primary scale (Sage Green — base: #9ea593) ────────────── */
+  --color-primary-50: #f4f7f1;
+  --color-primary-100: #e2eada;
+  --color-primary-200: #c8d5be;
+  --color-primary-300: #adc09e;
+  --color-primary-400: #a4b496;
+  --color-primary-500: #9ea593;
+  --color-primary-600: #7e8c73;
+  --color-primary-700: #60705a;
+  --color-primary-800: #435240;
+  --color-primary-900: #2c3629;
+
+  /* ─── Teal scale (Accent) ────────────────────────────────────── */
+  --color-teal-50: #f0fdfb;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+
+  /* ─── Emerald scale (Success) ───────────────────────────────── */
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+
+  /* ─── Rose scale (Danger) ───────────────────────────────────── */
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
+
+  /* ─── Amber scale (Warning) ─────────────────────────────────── */
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+
+  /* ─── Neutral scale ──────────────────────────────────────────── */
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+}
+
+/* ─── Blog prose theme ───────────────────────────────────────────── */
+.prose-gwan {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-fg);
+  --tw-prose-links: var(--accent);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-fg);
+  --tw-prose-bullets: var(--border);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--primary-default);
+  --tw-prose-captions: var(--muted-fg);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-code: var(--foreground);
+  --tw-prose-pre-bg: var(--surface);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border-subtle);
+  --tw-prose-invert-body: var(--foreground);
+  --tw-prose-invert-headings: var(--foreground);
+  --tw-prose-invert-links: var(--accent);
+  --tw-prose-invert-code: var(--foreground);
+  --tw-prose-invert-pre-bg: var(--surface);
+}
+
+@layer utilities {
+  /* Light mode — pale sage through the primary scale */
+  .custom-bg {
+    background-image: linear-gradient(135deg, #f4f7f1, #e2eada, #c8d5be, #adc09e, #9ea593);
+  }
+
+  /* Dark mode — deep forest through the primary scale */
+  .dark .custom-bg {
+    background-image: linear-gradient(135deg, #131a10, #2c3629, #435240, #60705a, #7e8c73);
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Roboto Flex", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Dark mode: prevent browser from overriding text colour on form elements */
+.dark input,
+.dark textarea {
+  color-scheme: dark;
+  -webkit-text-fill-color: var(--foreground);
+}
+
+/* Restore muted placeholder colour — overrides the inherited -webkit-text-fill-color above */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  -webkit-text-fill-color: color-mix(in srgb, var(--muted-fg) 45%, transparent);
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Thin scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 9999px;
+}

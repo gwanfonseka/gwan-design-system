@@ -1,0 +1,24 @@
+{
+  "package": "gwan-design-system",
+  "version": "1.0.8",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "entryPoints": [
+    {
+      "subpath": ".",
+      "target": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+- No Storybook, no *.stories.* files, and no Storybook test-runner. Representative variants are the component-library page tabs (light and dark) plus an isolated render of each exported component with required props only.
+- No Storybook (or test-runner) exists. The component-library page is the in-repo variant harness. Each sidebar tab is captured in light and dark.

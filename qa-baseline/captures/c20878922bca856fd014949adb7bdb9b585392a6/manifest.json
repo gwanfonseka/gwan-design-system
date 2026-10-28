@@ -1,0 +1,128 @@
+{
+  "package": "gwan-design-system",
+  "version": "1.0.8",
+  "gitSha": "c20878922bca856fd014949adb7bdb9b585392a6",
+  "gitBranch": "develop",
+  "capturedAt": "2026-10-28T14:37:27Z",
+  "node": "v22.23.4",
+  "npm": "10.9.9",
+  "lockfileSha256": "0ee33b06aa7fc00d76d061ee8d3f635e4ad9d604963572d041c133e9c1b1c5d0",
+  "exportCount": 398,
+  "exportsByKind": {
+    "component": 269,
+    "enum": 59,
+    "interface": 67,
+    "type": 3
+  },
+  "componentCount": 57,
+  "exportedComponentCount": 53,
+  "iconCount": 216,
+  "forwardedRefCount": 0,
+  "displayNameCount": 0,
+  "emittedFileCount": 6,
+  "emittedBytes": 2395870,
+  "emittedGzipBytes": 548955,
+  "emittedByFormat": {
+    "types": {
+      "count": 2,
+      "bytes": 87498,
+      "gzipBytes": 16684
+    },
+    "cjs": {
+      "count": 1,
+      "bytes": 524650,
+      "gzipBytes": 121295
+    },
+    "sourcemap": {
+      "count": 2,
+      "bytes": 1295688,
+      "gzipBytes": 292671
+    },
+    "esm": {
+      "count": 1,
+      "bytes": 488034,
+      "gzipBytes": 118305
+    }
+  },
+  "customPropertyCount": 153,
+  "audit": {
+    "info": 0,
+    "low": 1,
+    "moderate": 8,
+    "high": 12,
+    "critical": 1,
+    "total": 22
+  },
+  "tests": [
+    {
+      "name": "lint",
+      "status": "fail",
+      "exitCode": 1,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "eslint",
+      "status": "fail",
+      "exitCode": 2,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "typecheck",
+      "status": "pass",
+      "exitCode": 0,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "build-lib",
+      "status": "pass",
+      "exitCode": 0,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "site-build",
+      "status": "pass",
+      "exitCode": 0,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "unit",
+      "status": "not-present",
+      "exitCode": null,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "storybook",
+      "status": "not-present",
+      "exitCode": null,
+      "failedCount": 0,
+      "warningCount": 0
+    },
+    {
+      "name": "publish-dry-run",
+      "status": "pass",
+      "exitCode": 0,
+      "failedCount": 0,
+      "warningCount": 0
+    }
+  ],
+  "domRendered": 329,
+  "domFailed": 0,
+  "iconsRendered": 216,
+  "screenshots": 162,
+  "screenshotFailures": 0,
+  "committedDistMatchesFreshBuild": false,
+  "distChangedFiles": [
+    "index.d.mts",
+    "index.d.ts",
+    "index.js",
+    "index.js.map",
+    "index.mjs",
+    "index.mjs.map"
+  ]
+}

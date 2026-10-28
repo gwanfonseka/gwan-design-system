@@ -1,0 +1,53 @@
+{
+  "exists": true,
+  "root": "dist",
+  "totals": {
+    "bytes": 2395870,
+    "gzipBytes": 548955,
+    "count": 6
+  },
+  "files": [
+    {
+      "path": "index.d.mts",
+      "bytes": 43749,
+      "gzipBytes": 8342,
+      "sha256": "109b30a1e12f9c3ac96a4c59a82f6ec08860293a84ae25fb4221695ed17169c1",
+      "format": "types"
+    },
+    {
+      "path": "index.d.ts",
+      "bytes": 43749,
+      "gzipBytes": 8342,
+      "sha256": "109b30a1e12f9c3ac96a4c59a82f6ec08860293a84ae25fb4221695ed17169c1",
+      "format": "types"
+    },
+    {
+      "path": "index.js",
+      "bytes": 524650,
+      "gzipBytes": 121295,
+      "sha256": "7be567664d3d6c7126b4c1a5b26e4fff45f2ed3499cc418636140891fd3adf50",
+      "format": "cjs"
+    },
+    {
+      "path": "index.js.map",
+      "bytes": 650619,
+      "gzipBytes": 146324,
+      "sha256": "36e720f86f5ec424976d439342685c3f19beb8ca3c197a04a0048558fff851f9",
+      "format": "sourcemap"
+    },
+    {
+      "path": "index.mjs",
+      "bytes": 488034,
+      "gzipBytes": 118305,
+      "sha256": "c7e9747e24512acb8c8f68dd48fccad7020feeb64d7d3f513f64c0ac7448ed9e",
+      "format": "esm"
+    },
+    {
+      "path": "index.mjs.map",
+      "bytes": 645069,
+      "gzipBytes": 146347,
+      "sha256": "eba10657aa69f42fe96130dd2211c7b0b9326013a5c0e3b2998836db6faf82bc",
+      "format": "sourcemap"
+    }
+  ]
+}

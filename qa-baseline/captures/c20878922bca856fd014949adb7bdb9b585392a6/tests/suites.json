@@ -1,0 +1,50 @@
+[
+  {
+    "name": "lint",
+    "command": "npm run lint",
+    "kind": "log",
+    "note": "package.json script is next lint. Next 16 has no lint command, so the CLI treats lint as a project directory (/workspace/lint) and exits 1. Pre-existing on develop."
+  },
+  {
+    "name": "eslint",
+    "command": "npx eslint . -f json -o eslint-report.json",
+    "kind": "eslint-json",
+    "note": "Direct ESLint run, not used by CI. ESLint 9.39.2 crashes while loading eslint.config.mjs (FlatCompat circular JSON in config validation) before any file is linted. No per-rule results exist."
+  },
+  {
+    "name": "typecheck",
+    "command": "npx tsc --noEmit --pretty false --incremental false",
+    "kind": "tsc",
+    "note": "No typecheck script. tsconfig noEmit is already true."
+  },
+  {
+    "name": "build-lib",
+    "command": "npm run build:lib",
+    "kind": "log",
+    "note": "Library build used by CI before publish."
+  },
+  {
+    "name": "site-build",
+    "command": "npm run build",
+    "kind": "log",
+    "note": "Next.js docs site. Not run in CI. Required to emit Tailwind CSS for visual snapshots."
+  },
+  {
+    "name": "unit",
+    "command": null,
+    "kind": "absent",
+    "note": "No test script and no *.test.* or *.spec.* files."
+  },
+  {
+    "name": "storybook",
+    "command": null,
+    "kind": "absent",
+    "note": "No Storybook, no stories, no test-runner."
+  },
+  {
+    "name": "publish-dry-run",
+    "command": "npm publish --dry-run --json",
+    "kind": "log",
+    "note": "Same command CI uses before npm publish."
+  }
+]

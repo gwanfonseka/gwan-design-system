@@ -1,0 +1,3 @@
+api-extractor unavailable: Cannot find module '@microsoft/api-extractor'
+Require stack:
+- /tmp/gwan-qa-tools/package.json

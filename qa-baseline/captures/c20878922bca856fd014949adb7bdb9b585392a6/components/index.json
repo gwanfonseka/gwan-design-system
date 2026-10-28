@@ -1,0 +1,11 @@
+{
+  "componentCount": 57,
+  "exportedComponentCount": 53,
+  "iconCount": 216,
+  "forwardedRefCount": 0,
+  "displayNameCount": 0,
+  "reactDocgen": {
+    "ok": false,
+    "error": "Cannot find module 'react-docgen-typescript'\nRequire stack:\n- /tmp/gwan-qa-tools/package.json"
+  }
+}

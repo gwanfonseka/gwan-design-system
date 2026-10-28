@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "packages": [
+    {
+      "name": "gwan-design-system",
+      "version": "1.0.8",
+      "filename": "gwan-design-system-1.0.8.tgz",
+      "entryCount": 9,
+      "unpackedSize": 2413496,
+      "size": 550150,
+      "files": [
+        {
+          "path": "dist/index.d.mts",
+          "size": 43749,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.d.ts",
+          "size": 43749,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.js",
+          "size": 524650,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.js.map",
+          "size": 650619,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.mjs",
+          "size": 488034,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.mjs.map",
+          "size": 645069,
+          "mode": 420
+        },
+        {
+          "path": "LICENSE",
+          "size": 1071,
+          "mode": 420
+        },
+        {
+          "path": "package.json",
+          "size": 1763,
+          "mode": 420
+        },
+        {
+          "path": "README.md",
+          "size": 14792,
+          "mode": 420
+        }
+      ]
+    }
+  ]
+}

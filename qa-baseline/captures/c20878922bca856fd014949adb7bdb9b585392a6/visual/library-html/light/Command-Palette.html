@@ -1,0 +1,43 @@
+<p class="text-foreground text-xl font-medium">Command Palette</p><div><div class="flex flex-col gap-8"><div class="flex flex-col items-center gap-3 py-4"><button type="button" class="bg-primary-500 text-primary-default-fg hover:bg-primary-600 active:bg-primary-700 py-2.5 px-4 text-sm rounded-lg "><div class="flex flex-row gap-2 items-center"><span>Open Command Palette</span></div></button><p class="text-xs text-muted-fg">Keyboard shortcut: <kbd class="px-1.5 py-0.5 rounded border border-border font-mono text-[10px]">⌘K</kbd> / <kbd class="px-1.5 py-0.5 rounded border border-border font-mono text-[10px]">Ctrl+K</kbd></p></div><div class="relative border border-border rounded-xl"><div class="flex items-center justify-between px-4 py-2.5 border-b border-border rounded-t-xl bg-surface"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-muted-fg">Playground</span></div><div class="px-6 py-8 bg-background rounded-b-xl"><div class="flex flex-col gap-8"><div class="flex flex-col items-center gap-3"><button type="button" class="bg-primary-500 text-primary-default-fg hover:bg-primary-600 active:bg-primary-700 py-2.5 px-4 text-sm rounded-lg "><div class="flex flex-row gap-2 items-center"><span>Open Command Palette</span></div></button><p class="text-xs text-muted-fg">or press <kbd class="px-1.5 py-0.5 rounded border border-border font-mono text-[10px]">⌘K</kbd></p></div></div></div></div><div class="border border-border rounded-xl overflow-hidden"><div class="flex items-center justify-between px-4 py-2.5 bg-neutral-950 border-b border-neutral-800"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-neutral-400">Usage</span><button class="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md transition-colors duration-150" aria-label="Copy code"><div class="size-3.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="m16,18.5v1c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h1c.276,0,.5.224.5.5s-.224.5-.5.5h-1c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-1c0-.276.224-.5.5-.5s.5.224.5.5Zm8-14v7c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h7c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-7Z"></path></svg></div><span>Copy</span></button></div><pre class="bg-neutral-950 p-5 overflow-x-auto"><code class="text-neutral-100 font-mono text-xs leading-relaxed">import { CommandPalette } from "gwan-design-system";
+import { useEffect, useState } from "react";
+
+const commands = [
+  {
+    id: "home",
+    label: "Go to Home",
+    description: "Navigate to the landing page",
+    group: "Navigation",
+    shortcut: ["⌘", "H"],
+    onSelect: () =&gt; router.push("/"),
+  },
+  // ... more commands
+];
+
+const Example = () =&gt; {
+  const [open, setOpen] = useState(false);
+
+  // Optional: bind ⌘K to open
+  useEffect(() =&gt; {
+    const handler = (e: KeyboardEvent) =&gt; {
+      if ((e.metaKey || e.ctrlKey) &amp;&amp; e.key === "k") {
+        e.preventDefault();
+        setOpen((v) =&gt; !v);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () =&gt; document.removeEventListener("keydown", handler);
+  }, []);
+
+  return (
+    &lt;&gt;
+      &lt;Button label="Open Command Palette" onClick={() =&gt; setOpen(true)} /&gt;
+
+      &lt;CommandPalette
+        open={open}
+        onClose={() =&gt; setOpen(false)}
+        items={commands}
+        placeholder="Type a command or search..."
+      /&gt;
+    &lt;/&gt;
+  );
+};</code></pre></div></div></div>

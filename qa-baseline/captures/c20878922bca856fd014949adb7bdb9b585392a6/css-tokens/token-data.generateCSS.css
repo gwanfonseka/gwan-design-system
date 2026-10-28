@@ -1,0 +1,59 @@
+:root {
+  --background: #f8f9f5;
+  --foreground: #1c2218;
+  --surface: #ffffff;
+  --surface-raised: #eef2e8;
+  --surface-overlay: #e3e9da;
+  --border: #c4cdb8;
+  --muted-fg: #60705a;
+  --primary-default: #435240;
+  --primary-default-fg: #f4f7f1;
+  --primary-muted: #adc09e;
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-fg: #064e3b;
+  --danger: #e11d48;
+  --danger-bg: #fff1f2;
+  --danger-fg: #881337;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-fg: #78350f;
+}
+
+.dark {
+  --background: #131a10;
+  --foreground: #e2eada;
+  --surface: #1c241a;
+  --surface-raised: #252e22;
+  --surface-overlay: #2d392a;
+  --border: #3c4d38;
+  --muted-fg: #9ea593;
+  --primary-default: #adc09e;
+  --primary-default-fg: #1c2218;
+  --primary-muted: #435240;
+  --success: #34d399;
+  --success-bg: #022c1e;
+  --success-fg: #a7f3d0;
+  --danger: #fb7185;
+  --danger-bg: #200a10;
+  --danger-fg: #fecdd3;
+  --warning: #fbbf24;
+  --warning-bg: #1c1300;
+  --warning-fg: #fde68a;
+}
+
+/* ─── Primary colour scale ─────────────────────────────────────────
+   Components use these steps for hover, disabled, and active states.
+   ─────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-primary-50: #f4f7f1;
+  --color-primary-100: #e2eada;
+  --color-primary-200: #c8d5be;
+  --color-primary-300: #adc09e;
+  --color-primary-400: #a4b496;
+  --color-primary-500: #9ea593;
+  --color-primary-600: #7e8c73;
+  --color-primary-700: #60705a;
+  --color-primary-800: #435240;
+  --color-primary-900: #2c3629;
+}

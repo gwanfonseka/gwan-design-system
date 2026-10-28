@@ -1,0 +1,79 @@
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.tsup.json
+CLI tsup v8.5.1
+CLI Using tsup config: /workspace/tsup.config.ts
+CLI Target: es2017
+CLI Cleaning output folder
+ESM Build start
+CJS Build start
+ESM dist/index.mjs     476.60 KB
+ESM dist/index.mjs.map 629.62 KB
+ESM ⚡️ Build success in 119ms
+CJS dist/index.js     512.35 KB
+CJS dist/index.js.map 635.04 KB
+CJS ⚡️ Build success in 127ms
+DTS Build start
+DTS ⚡️ Build success in 2783ms
+DTS dist/index.d.mts 42.72 KB
+DTS dist/index.d.ts  42.72 KB
+[
+  {
+    "id": "gwan-design-system@1.0.8",
+    "name": "gwan-design-system",
+    "version": "1.0.8",
+    "size": 550150,
+    "unpackedSize": 2413496,
+    "shasum": "cdb1bdfd0bae187ade0e7e1e6cf32807cb727a3d",
+    "integrity": "sha512-y4gB8qpF9BvTyC0XcFguRdtxemsf5Vq94piQ03RlVCr7OrzDsRU5bXrQeIVI24NjPpeFFYzRrRSzqU06xQTtNQ==",
+    "filename": "gwan-design-system-1.0.8.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1071,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 14792,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.mts",
+        "size": 43749,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 43749,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 524650,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js.map",
+        "size": 650619,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.mjs",
+        "size": 488034,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.mjs.map",
+        "size": 645069,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 1763,
+        "mode": 420
+      }
+    ],
+    "entryCount": 9,
+    "bundled": []
+  }
+]

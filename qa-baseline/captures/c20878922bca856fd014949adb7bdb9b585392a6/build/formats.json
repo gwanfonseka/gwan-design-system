@@ -1,0 +1,35 @@
+{
+  "moduleFormats": {
+    "esm": "dist/index.mjs (package.json exports.import)",
+    "cjs": "dist/index.js (package.json main, module, and exports.require)",
+    "types": "dist/index.d.ts (package.json types and exports.types)",
+    "note": "tsup emits esm and cjs. package.json module points at the cjs file dist/index.js while exports.import points at dist/index.mjs."
+  },
+  "byFormat": {
+    "types": {
+      "count": 2,
+      "bytes": 87498,
+      "gzipBytes": 16684
+    },
+    "cjs": {
+      "count": 1,
+      "bytes": 524650,
+      "gzipBytes": 121295
+    },
+    "sourcemap": {
+      "count": 2,
+      "bytes": 1295688,
+      "gzipBytes": 292671
+    },
+    "esm": {
+      "count": 1,
+      "bytes": 488034,
+      "gzipBytes": 118305
+    }
+  },
+  "totals": {
+    "bytes": 2395870,
+    "gzipBytes": 548955,
+    "count": 6
+  }
+}

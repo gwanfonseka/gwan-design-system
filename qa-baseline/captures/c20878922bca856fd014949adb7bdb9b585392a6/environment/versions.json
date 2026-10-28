@@ -1,0 +1,20 @@
+{
+  "packageName": "gwan-design-system",
+  "packageVersion": "1.0.8",
+  "gitSha": "c20878922bca856fd014949adb7bdb9b585392a6",
+  "gitBranch": "develop",
+  "gitDescribe": "v1.0.8",
+  "capturedAt": "2026-10-28T14:37:27Z",
+  "node": "v22.23.4",
+  "npm": "10.9.9",
+  "packageManager": "npm",
+  "packageManagerReason": "package-lock.json is the lockfile; pnpm and yarn are not used by this repo",
+  "pnpm": "10.33.4",
+  "yarn": "1.22.22",
+  "ciNode": "18 (publish.yml and bump-version.yml; this capture does not switch Node)",
+  "platform": "Linux 6.12.94+ x86_64",
+  "lockfile": "package-lock.json",
+  "lockfileVersion": 3,
+  "lockfileSha256": "0ee33b06aa7fc00d76d061ee8d3f635e4ad9d604963572d041c133e9c1b1c5d0",
+  "toolingDir": "/tmp/gwan-qa-tools"
+}

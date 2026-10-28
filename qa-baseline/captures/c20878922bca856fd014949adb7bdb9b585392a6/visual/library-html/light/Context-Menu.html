@@ -1,0 +1,42 @@
+<p class="text-foreground text-xl font-medium">Context Menu</p><div><div class="flex flex-col gap-8"><div class="relative "><div class="border-2 border-dashed border-border rounded-xl p-12 flex items-center justify-center select-none cursor-default"><p class="text-sm text-muted-fg">Right-click anywhere in this area</p></div></div><div class="relative border border-border rounded-xl"><div class="flex items-center justify-between px-4 py-2.5 border-b border-border rounded-t-xl bg-surface"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-muted-fg">Playground</span></div><div class="px-6 py-8 bg-background rounded-b-xl"><div class="relative "><div class="border-2 border-dashed border-border rounded-xl p-12 flex items-center justify-center select-none cursor-default"><p class="text-sm text-muted-fg">Right-click anywhere in this area</p></div></div></div></div><div class="border border-border rounded-xl overflow-hidden"><div class="flex items-center justify-between px-4 py-2.5 bg-neutral-950 border-b border-neutral-800"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-neutral-400">Usage</span><button class="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md transition-colors duration-150" aria-label="Copy code"><div class="size-3.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="m16,18.5v1c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h1c.276,0,.5.224.5.5s-.224.5-.5.5h-1c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-1c0-.276.224-.5.5-.5s.5.224.5.5Zm8-14v7c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h7c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-7Z"></path></svg></div><span>Copy</span></button></div><pre class="bg-neutral-950 p-5 overflow-x-auto"><code class="text-neutral-100 font-mono text-xs leading-relaxed">import { ContextMenu } from "gwan-design-system";
+import type { IDropdownMenuItem } from "gwan-design-system";
+import { EditSVG, TrashSVG, CopySVG, LinkSVG, DownloadSVG } from "gwan-design-system";
+
+const items: IDropdownMenuItem[] = [
+  {
+    label: "Open",
+    icon: &lt;LinkSVG /&gt;,
+    onClick: () =&gt; window.open(url),              // wire any function here
+  },
+  {
+    label: "Edit",
+    icon: &lt;EditSVG /&gt;,
+    onClick: () =&gt; router.push(`/edit/${id}`),
+  },
+  {
+    label: "Copy",
+    icon: &lt;CopySVG /&gt;,
+    onClick: () =&gt; navigator.clipboard.writeText(value),
+  },
+  {
+    label: "Download",
+    icon: &lt;DownloadSVG /&gt;,
+    onClick: () =&gt; handleDownload(),
+    disabled: true,                               // greys out and blocks click
+  },
+  { isDivider: true },                            // renders a separator line
+  {
+    label: "Delete",
+    icon: &lt;TrashSVG /&gt;,
+    onClick: () =&gt; setConfirmDelete(true),        // e.g. open a confirm modal
+    destructive: true,                            // renders in danger color
+  },
+];
+
+const Example = () =&gt; (
+  &lt;ContextMenu items={items}&gt;
+    &lt;div className="border border-border rounded-lg p-6 text-sm text-muted-fg"&gt;
+      Right-click anywhere in this area
+    &lt;/div&gt;
+  &lt;/ContextMenu&gt;
+);</code></pre></div></div></div>

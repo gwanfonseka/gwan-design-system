@@ -1,0 +1,34 @@
+<p class="text-foreground text-xl font-medium">Radio Button</p><div><div class="flex flex-col gap-8"><div class="relative border border-border rounded-xl"><div class="flex items-center justify-between px-4 py-2.5 border-b border-border rounded-t-xl bg-surface"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-muted-fg">Playground</span></div><div class="px-6 py-8 bg-background rounded-b-xl"><div class="flex flex-col gap-8"><div class="flex flex-col gap-3 items-center"><label for="gwan-radio-group-option1" class="flex items-center gap-2 cursor-pointer  "><input id="gwan-radio-group-option1" type="radio" class="sr-only" checked="" value="option1"><div aria-hidden="true" class="w-5 h-5 flex items-center justify-center border-2 rounded-full transition-all
+          border-primary-default bg-primary-default
+          "><div class="w-2.5 h-2.5 bg-primary-default-fg rounded-full"></div></div><span class="text-foreground">Option 1</span></label><label for="gwan-radio-group-option2" class="flex items-center gap-2 cursor-pointer  "><input id="gwan-radio-group-option2" type="radio" class="sr-only" value="option2"><div aria-hidden="true" class="w-5 h-5 flex items-center justify-center border-2 rounded-full transition-all
+          border-border bg-surface hover:border-primary-default
+          "></div><span class="text-foreground">Option 2</span></label><label for="gwan-radio-group-option3" class="flex items-center gap-2 cursor-pointer  "><input id="gwan-radio-group-option3" type="radio" class="sr-only" value="option3"><div aria-hidden="true" class="w-5 h-5 flex items-center justify-center border-2 rounded-full transition-all
+          border-border bg-surface hover:border-primary-default
+          "></div><span class="text-foreground">Option 3</span></label><p class="text-sm text-muted-fg mt-2">Selected: <span class="text-foreground font-medium">option1</span></p></div><div class="flex flex-row justify-center gap-4 flex-wrap"><div class="flex flex-col relative w-full sm:w-48"><label for="gwan-input-option-1-label" class="text-xs font-semibold text-muted-fg mb-1">Option 1 Label</label><div class="relative"><input id="gwan-input-option-1-label" placeholder="" class="bg-surface text-foreground border border-border hover:border-primary-default focus:border-primary-default outline-none py-2.5 text-sm pl-3 pr-3 rounded cursor-text w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200  " type="text" value="Option 1"></div></div><div class="flex flex-col relative w-full sm:w-48"><label for="gwan-input-option-2-label" class="text-xs font-semibold text-muted-fg mb-1">Option 2 Label</label><div class="relative"><input id="gwan-input-option-2-label" placeholder="" class="bg-surface text-foreground border border-border hover:border-primary-default focus:border-primary-default outline-none py-2.5 text-sm pl-3 pr-3 rounded cursor-text w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200  " type="text" value="Option 2"></div></div><div class="flex flex-col relative w-full sm:w-48"><label for="gwan-input-option-3-label" class="text-xs font-semibold text-muted-fg mb-1">Option 3 Label</label><div class="relative"><input id="gwan-input-option-3-label" placeholder="" class="bg-surface text-foreground border border-border hover:border-primary-default focus:border-primary-default outline-none py-2.5 text-sm pl-3 pr-3 rounded cursor-text w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200  " type="text" value="Option 3"></div></div></div></div></div></div><div class="border border-border rounded-xl overflow-hidden"><div class="flex items-center justify-between px-4 py-2.5 bg-neutral-950 border-b border-neutral-800"><span class="text-[9px] font-bold tracking-[0.18em] uppercase text-neutral-400">Usage</span><button class="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md transition-colors duration-150" aria-label="Copy code"><div class="size-3.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="m16,18.5v1c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h1c.276,0,.5.224.5.5s-.224.5-.5.5h-1c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-1c0-.276.224-.5.5-.5s.5.224.5.5Zm8-14v7c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h7c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-7Z"></path></svg></div><span>Copy</span></button></div><pre class="bg-neutral-950 p-5 overflow-x-auto"><code class="text-neutral-100 font-mono text-xs leading-relaxed">import { RadioButton } from "gwan-design-system";
+
+const Example = () =&gt; {
+  const [selected, setSelected] = useState("option1");
+
+  return (
+    &lt;div className="flex flex-col gap-3"&gt;
+      &lt;RadioButton
+        label="Option 1"
+        value="option1"
+        selectedValue={selected}
+        onChange={setSelected}
+      /&gt;
+      &lt;RadioButton
+        label="Option 2"
+        value="option2"
+        selectedValue={selected}
+        onChange={setSelected}
+      /&gt;
+      &lt;RadioButton
+        label="Option 3"
+        value="option3"
+        selectedValue={selected}
+        onChange={setSelected}
+      /&gt;
+    &lt;/div&gt;
+  );
+};</code></pre></div></div></div>

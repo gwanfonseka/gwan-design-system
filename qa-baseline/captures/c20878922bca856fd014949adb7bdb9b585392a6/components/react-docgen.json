@@ -1,0 +1,6 @@
+{
+  "ok": false,
+  "error": "Error: Cannot find module 'react-docgen-typescript'\nRequire stack:\n- /tmp/gwan-qa-tools/package.json\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)\n    at Function._load (node:internal/modules/cjs/loader:1216:25)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Module.require (node:internal/modules/cjs/loader:1527:12)\n    at require (node:internal/modules/helpers:147:16)\n    at runDocgen (file:///cursor/stores/bc-cc93a62f-d680-56cc-bf95-2ffc14775eab/artifacts/qa-baseline/helpers/extract-props.mjs:366:36)\n    at file:///cursor/stores/bc-cc93a62f-d680-56cc-bf95-2ffc14775eab/artifacts/qa-baseline/helpers/extract-props.mjs:482:16\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)",
+  "components": [],
+  "errors": []
+}

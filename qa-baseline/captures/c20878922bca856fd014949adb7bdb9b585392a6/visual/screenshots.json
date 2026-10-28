@@ -1,0 +1,1146 @@
+{
+  "fixedTime": "2026-01-15T12:00:00.000Z",
+  "font": "DejaVu Sans",
+  "animations": "disabled",
+  "externalFonts": "blocked",
+  "intervalsAtLeast200ms": "disabled",
+  "mathRandom": "seeded",
+  "screenshotCount": 162,
+  "failureCount": 0,
+  "shots": [
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Icons",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Icons.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Buttons",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Buttons.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Input",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Input.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Text Area",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Text-Area.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Select Dropdown",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Select-Dropdown.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Filter Dropdown",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Filter-Dropdown.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Checkbox",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Checkbox.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Radio Button",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Radio-Button.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Switch",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Switch.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "File Uploader",
+      "ok": true,
+      "file": "visual/screenshots/library/light/File-Uploader.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Color Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Color-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Multi Select",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Multi-Select.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Search Input",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Search-Input.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Slider",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Slider.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "OTP Input",
+      "ok": true,
+      "file": "visual/screenshots/library/light/OTP-Input.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Date Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Date-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Time Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Time-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Date Range Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Date-Range-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Table",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Table.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Pagination",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Pagination.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Progress Bar",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Progress-Bar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Stat Card",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Stat-Card.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Circular Progress",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Circular-Progress.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Side Menu",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Side-Menu.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Menu Bar",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Menu-Bar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Tabs",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Tabs.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Breadcrumb",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Breadcrumb.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Ellipsis",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Ellipsis.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Card",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Card.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Divider",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Divider.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Banner",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Banner.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Carousel",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Carousel.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Accordion",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Accordion.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Timeline",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Timeline.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Stepper",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Stepper.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "List",
+      "ok": true,
+      "file": "visual/screenshots/library/light/List.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Modal",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Modal.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Drawer",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Drawer.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Popover",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Popover.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Command Palette",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Command-Palette.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Dropdown Menu",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Dropdown-Menu.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Context Menu",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Context-Menu.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Tags",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Tags.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Chips",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Chips.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Badge",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Badge.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Avatar",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Avatar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Avatar Group",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Avatar-Group.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Tooltip",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Tooltip.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Skeleton",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Skeleton.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Spinner",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Spinner.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Snackbar",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Snackbar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Alert",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Alert.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "Callout",
+      "ok": true,
+      "file": "visual/screenshots/library/light/Callout.png"
+    },
+    {
+      "kind": "library",
+      "theme": "light",
+      "name": "State",
+      "ok": true,
+      "file": "visual/screenshots/library/light/State.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Icons",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Icons.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Buttons",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Buttons.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Input",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Input.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Text Area",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Text-Area.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Select Dropdown",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Select-Dropdown.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Filter Dropdown",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Filter-Dropdown.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Checkbox",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Checkbox.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Radio Button",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Radio-Button.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Switch",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Switch.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "File Uploader",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/File-Uploader.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Color Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Color-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Multi Select",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Multi-Select.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Search Input",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Search-Input.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Slider",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Slider.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "OTP Input",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/OTP-Input.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Date Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Date-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Time Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Time-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Date Range Picker",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Date-Range-Picker.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Table",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Table.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Pagination",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Pagination.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Progress Bar",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Progress-Bar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Stat Card",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Stat-Card.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Circular Progress",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Circular-Progress.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Side Menu",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Side-Menu.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Menu Bar",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Menu-Bar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Tabs",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Tabs.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Breadcrumb",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Breadcrumb.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Ellipsis",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Ellipsis.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Card",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Card.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Divider",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Divider.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Banner",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Banner.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Carousel",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Carousel.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Accordion",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Accordion.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Timeline",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Timeline.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Stepper",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Stepper.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "List",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/List.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Modal",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Modal.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Drawer",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Drawer.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Popover",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Popover.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Command Palette",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Command-Palette.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Dropdown Menu",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Dropdown-Menu.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Context Menu",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Context-Menu.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Tags",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Tags.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Chips",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Chips.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Badge",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Badge.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Avatar",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Avatar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Avatar Group",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Avatar-Group.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Tooltip",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Tooltip.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Skeleton",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Skeleton.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Spinner",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Spinner.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Snackbar",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Snackbar.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Alert",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Alert.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "Callout",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/Callout.png"
+    },
+    {
+      "kind": "library",
+      "theme": "dark",
+      "name": "State",
+      "ok": true,
+      "file": "visual/screenshots/library/dark/State.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Accordion",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Accordion.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Alert",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Alert.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Avatar",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Avatar.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "AvatarGroup",
+      "ok": true,
+      "file": "visual/screenshots/isolated/AvatarGroup.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Badge",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Badge.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Banner",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Banner.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Breadcrumb",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Breadcrumb.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Button",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Button.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Callout",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Callout.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Card",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Card.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Carousel",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Carousel.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Checkbox",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Checkbox.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Chip",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Chip.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "CircularProgress",
+      "ok": true,
+      "file": "visual/screenshots/isolated/CircularProgress.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "ColorPicker",
+      "ok": true,
+      "file": "visual/screenshots/isolated/ColorPicker.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "CommandPalette",
+      "ok": true,
+      "file": "visual/screenshots/isolated/CommandPalette.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "ContextMenu",
+      "ok": true,
+      "file": "visual/screenshots/isolated/ContextMenu.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "DatePicker",
+      "ok": true,
+      "file": "visual/screenshots/isolated/DatePicker.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "DateRangePicker",
+      "ok": true,
+      "file": "visual/screenshots/isolated/DateRangePicker.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Divider",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Divider.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Drawer",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Drawer.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "DropdownMenu",
+      "ok": true,
+      "file": "visual/screenshots/isolated/DropdownMenu.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Ellipsis",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Ellipsis.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "FileUploader",
+      "ok": true,
+      "file": "visual/screenshots/isolated/FileUploader.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "FilterDropdown",
+      "ok": true,
+      "file": "visual/screenshots/isolated/FilterDropdown.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Input",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Input.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "List",
+      "ok": true,
+      "file": "visual/screenshots/isolated/List.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "MenuBar",
+      "ok": true,
+      "file": "visual/screenshots/isolated/MenuBar.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Modal",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Modal.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "MultiSelect",
+      "ok": true,
+      "file": "visual/screenshots/isolated/MultiSelect.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "NavBar",
+      "ok": true,
+      "file": "visual/screenshots/isolated/NavBar.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "OtpInput",
+      "ok": true,
+      "file": "visual/screenshots/isolated/OtpInput.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Pagination",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Pagination.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Popover",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Popover.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "ProgressBar",
+      "ok": true,
+      "file": "visual/screenshots/isolated/ProgressBar.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "RadioButton",
+      "ok": true,
+      "file": "visual/screenshots/isolated/RadioButton.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "SearchInput",
+      "ok": true,
+      "file": "visual/screenshots/isolated/SearchInput.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "SelectDropdown",
+      "ok": true,
+      "file": "visual/screenshots/isolated/SelectDropdown.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Skeleton",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Skeleton.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Slider",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Slider.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Snackbar",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Snackbar.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Spinner",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Spinner.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "StatCard",
+      "ok": true,
+      "file": "visual/screenshots/isolated/StatCard.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "States",
+      "ok": true,
+      "file": "visual/screenshots/isolated/States.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Stepper",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Stepper.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Switch",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Switch.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Table",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Table.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Tabs",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Tabs.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Tag",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Tag.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "TextArea",
+      "ok": true,
+      "file": "visual/screenshots/isolated/TextArea.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "TimeLine",
+      "ok": true,
+      "file": "visual/screenshots/isolated/TimeLine.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "TimePicker",
+      "ok": true,
+      "file": "visual/screenshots/isolated/TimePicker.png"
+    },
+    {
+      "kind": "isolated",
+      "theme": "light",
+      "name": "Tooltip",
+      "ok": true,
+      "file": "visual/screenshots/isolated/Tooltip.png"
+    },
+    {
+      "kind": "icons",
+      "theme": "light",
+      "name": "icons-sheet",
+      "ok": true,
+      "file": "visual/screenshots/icons-sheet.png"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+
+> gwan-design-system@1.0.8 prebuild
+> echo "NEXT_PUBLIC_APP_VERSION=$(git describe --tags --abbrev=0)" > .env.local
+
+
+> gwan-design-system@1.0.8 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.3s
+  Running TypeScript ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/16) ...
+  Generating static pages using 3 workers (4/16) 
+  Generating static pages using 3 workers (8/16) 
+  Generating static pages using 3 workers (12/16) 
+✓ Generating static pages using 3 workers (16/16) in 1276.9ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /blog
+├ ● /blog/[slug]
+│ ├ /blog/building-accessible-forms
+│ ├ /blog/dark-mode-done-right
+│ ├ /blog/how-the-theme-system-works
+│ └ [+3 more paths]
+├ ƒ /blog/[slug]/opengraph-image
+├ ƒ /components-library
+├ ○ /docs
+├ ○ /home
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+└ ○ /themes
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

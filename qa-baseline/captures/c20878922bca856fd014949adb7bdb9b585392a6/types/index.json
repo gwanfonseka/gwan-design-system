@@ -1,0 +1,12 @@
+{
+  "origin": "dist/index.d.ts",
+  "emittedDeclarationFiles": [
+    "index.d.mts",
+    "index.d.ts"
+  ],
+  "apiExtractor": {
+    "ok": false,
+    "reason": "Cannot find module '@microsoft/api-extractor'\nRequire stack:\n- /tmp/gwan-qa-tools/package.json"
+  },
+  "exportCount": 398
+}

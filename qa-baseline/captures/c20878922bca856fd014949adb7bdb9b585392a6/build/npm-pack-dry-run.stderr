@@ -1,0 +1,8 @@
+
+> gwan-design-system@1.0.8 prepare
+> npm run build:lib
+
+
+> gwan-design-system@1.0.8 build:lib
+> tsup
+
