@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useTheme } from "next-themes";
+import { useIsClient } from "@/lib/useIsClient";
 import ThemesNavbar from "./navbar";
 import SharedFooter from "../shared/footer";
 import TokenEditor from "./token-editor";
@@ -17,15 +18,17 @@ const ThemesTemplate = () => {
   const [lightTokens, setLightTokens] = useState<TokenMap>({ ...LIGHT_DEFAULTS });
   const [darkTokens, setDarkTokens] = useState<TokenMap>({ ...DARK_DEFAULTS });
   const [scaleTokens, setScaleTokens] = useState<ScaleMap>(DEFAULT_SCALE);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
-
-  useEffect(() => {
-    if (mounted && theme) {
-      setActiveTab(theme === "dark" ? "dark" : "light");
+  const mounted = useIsClient();
+  // Last theme value we already copied into the tab. Null until the client
+  // theme is known, so a manual tab click is not overwritten on unrelated renders.
+  const [syncedTheme, setSyncedTheme] = useState<string | null>(null);
+  const themeKey = mounted && theme ? theme : null;
+  if (themeKey !== syncedTheme) {
+    setSyncedTheme(themeKey);
+    if (themeKey) {
+      setActiveTab(themeKey === "dark" ? "dark" : "light");
     }
-  }, [theme, mounted]);
+  }
 
   const handleTokenChange = useCallback((key: TokenKey, value: string) => {
     if (activeTab === "light") {

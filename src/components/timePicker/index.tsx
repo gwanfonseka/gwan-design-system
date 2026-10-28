@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState, type RefObject } from "react";
 import { FORM_ELEMENT_SIZE } from "../input";
 
 export enum TIME_FORMAT {
@@ -24,6 +24,46 @@ export interface ITimePicker {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+function scrollColumnTo(colRef: RefObject<HTMLDivElement | null>, activeIdx: number) {
+  const item = colRef.current?.querySelectorAll("button")[activeIdx];
+  item?.scrollIntoView({ block: "center" });
+}
+
+const TimeColumn = ({
+  options,
+  active,
+  onSelect,
+  colRef,
+  format: fmt,
+}: {
+  options: number[];
+  active: number;
+  onSelect: (v: number) => void;
+  colRef: RefObject<HTMLDivElement | null>;
+  format?: (v: number) => string;
+}) => (
+  <div
+    ref={colRef}
+    className="flex flex-col overflow-y-auto h-48 scrollbar-hide snap-y snap-mandatory"
+    style={{ scrollbarWidth: "none" }}
+  >
+    {options.map((opt) => (
+      <button
+        key={opt}
+        type="button"
+        onClick={() => onSelect(opt)}
+        className={`snap-center px-3 py-1.5 text-sm font-medium rounded transition-colors duration-150 shrink-0 ${
+          opt === active
+            ? "bg-primary-default text-primary-default-fg"
+            : "text-foreground hover:bg-surface-raised"
+        }`}
+      >
+        {fmt ? fmt(opt) : pad(opt)}
+      </button>
+    ))}
+  </div>
+);
+
 const TimePicker: FC<ITimePicker> = ({
   value,
   onChange,
@@ -41,25 +81,33 @@ const TimePicker: FC<ITimePicker> = ({
   const isSM = size === FORM_ELEMENT_SIZE.SM;
 
   const parseValue = (v?: string | null) => {
-    if (!v) return { h: 12, m: 0, s: 0, period: "AM" as "AM" | "PM" };
+    const fallback = { h: 12, m: 0, s: 0, period: "AM" as "AM" | "PM", valid: false };
+    if (!v || !v.trim()) return fallback;
     const parts = v.split(":");
-    let h = parseInt(parts[0] ?? "12", 10);
-    const m = parseInt(parts[1] ?? "0", 10);
-    const s = parseInt(parts[2] ?? "0", 10);
+    const read = (raw: string | undefined) => (raw == null ? Number.NaN : parseInt(raw, 10));
+    const h24 = read(parts[0]);
+    const m = parts.length < 2 ? 0 : read(parts[1]);
+    const s = parts.length < 3 ? 0 : read(parts[2]);
+    const inRange = (n: number, min: number, max: number) => Number.isFinite(n) && n >= min && n <= max;
+    if (!inRange(h24, 0, 23) || !inRange(m, 0, 59) || !inRange(s, 0, 59)) return fallback;
+    let h = h24;
     let period: "AM" | "PM" = "AM";
     if (is12h) {
       period = h >= 12 ? "PM" : "AM";
       if (h === 0) h = 12;
       else if (h > 12) h -= 12;
     }
-    return { h, m, s, period };
+    return { h, m, s, period, valid: true };
   };
 
-  const { h: initH, m: initM, s: initS, period: initP } = parseValue(value);
-  const [hours, setHours] = useState(initH);
-  const [minutes, setMinutes] = useState(initM);
-  const [seconds, setSeconds] = useState(initS);
-  const [period, setPeriod] = useState<"AM" | "PM">(initP);
+  const initial = parseValue(value);
+  const [hours, setHours] = useState(initial.h);
+  const [minutes, setMinutes] = useState(initial.m);
+  const [seconds, setSeconds] = useState(initial.s);
+  const [period, setPeriod] = useState<"AM" | "PM">(initial.period);
+  const [valid, setValid] = useState(initial.valid);
+  const [prevValue, setPrevValue] = useState(value);
+  const [prevFormat, setPrevFormat] = useState(format);
   const [open, setOpen]             = useState(false);
   const [alignRight, setAlignRight] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
@@ -85,16 +133,24 @@ const TimePicker: FC<ITimePicker> = ({
   const handlePeriod = (p: "AM" | "PM") => { setPeriod(p); emitChange(hours, minutes, seconds, p); };
 
   const displayHour = is12h ? hours : hours;
-  const displayValue = value
+  const displayValue = value && valid
     ? is12h
       ? `${pad(displayHour)}:${pad(minutes)}${withSeconds ? `:${pad(seconds)}` : ""} ${period}`
       : `${pad(hours)}:${pad(minutes)}${withSeconds ? `:${pad(seconds)}` : ""}`
     : "";
 
-  useEffect(() => {
-    const { h, m, s, period: p } = parseValue(value);
-    setHours(h); setMinutes(m); setSeconds(s); setPeriod(p);
-  }, [value]);
+  const parsed = parseValue(value);
+  // Re-parse when the controlled value or the format changes. A format-only
+  // change must move 14:30 from 24h into 02:30 PM.
+  if (value !== prevValue || format !== prevFormat) {
+    setPrevValue(value);
+    setPrevFormat(format);
+    setHours(parsed.h);
+    setMinutes(parsed.m);
+    setSeconds(parsed.s);
+    setPeriod(parsed.period);
+    setValid(parsed.valid);
+  }
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -104,33 +160,39 @@ const TimePicker: FC<ITimePicker> = ({
     return () => document.removeEventListener("mousedown", handleOutside);
   }, [open]);
 
-  useEffect(() => {
-    if (open && ref.current) {
-      const rect        = ref.current.getBoundingClientRect();
-      const panelWidth  = 240;
-      const panelHeight = 220;
-      setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
-      setOpenUpward(window.innerHeight - rect.bottom < panelHeight && rect.top > panelHeight);
-    }
-  }, [open]);
+  const updatePlacement = () => {
+    const el = ref.current;
+    if (!el) return;
+    const rect        = el.getBoundingClientRect();
+    const panelWidth  = 240;
+    const panelHeight = 220;
+    setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
+    setOpenUpward(window.innerHeight - rect.bottom < panelHeight && rect.top > panelHeight);
+  };
 
-  const scrollToActive = (colRef: React.RefObject<HTMLDivElement | null>, activeIdx: number) => {
-    if (colRef.current) {
-      const item = colRef.current.querySelectorAll("button")[activeIdx];
-      item?.scrollIntoView({ block: "center" });
-    }
+  const toggleOpen = () => {
+    if (disabled) return;
+    if (!open) updatePlacement();
+    setOpen((v) => !v);
   };
 
   const hourColRef = useRef<HTMLDivElement>(null);
   const minColRef = useRef<HTMLDivElement>(null);
   const secColRef = useRef<HTMLDivElement>(null);
 
+  // Latest targets for the open-only scroll. Selecting a time must not scroll again.
+  const scrollStateRef = useRef({ hourIndex: 0, minutes: 0, seconds: 0, withSeconds: false });
+  useEffect(() => {
+    const hourIndex = is12h ? Math.max(0, hourOptions.indexOf(hours)) : hours;
+    scrollStateRef.current = { hourIndex, minutes, seconds, withSeconds };
+  }, [hourOptions, hours, is12h, minutes, seconds, withSeconds]);
+
   useEffect(() => {
     if (open) {
-      const hIdx = is12h ? hourOptions.indexOf(hours) : hours;
-      scrollToActive(hourColRef, hIdx >= 0 ? hIdx : 0);
-      scrollToActive(minColRef, minutes);
-      if (withSeconds) scrollToActive(secColRef, seconds);
+      const target = scrollStateRef.current;
+      scrollColumnTo(hourColRef, target.hourIndex);
+      scrollColumnTo(minColRef, target.minutes);
+      if (target.withSeconds) scrollColumnTo(secColRef, target.seconds);
     }
   }, [open]);
 
@@ -138,41 +200,6 @@ const TimePicker: FC<ITimePicker> = ({
   const borderClass = isError
     ? "border-danger"
     : "border-border hover:border-primary-default focus:border-primary-default";
-
-  const Column = ({
-    options,
-    active,
-    onSelect,
-    colRef,
-    format: fmt,
-  }: {
-    options: number[];
-    active: number;
-    onSelect: (v: number) => void;
-    colRef: React.RefObject<HTMLDivElement | null>;
-    format?: (v: number) => string;
-  }) => (
-    <div
-      ref={colRef}
-      className="flex flex-col overflow-y-auto h-48 scrollbar-hide snap-y snap-mandatory"
-      style={{ scrollbarWidth: "none" }}
-    >
-      {options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          onClick={() => onSelect(opt)}
-          className={`snap-center px-3 py-1.5 text-sm font-medium rounded transition-colors duration-150 shrink-0 ${
-            opt === active
-              ? "bg-primary-default text-primary-default-fg"
-              : "text-foreground hover:bg-surface-raised"
-          }`}
-        >
-          {fmt ? fmt(opt) : pad(opt)}
-        </button>
-      ))}
-    </div>
-  );
 
   return (
     <div ref={ref} className={`flex flex-col gap-1 relative ${className}`}>
@@ -184,7 +211,7 @@ const TimePicker: FC<ITimePicker> = ({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setOpen((v) => !v)}
+        onClick={toggleOpen}
         className={`w-full text-left bg-surface border rounded ${borderClass} ${triggerHeight} px-3 outline-none transition-colors duration-200 ${
           disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         } ${open ? (isError ? "border-danger" : "border-primary-default") : ""}`}
@@ -196,7 +223,7 @@ const TimePicker: FC<ITimePicker> = ({
 
       {open && (
         <div className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-2 flex gap-1 min-w-40 ${openUpward ? "bottom-full mb-1" : "top-full mt-1"} ${alignRight ? "right-0" : "left-0"}`}>
-          <Column
+          <TimeColumn
             options={hourOptions}
             active={hours}
             onSelect={handleHour}
@@ -204,7 +231,7 @@ const TimePicker: FC<ITimePicker> = ({
             format={(v) => pad(v)}
           />
           <div className="flex items-center justify-center text-muted-fg font-bold text-sm px-0.5">:</div>
-          <Column
+          <TimeColumn
             options={minuteOptions}
             active={minutes}
             onSelect={handleMinute}
@@ -213,7 +240,7 @@ const TimePicker: FC<ITimePicker> = ({
           {withSeconds && (
             <>
               <div className="flex items-center justify-center text-muted-fg font-bold text-sm px-0.5">:</div>
-              <Column
+              <TimeColumn
                 options={secondOptions}
                 active={seconds}
                 onSelect={handleSecond}

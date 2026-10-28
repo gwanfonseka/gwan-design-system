@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
@@ -106,7 +107,7 @@ const PostTemplate = ({
       <main className="pt-20 pb-24 max-w-7xl mx-auto px-5 md:px-10">
         <div className="max-w-3xl mx-auto">
           {/* Back link */}
-          <a
+          <Link
             href="/blog"
             className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.15em] uppercase text-muted-fg hover:text-foreground transition-colors duration-200 mt-8 mb-10"
           >
@@ -125,7 +126,7 @@ const PostTemplate = ({
               />
             </svg>
             All posts
-          </a>
+          </Link>
 
           {/* Tags */}
           {post.tags.length > 0 && (
@@ -204,12 +205,12 @@ const PostTemplate = ({
               </p>
               <p className="text-sm font-bold text-foreground">{post.author}</p>
             </div>
-            <a
+            <Link
               href="/blog"
               className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-fg hover:text-foreground transition-colors duration-200"
             >
               More posts →
-            </a>
+            </Link>
           </div>
         </div>
       </main>

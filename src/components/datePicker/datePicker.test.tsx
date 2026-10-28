@@ -114,7 +114,6 @@ describe("DatePicker", () => {
     expect(within(panel(container)).getAllByRole("spinbutton")[0]).toHaveValue(21);
     expect(within(panel(container)).getAllByRole("spinbutton")[1]).toHaveValue(45);
 
-    // SUSPECTED BUG: clearing `value` updates the trigger but leaves the viewed month and time inputs alone.
     rerender(
       <DatePicker
         onChange={onChange}
@@ -124,8 +123,10 @@ describe("DatePicker", () => {
       />,
     );
     expect(screen.getByRole("button", { name: "Select date" })).toBeInTheDocument();
-    expect(heading(container)).toBe("June 2026");
-    expect(within(panel(container)).getAllByRole("spinbutton")[0]).toHaveValue(21);
+    expect(heading(container)).toBe("March 2026");
+    const cleared = within(panel(container)).getAllByRole("spinbutton");
+    expect(cleared[0]).toHaveValue(14);
+    expect(cleared[1]).toHaveValue(30);
   });
 
   it("moves the viewed month and marks today", async () => {
@@ -230,7 +231,7 @@ describe("DatePicker", () => {
     expect((onChange.mock.calls[0][0] as Date).getDate()).toBe(10);
   });
 
-  it("clears and closes when there is no time picker, and clears without closing when there is", async () => {
+  it("clears and closes with or without the time picker", async () => {
     const user = userEvent.setup();
     const plain = renderPicker({ value: new Date(2026, 2, 15) });
     await user.click(screen.getByRole("button", { name: "15 Mar 2026" }));
@@ -242,8 +243,7 @@ describe("DatePicker", () => {
     await user.click(screen.getByRole("button", { name: "15 Mar 2026 09:00" }));
     await user.click(within(panel(timed.container)).getByRole("button", { name: "Clear selection" }));
     expect(timed.onChange).toHaveBeenCalledWith(null);
-    // SUSPECTED BUG: Clear in time-picker mode does not close the panel.
-    expect(timed.container.querySelector(".absolute.z-50")).toBeTruthy();
+    expect(timed.container.querySelector(".absolute.z-50")).toBeNull();
   });
 
   it("does not open when disabled, closes on an outside press, and shows errors", async () => {

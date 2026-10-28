@@ -9,32 +9,9 @@ import Avatar, {
 } from "./index";
 
 /**
- * Today's pastel is NOT derived from name/email. It is:
- *   hsl(floor(random*360), 60+random*20 %, 75+random*10 %)
- * applied in an effect, so the first paint is transparent.
- * Exact values below lock that formula.
+ * The swatch is a pastel derived from the name (or the email when the name
+ * is blank). It is stable across mounts and present in the server render.
  */
-
-/** jsdom serialises the inline hsl() as computed rgb(). This is that conversion. */
-function pastelRgb(hueUnit: number, satUnit: number, lightUnit: number) {
-  const h = Math.floor(hueUnit * 360);
-  const s = (60 + satUnit * 20) / 100;
-  const l = (75 + lightUnit * 10) / 100;
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = l - c / 2;
-  let r = 0;
-  let g = 0;
-  let b = 0;
-  if (h < 60) [r, g, b] = [c, x, 0];
-  else if (h < 120) [r, g, b] = [x, c, 0];
-  else if (h < 180) [r, g, b] = [0, c, x];
-  else if (h < 240) [r, g, b] = [0, x, c];
-  else if (h < 300) [r, g, b] = [x, 0, c];
-  else [r, g, b] = [c, 0, x];
-  const channel = (n: number) => Math.round((n + m) * 255);
-  return `rgb(${channel(r)}, ${channel(g)}, ${channel(b)})`;
-}
 
 function swatch(container: HTMLElement) {
   return container.querySelector(".rounded-full.font-semibold") as HTMLElement;
@@ -45,64 +22,57 @@ afterEach(() => {
 });
 
 describe("Avatar", () => {
-  it("paints an exact pastel from the random sequence, independent of identity", () => {
-    vi.spyOn(Math, "random")
-      .mockReturnValueOnce(0.5)
-      .mockReturnValueOnce(0.25)
-      .mockReturnValueOnce(0.5);
-
-    const { container } = render(
-      <Avatar
-        name="Ada Lovelace"
-        email="ada@example.com"
-        variant={AVATAR_VARIANT.INITIALS_ONLY}
-      />,
-    );
-
-    expect(swatch(container).style.backgroundColor).toBe(pastelRgb(0.5, 0.25, 0.5));
-    expect(swatch(container).style.backgroundColor).toBe("rgb(171, 237, 237)");
-  });
-
-  it("uses the same colour for different names when the random sequence matches", () => {
-    const sequence = [0, 0, 1];
-    const spy = vi.spyOn(Math, "random");
-    sequence.forEach((n) => spy.mockReturnValueOnce(n));
+  it("derives one stable pastel from the name and ignores Math.random", () => {
+    const random = vi.spyOn(Math, "random");
     const first = render(
-      <Avatar name="Ada Lovelace" email="a@x.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+      <Avatar name="Ada Lovelace" email="ada@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
     );
-    const firstColor = swatch(first.container).style.backgroundColor;
+    const ada = swatch(first.container).style.backgroundColor;
+    first.unmount();
 
-    sequence.forEach((n) => spy.mockReturnValueOnce(n));
     const second = render(
-      <Avatar name="Grace Hopper" email="g@x.com" variant={AVATAR_VARIANT.INITIALS_WITH_FULL} />,
+      <Avatar name="Ada Lovelace" email="other@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
     );
+    expect(ada).not.toBe("");
+    expect(ada).not.toBe("transparent");
+    expect(swatch(second.container).style.backgroundColor).toBe(ada);
 
-    expect(firstColor).toBe(pastelRgb(0, 0, 1));
-    expect(firstColor).toBe("rgb(240, 194, 194)");
-    expect(swatch(second.container).style.backgroundColor).toBe(firstColor);
+    const grace = render(
+      <Avatar name="Grace Hopper" email="ada@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+    );
+    expect(swatch(grace.container).style.backgroundColor).not.toBe(ada);
+    expect(random).not.toHaveBeenCalled();
   });
 
-  it("locks the upper end of the pastel formula", () => {
-    vi.spyOn(Math, "random")
-      .mockReturnValueOnce(0.999)
-      .mockReturnValueOnce(1)
-      .mockReturnValueOnce(1);
-
-    const { container } = render(
-      <Avatar name="Ken" email="k@x.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+  it("uses the email when the name is blank and keeps that colour across mounts", () => {
+    const first = render(
+      <Avatar name="   " email="ada@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
     );
+    const color = swatch(first.container).style.backgroundColor;
+    first.unmount();
+    const second = render(
+      <Avatar name="" email="ada@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+    );
+    expect(color).not.toBe("");
+    expect(color).not.toBe("transparent");
+    expect(swatch(second.container).style.backgroundColor).toBe(color);
 
-    expect(swatch(container).style.backgroundColor).toBe(pastelRgb(0.999, 1, 1));
-    expect(swatch(container).style.backgroundColor).toBe("rgb(247, 186, 187)");
+    const other = render(
+      <Avatar name="" email="grace@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+    );
+    expect(swatch(other.container).style.backgroundColor).not.toBe(color);
   });
 
-  it("server-renders a transparent swatch before the effect runs", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.5);
+  it("server-renders the same name-derived swatch colour", () => {
     const html = renderToString(
       <Avatar name="Ada Lovelace" email="ada@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
     );
-    expect(html).toContain("background-color:transparent");
-    expect(html).not.toContain("hsl(");
+    const again = renderToString(
+      <Avatar name="Ada Lovelace" email="ada@example.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+    );
+    expect(html).toBe(again);
+    expect(html).toMatch(/background-color:hsl\(/);
+    expect(html).not.toContain("background-color:transparent");
     expect(html).toContain("AL");
   });
 
@@ -121,9 +91,8 @@ describe("Avatar", () => {
     );
     expect(screen.getByText("JP")).toBeInTheDocument();
 
-    // SUSPECTED BUG: a blank second word drops the real second initial ("a" + "").
     rerender(<Avatar name="a  b" email="a@x.com" variant={AVATAR_VARIANT.INITIALS_ONLY} />);
-    expect(screen.getByText("a")).toBeInTheDocument();
+    expect(screen.getByText("ab")).toBeInTheDocument();
   });
 
   it.each([
@@ -259,8 +228,7 @@ describe("Avatar", () => {
     expect(container.querySelector(".animate-pulse")).toBeTruthy();
     const bars = container.querySelectorAll(".bg-surface-raised");
     expect(bars.length).toBeGreaterThanOrEqual(3);
-    // SUSPECTED BUG: className is omitted while isLoading is true.
-    expect(container.firstElementChild!.className).not.toContain("should-drop");
+    expect(container.firstElementChild!.className).toContain("should-drop");
 
     rerender(
       <Avatar

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import TimeLine, { STEP_DIRECTION, STEP_STATUS, type ILog } from "./index";
 
 function log(title: string, status: string, extra: Partial<ILog> = {}): ILog {
@@ -110,13 +110,18 @@ describe("TimeLine", () => {
     );
   });
 
-  // SUSPECTED BUG: status matching is case-sensitive, so "success" is a neutral step.
-  it("treats a differently cased status as neutral", () => {
+  it("matches Success, Failed, and Finished without case sensitivity", () => {
     render(
-      <TimeLine direction={STEP_DIRECTION.UPWARD} logs={[log("Odd", "success")]} />,
+      <TimeLine
+        direction={STEP_DIRECTION.UPWARD}
+        logs={[log("Odd", "success"), log("Bad", "FAILED"), log("Done", "finished")]}
+      />,
     );
-    expect(iconClass("Odd")).toContain("bg-surface-raised");
-    expect(iconClass("Odd")).not.toContain("bg-success");
+    expect(titles()).toEqual(["Odd", "Bad", "Done"]);
+    expect(iconClass("Odd")).toContain("bg-success");
+    expect(iconClass("Bad")).toContain("bg-danger");
+    expect(iconClass("Done")).toContain("bg-success");
+    expect(screen.queryByText("Pending")).not.toBeInTheDocument();
   });
 
   it("reorders when direction changes", () => {
@@ -135,10 +140,10 @@ describe("TimeLine", () => {
     expect(titles()).toEqual(["Only"]);
   });
 
-  // SUSPECTED BUG: an empty log list reads logs[-1].status and throws.
-  it("throws when logs is empty", () => {
-    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<TimeLine logs={[]} />)).toThrow(TypeError);
-    spy.mockRestore();
+  it("renders an empty timeline when logs is empty", () => {
+    const { container } = render(<TimeLine logs={[]} className="timeline" />);
+    expect(container.firstElementChild).toHaveClass("timeline");
+    expect(container.firstElementChild).toBeEmptyDOMElement();
+    expect(screen.queryByText("Pending")).not.toBeInTheDocument();
   });
 });

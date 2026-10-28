@@ -51,9 +51,16 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   isLoading = false,
   emptyMessage = "No options found",
 }: ISelectDropdown) => {
-  const [dropdownValue, setDropdownValue] = useState<string>("");
+  const labelForValue = (opts: ISelectDropdownOption[], val: string) => {
+    const option = opts.find((opt) => (opt.value ?? opt.label) === val);
+    return option ? option.label : val;
+  };
+
+  const [dropdownValue, setDropdownValue] = useState(() => labelForValue(options, value));
+  const [prevValue, setPrevValue] = useState(value);
+  const [prevOptions, setPrevOptions] = useState(options);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const [openUpward, setOpenUpward] = useState(false);
+  const [anchor, setAnchor] = useState<{ spaceBelow: number; top: number } | null>(null);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -75,43 +82,63 @@ const SelectDropdown: FC<ISelectDropdown> = ({
     ? options.filter((o) => o.label.toLowerCase().includes(searchQuery.toLowerCase()))
     : options;
 
-  useEffect(() => {
-    const option = options.find((opt) => (opt.value ?? opt.label) === value);
-    setDropdownValue(option ? option.label : value);
-  }, [value, options]);
+  // Same triggers as the old effect: a new value or options array snaps the
+  // label back, including after an optimistic selection.
+  if (value !== prevValue || options !== prevOptions) {
+    setPrevValue(value);
+    setPrevOptions(options);
+    setDropdownValue(labelForValue(options, value));
+  }
 
-  // Click-outside to close
+  // Click-outside closes and clears highlight/search, matching the old open effect.
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOptionsVisible(false);
+        setHighlightedIndex(-1);
+        setSearchQuery("");
       }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Position (up/down) when opening
-  useEffect(() => {
-    if (isOptionsVisible && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const dropdownHeight = Math.min(displayOptions.length * 40 + (searchable ? 52 : 0), 320);
-      const spaceBelow = window.innerHeight - rect.bottom;
-      setOpenUpward(spaceBelow < dropdownHeight && rect.top > spaceBelow);
-    }
-  }, [isOptionsVisible, displayOptions.length, searchable]);
+  const dropdownHeight = Math.min(displayOptions.length * 40 + (searchable ? 52 : 0), 320);
+  const openUpward =
+    anchor !== null &&
+    anchor.spaceBelow < dropdownHeight &&
+    anchor.top > anchor.spaceBelow;
 
-  // Highlight current selection when opening; auto-focus search
-  useEffect(() => {
-    if (isOptionsVisible) {
-      const idx = displayOptions.findIndex((o) => (o.value ?? o.label) === value);
-      setHighlightedIndex(idx);
-      if (searchable) setTimeout(() => searchRef.current?.focus(), 0);
-    } else {
-      setHighlightedIndex(-1);
-      setSearchQuery("");
-    }
-  }, [isOptionsVisible]);
+  const measureAnchor = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setAnchor({
+      spaceBelow: window.innerHeight - rect.bottom,
+      top: rect.top,
+    });
+  };
+
+  const openMenu = () => {
+    if (disabled) return;
+    measureAnchor();
+    const idx = displayOptions.findIndex((o) => (o.value ?? o.label) === value);
+    setHighlightedIndex(idx);
+    setIsOptionsVisible(true);
+    if (searchable) setTimeout(() => searchRef.current?.focus(), 0);
+  };
+
+  const closeMenu = () => {
+    setIsOptionsVisible(false);
+    setHighlightedIndex(-1);
+    setSearchQuery("");
+  };
+
+  const toggleMenu = () => {
+    if (disabled) return;
+    if (isOptionsVisible) closeMenu();
+    else openMenu();
+  };
 
   // Scroll highlighted option into view
   useEffect(() => {
@@ -121,15 +148,11 @@ const SelectDropdown: FC<ISelectDropdown> = ({
     }
   }, [highlightedIndex]);
 
-  const open  = () => !disabled && setIsOptionsVisible(true);
-  const close = () => setIsOptionsVisible(false);
-  const toggle = () => !disabled && setIsOptionsVisible((v) => !v);
-
   const handleSelect = (option: ISelectDropdownOption) => {
     const actualValue = option.value ?? option.label;
     setDropdownValue(option.label);
     onChange(actualValue);
-    setIsOptionsVisible(false);
+    closeMenu();
     triggerRef.current?.focus();
   };
 
@@ -147,7 +170,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
     if (!isOptionsVisible) {
       if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) {
         e.preventDefault();
-        open();
+        openMenu();
       }
       return;
     }
@@ -155,6 +178,8 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   const handleSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // Space belongs to the query. Enter still selects the highlighted option.
+    if (e.key === " ") return;
     navigateList(e);
   };
 
@@ -170,7 +195,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
       if (highlightedIndex >= 0) handleSelect(displayOptions[highlightedIndex]);
     } else if (e.key === "Escape") {
       e.preventDefault();
-      close();
+      closeMenu();
       triggerRef.current?.focus();
     }
   };
@@ -209,18 +234,18 @@ const SelectDropdown: FC<ISelectDropdown> = ({
             aria-describedby={isError && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
             className={`bg-surface text-foreground border outline-none ${sizeClass} ${
-              rounded && "rounded"
+              rounded ? "rounded" : ""
             } ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${
               isError
                 ? "border-danger focus:border-danger"
                 : "border-border hover:border-primary-default focus:border-primary-default"
             } w-full placeholder:text-muted-fg/60 dark:placeholder:text-muted-fg/40 transition-colors duration-200 ${inputClassName}`}
             placeholder={placeholder}
-            onClick={toggle}
+            onClick={toggleMenu}
             onKeyDown={handleTriggerKeyDown}
             onBlur={(e) => {
               if (!containerRef.current?.contains(e.relatedTarget as Node)) {
-                setIsOptionsVisible(false);
+                closeMenu();
               }
             }}
             value={dropdownValue}
@@ -235,7 +260,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
             id={listboxId}
             role="listbox"
             aria-label={label}
-            className={`border border-border ${rounded && "rounded"} shadow-lg absolute min-w-full bg-surface z-10 ${
+            className={`border border-border ${rounded ? "rounded" : ""} shadow-lg absolute min-w-full bg-surface z-10 ${
               openUpward ? "bottom-full mb-1" : "top-full mt-1"
             } overflow-hidden`}
           >
@@ -283,7 +308,12 @@ const SelectDropdown: FC<ISelectDropdown> = ({
                     className={`px-3 py-2.5 cursor-pointer text-sm text-foreground transition-colors ${
                       highlightedIndex === index ? "bg-surface-raised" : "hover:bg-surface-raised"
                     }`}
-                    onMouseDown={() => handleSelect({ label: optLabel, value: optVal })}
+                    onMouseDown={(e) => {
+                      // Keep the following click from moving focus to the body
+                      // after this option unmounts.
+                      e.preventDefault();
+                      handleSelect({ label: optLabel, value: optVal });
+                    }}
                     onMouseEnter={() => setHighlightedIndex(index)}
                   >
                     {optLabel}

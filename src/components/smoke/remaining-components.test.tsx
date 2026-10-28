@@ -413,9 +413,7 @@ describe("remaining exported components", () => {
         <p>Are you sure?</p>
       </Modal>,
     );
-    // SUSPECTED BUG: the overlay is aria-hidden, so the dialog is removed from the accessibility tree.
-    expect(screen.getByRole("dialog", { name: "Confirm", hidden: true })).toBeInTheDocument();
-    expect(screen.queryByRole("dialog", { name: "Confirm" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Confirm" })).toBeInTheDocument();
     fireEvent.keyDown(window, { key: "Escape" });
     expect(onClear).toHaveBeenCalledTimes(1);
   });
@@ -626,8 +624,9 @@ describe("remaining exported components", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Switch checked={false} onChange={onChange} label="Alerts" description="Email" size={SWITCH_SIZE.LARGE} />);
-    // Label and description are concatenated into one accessible name.
-    await user.click(screen.getByRole("switch", { name: "AlertsEmail" }));
+    const toggle = screen.getByRole("switch", { name: "Alerts" });
+    expect(toggle).toHaveAccessibleDescription("Email");
+    await user.click(toggle);
     expect(onChange).toHaveBeenCalledWith(true);
     render(<Switch checked disabled onChange={onChange} label="Locked" />);
     expect(screen.getByRole("switch", { name: "Locked" })).toBeDisabled();
