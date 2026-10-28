@@ -413,9 +413,7 @@ describe("remaining exported components", () => {
         <p>Are you sure?</p>
       </Modal>,
     );
-    // SUSPECTED BUG: the overlay is aria-hidden, so the dialog is removed from the accessibility tree.
-    expect(screen.getByRole("dialog", { name: "Confirm", hidden: true })).toBeInTheDocument();
-    expect(screen.queryByRole("dialog", { name: "Confirm" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Confirm" })).toBeInTheDocument();
     fireEvent.keyDown(window, { key: "Escape" });
     expect(onClear).toHaveBeenCalledTimes(1);
   });
