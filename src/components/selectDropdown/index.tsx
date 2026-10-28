@@ -155,6 +155,8 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   const handleSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // Space belongs to the query. Enter still selects the highlighted option.
+    if (e.key === " ") return;
     navigateList(e);
   };
 
@@ -209,7 +211,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
             aria-describedby={isError && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
             className={`bg-surface text-foreground border outline-none ${sizeClass} ${
-              rounded && "rounded"
+              rounded ? "rounded" : ""
             } ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${
               isError
                 ? "border-danger focus:border-danger"
@@ -235,7 +237,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
             id={listboxId}
             role="listbox"
             aria-label={label}
-            className={`border border-border ${rounded && "rounded"} shadow-lg absolute min-w-full bg-surface z-10 ${
+            className={`border border-border ${rounded ? "rounded" : ""} shadow-lg absolute min-w-full bg-surface z-10 ${
               openUpward ? "bottom-full mb-1" : "top-full mt-1"
             } overflow-hidden`}
           >
@@ -283,7 +285,12 @@ const SelectDropdown: FC<ISelectDropdown> = ({
                     className={`px-3 py-2.5 cursor-pointer text-sm text-foreground transition-colors ${
                       highlightedIndex === index ? "bg-surface-raised" : "hover:bg-surface-raised"
                     }`}
-                    onMouseDown={() => handleSelect({ label: optLabel, value: optVal })}
+                    onMouseDown={(e) => {
+                      // Keep the following click from moving focus to the body
+                      // after this option unmounts.
+                      e.preventDefault();
+                      handleSelect({ label: optLabel, value: optVal });
+                    }}
                     onMouseEnter={() => setHighlightedIndex(index)}
                   >
                     {optLabel}

@@ -108,9 +108,7 @@ describe("SelectDropdown", () => {
     await user.click(screen.getByRole("option", { name: "Cherry" }));
     expect(onChange).toHaveBeenCalledWith("cherry");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    // SUSPECTED BUG: handleSelect focuses the trigger, but the click that follows
-    // leaves focus on the document body.
-    expect(document.activeElement).toBe(document.body);
+    expect(screen.getByRole("combobox")).toHaveFocus();
   });
 
   it("uses the label as the value when an option has no value", async () => {
@@ -278,14 +276,13 @@ describe("SelectDropdown", () => {
     expect(onChange).toHaveBeenCalledWith("cherry");
   });
 
-  // SUSPECTED BUG: Space always preventDefault's inside the search field, so a query cannot contain a space.
-  it("does not insert a space into the search query", async () => {
+  it("inserts a space into the search query", async () => {
     const user = userEvent.setup();
     renderSelect({ searchable: true, value: "" });
     await user.click(screen.getByRole("combobox"));
     const search = screen.getByPlaceholderText("Search...");
     await user.type(search, "a b");
-    expect(search).toHaveValue("ab");
+    expect(search).toHaveValue("a b");
   });
 
   it("moves the highlight on mouse enter and closes on an outside press", async () => {
@@ -350,7 +347,8 @@ describe("SelectDropdown", () => {
     expect(listbox().className).toContain("bottom-full");
   });
 
-  it("applies size and edge classes", () => {
+  it("applies size and edge classes", async () => {
+    const user = userEvent.setup();
     const { rerender, onChange } = renderSelect({
       size: FORM_ELEMENT_SIZE.SM,
       edges: FORM_ELEMENT_EDGE_STYLE.SQUARED,
@@ -358,8 +356,10 @@ describe("SelectDropdown", () => {
     const input = screen.getByRole("combobox");
     expect(input.className).toContain("text-xs");
     expect(input.className.split(/\s+/)).not.toContain("rounded");
-    // SUSPECTED BUG: `rounded && "rounded"` stringifies to the class "false".
-    expect(input.className.split(/\s+/)).toContain("false");
+    expect(input.className.split(/\s+/)).not.toContain("false");
+    await user.click(input);
+    expect(screen.getByRole("listbox").className.split(/\s+/)).not.toContain("false");
+    expect(screen.getByRole("listbox").className.split(/\s+/)).not.toContain("rounded");
 
     rerender(
       <SelectDropdown
