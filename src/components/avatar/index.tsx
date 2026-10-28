@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
 export enum AVATAR_VARIANT {
@@ -40,9 +40,23 @@ const sizeMap = {
   [AVATAR_SIZE.XL]: { avatar: "size-18",   text: "text-lg",   sub: "text-sm",     initials: "text-base"},
 };
 
-const generatePastelColor = () => {
-  const hue = Math.floor(Math.random() * 360);
-  return `hsl(${hue}, ${60 + Math.random() * 20}%, ${75 + Math.random() * 10}%)`;
+/** FNV-1a. Stable across runtimes so SSR and the client paint the same swatch. */
+function hashString(value: string): number {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+/** Pastel in the same band the random swatch used: sat 60–80%, light 75–85%. */
+const generatePastelColor = (seed: string) => {
+  const hash = hashString(seed || "avatar");
+  const hue = hash % 360;
+  const saturation = 60 + (hash % 21);
+  const lightness = 75 + (Math.floor(hash / 360) % 11);
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
 const Avatar: FC<IAvatar> = ({
@@ -55,24 +69,20 @@ const Avatar: FC<IAvatar> = ({
   className = "",
   isLoading = false,
 }) => {
-  const [bgColor, setBgColor] = useState<string>("transparent");
   const [isTooltipInitialVisible, setIsTooltipInitialVisible] = useState(false);
   const [isTooltipImageVisible, setIsTooltipImageVisible] = useState(false);
-
-  useEffect(() => {
-    setBgColor(generatePastelColor());
-  }, []);
+  const bgColor = generatePastelColor(name.trim() || email.trim());
 
   const sizes = sizeMap[size];
   const tooltipPos = labelPosition === AVATAR_LABEL_POSITION.LEFT
     ? TOOLTIP_POSITION.LEFT
     : TOOLTIP_POSITION.RIGHT;
 
-  const generateInitials = (name: string) => {
-    const parts = name.split(" ");
-    return parts.length > 1
-      ? `${parts[0].charAt(0)}${parts[1].charAt(0)}`
-      : parts[0].charAt(0);
+  const generateInitials = (fullName: string) => {
+    const parts = fullName.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return "";
+    if (parts.length === 1) return parts[0].charAt(0);
+    return `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
   };
 
   const renderTooltip = (isVisible: boolean) => (
@@ -137,7 +147,7 @@ const Avatar: FC<IAvatar> = ({
       </div>
     );
     return (
-      <div className="flex flex-row items-center gap-2 pl-1.25 animate-pulse">
+      <div className={`flex flex-row items-center gap-2 pl-1.25 animate-pulse ${className}`}>
         {labelPosition === AVATAR_LABEL_POSITION.LEFT && shimmerLabel}
         <div className={`${sizes.avatar} rounded-full bg-surface-raised`} />
         {labelPosition === AVATAR_LABEL_POSITION.RIGHT && shimmerLabel}
