@@ -210,13 +210,7 @@ describe("MenuBar", () => {
     expect(onNavigate).toHaveBeenCalledWith("/shoes");
   });
 
-  /**
-   * TODAY there is no roving tabindex. Enter and Space activate the focused
-   * button through native button behaviour. Arrow keys, Home, End, and Escape
-   * do not move focus, change the active item, or close a submenu.
-   * Suspected a11y gap — locked so a refactor does not invent a different model.
-   */
-  it("activates the focused item with Enter and Space only", async () => {
+  it("activates the focused item with Enter and Space", async () => {
     mockWidths(1000, 40);
     const user = userEvent.setup();
     const onClick = vi.fn();
@@ -237,24 +231,41 @@ describe("MenuBar", () => {
     expect(onNavigate).toHaveBeenCalledWith("/home");
   });
 
-  it("does not move focus or the active item with arrows, Home, or End", async () => {
+  it("moves focus with arrows, Home, and End, wraps, and does not activate", async () => {
     mockWidths(1000, 40);
     const user = userEvent.setup();
     renderBar({
       menuItems: [item("Home", { isActive: true }), item("Settings"), item("Docs")],
     });
     const home = screen.getByRole("button", { name: "Home" });
+    const settings = screen.getByRole("button", { name: "Settings" });
     const docs = screen.getByRole("button", { name: "Docs" });
-    home.focus();
-    await user.keyboard("{ArrowDown}{ArrowUp}{ArrowRight}{ArrowLeft}{Home}{End}");
-    expect(document.activeElement).toBe(home);
-    expect(home.className).toContain("text-primary-default");
-    expect(docs.className).not.toContain("text-primary-default");
+    expect(home).toHaveAttribute("tabindex", "0");
+    expect(settings).toHaveAttribute("tabindex", "-1");
+    expect(docs).toHaveAttribute("tabindex", "-1");
 
-    docs.focus();
-    await user.keyboard("{ArrowDown}{End}{Home}");
-    expect(document.activeElement).toBe(docs);
+    home.focus();
+    await user.keyboard("{ArrowDown}{ArrowUp}");
+    expect(home).toHaveFocus();
+
+    await user.keyboard("{ArrowRight}");
+    expect(settings).toHaveFocus();
+    expect(settings).toHaveAttribute("tabindex", "0");
+    expect(home).toHaveAttribute("tabindex", "-1");
+    await user.keyboard("{ArrowRight}");
+    expect(docs).toHaveFocus();
+    await user.keyboard("{ArrowRight}");
+    expect(home).toHaveFocus();
+    await user.keyboard("{ArrowLeft}");
+    expect(docs).toHaveFocus();
+    await user.keyboard("{Home}");
+    expect(home).toHaveFocus();
+    await user.keyboard("{End}");
+    expect(docs).toHaveFocus();
+
     expect(home.className).toContain("text-primary-default");
+    expect(settings.className).not.toContain("text-primary-default");
+    expect(docs.className).not.toContain("text-primary-default");
   });
 
   it("does not wrap focus from the last item back to the first", async () => {
@@ -272,23 +283,47 @@ describe("MenuBar", () => {
     expect(document.activeElement).not.toBe(docs);
   });
 
-  it("leaves a submenu and the More menu open when Escape is pressed", async () => {
+  it("opens, navigates, and closes a submenu and the More menu from the keyboard", async () => {
     mockWidths(1000, 40);
     const user = userEvent.setup();
     const view = renderBar({
       menuItems: [
         item("Products", {
           hasChildren: true,
-          children: [{ title: "Shoes", route: "/shoes", isActive: false }],
+          children: [
+            { title: "Shoes", route: "/shoes", isActive: false },
+            { title: "Hats", route: "/hats", isActive: false },
+          ],
         }),
+        item("Docs"),
       ],
     });
     const products = screen.getByRole("button", { name: "Products" });
     products.focus();
+    await user.keyboard("{ArrowDown}");
+    const shoes = screen.getByRole("button", { name: "Shoes" });
+    const hats = screen.getByRole("button", { name: "Hats" });
+    expect(shoes).toHaveFocus();
+    await user.keyboard("{ArrowDown}");
+    expect(hats).toHaveFocus();
+    await user.keyboard("{ArrowDown}");
+    expect(shoes).toHaveFocus();
+    await user.keyboard("{ArrowUp}");
+    expect(hats).toHaveFocus();
+    await user.keyboard("{Home}");
+    expect(shoes).toHaveFocus();
+    await user.keyboard("{End}");
+    expect(hats).toHaveFocus();
+    await user.keyboard("{ArrowRight}");
+    expect(screen.queryByRole("button", { name: "Hats" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Docs" })).toHaveFocus();
+    await user.keyboard("{ArrowLeft}");
+    expect(products).toHaveFocus();
+
     await user.keyboard("{Enter}");
-    expect(screen.getByRole("button", { name: "Shoes" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Shoes" })).toHaveFocus();
     await user.keyboard("{Escape}");
-    expect(screen.getByRole("button", { name: "Shoes" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Shoes" })).not.toBeInTheDocument();
     expect(products).toHaveFocus();
     view.unmount();
 
@@ -297,9 +332,9 @@ describe("MenuBar", () => {
     const more = screen.getByRole("button", { name: "More" });
     more.focus();
     await user.keyboard("{Enter}");
-    expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Home" })).toHaveFocus();
     await user.keyboard("{Escape}");
-    expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Home" })).not.toBeInTheDocument();
     expect(more).toHaveFocus();
   });
 
