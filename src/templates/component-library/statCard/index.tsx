@@ -6,7 +6,7 @@ import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
 import Input from "@/components/input";
 import StatCard, { STAT_TREND } from "@/components/statCard";
-import { ChartSVG, UsersSVG, MoneySVG, OrdersSVG } from "@/components/icons";
+import { ChartSVG } from "@/components/icons";
 
 const trendOptions = [
   { value: "none", label: "None" },

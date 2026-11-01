@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useId } from "react";
 
 export enum SWITCH_SIZE {
   SMALL = "small",
@@ -49,6 +49,9 @@ const Switch: FC<ISwitch> = ({
       ? "bg-primary-500 cursor-pointer"
       : "bg-surface-raised border border-border cursor-pointer";
 
+  const labelId = useId();
+  const descriptionId = useId();
+
   return (
     <label
       className={`inline-flex items-start gap-3 ${disabled ? "opacity-50" : ""} ${className}`}
@@ -57,6 +60,8 @@ const Switch: FC<ISwitch> = ({
         type="button"
         role="switch"
         aria-checked={checked}
+        aria-labelledby={label ? labelId : undefined}
+        aria-describedby={description ? descriptionId : undefined}
         disabled={disabled}
         onClick={() => !disabled && onChange(!checked)}
         className={`relative shrink-0 inline-flex items-center rounded-full transition-colors duration-200 focus:outline-none ${trackSize} ${trackColor}`}
@@ -68,12 +73,12 @@ const Switch: FC<ISwitch> = ({
       {(label || description) && (
         <div className="flex flex-col">
           {label && (
-            <span className="text-sm font-medium text-foreground leading-tight">
+            <span id={labelId} className="text-sm font-medium text-foreground leading-tight">
               {label}
             </span>
           )}
           {description && (
-            <span className="text-xs text-muted-fg mt-0.5">{description}</span>
+            <span id={descriptionId} className="text-xs text-muted-fg mt-0.5">{description}</span>
           )}
         </div>
       )}

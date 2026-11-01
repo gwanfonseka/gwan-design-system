@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 // ─── Colour utilities ────────────────────────────────────────────────────────
 
@@ -101,7 +101,9 @@ const ScaleBuilder: FC<IScaleBuilder> = ({ onScaleChange }) => {
   const [seed, setSeed] = useState(DEFAULT_SEED);
   const [scale, setScale] = useState<ScaleMap>(DEFAULT_SCALE);
   const onChangeRef = useRef(onScaleChange);
-  onChangeRef.current = onScaleChange;
+  useEffect(() => {
+    onChangeRef.current = onScaleChange;
+  }, [onScaleChange]);
 
   const updateScale = useCallback((next: ScaleMap) => {
     setScale(next);

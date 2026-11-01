@@ -22,7 +22,11 @@ npm install react-hook-form
 
 ## A complete sign-up form
 
-Here's a full example using Gwan's `Input`, `SelectDropdown`, `Checkbox`, and `Button` components:
+Here's a full example using Gwan's `Input`, `SelectDropdown`, `Checkbox`, and `Button` components.
+
+Gwan's fields are controlled. `Input` requires `value` and is not built with `forwardRef`, so `{...register()}` is not a valid prop spread. `SelectDropdown` and `Checkbox` own `value`/`checked` and `onChange` as well. Bridge all of them with `Controller`. `Checkbox` has no error props — render that message beside it.
+
+`Button` requires `onClick` even when `type="submit"`. The empty handler does not replace the form's `onSubmit`.
 
 ```tsx
 "use client";
@@ -45,11 +49,17 @@ type SignUpForm = {
 
 export default function SignUpPage() {
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpForm>();
+  } = useForm<SignUpForm>({
+    defaultValues: {
+      name: "",
+      email: "",
+      role: "",
+      agreed: false,
+    },
+  });
 
   const onSubmit = (data: SignUpForm) => {
     console.log(data);
@@ -60,22 +70,42 @@ export default function SignUpPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-5 max-w-md"
     >
-      <Input
-        label="Full name"
-        placeholder="Nimesh Fonseka"
-        error={errors.name?.message}
-        {...register("name", { required: "Name is required" })}
+      <Controller
+        name="name"
+        control={control}
+        rules={{ required: "Name is required" }}
+        render={({ field }) => (
+          <Input
+            label="Full name"
+            placeholder="Nimesh Fonseka"
+            value={field.value}
+            onBlur={field.onBlur}
+            onChange={(e) => field.onChange(e.target.value)}
+            isError={!!errors.name}
+            errorMessage={errors.name?.message}
+          />
+        )}
       />
 
-      <Input
-        label="Email"
-        type="email"
-        placeholder="you@example.com"
-        error={errors.email?.message}
-        {...register("email", {
+      <Controller
+        name="email"
+        control={control}
+        rules={{
           required: "Email is required",
           pattern: { value: /\S+@\S+\.\S+/, message: "Invalid email" },
-        })}
+        }}
+        render={({ field }) => (
+          <Input
+            label="Email"
+            type="email"
+            placeholder="you@example.com"
+            value={field.value}
+            onBlur={field.onBlur}
+            onChange={(e) => field.onChange(e.target.value)}
+            isError={!!errors.email}
+            errorMessage={errors.email?.message}
+          />
+        )}
       />
 
       <Controller
@@ -91,8 +121,9 @@ export default function SignUpPage() {
               { label: "Product Manager", value: "pm" },
             ]}
             value={field.value}
-            onChange={field.onChange}
-            error={errors.role?.message}
+            onChange={(value) => field.onChange(value)}
+            isError={!!errors.role}
+            errorMessage={errors.role?.message}
           />
         )}
       />
@@ -102,12 +133,18 @@ export default function SignUpPage() {
         control={control}
         rules={{ required: "You must agree to the terms" }}
         render={({ field }) => (
-          <Checkbox
-            label="I agree to the terms and conditions"
-            checked={field.value}
-            onChange={field.onChange}
-            error={errors.agreed?.message}
-          />
+          <div className="flex flex-col gap-1">
+            <Checkbox
+              label="I agree to the terms and conditions"
+              checked={field.value}
+              onChange={(checked) => field.onChange(checked)}
+            />
+            {errors.agreed?.message ? (
+              <p role="alert" className="text-danger text-xs">
+                {errors.agreed.message}
+              </p>
+            ) : null}
+          </div>
         )}
       />
 
@@ -115,6 +152,7 @@ export default function SignUpPage() {
         type="submit"
         variant={BUTTON_VARIANTS.PRIMARY}
         label="Create account"
+        onClick={() => {}}
       />
     </form>
   );
@@ -123,78 +161,93 @@ export default function SignUpPage() {
 
 ## How it works
 
-### Native inputs: `register`
-
-For `Input` and `TextArea`, you can spread `register()` directly since they render a native `<input>` or `<textarea>` under the hood:
-
-```tsx
-<Input {...register("email", { required: "Email is required" })} />
-```
-
 ### Controlled components: `Controller`
 
-`SelectDropdown` and `Checkbox` manage their own internal state, so they need `Controller` to bridge react-hook-form's value/onChange with the component's props:
+`Input` and `TextArea` render a native `<input>` or `<textarea>`, but both require `value` and neither forwards a ref. `register()` returns `{ name, onChange, onBlur, ref }` and does not provide `value`, so spreading it onto `Input` or `TextArea` fails to type-check. `Input`'s props extend `HTMLAttributes`, which has no `name` attribute — `Controller`'s own `name` is what react-hook-form tracks. Pass `value` and `onChange` through `Controller`:
 
 ```tsx
-<Controller
-  name="role"
-  control={control}
-  render={({ field }) => (
-    <SelectDropdown value={field.value} onChange={field.onChange} ... />
-  )}
-/>
+"use client";
+
+import { Controller, useForm } from "react-hook-form";
+import { Input } from "gwan-design-system";
+
+export function EmailField() {
+  const {
+    control,
+    formState: { errors },
+  } = useForm<{ email: string }>({ defaultValues: { email: "" } });
+
+  return (
+    <Controller
+      name="email"
+      control={control}
+      rules={{ required: "Email is required" }}
+      render={({ field }) => (
+        <Input
+          label="Email"
+          value={field.value}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e.target.value)}
+          isError={!!errors.email}
+          errorMessage={errors.email?.message}
+        />
+      )}
+    />
+  );
+}
 ```
+
+`TextArea` uses the same shape: `value`, `onChange` with `e.target.value`, `isError`, and `errorMessage`.
+
+`SelectDropdown` takes `value: string` and `onChange: (option: string) => void`. `Checkbox` takes `checked: boolean` and `onChange: (checked: boolean) => void`. Neither accepts a ref from `register()`, so they use `Controller` the same way — see the sign-up form above.
 
 ### Showing errors
 
-Every Gwan form component accepts an `error` prop that renders a red error message beneath the field. Pass `errors.fieldName?.message` from react-hook-form's `formState`:
+`Input`, `TextArea`, and `SelectDropdown` accept `isError` and `errorMessage`. Set `isError` when react-hook-form has an error for that field, and pass `errors.fieldName?.message` as `errorMessage`. There is no `error` prop.
 
-```tsx
-<Input
-  error={errors.email?.message}
-  {...register("email", { required: "Email is required" })}
-/>
-```
+`Checkbox` has neither prop. Render the message yourself, next to the control, as the sign-up form does with `role="alert"`.
 
 ## Schema validation with Zod
 
-For complex forms, pair react-hook-form with **Zod** for schema-based validation:
+For complex forms, pair react-hook-form with **Zod** for schema-based validation. Zod 4's email check is `z.email()` (`z.string().email()` still runs, and is deprecated):
 
 ```bash
 npm install zod @hookform/resolvers
 ```
 
 ```tsx
+"use client";
+
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
-  email: z.string().email("Invalid email"),
+  email: z.email("Invalid email"),
   password: z.string().min(8, "Minimum 8 characters"),
 });
 
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = useForm({
-  resolver: zodResolver(schema),
-});
+export function usePasswordForm() {
+  return useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "", password: "" },
+  });
+}
 ```
 
-This keeps all your validation logic in one place and gives you full type inference.
+This keeps all your validation logic in one place and gives you full type inference. Wire each Gwan field with `Controller`, as in the sign-up form. Leave the `useForm` generic off when a resolver is present so Zod's input and output types are inferred.
 
 ## Summary
 
-| Component        | react-hook-form method |
-| ---------------- | ---------------------- |
-| `Input`          | `register()` spread    |
-| `TextArea`       | `register()` spread    |
-| `SelectDropdown` | `Controller`           |
-| `Checkbox`       | `Controller`           |
-| `RadioButton`    | `Controller`           |
+| Component        | react-hook-form method                         |
+| ---------------- | ---------------------------------------------- |
+| `Input`          | `Controller` (`value` is required)             |
+| `TextArea`       | `Controller` (`value` is required)             |
+| `SelectDropdown` | `Controller`                                   |
+| `Checkbox`       | `Controller`; render the error text yourself   |
+| `RadioButton`    | `Controller` (`selectedValue` / `onChange`)    |
 
-The pattern is consistent: native inputs use `register`, controlled components use `Controller`. Errors flow in via the `error` prop.
+Gwan's form fields are controlled components, so they use `Controller`. Where the component supports them, pass `isError` and `errorMessage`. `Checkbox` and `RadioButton` do not, so the message sits beside the control.
 
 ---
 

@@ -87,25 +87,27 @@ v4 collapses these to one import:
 
 Instead of adding to the `plugins` array in config.
 
-### 5. Content scanning is mostly automatic
+### 5. Dependencies are scanned with `@source`
 
-In v4, Tailwind scans your project files automatically. You only need to configure `content` for packages that live outside your project root — like component libraries:
+In v4, Tailwind detects your project files automatically and ignores paths in `.gitignore`, including `node_modules`. A `content` array in `tailwind.config.ts` has no effect, even if you load that file with `@config`.
 
-```ts
-// tailwind.config.ts (still needed for content paths)
-content: [
-  "./src/**/*.{ts,tsx}",
-  join(dirname(require.resolve("gwan-design-system")), "**/*.{js,ts,tsx}"),
-],
+Class names from a dependency have to be added with `@source`. The path is relative to the CSS file. Gwan's class names ship in the published `dist` JavaScript:
+
+```css
+/* src/app/globals.css */
+@import "tailwindcss";
+
+/* src/app/globals.css → package root's dist */
+@source "../../node_modules/gwan-design-system/dist";
 ```
 
 ## Why this is better for a component library
 
 In v3, library consumers had to add the library's source to their `content` array _and_ extend the `theme` with the library's colour tokens. If they forgot either, components would render without styles or colours.
 
-In v4, the library ships pre-built CSS that uses CSS custom properties. Consumers only need to:
+In v4, Gwan's published components are JavaScript. The class names in that bundle are Tailwind utilities, and the colours are CSS custom properties you define. Consumers only need to:
 
-1. Add the library source to `content` (so Tailwind scans class names)
+1. Add `@source` for `gwan-design-system/dist` so Tailwind sees those class names
 2. Define the CSS variables in their `globals.css`
 
 The token values are runtime CSS, not build-time Tailwind config. This makes theming more resilient and makes the library less tightly coupled to the consumer's build setup.

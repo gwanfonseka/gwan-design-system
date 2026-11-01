@@ -2,7 +2,7 @@ import CodeSnippet from "@/components/codeSnippet";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
 import Button from "@/components/button";
-import Stepper, { STEPPER_ORIENTATION, STEPPER_VARIANT, STEP_STATUS } from "@/components/stepper";
+import Stepper, { STEPPER_ORIENTATION, STEPPER_VARIANT } from "@/components/stepper";
 import { useState } from "react";
 
 const stepData = [

@@ -152,7 +152,19 @@ The `<fieldset>` + `<legend>` combination means a screen reader user hears "Noti
 When a `Modal` opens, focus automatically moves to the first focusable element inside it. Tab and Shift+Tab cycle only through elements within the modal — focus cannot escape. When the modal closes, focus returns to the element that triggered the open.
 
 ```tsx
-function DeleteUserModal({ open, onClose, userName }) {
+import { Button, BUTTON_VARIANTS, Modal } from "gwan-design-system";
+
+function DeleteUserModal({
+  open,
+  onClose,
+  onDelete,
+  userName,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+  userName: string;
+}) {
   return open ? (
     <Modal title="Delete user?" onClear={onClose}>
       <p className="text-sm text-muted-fg mb-4">
@@ -167,7 +179,7 @@ function DeleteUserModal({ open, onClose, userName }) {
         <Button
           variant={BUTTON_VARIANTS.PRIMARY}
           label="Delete"
-          onClick={handleDelete}
+          onClick={onDelete}
         />
       </div>
     </Modal>
@@ -295,6 +307,8 @@ Gwan handles component-level accessibility. You still own:
 5. **Post-submit focus** — after a failed submission, move focus to the first errored field or an error summary at the top:
 
 ```tsx
+import { useRef } from "react";
+
 const firstErrorRef = useRef<HTMLDivElement>(null);
 
 // After validation fails:
@@ -304,8 +318,14 @@ firstErrorRef.current?.focus();
 6. **Form-level errors** — for multi-step or complex flows, add a summary region:
 
 ```tsx
-{
-  hasErrors && (
+function FormErrorSummary({
+  hasErrors,
+  errorCount,
+}: {
+  hasErrors: boolean;
+  errorCount: number;
+}) {
+  return hasErrors ? (
     <div
       role="alert"
       aria-live="assertive"
@@ -314,7 +334,7 @@ firstErrorRef.current?.focus();
       Please fix the {errorCount} error{errorCount > 1 ? "s" : ""} below before
       continuing.
     </div>
-  );
+  ) : null;
 }
 ```
 
@@ -327,6 +347,9 @@ npm install -D @axe-core/react
 ```
 
 ```tsx
+import React from "react";
+import ReactDOM from "react-dom";
+
 // In your root layout or _app.tsx — development only
 if (process.env.NODE_ENV !== "production") {
   const axe = await import("@axe-core/react");

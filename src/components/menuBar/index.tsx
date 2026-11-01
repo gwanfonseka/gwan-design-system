@@ -5,7 +5,8 @@ import Avatar, {
   AVATAR_SIZE,
   AVATAR_LABEL_POSITION,
 } from "../avatar";
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { FC, ReactNode, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { flushSync } from "react-dom";
 import { ChevDownSVG, MenuSVG, CrossSVG } from "../icons";
 import type { IMenuItem, ISubMenuItem } from "../navBar";
 
@@ -93,22 +94,16 @@ const MenuBar: FC<IMenuBar> = ({
   onNavigate,
   rightSlot,
 }) => {
-  const [activeItem, setActiveItem] = useState<string>("");
+  const [activeItem, setActiveItem] = useState(() => menuItems.find((i) => i.isActive)?.title ?? "");
+  const [prevMenuItems, setPrevMenuItems] = useState(menuItems);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [rovingId, setRovingId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(menuItems.length);
 
   const navRef = useRef<HTMLDivElement>(null);
   const itemsContainerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Reset item refs when menu changes
-  itemRefs.current = itemRefs.current.slice(0, menuItems.length);
-
-  useEffect(() => {
-    const active = menuItems.find((i) => i.isActive);
-    setActiveItem(active?.title ?? "");
-  }, [menuItems]);
 
   // Click-outside closes all dropdowns
   useEffect(() => {
@@ -126,6 +121,9 @@ const MenuBar: FC<IMenuBar> = ({
     const calculate = () => {
       const container = itemsContainerRef.current;
       if (!container) return;
+
+      // Drop refs for items that unmounted. Done here, not during render.
+      itemRefs.current = itemRefs.current.slice(0, menuItems.length);
 
       const available = container.offsetWidth;
       const items = itemRefs.current;
@@ -198,11 +196,139 @@ const MenuBar: FC<IMenuBar> = ({
     .filter((i) => !i.isDivider);
   const hasOverflow = overflowItems.length > 0;
 
+  // Clicks override the highlight until the parent passes a new menuItems array.
+  if (menuItems !== prevMenuItems) {
+    setPrevMenuItems(menuItems);
+    setActiveItem(menuItems.find((i) => i.isActive)?.title ?? "");
+  }
+
+  // Keep roving tabindex on a visible item. Arrows update rovingId directly;
+  // this only repairs it when the menu or the overflow set changes.
+  const rovingTitles = menuItems
+    .slice(0, visibleCount)
+    .filter((item) => !item.isDivider)
+    .map((item) => item.title);
+  if (hasOverflow) rovingTitles.push("__more__");
+  if (!rovingId || !rovingTitles.includes(rovingId)) {
+    const active = menuItems.find((item) => item.isActive && !item.isDivider);
+    const next = active && rovingTitles.includes(active.title) ? active.title : (rovingTitles[0] ?? "");
+    if (next !== rovingId) setRovingId(next);
+  }
+
+  const topLevelButtons = () => {
+    const container = itemsContainerRef.current;
+    if (!container) return [] as HTMLButtonElement[];
+    const buttons: HTMLButtonElement[] = [];
+    for (const child of container.children) {
+      if (!(child instanceof HTMLElement) || !child.classList.contains("relative")) continue;
+      const button = [...child.children].find((node) => node instanceof HTMLButtonElement);
+      if (button instanceof HTMLButtonElement) buttons.push(button);
+    }
+    return buttons;
+  };
+
+  const focusTop = (button: HTMLButtonElement | undefined) => {
+    if (!button) return;
+    const id = button.dataset.menubarItem;
+    if (id) setRovingId(id);
+    button.focus();
+  };
+
+  const panelButtons = (panel: Element | null) =>
+    panel ? [...panel.querySelectorAll("button")] : [];
+
+  // Menubar keyboard: arrows, Home, and End move focus (and wrap); they do not
+  // activate. Down/Up open a submenu. Escape closes it and returns focus.
+  const handleMenuKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    const target = e.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    const tops = topLevelButtons();
+    if (!tops.length) return;
+    const topIndex = tops.indexOf(target);
+    const panel = target.closest("[data-menubar-panel]");
+    const inMenu = topIndex === -1 && !!panel;
+
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      const delta = e.key === "ArrowRight" ? 1 : -1;
+      let index = topIndex;
+      if (inMenu) {
+        const ownerId = (panel as HTMLElement).dataset.menubarOwner;
+        index = tops.findIndex((button) => button.dataset.menubarItem === ownerId);
+      }
+      if (index < 0) index = 0;
+      if (openDropdown) setOpenDropdown(null);
+      focusTop(tops[(index + delta + tops.length) % tops.length]);
+      return;
+    }
+
+    if (e.key === "Home" || e.key === "End") {
+      e.preventDefault();
+      if (inMenu && panel) {
+        const buttons = panelButtons(panel);
+        (e.key === "Home" ? buttons[0] : buttons[buttons.length - 1])?.focus();
+        return;
+      }
+      if (openDropdown) setOpenDropdown(null);
+      focusTop(e.key === "Home" ? tops[0] : tops[tops.length - 1]);
+      return;
+    }
+
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (inMenu && panel) {
+        const buttons = panelButtons(panel);
+        const index = Math.max(0, buttons.indexOf(target));
+        const delta = e.key === "ArrowDown" ? 1 : -1;
+        buttons[(index + delta + buttons.length) % buttons.length]?.focus();
+        return;
+      }
+      const id = target.dataset.menubarItem;
+      if (!id) return;
+      const item = id === "__more__" ? undefined : menuItems.find((entry) => entry.title === id);
+      const canOpen = id === "__more__" ? hasOverflow : !!item?.hasChildren;
+      if (!canOpen) return;
+      flushSync(() => setOpenDropdown(id));
+      const opened = target.parentElement?.querySelector("[data-menubar-panel]") ?? null;
+      const buttons = panelButtons(opened);
+      (e.key === "ArrowUp" ? buttons[buttons.length - 1] : buttons[0])?.focus();
+      return;
+    }
+
+    if (e.key === "Escape") {
+      if (!openDropdown) return;
+      e.preventDefault();
+      const ownerId = (panel as HTMLElement | null)?.dataset.menubarOwner ?? target.dataset.menubarItem;
+      flushSync(() => setOpenDropdown(null));
+      focusTop(tops.find((button) => button.dataset.menubarItem === ownerId) ?? target);
+      return;
+    }
+
+    if ((e.key === "Enter" || e.key === " ") && !inMenu) {
+      const id = target.dataset.menubarItem;
+      if (!id) return;
+      const item = id === "__more__" ? undefined : menuItems.find((entry) => entry.title === id);
+      const opens = id === "__more__" ? hasOverflow : !!item?.hasChildren;
+      if (!opens) return;
+      e.preventDefault();
+      const willOpen = openDropdown !== id;
+      flushSync(() => {
+        if (item) setActiveItem(item.title);
+        setOpenDropdown(willOpen ? id : null);
+      });
+      if (!willOpen) return;
+      const opened = target.parentElement?.querySelector("[data-menubar-panel]") ?? null;
+      panelButtons(opened)[0]?.focus();
+    }
+  };
+
   const renderItemButton = (item: IMenuItem, isOverflow = false) => {
     const isActive = activeItem === item.title;
     return (
       <>
         <button
+          data-menubar-item={item.title}
+          tabIndex={isOverflow ? -1 : rovingId === item.title ? 0 : -1}
           onClick={() => handleItemClick(item)}
           className={`w-full flex flex-row items-center gap-1.5 px-3 py-2 rounded text-sm transition-colors duration-150 cursor-pointer ${
             isOverflow ? "text-left" : ""
@@ -225,10 +351,16 @@ const MenuBar: FC<IMenuBar> = ({
 
         {/* Sub-menu dropdown */}
         {item.hasChildren && openDropdown === item.title && !isOverflow && (
-          <div className="absolute top-full left-0 mt-1 min-w-44 bg-surface border border-border rounded shadow-lg z-50 py-1">
+          <div
+            data-menubar-panel
+            data-menubar-owner={item.title}
+            role="menu"
+            className="absolute top-full left-0 mt-1 min-w-44 bg-surface border border-border rounded shadow-lg z-50 py-1"
+          >
             {item.children?.map((sub, i) => (
               <button
                 key={i}
+                tabIndex={-1}
                 onClick={() => handleSubItemClick(sub)}
                 className={`w-full text-left px-4 py-2.5 text-sm transition-colors duration-150 cursor-pointer ${
                   sub.isActive
@@ -248,6 +380,7 @@ const MenuBar: FC<IMenuBar> = ({
             {item.children?.map((sub, i) => (
               <button
                 key={i}
+                tabIndex={-1}
                 onClick={() => handleSubItemClick(sub)}
                 className={`w-full text-left px-3 py-2 text-sm rounded transition-colors duration-150 cursor-pointer ${
                   sub.isActive
@@ -289,6 +422,9 @@ const MenuBar: FC<IMenuBar> = ({
         {!isLoading ? (
           <div
             ref={itemsContainerRef}
+            role="menubar"
+            aria-orientation="horizontal"
+            onKeyDown={handleMenuKeyDown}
             className={`hidden md:flex items-center flex-1 min-w-0 ${alignClass[itemsAlign]}`}
           >
             {visibleItems.map((item, index) => {
@@ -330,6 +466,7 @@ const MenuBar: FC<IMenuBar> = ({
                   <div className="w-px h-5 mx-1" />
                 ) : (
                   <button
+                    tabIndex={-1}
                     className={`flex items-center gap-1.5 px-3 py-2 text-sm ${menuItemTextClass}`}
                   >
                     {item.icon && <span className="size-4">{item.icon}</span>}
@@ -348,6 +485,8 @@ const MenuBar: FC<IMenuBar> = ({
             {hasOverflow && (
               <div className="relative shrink-0">
                 <button
+                  data-menubar-item="__more__"
+                  tabIndex={rovingId === "__more__" ? 0 : -1}
                   onClick={() =>
                     setOpenDropdown(
                       openDropdown === "__more__" ? null : "__more__",
@@ -368,7 +507,12 @@ const MenuBar: FC<IMenuBar> = ({
                 </button>
 
                 {openDropdown === "__more__" && (
-                  <div className="absolute top-full right-0 mt-1 min-w-48 bg-surface border border-border rounded shadow-lg z-50 py-1">
+                  <div
+                    data-menubar-panel
+                    data-menubar-owner="__more__"
+                    role="menu"
+                    className="absolute top-full right-0 mt-1 min-w-48 bg-surface border border-border rounded shadow-lg z-50 py-1"
+                  >
                     {overflowItems.map((item, i) => (
                       <div key={i} className="px-1">
                         {renderItemButton(item, true)}

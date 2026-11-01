@@ -5,7 +5,7 @@ import Modal, { MODAL_SIZE } from "@/components/modal";
 import Playground from "@/components/playground";
 import SelectDropdown from "@/components/selectDropdown";
 import Image from "next/image";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const Modals = () => {
   const [isSmallModalOpen, setIsSmallModalOpen] = useState<boolean>(false);

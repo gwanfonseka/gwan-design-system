@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useIsClient } from "@/lib/useIsClient";
 import Icons from "./icons";
 import Tags from "./tags";
 import Buttons from "./buttons";
@@ -164,11 +166,7 @@ const menuItems = menuGroups.flatMap((g) => g.items);
 
 const ThemeToggleButton = () => {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsClient();
 
   if (!mounted)
     return (
@@ -396,7 +394,7 @@ const LibraryTemplate = () => {
                 </svg>
                 Themes
               </a>
-              <a
+              <Link
                 href="/blog"
                 className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted-fg hover:text-foreground hover:bg-surface-raised transition-colors duration-200"
               >
@@ -432,7 +430,7 @@ const LibraryTemplate = () => {
                   />
                 </svg>
                 Blog
-              </a>
+              </Link>
             </div>
 
             <hr className="border-border border-2" />
