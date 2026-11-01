@@ -1,25 +1,23 @@
 import { ImageResponse } from "next/og";
-import { getPostBySlug } from "@/lib/blog";
+import { notFound } from "next/navigation";
+import { getAllSlugs, getPublishedPostBySlug } from "@/lib/blog";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  return getAllSlugs().map((slug) => ({ slug }));
+}
 
 export default async function OgImage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const post = getPublishedPostBySlug(slug);
+  if (!post) notFound();
 
-  let title = "GWAN Blog";
-  let description = "Insights on the Gwan design system";
-  let tags: string[] = [];
-
-  try {
-    const post = getPostBySlug(slug);
-    title = post.title;
-    description = post.description;
-    tags = post.tags.slice(0, 3);
-  } catch {
-    // fall through to defaults
-  }
+  const { title, description } = post;
+  const tags = post.tags.slice(0, 3);
 
   return new ImageResponse(
     (
