@@ -40,46 +40,47 @@ function parseFrontmatter(slug: string): BlogPost {
   };
 }
 
-export function getAllPosts(): BlogPostMeta[] {
+function toMeta(post: BlogPost): BlogPostMeta {
+  return {
+    slug: post.slug,
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    author: post.author,
+    tags: post.tags,
+    coverImage: post.coverImage,
+    readingTime: post.readingTime,
+    draft: post.draft,
+  };
+}
+
+function listMdxSlugs(): string[] {
   if (!fs.existsSync(BLOG_DIR)) return [];
 
-  const files = fs
+  return fs
     .readdirSync(BLOG_DIR)
-    .filter((f) => f.endsWith(".mdx"));
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => file.replace(/\.mdx$/, ""));
+}
 
-  return files
-    .map((file) => {
-      const slug = file.replace(/\.mdx$/, "");
-      const post = parseFrontmatter(slug);
-      const meta: BlogPostMeta = {
-        slug: post.slug,
-        title: post.title,
-        description: post.description,
-        date: post.date,
-        author: post.author,
-        tags: post.tags,
-        coverImage: post.coverImage,
-        readingTime: post.readingTime,
-        draft: post.draft,
-      };
-      return meta;
-    })
-    .filter((post) => !post.draft)
+/** Published post, or null when the slug is missing or `draft: true`. */
+export function getPublishedPostBySlug(slug: string): BlogPost | null {
+  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) return null;
+
+  const post = parseFrontmatter(slug);
+  if (post.draft) return null;
+  return post;
+}
+
+export function getAllPosts(): BlogPostMeta[] {
+  return listMdxSlugs()
+    .map((slug) => getPublishedPostBySlug(slug))
+    .filter((post): post is BlogPost => post !== null)
+    .map(toMeta)
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export function getPostBySlug(slug: string): BlogPost {
-  return parseFrontmatter(slug);
-}
-
 export function getAllSlugs(): string[] {
-  if (!fs.existsSync(BLOG_DIR)) return [];
-  return fs
-    .readdirSync(BLOG_DIR)
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""))
-    .filter((slug) => {
-      const post = parseFrontmatter(slug);
-      return !post.draft;
-    });
+  return getAllPosts().map((post) => post.slug);
 }
