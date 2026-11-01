@@ -58,10 +58,21 @@ Now `bg-background`, `text-foreground`, `border-border` all resolve to whichever
 ### Layer 3: next-themes
 
 ```tsx
-// app/layout.tsx
-<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-  {children}
-</ThemeProvider>
+"use client";
+
+import { ThemeProvider } from "next-themes";
+
+export function AppThemeProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      {children}
+    </ThemeProvider>
+  );
+}
 ```
 
 `next-themes` adds or removes `.dark` on `<html>` based on user preference, persists it to `localStorage`, and respects `prefers-color-scheme` for the system default. The CSS and Tailwind layers do the rest — zero JS color mapping.
@@ -108,9 +119,8 @@ These describe a _specific shade_ on a palette. They live in `@theme {}` and nev
 | Stepper      | 500 (active and complete steps)                     |
 | Switch       | 500 (active track)                                  |
 | Progress Bar | 500 (default fill)                                  |
-| Radio Button | 500 (checked state)                                 |
-| Checkbox     | 300, 400 (checked state)                            |
-| Date Picker  | 500 (selected date, today ring)                     |
+
+`Checkbox`, `RadioButton`, and `DatePicker` do not use those steps. Checked, selected, and today styles read the semantic tokens `--primary-default` and `--primary-default-fg`, which follow the active theme.
 
 This is why you need to update **both** token types when rebranding. If you only change `--primary-default`, buttons and tabs will use the wrong shade for hover and active states.
 
@@ -120,7 +130,7 @@ This is why you need to update **both** token types when rebranding. If you only
 
 The [Theme Generator](/themes) at gwan.dev/themes does three things in one page:
 
-1. **Edits semantic tokens** — live color pickers for all 21 semantic tokens across light and dark modes
+1. **Edits semantic tokens** — live color pickers for all 19 semantic tokens across light and dark modes
 2. **Generates the primary color scale** — a seed color auto-generates all 10 steps
 3. **Outputs the final CSS** — one block, ready to paste into `globals.css`
 
@@ -185,7 +195,7 @@ Click **Copy CSS** and paste the entire block into your project's `globals.css`,
 @theme { ... }
 ```
 
-That's it. Every Gwan component will immediately reflect your brand.
+The generator writes the semantic variables and the primary scale. It does not write the Tailwind mappings from `--color-background` to `var(--background)` (and the same for the other semantic names). Those lines have to stay in `globals.css` — see the [Getting Started](/docs) stylesheet — or utilities such as `bg-background` are never created. With both in place, every Gwan component picks up the new values.
 
 ---
 
@@ -211,7 +221,7 @@ Here's what to verify after applying your custom theme:
 
 ```
 gwan.dev/themes
-  → Set 21 semantic tokens (light + dark)
+  → Set 19 semantic tokens (light + dark)
     → Set primary scale (10 steps from seed)
       → Copy generated CSS
         → Paste into globals.css
