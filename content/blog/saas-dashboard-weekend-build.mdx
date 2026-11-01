@@ -43,7 +43,7 @@ export default function UsersPage() {
 // src/templates/users/index.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   MenuBar,
@@ -95,9 +95,16 @@ const menuItems = [
 
 export default function UsersTemplate() {
   const router = useRouter();
-  const [snack, setSnack] = useState<{ message: string; type: string } | null>(
-    null,
-  );
+  const [snack, setSnack] = useState<{
+    message: string;
+    type: SNACK_BAR_TYPE;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!snack) return;
+    const id = window.setTimeout(() => setSnack(null), 4000);
+    return () => window.clearTimeout(id);
+  }, [snack]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -126,21 +133,17 @@ export default function UsersTemplate() {
         </div>
 
         <UsersContent
-          onAction={(msg, type) => setSnack({ message: msg, type })}
+          onAction={(message, type) => setSnack({ message, type })}
         />
       </main>
 
-      {snack && (
-        <Snackbar
-          message={snack.message}
-          type={snack.type as never}
-          onClose={() => setSnack(null)}
-        />
-      )}
+      {snack && <Snackbar message={snack.message} type={snack.type} />}
     </div>
   );
 }
 ```
+
+`Snackbar` only accepts `message`, `type`, `icon`, and `className` — there is no `onClose`. The effect above unmounts it after four seconds.
 
 ## 2. Metrics row with StatCard and CircularProgress
 
@@ -327,13 +330,20 @@ export default function UsersTable() {
 
 ## 5. Putting it all together
 
+`UsersContent` takes `onAction` so the shell can raise a snackbar. This section only composes the rows — invite and delete call `onAction` when you add them.
+
 ```tsx
 // src/templates/users/content.tsx
+import { SNACK_BAR_TYPE } from "gwan-design-system";
 import Metrics from "./metrics";
 import TeamRow from "./team";
 import UsersTable from "./table";
 
-export default function UsersContent() {
+export default function UsersContent({
+  onAction,
+}: {
+  onAction: (message: string, type: SNACK_BAR_TYPE) => void;
+}) {
   return (
     <>
       <Metrics />

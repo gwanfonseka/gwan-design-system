@@ -49,7 +49,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 // src/app/layout.tsx
 import { ThemeProvider } from "@/components/theme-provider";
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -69,6 +73,25 @@ export default function RootLayout({ children }) {
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
+      <circle cx="12" cy="12" r="4" fill="currentColor" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
+      <path
+        fill="currentColor"
+        d="M21 14.5A8.5 8.5 0 1 1 9.5 3a7 7 0 0 0 11.5 11.5z"
+      />
+    </svg>
+  );
+}
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -90,7 +113,7 @@ export function ThemeToggle() {
 }
 ```
 
-The `mounted` guard is the key insight — `useTheme()` returns `undefined` on the server, so you must wait for mount before rendering any theme-dependent UI.
+The `mounted` guard is the key insight — `theme` from `useTheme()` is `undefined` on the server, so you must wait for mount before rendering any theme-dependent UI.
 
 ## How the CSS does the heavy lifting
 
@@ -119,7 +142,7 @@ All Tailwind utilities (`bg-background`, `text-foreground`) resolve to the corre
 
 ## A real-world token system
 
-Two variables is enough to prove the concept, but a production UI needs a full semantic palette — surfaces, borders, interactive states, status colours. Here is the complete token set used by [gwan.dev](https://gwan.dev):
+Two variables is enough to prove the concept, but a production UI needs a full semantic palette — surfaces, borders, interactive states, status colours. Here are the semantic tokens used by [gwan.dev](https://gwan.dev). The numeric scales (primary, teal, emerald, rose, amber, neutral) live in the same `@theme` block and are not repeated here:
 
 ```css
 /* globals.css */
@@ -139,6 +162,9 @@ Two variables is enough to prove the concept, but a production UI needs a full s
   --primary-default-fg: #f4f7f1;
   --primary-muted: #adc09e;
   --primary-muted-fg: #2c3629;
+
+  --accent: #0f766e;
+  --accent-fg: #f0fdfb;
 
   --muted: #e3e9da;
   --muted-fg: #60705a;
@@ -172,6 +198,9 @@ Two variables is enough to prove the concept, but a production UI needs a full s
   --primary-muted: #435240;
   --primary-muted-fg: #e2eada;
 
+  --accent: #2dd4bf;
+  --accent-fg: #134e4a;
+
   --muted: #252e22;
   --muted-fg: #9ea593;
 
@@ -198,6 +227,10 @@ Two variables is enough to prove the concept, but a production UI needs a full s
   --color-border-subtle: var(--border-subtle);
   --color-primary-default: var(--primary-default);
   --color-primary-default-fg: var(--primary-default-fg);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-muted-fg: var(--primary-muted-fg);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
   --color-muted: var(--muted);
   --color-muted-fg: var(--muted-fg);
   --color-success: var(--success);
@@ -222,7 +255,7 @@ Swap the hex values for your own brand colours, keep the token names, and every 
 
 ## Don't want to write tokens by hand?
 
-The [gwan.dev/themes](https://gwan.dev/themes) configurator lets you build your entire palette visually — pick your brand colour, tweak light and dark surfaces, adjust status colours, and watch every component update in real time. When you're happy, hit **Export** and it generates the complete `:root`, `.dark`, and `@theme` CSS block ready to drop into your `globals.css`. No manual hex juggling required.
+The [gwan.dev/themes](https://gwan.dev/themes) configurator lets you build your entire palette visually — pick your brand colour, tweak light and dark surfaces, adjust status colours, and watch every component update in real time. When you're happy, hit **Copy CSS** and it generates the `:root`, `.dark`, and primary-scale `@theme` block ready to drop into your `globals.css`. No manual hex juggling required.
 
 ## Smooth transitions (optional)
 
@@ -248,10 +281,25 @@ Apply this carefully — some interactive elements (buttons, inputs) feel laggy 
 The three-way toggle (system → light → dark → system) gives users the best control:
 
 ```tsx
-const themes = ["system", "light", "dark"];
+"use client";
 
-const next = themes[(themes.indexOf(theme ?? "system") + 1) % themes.length];
-setTheme(next);
+import { useTheme } from "next-themes";
+
+const themes = ["system", "light", "dark"] as const;
+
+export function ThemeCycleButton() {
+  const { theme, setTheme } = useTheme();
+  const current = themes.includes(theme as (typeof themes)[number])
+    ? (theme as (typeof themes)[number])
+    : "system";
+  const next = themes[(themes.indexOf(current) + 1) % themes.length];
+
+  return (
+    <button type="button" onClick={() => setTheme(next)}>
+      {current}
+    </button>
+  );
+}
 ```
 
 Most apps only need light/dark toggle, but if you want the system option exposed, this is the pattern.
