@@ -1,125 +1,263 @@
 ---
-title: "Authenticated Navigation with NextAuth and Gwan NavBar"
-description: "Show the logged-in user's avatar, name, and a sign-out option in the Gwan NavBar using NextAuth session data."
+title: "An auth-aware, keyboard-friendly app bar with NextAuth and Gwan MenuBar"
+description: "Wire a NextAuth session into Gwan MenuBar: real menu items, the built-in avatar, and Sign in or Sign out in the right slot."
 date: "2026-04-12"
 author: "Nimesh Fonseka"
-tags: ["nextauth", "auth", "navbar", "tutorial"]
+tags: ["nextauth", "auth", "menubar", "tutorial"]
 draft: true
 ---
 
-Authentication changes your navigation. An unauthenticated visitor sees "Sign in". A logged-in user sees their avatar, maybe their workspace, and a way to sign out. In this post I'll show how to connect **NextAuth.js v5** session data to **Gwan's NavBar and Avatar** components.
+A signed-out visitor needs a way in. A signed-in person needs their name on the bar and a way out. This post wires a **NextAuth.js v5** session into **Gwan's `MenuBar`**, the horizontal app bar from the [SaaS dashboard walkthrough](/blog/saas-dashboard-weekend-build).
 
-## Installation
+The file that renders the bar calls `useSession`, so that file needs `"use client"`.
+
+## Install
+
+Auth.js still publishes the Next.js v5 package on the `beta` tag. In a Next.js 16 App Router app:
 
 ```bash
-npm install next-auth@beta
+npm install next-auth@beta gwan-design-system
+npx auth secret
 ```
 
-Set up the auth config and route handler as per the NextAuth v5 docs. The key part for us is accessing the session on the client.
+`AUTH_SECRET` is the env var Auth.js requires. A GitHub provider also reads `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`. These paths assume `@/*` maps to `./src/*`.
 
-## Reading the session
+## Auth.js config
+
+`auth.ts` is the single config. It exports `handlers`, `signIn`, `signOut`, and `auth`. The default session user has `name`, `email`, and `image`. A `role` is not included until you add it. The module augmentations below are the [TypeScript guide](https://authjs.dev/getting-started/typescript) pattern, and the callbacks are the [role-based access](https://authjs.dev/guides/role-based-access-control) pattern: copy `user.role` onto the JWT at sign-in, then copy `token.role` onto the session the client can read.
+
+```ts
+// src/auth.ts
+import NextAuth, { type DefaultSession } from "next-auth";
+import GitHub from "next-auth/providers/github";
+// next-auth/jwt re-exports @auth/core. The import lets this augmentation resolve.
+import type { JWT } from "next-auth/jwt";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      role?: "admin" | "member";
+    } & DefaultSession["user"];
+  }
+
+  interface User {
+    role?: "admin" | "member";
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: "admin" | "member";
+  }
+}
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [GitHub],
+  callbacks: {
+    jwt({ token, user }): JWT {
+      if (user?.role) token.role = user.role;
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) session.user.role = token.role;
+      return session;
+    },
+  },
+});
+```
+
+Set the role in the provider `profile` callback. Until you do, `role` stays unset and the Admin item below stays hidden.
+
+Expose the route handlers:
+
+```ts
+// src/app/api/auth/[...nextauth]/route.ts
+import { handlers } from "@/auth";
+
+export const { GET, POST } = handlers;
+```
+
+## Session provider
+
+`useSession` reads a React context. Wrap the tree in `SessionProvider` from a file that has `"use client"`. The root layout can render that provider.
 
 ```tsx
-// src/app/providers.tsx
 "use client";
+
+// src/components/auth-provider.tsx
+import type { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   return <SessionProvider>{children}</SessionProvider>;
 }
 ```
 
-## Building an authenticated navbar
+```tsx
+// src/app/layout.tsx
+import type { ReactNode } from "react";
+import { AuthProvider } from "@/components/auth-provider";
 
-Gwan's `NavBar` accepts menu items and renders the nav. We add a user section by composing `Avatar` alongside it:
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## The menu bar
+
+`MenuBar` takes `menuItems` of type `IMenuItem`. Each item needs `title`, `route`, `isActive`, and `isDivider`. `icon` and `onClick` are optional. A submenu is `hasChildren: true` plus `children`, and each child is `{ title, route, isActive }`. `logoShort` and `logoLong` are required image paths. The bar does not navigate on its own: it calls `onNavigate` with the item `route`.
+
+The signed-in user is rendered with `MenuBar`'s built-in avatar. When `isAvatarVisible` is true, `avatarName`, `avatarEmail`, `avatarImage`, and `avatarType` are all required. `avatarType` is an `AVATAR_VARIANT` member. `IMAGE_WITH_FULL` shows the photo when `avatarImage` is non-empty, and the initials swatch when it is empty, with the name and email beside it. Pass the session strings through, using `""` when a field is missing, including a blank name so the swatch can fall back to the email.
+
+Name and email come from those props, so this bar does not render `Ellipsis`. Where you do truncate a string yourself, `Ellipsis` takes `label`.
+
+Sign in and Sign out go in `rightSlot` as `Button`, with `label` and `onClick`. While `useSession` reports `"loading"`, set `MenuBar`'s `isLoading` so the items are replaced by the built-in shimmer, and render no button yet.
+
+The client `signIn()` and `signOut()` used here are the ones from `next-auth/react`. `signOut` takes `redirectTo`.
 
 ```tsx
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
-import { NavBar, Avatar, AVATAR_VARIANT, Ellipsis } from "gwan-design-system";
+// src/components/app-menu-bar.tsx
+import { usePathname, useRouter } from "next/navigation";
+import { signIn, signOut, useSession } from "next-auth/react";
+import {
+  AVATAR_VARIANT,
+  BUTTON_VARIANTS,
+  Button,
+  DashboardSVG,
+  MenuBar,
+  SettingsSVG,
+  type IMenuItem,
+} from "gwan-design-system";
 
-export default function AppNavbar() {
+export default function AppMenuBar() {
+  const pathname = usePathname();
+  const router = useRouter();
   const { data: session, status } = useSession();
+  const user = session?.user;
 
-  const menuItems = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Projects", href: "/projects" },
-    { label: "Settings", href: "/settings" },
+  const menuItems: IMenuItem[] = [
+    {
+      title: "Dashboard",
+      icon: <DashboardSVG />,
+      route: "/dashboard",
+      isActive: pathname.startsWith("/dashboard"),
+      isDivider: false,
+    },
+    {
+      title: "Projects",
+      route: "/projects",
+      isActive: pathname.startsWith("/projects"),
+      isDivider: false,
+    },
+    {
+      title: "Settings",
+      icon: <SettingsSVG />,
+      route: "/settings",
+      isActive: pathname.startsWith("/settings"),
+      isDivider: false,
+    },
   ];
 
-  return (
-    <NavBar
-      menuItems={menuItems}
-      rightSlot={
-        status === "loading" ? (
-          <div className="w-8 h-8 rounded-full bg-border animate-pulse" />
-        ) : session?.user ? (
-          <div className="flex items-center gap-3">
-            <Avatar
-              variant={AVATAR_VARIANT.CIRCLE}
-              src={session.user.image ?? undefined}
-              fallback={session.user.name?.[0] ?? "U"}
-            />
-            <div className="hidden md:flex flex-col">
-              <Ellipsis
-                text={session.user.name ?? ""}
-                className="text-sm font-semibold text-foreground max-w-[120px]"
-              />
-              <span className="text-xs text-muted-fg">{session.user.email}</span>
-            </div>
-            <button
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="text-xs font-semibold tracking-[0.1em] uppercase text-muted-fg hover:text-foreground transition-colors duration-200"
-            >
-              Sign out
-            </button>
-          </div>
-        ) : (
-          <a
-            href="/auth/signin"
-            className="text-xs font-semibold tracking-[0.1em] uppercase text-muted-fg hover:text-foreground transition-colors duration-200"
-          >
-            Sign in
-          </a>
-        )
+  if (user?.role === "admin") {
+    menuItems.push({
+      title: "Admin",
+      route: "/admin",
+      isActive: pathname.startsWith("/admin"),
+      isDivider: false,
+    });
+  }
+
+  const rightSlot =
+    status === "authenticated" ? (
+      <Button
+        variant={BUTTON_VARIANTS.TERTIARY}
+        label="Sign out"
+        onClick={() => {
+          void signOut({ redirectTo: "/" });
+        }}
+      />
+    ) : status === "unauthenticated" ? (
+      <Button
+        variant={BUTTON_VARIANTS.SECONDARY}
+        label="Sign in"
+        onClick={() => {
+          void signIn();
+        }}
+      />
+    ) : null;
+
+  const avatar = user
+    ? {
+        isAvatarVisible: true as const,
+        avatarName: user.name ?? "",
+        avatarEmail: user.email ?? "",
+        avatarImage: user.image ?? "",
+        avatarType: AVATAR_VARIANT.IMAGE_WITH_FULL,
       }
+    : { isAvatarVisible: false as const };
+
+  return (
+    <MenuBar
+      menuItems={menuItems}
+      logoShort="/logo-mark.svg"
+      logoLong="/logo.svg"
+      sticky
+      isLoading={status === "loading"}
+      onNavigate={(route) => {
+        if (route.length > 0) router.push(route);
+      }}
+      rightSlot={rightSlot}
+      {...avatar}
     />
   );
 }
 ```
 
-## Protecting routes with middleware
+## Protect routes with `proxy.ts`
+
+Next.js 16 renamed `middleware.ts` to `proxy.ts` and the exported function to `proxy`. The file sits next to `app` (so `src/proxy.ts` when you use a `src` directory).
+
+Auth.js wraps that function with `auth`. The installation guide's one-line form is `export { auth as proxy } from "@/auth"`, which keeps the session expiry fresh. The wrapper below is the same `auth()` with the redirect written out, matching the [protecting guide](https://authjs.dev/getting-started/session-management/protecting). The matcher lists only private sections, so the redirect target is not run through this check.
 
 ```ts
-// middleware.ts
+// src/proxy.ts
 import { auth } from "@/auth";
 
-export default auth((req) => {
-  const isAuthenticated = !!req.auth;
-  const isProtected = req.nextUrl.pathname.startsWith("/dashboard");
+export const proxy = auth((req) => {
+  const pathname = req.nextUrl.pathname;
+  const isProtected =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/settings") ||
+    pathname.startsWith("/admin");
 
-  if (isProtected && !isAuthenticated) {
-    return Response.redirect(new URL("/auth/signin", req.url));
+  if (isProtected && !req.auth) {
+    return Response.redirect(new URL("/api/auth/signin", req.nextUrl.origin));
   }
 });
 
-export const config = { matcher: ["/dashboard/:path*", "/settings/:path*"] };
+export const config = {
+  matcher: ["/dashboard/:path*", "/settings/:path*", "/admin/:path*"],
+};
 ```
 
-## Role-based nav items
+Do not rely on the proxy as the only check. Read the session again beside the data you are protecting.
 
-Filter menu items based on the user's role from the session:
+## What's new in this release
 
-```tsx
-const menuItems = [
-  { label: "Dashboard", href: "/dashboard" },
-  ...(session?.user?.role === "admin"
-    ? [{ label: "Admin", href: "/admin" }]
-    : []),
-];
-```
+[PR #135](https://github.com/gwanfonseka/gwan-design-system/pull/135) is the release that shows up in this bar. No public props, exports, or TypeScript types changed. Two of the fixes are visible once a session is on screen. The behaviour below is only what that pull request, and the Avatar and MenuBar commits in it, state.
+
+**Stable pastel.** The swatch was a new random pastel on every mount. It is now an FNV-1a hash of the name, or of the email when the name is blank, in the same 60–80% saturation and 75–85% lightness band, including on the server. [Commit `53ae217`](https://github.com/gwanfonseka/gwan-design-system/commit/53ae21744a464870da799b3f0dbef53f8eb1e929) describes the fix as: derive it from the name, falling back to the email, so server and client match. `MenuBar` passes `avatarName` and `avatarEmail` through to that avatar.
+
+**Keyboard.** The keyboard behaviour follows the WAI-ARIA menubar pattern. Before this release there was no Arrow, Home, End, or Escape handling, no roving tabindex, and no focus wrap. Enter and Space only activated the focused button. Left and Right now move across the bar and wrap. Up and Down open a submenu and wrap inside it. Home and End move to the ends. Escape closes a submenu or More and returns focus. One item has `tabindex=0`. Enter and Space still activate. Arrow keys do not. Tab still leaves the bar. [Commit `19cb919`](https://github.com/gwanfonseka/gwan-design-system/commit/19cb9194cd2c319681b257e0979ba51e96443a80) puts the same change as: focus now moves with those keys, wraps at the ends, and Escape closes the open menu. Enter and Space still activate.
 
 ## Summary
 
-The pattern is: read `useSession()`, map the result to Gwan components (`Avatar` for the face, `Ellipsis` for the name overflow), and pass them into the navbar's right slot. No custom CSS, no bespoke auth UI.
+Read the session with `useSession` inside a file that has `"use client"`. Pass `IMenuItem` entries (`title`, `route`, `isActive`, `isDivider`) and the required logos to `MenuBar`. Turn the built-in avatar on with `isAvatarVisible`, `avatarName`, `avatarEmail`, `avatarImage`, and `avatarType`. Put Sign in and Sign out in `rightSlot` as a `Button` with `label` and `onClick`. Set `isLoading` while the session status is `"loading"`. Gate the private routes in `proxy.ts` with the `auth()` wrapper.
