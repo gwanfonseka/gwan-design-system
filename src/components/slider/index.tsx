@@ -33,22 +33,23 @@ const trackHeight: Record<SLIDER_SIZE, string> = {
   [SLIDER_SIZE.LG]: "h-2",
 };
 
+// The @__PURE__ marks let bundlers drop these when Slider isn't imported.
 const thumbClass: Record<SLIDER_SIZE, string> = {
-  [SLIDER_SIZE.SM]: [
+  [SLIDER_SIZE.SM]: /* @__PURE__ */ [
     "[&::-webkit-slider-thumb]:size-3.5",
     "[&::-moz-range-thumb]:size-3.5",
   ].join(" "),
-  [SLIDER_SIZE.MD]: [
+  [SLIDER_SIZE.MD]: /* @__PURE__ */ [
     "[&::-webkit-slider-thumb]:size-4",
     "[&::-moz-range-thumb]:size-4",
   ].join(" "),
-  [SLIDER_SIZE.LG]: [
+  [SLIDER_SIZE.LG]: /* @__PURE__ */ [
     "[&::-webkit-slider-thumb]:size-5",
     "[&::-moz-range-thumb]:size-5",
   ].join(" "),
 };
 
-const baseInputClass = [
+const baseInputClass = /* @__PURE__ */ [
   "absolute inset-0 w-full h-full",
   "appearance-none bg-transparent cursor-pointer",
   "[&::-webkit-slider-runnable-track]:appearance-none",
@@ -112,10 +113,10 @@ const Slider: FC<ISlider> = ({
   };
 
   const inputClass = `${baseInputClass} ${thumbClass[size]}`;
-
   const fieldId = useId();
   const labelId = `${fieldId}-label`;
   const inputId = `${fieldId}-input`;
+
   return (
     <div className={`flex flex-col gap-2.5 ${className}`}>
       {label && (
@@ -182,8 +183,8 @@ const Slider: FC<ISlider> = ({
           </>
         ) : (
           <input
-            type="range"
             id={inputId}
+            type="range"
             min={min}
             max={max}
             step={step}

@@ -49,6 +49,12 @@ export default defineStory<ICommandPalette>({
       required: true,
       group: "Events",
     },
+    className: {
+      description: "Extra classes on the palette panel.",
+      control: text(),
+      defaultValue: "",
+      group: "Advanced",
+    },
   },
   render: (props, { setArgs }) => (
     <>

@@ -18,6 +18,7 @@ export interface ICommandPalette {
   items: ICommandItem[];
   placeholder?: string;
   emptyMessage?: string;
+  className?: string;
 }
 
 const CommandPalette: FC<ICommandPalette> = ({
@@ -26,6 +27,7 @@ const CommandPalette: FC<ICommandPalette> = ({
   items,
   placeholder = "Type a command or search...",
   emptyMessage = "No results found.",
+  className = "",
 }) => {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -90,7 +92,7 @@ const CommandPalette: FC<ICommandPalette> = ({
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       {/* Panel */}
-      <div className="relative w-full max-w-lg bg-surface border border-border rounded-xl shadow-2xl overflow-hidden">
+      <div className={`relative w-full max-w-lg bg-surface border border-border rounded-xl shadow-2xl overflow-hidden ${className}`}>
         {/* Search input */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
           <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4 text-muted-fg shrink-0" xmlns="http://www.w3.org/2000/svg">
