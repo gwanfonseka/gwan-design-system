@@ -1,8 +1,23 @@
-import { useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { highlightTsx, loadHighlighter } from "@/lib/highlight";
 import { CheckSVG, CopySVG } from "../icons";
 
 const CodeSnippet = ({ code }: { code: string }) => {
   const [copied, setCopied] = useState(false);
+  // Plain text on the server and until the highlighter loads; then coloured on every change.
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadHighlighter()
+      .then(() => !cancelled && setReady(true))
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const lines = useMemo(() => (ready ? highlightTsx(code) : null), [ready, code]);
 
   const handleCopy = async () => {
     try {
@@ -39,7 +54,20 @@ const CodeSnippet = ({ code }: { code: string }) => {
         </button>
       </div>
       <pre className="bg-neutral-950 p-5 overflow-x-auto">
-        <code className="text-neutral-100 font-mono text-xs leading-relaxed">{code}</code>
+        <code className="text-neutral-100 font-mono text-xs leading-relaxed">
+          {lines
+            ? lines.map((line, i) => (
+                <Fragment key={i}>
+                  {line.map((token, j) => (
+                    <span key={j} style={{ color: token.color }}>
+                      {token.content}
+                    </span>
+                  ))}
+                  {i < lines.length - 1 && "\n"}
+                </Fragment>
+              ))
+            : code}
+        </code>
       </pre>
     </div>
   );

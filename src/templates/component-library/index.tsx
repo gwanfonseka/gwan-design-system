@@ -226,6 +226,7 @@ const LibraryTemplate = () => {
   const handleTabChange = (tab: string) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set("tab", tab);
+    newParams.delete("args");
     router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
     setSidebarOpen(false);
   };
