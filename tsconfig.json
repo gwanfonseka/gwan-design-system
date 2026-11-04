@@ -29,6 +29,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "gwan-design-system": [
+        "./src/index.ts"
       ]
     },
     "noEmit": true

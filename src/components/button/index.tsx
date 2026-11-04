@@ -36,7 +36,7 @@ const variantClass = (variant: BUTTON_VARIANTS, disabled: boolean): string => {
     case BUTTON_VARIANTS.PRIMARY:
       return disabled
         ? "bg-primary-200 text-primary-500 cursor-not-allowed"
-        : "bg-primary-500 text-primary-default-fg hover:bg-primary-600 active:bg-primary-700";
+        : "bg-primary-default text-primary-default-fg hover:bg-primary-default/90 active:bg-primary-default/80";
 
     case BUTTON_VARIANTS.SECONDARY:
       return disabled
@@ -46,7 +46,7 @@ const variantClass = (variant: BUTTON_VARIANTS, disabled: boolean): string => {
     case BUTTON_VARIANTS.TERTIARY:
       return disabled
         ? "text-muted-fg border border-border cursor-not-allowed"
-        : "bg-transparent text-primary-500 border border-primary-500 cursor-pointer hover:bg-surface active:bg-surface-raised";
+        : "bg-transparent text-primary-default border border-primary-default cursor-pointer hover:bg-surface active:bg-surface-raised";
   }
 };
 

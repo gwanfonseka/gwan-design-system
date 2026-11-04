@@ -5,6 +5,10 @@ import { expectAnchored, mockRect, setViewport } from "../../test/helpers";
 import { FORM_ELEMENT_SIZE } from "../input";
 import TimePicker, { TIME_FORMAT } from "./index";
 
+/** Trigger names are "<label> <value>"; match the value whether or not a label is set. */
+const endsWith = (text: string) =>
+  new RegExp(`(^|\\s)${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+
 function renderPicker(props: Partial<React.ComponentProps<typeof TimePicker>> = {}) {
   const onChange = vi.fn();
   const result = render(
@@ -37,7 +41,7 @@ describe("TimePicker", () => {
 
   it("shows the placeholder until a value is set, and defaults to 12-hour", () => {
     renderPicker();
-    expect(screen.getByRole("button", { name: "Select time" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("Select time") })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "AM" })).not.toBeInTheDocument();
   });
 
@@ -57,7 +61,7 @@ describe("TimePicker", () => {
     ["1.9:2.8", TIME_FORMAT.H24, false, "01:02"],
   ])("parses %j as %s (seconds=%s) into %s", (value, format, withSeconds, display) => {
     renderPicker({ value, format, withSeconds });
-    expect(screen.getByRole("button", { name: display })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith(display) })).toBeInTheDocument();
   });
 
   it.each([
@@ -71,7 +75,7 @@ describe("TimePicker", () => {
     ["", TIME_FORMAT.H12, false],
   ])("shows the placeholder for invalid value %j", (value, format, withSeconds) => {
     renderPicker({ value, format, withSeconds });
-    expect(screen.getByRole("button", { name: "Select time" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("Select time") })).toBeInTheDocument();
   });
 
   it("updates the displayed time when the controlled value changes", () => {
@@ -79,11 +83,11 @@ describe("TimePicker", () => {
     const { rerender } = render(
       <TimePicker value="09:15" onChange={onChange} format={TIME_FORMAT.H24} />,
     );
-    expect(screen.getByRole("button", { name: "09:15" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("09:15") })).toBeInTheDocument();
     rerender(<TimePicker value="18:45" onChange={onChange} format={TIME_FORMAT.H24} />);
-    expect(screen.getByRole("button", { name: "18:45" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("18:45") })).toBeInTheDocument();
     rerender(<TimePicker value={null} onChange={onChange} format={TIME_FORMAT.H24} />);
-    expect(screen.getByRole("button", { name: "Select time" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("Select time") })).toBeInTheDocument();
   });
 
   it("re-parses when only the format changes", async () => {
@@ -93,8 +97,8 @@ describe("TimePicker", () => {
       <TimePicker value="14:30" onChange={onChange} format={TIME_FORMAT.H24} />,
     );
     rerender(<TimePicker value="14:30" onChange={onChange} format={TIME_FORMAT.H12} />);
-    expect(screen.getByRole("button", { name: "02:30 PM" })).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "02:30 PM" }));
+    expect(screen.getByRole("combobox", { name: endsWith("02:30 PM") })).toBeInTheDocument();
+    await user.click(screen.getByRole("combobox", { name: endsWith("02:30 PM") }));
     const [hours, minutes] = columns(container);
     expect(activeText(hours)).toEqual(["02"]);
     expect(activeText(minutes)).toEqual(["30"]);
@@ -105,7 +109,7 @@ describe("TimePicker", () => {
     const user = userEvent.setup();
     const scroll = vi.spyOn(Element.prototype, "scrollIntoView");
     const { container } = renderPicker({ value: "14:30:08", withSeconds: true });
-    await user.click(screen.getByRole("button", { name: "02:30:08 PM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("02:30:08 PM") }));
 
     const [hours, minutes, seconds] = columns(container);
     expect(activeText(hours)).toEqual(["02"]);
@@ -124,7 +128,7 @@ describe("TimePicker", () => {
   it("offers 1-12 plus AM/PM in 12-hour mode and 0-23 without a period in 24-hour mode", async () => {
     const user = userEvent.setup();
     const view = renderPicker({ value: "00:00" });
-    await user.click(screen.getByRole("button", { name: "12:00 AM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("12:00 AM") }));
     const hourButtons = columns(view.container)[0].querySelectorAll("button");
     expect(hourButtons).toHaveLength(12);
     expect(hourButtons[0]).toHaveTextContent("01");
@@ -133,7 +137,7 @@ describe("TimePicker", () => {
     view.unmount();
 
     const h24 = renderPicker({ value: "00:00", format: TIME_FORMAT.H24 });
-    await user.click(screen.getByRole("button", { name: "00:00" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("00:00") }));
     const hours24 = columns(h24.container)[0].querySelectorAll("button");
     expect(hours24).toHaveLength(24);
     expect(hours24[0]).toHaveTextContent("00");
@@ -145,7 +149,7 @@ describe("TimePicker", () => {
   it("emits 24-hour strings when a column or period is chosen", async () => {
     const user = userEvent.setup();
     const { container, onChange } = renderPicker({ value: "09:10" });
-    await user.click(screen.getByRole("button", { name: "09:10 AM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("09:10 AM") }));
     await user.click(withinButtons(columns(container)[0], "11"));
     expect(onChange).toHaveBeenLastCalledWith("11:10");
     await user.click(withinButtons(columns(container)[1], "45"));
@@ -159,13 +163,13 @@ describe("TimePicker", () => {
   it("emits midnight and noon from the 12-hour period control", async () => {
     const user = userEvent.setup();
     const noon = renderPicker({ value: "12:15" });
-    await user.click(screen.getByRole("button", { name: "12:15 PM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("12:15 PM") }));
     await user.click(screen.getByRole("button", { name: "AM" }));
     expect(noon.onChange).toHaveBeenCalledWith("00:15");
     noon.unmount();
 
     const midnight = renderPicker({ value: "00:15" });
-    await user.click(screen.getByRole("button", { name: "12:15 AM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("12:15 AM") }));
     await user.click(screen.getByRole("button", { name: "PM" }));
     expect(midnight.onChange).toHaveBeenCalledWith("12:15");
   });
@@ -177,7 +181,7 @@ describe("TimePicker", () => {
       format: TIME_FORMAT.H24,
       withSeconds: true,
     });
-    await user.click(screen.getByRole("button", { name: "01:02:03" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("01:02:03") }));
     const seconds = columns(container)[2];
     await user.click(withinButtons(seconds, "59"));
     expect(onChange).toHaveBeenCalledWith("01:02:59");
@@ -189,10 +193,10 @@ describe("TimePicker", () => {
     const { container, rerender } = render(
       <TimePicker value="08:00" onChange={onChange} format={TIME_FORMAT.H24} />,
     );
-    await user.click(screen.getByRole("button", { name: "08:00" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("08:00") }));
     expect(activeText(columns(container)[0])).toEqual(["08"]);
     rerender(<TimePicker value="19:42" onChange={onChange} format={TIME_FORMAT.H24} />);
-    expect(screen.getByRole("button", { name: "19:42" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("19:42") })).toBeInTheDocument();
     expect(activeText(columns(container)[0])).toEqual(["19"]);
     expect(activeText(columns(container)[1])).toEqual(["42"]);
   });
@@ -200,18 +204,18 @@ describe("TimePicker", () => {
   it("toggles the panel, ignores clicks while disabled, and closes on an outside press", async () => {
     const user = userEvent.setup();
     const { container, rerender, onChange } = renderPicker({ value: "10:00" });
-    const trigger = screen.getByRole("button", { name: "10:00 AM" });
+    const trigger = screen.getByRole("combobox", { name: endsWith("10:00 AM") });
     await user.click(trigger);
     expect(panel(container)).toBeTruthy();
     await user.click(trigger);
     expect(container.querySelector(".absolute.z-50")).toBeNull();
 
     rerender(<TimePicker value="10:00" onChange={onChange} disabled />);
-    await user.click(screen.getByRole("button", { name: "10:00 AM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10:00 AM") }));
     expect(container.querySelector(".absolute.z-50")).toBeNull();
 
     rerender(<TimePicker value="10:00" onChange={onChange} />);
-    await user.click(screen.getByRole("button", { name: "10:00 AM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10:00 AM") }));
     fireEvent.mouseDown(document.body);
     expect(container.querySelector(".absolute.z-50")).toBeNull();
   });
@@ -226,7 +230,7 @@ describe("TimePicker", () => {
 
   it("applies the small size and a custom placeholder", () => {
     renderPicker({ size: FORM_ELEMENT_SIZE.SM, placeholder: "When?" });
-    const trigger = screen.getByRole("button", { name: "When?" });
+    const trigger = screen.getByRole("combobox", { name: endsWith("When?") });
     expect(trigger.className).toContain("text-xs");
     expect(trigger.className).toContain("py-1.5");
   });
@@ -243,7 +247,7 @@ describe("TimePicker", () => {
     setViewport(width, height);
     const { container } = renderPicker({ value: "10:00" });
     mockRect(container.firstElementChild as HTMLElement, box);
-    await user.click(screen.getByRole("button", { name: "10:00 AM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10:00 AM") }));
     expectAnchored(panel(container), position, align);
   });
 });

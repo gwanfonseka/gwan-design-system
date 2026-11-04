@@ -18,8 +18,45 @@ import OgImage, {
 
 const NOT_FOUND_DIGEST = "NEXT_HTTP_ERROR_FALLBACK;404";
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
-const KNOWN_DRAFTS = ["migrating-from-shadcn", "nextauth-with-gwan-navbar"];
 const KNOWN_PUBLISHED = "building-accessible-forms";
+
+// No real drafts are kept in the repo, so add one to the blog folder as the code sees it.
+const fixture = vi.hoisted(() => ({
+  slug: "fixture-draft-post",
+  body: `---
+title: "Fixture draft"
+description: "A draft that must never reach the site"
+date: "2026-01-01"
+draft: true
+---
+
+Secret draft body.
+`,
+}));
+const KNOWN_DRAFTS = [fixture.slug];
+
+vi.mock("fs", async (importOriginal) => {
+  const real = await importOriginal<typeof import("fs")>();
+  const nodePath = await import("path");
+  const file = `${fixture.slug}.mdx`;
+  const isFixture = (p: unknown) => nodePath.basename(String(p)) === file;
+  const isBlogDir = (p: unknown) =>
+    nodePath.resolve(String(p)) === nodePath.resolve(process.cwd(), "content/blog");
+  const patched = {
+    ...real,
+    existsSync: ((p: Parameters<typeof real.existsSync>[0]) =>
+      isFixture(p) || real.existsSync(p)) as typeof real.existsSync,
+    readdirSync: ((p: Parameters<typeof real.readdirSync>[0], ...rest: unknown[]) => {
+      const entries = (real.readdirSync as (...a: unknown[]) => string[])(p, ...rest);
+      return isBlogDir(p) ? [...entries, file] : entries;
+    }) as typeof real.readdirSync,
+    readFileSync: ((p: Parameters<typeof real.readFileSync>[0], ...rest: unknown[]) =>
+      isFixture(p)
+        ? fixture.body
+        : (real.readFileSync as (...a: unknown[]) => unknown)(p, ...rest)) as typeof real.readFileSync,
+  };
+  return { ...patched, default: patched };
+});
 
 const renderedImages = vi.hoisted(() => [] as { element: unknown; options: unknown }[]);
 

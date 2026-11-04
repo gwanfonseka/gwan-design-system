@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
+import { BoxSVG, CheckSVG, SpinnerIconSVG, WarningSVG } from "../icons";
 
 export enum STATE_TYPE {
   EMPTY = "EMPTY",
@@ -19,40 +20,48 @@ export type IState =
   | ({ type: STATE_TYPE; stateImage?: string } & IStateBase)
   | ({ type?: undefined; stateImage: string } & IStateBase);
 
+/** Built-in illustrations, drawn inline so they ship with the component and follow the theme. */
+const ILLUSTRATION: Record<STATE_TYPE, { icon: ReactNode; tone: string }> = {
+  [STATE_TYPE.EMPTY]: { icon: <BoxSVG />, tone: "text-muted-fg" },
+  [STATE_TYPE.SUCCESS]: { icon: <CheckSVG />, tone: "text-success" },
+  [STATE_TYPE.ERROR]: { icon: <WarningSVG />, tone: "text-danger" },
+  [STATE_TYPE.LOADING]: { icon: <SpinnerIconSVG />, tone: "text-primary-default animate-spin" },
+};
+
 const State: FC<IState> = ({
   type,
   stateImage,
   title,
   subTitle,
-  imageWidth = 526,
-  imageHeight = 526,
+  imageWidth,
+  imageHeight,
   className = "",
 }: IState) => {
-  const typeImage = () => {
-    switch (type) {
-      case STATE_TYPE.EMPTY:
-        return "/images/empty.png";
-      case STATE_TYPE.SUCCESS:
-        return "/images/success.png";
-      case STATE_TYPE.ERROR:
-        return "/images/empty.png";
-      case STATE_TYPE.LOADING:
-        return "/images/empty.png";
-      default:
-        return "/images/empty.png";
-    }
-  };
+  const illustration = type ? ILLUSTRATION[type] : undefined;
+  // A built-in illustration is an icon, so it defaults much smaller than a custom image.
+  const size = Math.min(imageWidth ?? 160, imageHeight ?? 160);
 
   return (
     <div
+      role={type === STATE_TYPE.LOADING ? "status" : undefined}
       className={`w-full h-full flex flex-col gap-8 items-center justify-center ${className}`}
     >
-      <img
-        src={stateImage ?? typeImage()}
-        alt="state image"
-        width={imageWidth}
-        height={imageHeight}
-      />
+      {stateImage ? (
+        // eslint-disable-next-line @next/next/no-img-element -- the library can't depend on next/image
+        <img src={stateImage} alt="" width={imageWidth ?? 526} height={imageHeight ?? 526} />
+      ) : (
+        illustration && (
+          <div
+            aria-hidden="true"
+            className="flex items-center justify-center rounded-full bg-surface-raised"
+            style={{ width: size, height: size }}
+          >
+            <span className={`block ${illustration.tone}`} style={{ width: size * 0.4, height: size * 0.4 }}>
+              {illustration.icon}
+            </span>
+          </div>
+        )
+      )}
       <div className="flex flex-col gap-2">
         <p className="text-3xl text-center font-semibold">{title}</p>
         <p className="w-[300px] text-center">{subTitle}</p>

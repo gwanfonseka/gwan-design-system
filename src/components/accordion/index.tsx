@@ -65,7 +65,7 @@ const Accordion: FC<IAccordion> = ({
 
   const itemStyle = (isOpen: boolean, disabled?: boolean) => {
     if (variant === ACCORDION_VARIANT.DEFAULT) {
-      return `rounded-lg border ${isOpen ? "border-primary-500/30 bg-surface" : "border-border bg-surface"} ${disabled ? "opacity-50" : ""}`;
+      return `rounded-lg border ${isOpen ? "border-primary-default/30 bg-surface" : "border-border bg-surface"} ${disabled ? "opacity-50" : ""}`;
     }
     return disabled ? "opacity-50" : "";
   };
@@ -81,7 +81,7 @@ const Accordion: FC<IAccordion> = ({
               disabled={item.disabled}
               onClick={() => !item.disabled && toggle(item.key)}
               className={`w-full flex items-center justify-between px-4 py-3.5 text-left text-sm font-medium text-foreground ${
-                item.disabled ? "cursor-not-allowed" : "cursor-pointer hover:text-primary-500 transition-colors duration-200"
+                item.disabled ? "cursor-not-allowed" : "cursor-pointer hover:text-primary-default transition-colors duration-200"
               }`}
             >
               <span>{item.title}</span>

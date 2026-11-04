@@ -591,7 +591,7 @@ describe("remaining exported components", () => {
   });
 
   it("StatCard and State render their copy", () => {
-    render(
+    const { container } = render(
       <>
         <StatCard label="Users" value={12} trend={STAT_TREND.UP} trendLabel="4%" />
         <States type={STATE_TYPE.EMPTY} title="None" subTitle="Nothing yet" />
@@ -599,7 +599,9 @@ describe("remaining exported components", () => {
     );
     expect(screen.getByText("Users")).toBeInTheDocument();
     expect(screen.getByText("↑ 4%")).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "state image" })).toHaveAttribute("src", "/images/empty.png");
+    // The built-in illustration is inline SVG, not a file the app would have to host.
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.querySelector('[aria-hidden="true"] svg')).not.toBeNull();
     expect(screen.getByText("Nothing yet")).toBeInTheDocument();
   });
 
@@ -660,9 +662,9 @@ describe("remaining exported components", () => {
       />,
     );
     expect(screen.getByText("First")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Two" }));
+    await user.click(screen.getByRole("tab", { name: "Two" }));
     expect(onChange).not.toHaveBeenCalled();
-    await user.click(screen.getByRole("button", { name: "One" }));
+    await user.click(screen.getByRole("tab", { name: "One" }));
     expect(onChange).toHaveBeenCalledWith("one");
   });
 

@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
 @import "tailwindcss";
+/* dark: utilities follow the .dark class on <html>, not the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
 
 /* ─── Light theme (default) ─────────────────────────────────────── */
@@ -25,15 +27,15 @@
   --accent: #0f766e;
   --accent-fg: #f0fdfb;
 
-  --success: #059669;
+  --success: #047857;
   --success-bg: #ecfdf5;
   --success-fg: #064e3b;
 
-  --danger: #e11d48;
+  --danger: #be123c;
   --danger-bg: #fff1f2;
   --danger-fg: #881337;
 
-  --warning: #d97706;
+  --warning: #b45309;
   --warning-bg: #fffbeb;
   --warning-fg: #78350f;
 }

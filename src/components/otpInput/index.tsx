@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, KeyboardEvent, ClipboardEvent, useRef } from "react";
+import { FC, KeyboardEvent, ClipboardEvent, useId, useRef } from "react";
 
 export enum OTP_SIZE {
   SM = "SM",
@@ -96,14 +96,20 @@ const OtpInput: FC<IOtpInput> = ({
     ? "border-danger focus:border-danger"
     : "border-border hover:border-primary-default focus:border-primary-default";
 
+  const fieldId = useId();
+  const labelId = `${fieldId}-label`;
+  const errorId = `${fieldId}-error`;
+  const showError = isError && !!errorMessage;
+
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
       {label && (
-        <label className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>
+        <span id={labelId} className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>
           {label}
-        </label>
+        </span>
       )}
-      <div className="flex gap-2">
+      {/* One input per digit, so the label names the group rather than a single field. */}
+      <div role="group" aria-labelledby={label ? labelId : undefined} className="flex gap-2">
         {digits.map((digit, i) => (
           <input
             key={i}
@@ -114,6 +120,8 @@ const OtpInput: FC<IOtpInput> = ({
             value={digit}
             disabled={disabled}
             aria-label={`Digit ${i + 1} of ${length}`}
+            aria-invalid={isError || undefined}
+            aria-describedby={showError ? errorId : undefined}
             className={`${cell} ${text} text-center font-semibold bg-surface text-foreground border rounded outline-none transition-colors duration-200 ${borderClass} ${
               disabled ? "cursor-not-allowed opacity-50" : ""
             }`}
@@ -127,8 +135,8 @@ const OtpInput: FC<IOtpInput> = ({
           />
         ))}
       </div>
-      {isError && errorMessage && (
-        <p role="alert" className="text-danger text-xs mt-0.5">{errorMessage}</p>
+      {showError && (
+        <p id={errorId} role="alert" className="text-danger text-xs mt-0.5">{errorMessage}</p>
       )}
     </div>
   );

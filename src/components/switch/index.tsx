@@ -46,7 +46,7 @@ const Switch: FC<ISwitch> = ({
   const trackColor = disabled
     ? "bg-border cursor-not-allowed"
     : checked
-      ? "bg-primary-500 cursor-pointer"
+      ? "bg-primary-default cursor-pointer"
       : "bg-surface-raised border border-border cursor-pointer";
 
   const labelId = useId();

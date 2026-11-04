@@ -64,16 +64,20 @@ const Hero = () => {
       <div className="relative z-10 text-center max-w-4xl mx-auto px-5 sm:px-8">
         <h1 className="font-black uppercase leading-[0.92] tracking-tight">
           <span className="block text-[clamp(38px,8vw,96px)] text-foreground">
-            Design at the
+            Typed Components,
           </span>
-          <span className="block text-[clamp(38px,8vw,96px)] text-primary-600 dark:text-primary-400">
-            Speed of Thought
+          <span className="block text-[clamp(38px,8vw,96px)] text-primary-default">
+            Themed in CSS
           </span>
         </h1>
 
-        <p className="mt-6 md:mt-8 text-sm text-muted-fg leading-relaxed max-w-sm mx-auto">
-          GWAN is a high-performance reactive component library engineered for
-          developers who demand surgical precision and scalable aesthetics.
+        <p className="mt-6 md:mt-8 text-sm text-muted-fg leading-relaxed max-w-md mx-auto">
+          GWAN is an open-source React component library for Next.js: 53 typed
+          components and 216 icons, styled with Tailwind CSS v4 and themed with
+          CSS variables, with light and dark mode built in.
+        </p>
+        <p className="mt-4 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">
+          MIT licensed · React 19 · Tailwind CSS v4
         </p>
 
         <div className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">

@@ -98,7 +98,7 @@ These describe _intent_, not a specific shade. They live in `:root` / `.dark` an
 
 ### Scale tokens — fixed values
 
-These describe a _specific shade_ on a palette. They live in `@theme {}` and never change between light and dark mode. They're used by components for interactive states:
+These describe a _specific shade_ on a palette. They live in `@theme {}` and never change between light and dark mode:
 
 ```css
 @theme {
@@ -112,17 +112,14 @@ These describe a _specific shade_ on a palette. They live in `@theme {}` and nev
 
 **Which components use the scale?**
 
-| Component    | Scale steps used                                    |
-| ------------ | --------------------------------------------------- |
-| Button       | 100, 200, 300 (secondary) · 500, 600, 700 (primary) |
-| Tabs         | 500 (active underline / pill)                       |
-| Stepper      | 500 (active and complete steps)                     |
-| Switch       | 500 (active track)                                  |
-| Progress Bar | 500 (default fill)                                  |
+| Component | Scale steps used                                                |
+| --------- | --------------------------------------------------------------- |
+| Button    | 100, 200, 300, 800 (secondary) · 200, 500 (disabled primary)    |
+| Spinner   | 100 (track of the PRIMARY colour)                               |
 
-`Checkbox`, `RadioButton`, and `DatePicker` do not use those steps. Checked, selected, and today styles read the semantic tokens `--primary-default` and `--primary-default-fg`, which follow the active theme.
+Everything else that shows the brand colour — primary buttons, tabs, the stepper, switches, progress bars, checkboxes, radio buttons, the date picker and focus borders — reads the semantic tokens `--primary-default` and `--primary-default-fg`, which follow the active theme. A fixed shade can't do that: the text on a primary fill flips from light to dark between themes, so no single step stays readable in both.
 
-This is why you need to update **both** token types when rebranding. If you only change `--primary-default`, buttons and tabs will use the wrong shade for hover and active states.
+When rebranding, change both: the semantic tokens for most of the UI, and the scale so secondary and disabled buttons match.
 
 ---
 
@@ -172,9 +169,9 @@ Scroll down to the **Primary Color Scale** section. This is a separate panel wit
 **Tips:**
 
 - If your brand uses a specific primary shade as the main CTA (e.g. your brand blue), start with that as the seed and adjust around it
-- Check that step 800 is dark enough to look like a readable, high-contrast button in light mode
+- Check that step 800 reads clearly on step 100 — it's the secondary button's text on its fill
 - Check that step 200 is light enough to be a subtle disabled-state background
-- The scale steps replace the Gwan sage green throughout all interactive component states — make sure the full range looks coherent
+- Make sure the full range looks coherent next to your `--primary-default`
 
 ### Step 3 — Copy the generated CSS
 

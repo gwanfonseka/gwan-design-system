@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from "react";
+import { FC, ReactNode, useEffect, useId, useRef, type KeyboardEvent } from "react";
 
 export enum DRAWER_PLACEMENT {
   LEFT = "left",
@@ -25,6 +25,9 @@ export interface IDrawer {
   className?: string;
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 const Drawer: FC<IDrawer> = ({
   open,
   onClose,
@@ -35,6 +38,43 @@ const Drawer: FC<IDrawer> = ({
   showOverlay = true,
   className = "",
 }) => {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
+  // Move focus into the drawer when it opens, and back to where it was when it closes.
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const first = panelRef.current?.querySelector<HTMLElement>(FOCUSABLE);
+    (first ?? panelRef.current)?.focus();
+    return () => previous?.focus();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  // With the overlay the page behind is unusable, so keep Tab inside the drawer.
+  const trapFocus = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "Tab" || !showOverlay) return;
+    const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -84,9 +124,18 @@ const Drawer: FC<IDrawer> = ({
         />
       )}
 
-      {/* Drawer panel */}
+      {/* Drawer panel. Closed, it stays mounted off-screen, so inert keeps it out of reach. */}
       <div
-        className={`fixed z-50 bg-surface border-border shadow-xl flex flex-col transition-transform duration-300 ease-in-out
+        ref={panelRef}
+        role="dialog"
+        aria-modal={showOverlay || undefined}
+        aria-labelledby={title ? titleId : undefined}
+        aria-label={title ? undefined : "Drawer"}
+        tabIndex={-1}
+        inert={!open}
+        aria-hidden={!open || undefined}
+        onKeyDown={trapFocus}
+        className={`fixed z-50 outline-none bg-surface border-border shadow-xl flex flex-col transition-transform duration-300 ease-in-out
           ${placementBase[placement]}
           ${placement === DRAWER_PLACEMENT.LEFT || placement === DRAWER_PLACEMENT.TOP ? "border-r border-b" : "border-l border-t"}
           ${open ? "translate-x-0 translate-y-0" : translateHidden[placement]}
@@ -95,7 +144,7 @@ const Drawer: FC<IDrawer> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
           {title ? (
-            <p className="text-sm font-semibold text-foreground">{title}</p>
+            <h2 id={titleId} className="text-sm font-semibold text-foreground">{title}</h2>
           ) : (
             <span />
           )}
