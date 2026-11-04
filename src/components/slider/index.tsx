@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useId, useState } from "react";
 
 export enum SLIDER_SIZE {
   SM = "SM",
@@ -113,13 +113,27 @@ const Slider: FC<ISlider> = ({
 
   const inputClass = `${baseInputClass} ${thumbClass[size]}`;
 
+  const fieldId = useId();
+  const labelId = `${fieldId}-label`;
+  const inputId = `${fieldId}-input`;
   return (
     <div className={`flex flex-col gap-2.5 ${className}`}>
       {label && (
-        <label className="text-xs font-semibold text-muted-fg">{label}</label>
+        <label
+          id={labelId}
+          htmlFor={isRange ? undefined : inputId}
+          className="text-xs font-semibold text-muted-fg"
+        >
+          {label}
+        </label>
       )}
 
-      <div className={`relative flex items-center ${wrapperHeight[size]} ${disabled ? "opacity-50" : ""}`}>
+      {/* In range mode the label names the pair of thumbs as a group. */}
+      <div
+        role={isRange ? "group" : undefined}
+        aria-labelledby={isRange && label ? labelId : undefined}
+        className={`relative flex items-center ${wrapperHeight[size]} ${disabled ? "opacity-50" : ""}`}
+      >
         {/* Background track */}
         <div className={`absolute inset-x-0 top-1/2 -translate-y-1/2 ${trackHeight[size]} bg-border rounded-full pointer-events-none`} />
 
@@ -169,6 +183,7 @@ const Slider: FC<ISlider> = ({
         ) : (
           <input
             type="range"
+            id={inputId}
             min={min}
             max={max}
             step={step}

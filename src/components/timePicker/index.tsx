@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState, type RefObject } from "react";
+import { FC, useEffect, useId, useRef, useState, type RefObject } from "react";
 import { FORM_ELEMENT_SIZE } from "../input";
 
 export enum TIME_FORMAT {
@@ -109,6 +109,14 @@ const TimePicker: FC<ITimePicker> = ({
   const [prevValue, setPrevValue] = useState(value);
   const [prevFormat, setPrevFormat] = useState(format);
   const [open, setOpen]             = useState(false);
+  const fieldId = useId();
+  const labelId = `${fieldId}-label`;
+  const triggerId = `${fieldId}-trigger`;
+  // The name reads as "<label> <current value>", e.g. "Start Select time".
+  const valueId = `${fieldId}-value`;
+  const panelId = `${fieldId}-panel`;
+  const errorId = `${fieldId}-error`;
+  const showError = isError && !!errorMessage;
   const [alignRight, setAlignRight] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -204,25 +212,35 @@ const TimePicker: FC<ITimePicker> = ({
   return (
     <div ref={ref} className={`flex flex-col gap-1 relative ${className}`}>
       {label && (
-        <label className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>
+        <label id={labelId} htmlFor={triggerId} className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>
           {label}
         </label>
       )}
       <button
+        id={triggerId}
         type="button"
+        // A trigger that opens a calendar popup is a combobox (ARIA APG date picker pattern),
+        // which also lets it carry aria-invalid.
+        role="combobox"
+        aria-haspopup="dialog"
+        aria-controls={open ? panelId : undefined}
+        aria-expanded={open}
+        aria-labelledby={label ? `${labelId} ${valueId}` : valueId}
+        aria-invalid={isError || undefined}
+        aria-describedby={showError ? errorId : undefined}
         disabled={disabled}
         onClick={toggleOpen}
         className={`w-full text-left bg-surface border rounded ${borderClass} ${triggerHeight} px-3 outline-none transition-colors duration-200 ${
           disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         } ${open ? (isError ? "border-danger" : "border-primary-default") : ""}`}
       >
-        <span className={displayValue ? "text-foreground" : "text-muted-fg/60"}>
+        <span id={valueId} className={displayValue ? "text-foreground" : "text-muted-fg/60"}>
           {displayValue || placeholder}
         </span>
       </button>
 
       {open && (
-        <div className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-2 flex gap-1 min-w-40 ${openUpward ? "bottom-full mb-1" : "top-full mt-1"} ${alignRight ? "right-0" : "left-0"}`}>
+        <div id={panelId} role="dialog" aria-label={label ?? "Choose a time"} className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-2 flex gap-1 min-w-40 ${openUpward ? "bottom-full mb-1" : "top-full mt-1"} ${alignRight ? "right-0" : "left-0"}`}>
           <TimeColumn
             options={hourOptions}
             active={hours}
@@ -269,8 +287,8 @@ const TimePicker: FC<ITimePicker> = ({
         </div>
       )}
 
-      {isError && errorMessage && (
-        <p role="alert" className="text-danger text-xs mt-0.5">{errorMessage}</p>
+      {showError && (
+        <p id={errorId} role="alert" className="text-danger text-xs mt-0.5">{errorMessage}</p>
       )}
     </div>
   );

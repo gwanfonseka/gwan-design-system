@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useId, useRef, useState } from "react";
 import { FORM_ELEMENT_SIZE } from "../input";
 
 export enum DATE_PICKER_FORMAT {
@@ -124,6 +124,14 @@ const DatePicker: FC<IDatePicker> = ({
   errorMessage,
   className     = "",
 }) => {
+  const fieldId = useId();
+  const labelId = `${fieldId}-label`;
+  const triggerId = `${fieldId}-trigger`;
+  // The name reads as "<label> <current value>", e.g. "Start Select time".
+  const valueId = `${fieldId}-value`;
+  const panelId = `${fieldId}-panel`;
+  const errorId = `${fieldId}-error`;
+  const showError = isError && !!errorMessage;
   const isSM      = size === FORM_ELEMENT_SIZE.SM;
   const sizeClass = isSM ? "px-2.5 py-1.5 text-xs" : "px-3 py-2.5 text-sm";
   const iconSize  = isSM ? "w-3.5 h-3.5" : "w-4 h-4";
@@ -250,11 +258,21 @@ const DatePicker: FC<IDatePicker> = ({
   return (
     <div className={`relative inline-flex flex-col gap-1 ${className}`} ref={ref}>
       {label && (
-        <label className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>{label}</label>
+        <label id={labelId} htmlFor={triggerId} className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>{label}</label>
       )}
 
       <button
+        id={triggerId}
         type="button"
+        // A trigger that opens a calendar popup is a combobox (ARIA APG date picker pattern),
+        // which also lets it carry aria-invalid.
+        role="combobox"
+        aria-haspopup="dialog"
+        aria-controls={open ? panelId : undefined}
+        aria-expanded={open}
+        aria-labelledby={label ? `${labelId} ${valueId}` : valueId}
+        aria-invalid={isError || undefined}
+        aria-describedby={showError ? errorId : undefined}
         disabled={disabled}
         onClick={toggleOpen}
         className={`flex items-center justify-between gap-2 ${sizeClass} ${minWidth} border rounded transition-colors duration-200 ${
@@ -265,7 +283,7 @@ const DatePicker: FC<IDatePicker> = ({
             : "border-border bg-surface text-foreground hover:border-primary-default focus:outline-none focus:border-primary-default cursor-pointer"
         }`}
       >
-        <span className={value ? "text-foreground" : "text-muted-fg/60"}>
+        <span id={valueId} className={value ? "text-foreground" : "text-muted-fg/60"}>
           {value ? formatDisplay(value, format, timePicker) : placeholder}
         </span>
         <svg viewBox="0 0 16 16" fill="none" className={`${iconSize} text-muted-fg shrink-0`} xmlns="http://www.w3.org/2000/svg">
@@ -274,12 +292,12 @@ const DatePicker: FC<IDatePicker> = ({
         </svg>
       </button>
 
-      {isError && errorMessage && (
-        <p role="alert" className="text-danger text-xs mt-1">{errorMessage}</p>
+      {showError && (
+        <p id={errorId} role="alert" className="text-danger text-xs mt-1">{errorMessage}</p>
       )}
 
       {open && (
-        <div className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-3 w-64 ${openUpward ? "bottom-full mb-1.5" : "top-full mt-1.5"} ${alignRight ? "right-0" : "left-0"}`}>
+        <div id={panelId} role="dialog" aria-label={label ?? "Choose a date"} className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-3 w-64 ${openUpward ? "bottom-full mb-1.5" : "top-full mt-1.5"} ${alignRight ? "right-0" : "left-0"}`}>
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-3">
             <button type="button" onClick={prevMonth} className="p-1 rounded hover:bg-surface-raised text-muted-fg hover:text-foreground transition-colors">

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useId, useRef, useState } from "react";
 import { FORM_ELEMENT_SIZE } from "../input";
 
 export interface IColorPicker {
@@ -58,12 +58,25 @@ const ColorPicker: FC<IColorPicker> = ({
     onChange(v);
   };
 
+  const fieldId = useId();
+  const labelId = `${fieldId}-label`;
+  const triggerId = `${fieldId}-trigger`;
+  // The name reads as "<label> <current value>", e.g. "Start Select time".
+  const valueId = `${fieldId}-value`;
+
   return (
     <div className={`relative inline-flex flex-col gap-1 ${className}`} ref={ref}>
-      {label && <span className="text-xs font-semibold text-muted-fg">{label}</span>}
+      {label && (
+        <label id={labelId} htmlFor={triggerId} className="text-xs font-semibold text-muted-fg">
+          {label}
+        </label>
+      )}
 
       <button
+        id={triggerId}
         type="button"
+        aria-expanded={open}
+        aria-labelledby={label ? `${labelId} ${valueId}` : undefined}
         disabled={disabled}
         onClick={() => !disabled && setOpen((v) => !v)}
         className={`flex items-center ${sizeClass} border rounded transition-colors duration-200 ${
@@ -76,7 +89,7 @@ const ColorPicker: FC<IColorPicker> = ({
           className={`${swatchSize} rounded border border-border/60 shrink-0`}
           style={{ backgroundColor: value }}
         />
-        <span className="text-foreground font-mono text-xs">{value.toUpperCase()}</span>
+        <span id={valueId} className="text-foreground font-mono text-xs">{value.toUpperCase()}</span>
         <svg viewBox="0 0 16 16" fill="none" className={`${chevSize} text-muted-fg`} xmlns="http://www.w3.org/2000/svg">
           <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -90,6 +103,7 @@ const ColorPicker: FC<IColorPicker> = ({
               <div className="w-full h-full" style={{ backgroundColor: value }} />
               <input
                 type="color"
+                aria-label="Pick a colour"
                 value={value}
                 onChange={(e) => handleNativeChange(e.target.value)}
                 className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
@@ -99,6 +113,7 @@ const ColorPicker: FC<IColorPicker> = ({
               <p className="text-[10px] text-muted-fg mb-1 font-semibold">HEX</p>
               <input
                 type="text"
+                aria-label="Hex colour"
                 value={inputVal}
                 onChange={(e) => handleInputChange(e.target.value)}
                 maxLength={7}

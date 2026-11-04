@@ -6,6 +6,10 @@ import { FORM_ELEMENT_SIZE } from "../input";
 import { DATE_PICKER_FORMAT } from "../datePicker";
 import DateRangePicker from "./index";
 
+/** Trigger names are "<label> <value>"; match the value whether or not a label is set. */
+const endsWith = (text: string) =>
+  new RegExp(`(^|\\s)${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+
 function renderPicker(props: Partial<React.ComponentProps<typeof DateRangePicker>> = {}) {
   const onChange = vi.fn();
   const result = render(<DateRangePicker onChange={onChange} label="Range" {...props} />);
@@ -37,7 +41,7 @@ describe("DateRangePicker", () => {
 
   it("shows the default placeholders and a medium trigger", () => {
     renderPicker();
-    const trigger = screen.getByRole("button", { name: "Start date → End date" });
+    const trigger = screen.getByRole("combobox", { name: endsWith("Start date → End date") });
     expect(trigger.className).toContain("text-sm");
     expect(screen.getByText("Range").className).toContain("text-muted-fg");
   });
@@ -47,7 +51,7 @@ describe("DateRangePicker", () => {
     const { rerender } = render(
       <DateRangePicker onChange={onChange} startDate={new Date(2026, 0, 10)} />,
     );
-    expect(screen.getByRole("button", { name: "10 Jan 2026 → End date" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("10 Jan 2026 → End date") })).toBeInTheDocument();
 
     rerender(
       <DateRangePicker
@@ -57,7 +61,7 @@ describe("DateRangePicker", () => {
         format={DATE_PICKER_FORMAT.DD_MM_YYYY_SLASH}
       />,
     );
-    expect(screen.getByRole("button", { name: "10/01/2026 → 12/01/2026" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("10/01/2026 → 12/01/2026") })).toBeInTheDocument();
 
     rerender(
       <DateRangePicker
@@ -69,7 +73,7 @@ describe("DateRangePicker", () => {
         endPlaceholder="To"
       />,
     );
-    expect(screen.getByRole("button", { name: "10 Jan 2026 → 02 Feb 2026" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("10 Jan 2026 → 02 Feb 2026") })).toBeInTheDocument();
   });
 
   it("selects a start, previews the hover range, then commits an end and closes", async () => {
@@ -86,7 +90,7 @@ describe("DateRangePicker", () => {
       );
     };
 
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
     const [left, right] = months(view.container);
     expect(monthTitle(left)).toBe("March 2026");
     expect(monthTitle(right)).toBe("April 2026");
@@ -117,7 +121,7 @@ describe("DateRangePicker", () => {
   it("swaps the range when the second click is before the start, and stays open", async () => {
     const user = userEvent.setup();
     const { container, onChange } = renderPicker({ startDate: new Date(2026, 2, 20) });
-    await user.click(screen.getByRole("button", { name: "20 Mar 2026 → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("20 Mar 2026 → End date") }));
     await user.click(day(months(container)[0], 5));
     expect(onChange).toHaveBeenCalledWith({
       startDate: new Date(2026, 2, 5),
@@ -136,7 +140,7 @@ describe("DateRangePicker", () => {
         endDate={new Date(2026, 2, 12)}
       />,
     );
-    await user.click(screen.getByRole("button", { name: "10 Mar 2026 → 12 Mar 2026" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10 Mar 2026 → 12 Mar 2026") }));
     await user.click(day(months(container)[0], 18));
     expect(onChange).toHaveBeenCalledWith({
       startDate: new Date(2026, 2, 18),
@@ -156,7 +160,7 @@ describe("DateRangePicker", () => {
   it("moves both months together and hides the inner navigation buttons", async () => {
     const user = userEvent.setup();
     const { container } = renderPicker();
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
     const [left, right] = months(container);
     const leftNav = within(left).getAllByRole("button").slice(0, 2);
     const rightNav = within(right).getAllByRole("button").slice(0, 2);
@@ -177,7 +181,7 @@ describe("DateRangePicker", () => {
       minDate: new Date(2026, 2, 10),
       maxDate: new Date(2026, 3, 5),
     });
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
     const [left, right] = months(container);
     expect(day(left, 9)).toBeDisabled();
     expect(day(left, 10)).toBeEnabled();
@@ -197,20 +201,20 @@ describe("DateRangePicker", () => {
         endDate={new Date(2026, 2, 12)}
       />,
     );
-    await user.click(screen.getByRole("button", { name: "10 Mar 2026 → 12 Mar 2026" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10 Mar 2026 → 12 Mar 2026") }));
     await user.click(within(panel(view.container)).getByRole("button", { name: "Clear" }));
     expect(onChange).toHaveBeenCalledWith({ startDate: null, endDate: null });
     expect(view.container.querySelector(".absolute.z-50")).toBeNull();
 
     view.rerender(<DateRangePicker onChange={onChange} startDate={null} endDate={null} />);
-    expect(screen.getByRole("button", { name: "Start date → End date" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("Start date → End date") })).toBeInTheDocument();
     expect(view.container.querySelector(".absolute.z-50")).toBeNull();
   });
 
   it("Done closes a partial range", async () => {
     const user = userEvent.setup();
     const { container, onChange } = renderPicker({ startDate: new Date(2026, 2, 10) });
-    await user.click(screen.getByRole("button", { name: "10 Mar 2026 → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10 Mar 2026 → End date") }));
     await user.click(within(panel(container)).getByRole("button", { name: "Done" }));
     expect(container.querySelector(".absolute.z-50")).toBeNull();
     expect(onChange).not.toHaveBeenCalled();
@@ -229,8 +233,8 @@ describe("DateRangePicker", () => {
         endDate={new Date(2026, 7, 9)}
       />,
     );
-    expect(screen.getByRole("button", { name: "03 Aug 2026 → 09 Aug 2026" })).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "03 Aug 2026 → 09 Aug 2026" }));
+    expect(screen.getByRole("combobox", { name: endsWith("03 Aug 2026 → 09 Aug 2026") })).toBeInTheDocument();
+    await user.click(screen.getByRole("combobox", { name: endsWith("03 Aug 2026 → 09 Aug 2026") }));
     expect(monthTitle(months(container)[0])).toBe("August 2026");
     expect(monthTitle(months(container)[1])).toBe("September 2026");
   });
@@ -238,7 +242,7 @@ describe("DateRangePicker", () => {
   it("does not open when disabled, closes on an outside press, and shows errors", async () => {
     const user = userEvent.setup();
     const { container, rerender, onChange } = renderPicker({ disabled: true });
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
     expect(container.querySelector(".absolute.z-50")).toBeNull();
 
     rerender(
@@ -253,8 +257,8 @@ describe("DateRangePicker", () => {
     expect(container.firstElementChild!.className).toContain("range-field");
     expect(screen.getByRole("alert")).toHaveTextContent("Pick a range");
     expect(screen.getByText("Range").className).toContain("text-danger");
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
-    expect(screen.getByRole("button", { name: "Start date → End date" }).className).toContain(
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
+    expect(screen.getByRole("combobox", { name: endsWith("Start date → End date") }).className).toContain(
       "border-danger",
     );
     fireEvent.mouseDown(document.body);
@@ -263,7 +267,7 @@ describe("DateRangePicker", () => {
 
   it("uses the small size", () => {
     renderPicker({ size: FORM_ELEMENT_SIZE.SM, startPlaceholder: "From", endPlaceholder: "To" });
-    const trigger = screen.getByRole("button", { name: "From → To" });
+    const trigger = screen.getByRole("combobox", { name: endsWith("From → To") });
     expect(trigger.className).toContain("text-xs");
     expect(trigger.className).toContain("py-1.5");
   });
@@ -271,7 +275,7 @@ describe("DateRangePicker", () => {
   it("marks today and does not move day focus with arrow keys", async () => {
     const user = userEvent.setup();
     const { container } = renderPicker();
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
     const today = day(months(container)[0], 15);
     expect(today.className).toContain("border-primary-default");
     today.focus();
@@ -291,7 +295,7 @@ describe("DateRangePicker", () => {
     setViewport(width, height);
     const { container } = renderPicker();
     mockRect(container.firstElementChild as HTMLElement, box);
-    await user.click(screen.getByRole("button", { name: "Start date → End date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Start date → End date") }));
     expectAnchored(panel(container), position, align);
   });
 });
