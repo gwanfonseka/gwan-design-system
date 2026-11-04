@@ -79,21 +79,18 @@ const FileUploader: FC<IFileUploader> = ({
     setErrors(errs);
     if (!valid.length) return;
 
-    setFiles((prev) => {
-      const next = multiple ? [...prev, ...valid] : [valid[valid.length - 1]];
-      const capped = maxFiles ? next.slice(0, maxFiles) : next;
-      onFilesChange?.(capped);
-      handleAttachment(valid[0]);
-      return capped;
-    });
+    // Callbacks run here, not inside a state updater, which React may call twice.
+    const next = multiple ? [...files, ...valid] : [valid[valid.length - 1]];
+    const capped = maxFiles ? next.slice(0, maxFiles) : next;
+    setFiles(capped);
+    onFilesChange?.(capped);
+    handleAttachment(valid[0]);
   };
 
   const removeFile = (index: number) => {
-    setFiles((prev) => {
-      const next = prev.filter((_, i) => i !== index);
-      onFilesChange?.(next);
-      return next;
-    });
+    const next = files.filter((_, i) => i !== index);
+    setFiles(next);
+    onFilesChange?.(next);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

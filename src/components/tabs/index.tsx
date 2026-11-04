@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useId, useRef, type KeyboardEvent } from "react";
 
 export enum TABS_VARIANT {
   UNDERLINE = "underline",
@@ -62,22 +62,61 @@ const Tabs: FC<ITabs> = ({
     return "";
   };
 
+  const baseId = useId();
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const tabId = (key: string) => `${baseId}-tab-${key}`;
+  const panelId = `${baseId}-panel`;
+
+  // Arrow keys, Home and End move between enabled tabs and select them (ARIA tabs pattern).
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    const enabled = items.map((item, i) => (item.disabled ? -1 : i)).filter((i) => i >= 0);
+    const at = enabled.indexOf(index);
+    const target =
+      e.key === "ArrowRight" ? enabled[(at + 1) % enabled.length]
+      : e.key === "ArrowLeft" ? enabled[(at - 1 + enabled.length) % enabled.length]
+      : e.key === "Home" ? enabled[0]
+      : e.key === "End" ? enabled[enabled.length - 1]
+      : undefined;
+    if (target === undefined) return;
+    e.preventDefault();
+    tabRefs.current[target]?.focus();
+    onChange?.(items[target].key);
+  };
+
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
-      <div className={`flex flex-row flex-wrap ${getTrackStyle()}`}>
-        {items.map((item) => (
-          <button
-            key={item.key}
-            type="button"
-            disabled={item.disabled}
-            onClick={() => !item.disabled && onChange?.(item.key)}
-            className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${getTabStyle(item.key, item.disabled)}`}
-          >
-            {item.label}
-          </button>
-        ))}
+      <div role="tablist" className={`flex flex-row flex-wrap ${getTrackStyle()}`}>
+        {items.map((item, index) => {
+          const selected = active === item.key;
+          return (
+            <button
+              key={item.key}
+              ref={(el) => {
+                tabRefs.current[index] = el;
+              }}
+              id={tabId(item.key)}
+              type="button"
+              role="tab"
+              aria-selected={selected}
+              aria-controls={selected ? panelId : undefined}
+              tabIndex={selected ? 0 : -1}
+              disabled={item.disabled}
+              onClick={() => !item.disabled && onChange?.(item.key)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${getTabStyle(item.key, item.disabled)}`}
+            >
+              {item.label}
+            </button>
+          );
+        })}
       </div>
-      <div>
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={active ? tabId(active) : undefined}
+        tabIndex={0}
+        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-default rounded-sm"
+      >
         {items.find((item) => item.key === active)?.content}
       </div>
     </div>

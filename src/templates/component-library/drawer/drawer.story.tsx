@@ -56,7 +56,7 @@ export default defineStory<IDrawer>({
       group: "Appearance",
     },
     onClose: {
-      description: "Called from the close button or the overlay.",
+      description: "Called from the close button, the overlay, or the Escape key.",
       control: action(),
       required: true,
       group: "Events",

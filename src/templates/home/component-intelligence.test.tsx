@@ -8,7 +8,7 @@ describe("home showcase", () => {
     const user = userEvent.setup();
     render(<ComponentIntelligence />);
     expect(screen.getByText("$12,480")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "This month" }));
+    await user.click(screen.getByRole("tab", { name: "This month" }));
     expect(screen.getByText("$48,210")).toBeInTheDocument();
   });
 

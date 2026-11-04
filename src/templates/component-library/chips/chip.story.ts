@@ -25,7 +25,7 @@ export default defineStory<IChip>({
       group: "Appearance",
     },
     onClear: {
-      description: "Called from the chip's × icon. Remove the chip from your list here.",
+      description: "Called from the chip's × button. Remove the chip from your list here.",
       control: action(),
       required: true,
       group: "Events",
