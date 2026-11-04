@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Blog examples import the package by name, exactly as readers will.
+      "gwan-design-system": path.resolve(__dirname, "./src/index.ts"),
     },
   },
   test: {

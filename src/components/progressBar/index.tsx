@@ -46,7 +46,7 @@ const ProgressBar: FC<IProgressBar> = ({
     [PROGRESS_BAR_TYPE.DANGER]: "bg-danger",
     [PROGRESS_BAR_TYPE.WARNING]: "bg-warning",
     [PROGRESS_BAR_TYPE.INFO]: "bg-accent",
-    [PROGRESS_BAR_TYPE.DEFAULT]: "bg-primary-500",
+    [PROGRESS_BAR_TYPE.DEFAULT]: "bg-primary-default",
   }[type];
 
   const trackHeight = {

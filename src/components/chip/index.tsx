@@ -52,9 +52,14 @@ const Chip: FC<IChip> = ({
     <div
       className={`flex flex-row gap-2 items-center ${getChipStyle(variant)} w-fit px-4 py-2 ${getEdgesStyle(edges)} ${className}`}
     >
-      <div className="size-4 cursor-pointer" onClick={onClear}>
+      <button
+        type="button"
+        onClick={onClear}
+        aria-label={`Remove ${label}`}
+        className="size-4 cursor-pointer rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-default"
+      >
         <CrossSVG />
-      </div>
+      </button>
       <p className="text-base">{label}</p>
     </div>
   );

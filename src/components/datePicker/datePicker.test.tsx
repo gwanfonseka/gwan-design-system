@@ -5,6 +5,10 @@ import { expectAnchored, freezeClock, mockRect, setViewport } from "../../test/h
 import { FORM_ELEMENT_SIZE } from "../input";
 import DatePicker, { DATE_PICKER_FORMAT } from "./index";
 
+/** Trigger names are "<label> <value>"; match the value whether or not a label is set. */
+const endsWith = (text: string) =>
+  new RegExp(`(^|\\s)${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+
 function renderPicker(props: Partial<React.ComponentProps<typeof DatePicker>> = {}) {
   const onChange = vi.fn();
   const result = render(<DatePicker onChange={onChange} label="When" {...props} />);
@@ -32,7 +36,7 @@ describe("DatePicker", () => {
 
   it("defaults to an empty medium field in DD MMM YYYY", () => {
     renderPicker();
-    const trigger = screen.getByRole("button", { name: "Select date" });
+    const trigger = screen.getByRole("combobox", { name: endsWith("Select date") });
     expect(trigger.className).toContain("text-sm");
     expect(trigger.className).toContain("min-w-[200px]");
     expect(screen.getByText("When").className).toContain("text-muted-fg");
@@ -43,7 +47,7 @@ describe("DatePicker", () => {
     const { rerender } = render(
       <DatePicker onChange={onChange} value={new Date(2026, 2, 15, 9, 5)} />,
     );
-    expect(screen.getByRole("button", { name: "15 Mar 2026" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("15 Mar 2026") })).toBeInTheDocument();
 
     rerender(
       <DatePicker
@@ -52,10 +56,10 @@ describe("DatePicker", () => {
         format={DATE_PICKER_FORMAT.YYYY_MM_DD}
       />,
     );
-    expect(screen.getByRole("button", { name: "2026-06-02" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("2026-06-02") })).toBeInTheDocument();
 
     rerender(<DatePicker onChange={onChange} value={null} />);
-    expect(screen.getByRole("button", { name: "Select date" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("Select date") })).toBeInTheDocument();
   });
 
   it.each([
@@ -72,7 +76,7 @@ describe("DatePicker", () => {
         ? new Date(2026, 2, 15, 0, 0)
         : new Date(2026, 2, 15, 9, 5);
     renderPicker({ value, format });
-    expect(screen.getByRole("button", { name: display })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith(display) })).toBeInTheDocument();
   });
 
   it("appends 24-hour time when timePicker is on and the format has no time tokens", () => {
@@ -81,7 +85,7 @@ describe("DatePicker", () => {
       timePicker: true,
       format: DATE_PICKER_FORMAT.DD_MMM_YYYY,
     });
-    expect(screen.getByRole("button", { name: "15 Mar 2026 09:05" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("15 Mar 2026 09:05") })).toBeInTheDocument();
   });
 
   it("syncs the open month and time fields when value changes, including across a clear", async () => {
@@ -95,7 +99,7 @@ describe("DatePicker", () => {
         format={DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME}
       />,
     );
-    await user.click(screen.getByRole("button", { name: "10 Jan 2026 08:15" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("10 Jan 2026 08:15") }));
     expect(heading(container)).toBe("January 2026");
     const [hours, minutes] = within(panel(container)).getAllByRole("spinbutton");
     expect(hours).toHaveValue(8);
@@ -109,7 +113,7 @@ describe("DatePicker", () => {
         format={DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME}
       />,
     );
-    expect(screen.getByRole("button", { name: "02 Jun 2026 21:45" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("02 Jun 2026 21:45") })).toBeInTheDocument();
     expect(heading(container)).toBe("June 2026");
     expect(within(panel(container)).getAllByRole("spinbutton")[0]).toHaveValue(21);
     expect(within(panel(container)).getAllByRole("spinbutton")[1]).toHaveValue(45);
@@ -122,7 +126,7 @@ describe("DatePicker", () => {
         format={DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME}
       />,
     );
-    expect(screen.getByRole("button", { name: "Select date" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: endsWith("Select date") })).toBeInTheDocument();
     expect(heading(container)).toBe("March 2026");
     const cleared = within(panel(container)).getAllByRole("spinbutton");
     expect(cleared[0]).toHaveValue(14);
@@ -132,7 +136,7 @@ describe("DatePicker", () => {
   it("moves the viewed month and marks today", async () => {
     const user = userEvent.setup();
     const { container } = renderPicker();
-    await user.click(screen.getByRole("button", { name: "Select date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Select date") }));
     expect(heading(container)).toBe("March 2026");
     expect(day(container, 15).className).toContain("border-primary-default");
 
@@ -155,7 +159,7 @@ describe("DatePicker", () => {
     const { container, onChange } = renderPicker({
       format: DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME,
     });
-    await user.click(screen.getByRole("button", { name: "Select date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Select date") }));
     await user.click(day(container, 20));
     const picked = onChange.mock.calls[0][0] as Date;
     expect(picked.getFullYear()).toBe(2026);
@@ -170,7 +174,7 @@ describe("DatePicker", () => {
   it("keeps the panel open in timePicker mode and applies the typed time", async () => {
     const user = userEvent.setup();
     const { container, onChange } = renderPicker({ timePicker: true });
-    await user.click(screen.getByRole("button", { name: "Select date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Select date") }));
     const [hours, minutes] = within(panel(container)).getAllByRole("spinbutton");
     fireEvent.change(hours, { target: { value: "99" } });
     fireEvent.change(minutes, { target: { value: "99" } });
@@ -194,7 +198,7 @@ describe("DatePicker", () => {
       timePicker: true,
       format: DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME_12,
     });
-    await user.click(screen.getByRole("button", { name: "15 Mar 2026 03:10 PM" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("15 Mar 2026 03:10 PM") }));
     expect(within(panel(container)).getByRole("button", { name: "PM" })).toBeInTheDocument();
     const [hours, minutes] = within(panel(container)).getAllByRole("spinbutton");
     expect(hours).toHaveValue(3);
@@ -220,7 +224,7 @@ describe("DatePicker", () => {
       minDate: new Date(2026, 2, 10),
       maxDate: new Date(2026, 2, 20),
     });
-    await user.click(screen.getByRole("button", { name: "15 Mar 2026" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("15 Mar 2026") }));
     expect(day(container, 9)).toBeDisabled();
     expect(day(container, 21)).toBeDisabled();
     expect(day(container, 10)).toBeEnabled();
@@ -234,13 +238,13 @@ describe("DatePicker", () => {
   it("clears and closes with or without the time picker", async () => {
     const user = userEvent.setup();
     const plain = renderPicker({ value: new Date(2026, 2, 15) });
-    await user.click(screen.getByRole("button", { name: "15 Mar 2026" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("15 Mar 2026") }));
     await user.click(within(panel(plain.container)).getByRole("button", { name: "Clear selection" }));
     expect(plain.onChange).toHaveBeenCalledWith(null);
     expect(plain.container.querySelector(".absolute.z-50")).toBeNull();
 
     const timed = renderPicker({ value: new Date(2026, 2, 15, 9, 0), timePicker: true });
-    await user.click(screen.getByRole("button", { name: "15 Mar 2026 09:00" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("15 Mar 2026 09:00") }));
     await user.click(within(panel(timed.container)).getByRole("button", { name: "Clear selection" }));
     expect(timed.onChange).toHaveBeenCalledWith(null);
     expect(timed.container.querySelector(".absolute.z-50")).toBeNull();
@@ -249,7 +253,7 @@ describe("DatePicker", () => {
   it("does not open when disabled, closes on an outside press, and shows errors", async () => {
     const user = userEvent.setup();
     const { container, rerender, onChange } = renderPicker({ disabled: true, value: new Date(2026, 2, 15) });
-    await user.click(screen.getByRole("button", { name: "15 Mar 2026" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("15 Mar 2026") }));
     expect(container.querySelector(".absolute.z-50")).toBeNull();
 
     rerender(
@@ -264,7 +268,7 @@ describe("DatePicker", () => {
     );
     expect(screen.getByRole("alert")).toHaveTextContent("Required");
     expect(screen.getByText("When").className).toContain("text-danger");
-    await user.click(screen.getByRole("button", { name: "15 Mar 2026" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("15 Mar 2026") }));
     fireEvent.mouseDown(document.body);
     expect(container.querySelector(".absolute.z-50")).toBeNull();
 
@@ -275,14 +279,14 @@ describe("DatePicker", () => {
   it("uses the small size and a custom class", () => {
     const { container } = renderPicker({ size: FORM_ELEMENT_SIZE.SM, className: "when-field" });
     expect(container.firstElementChild!.className).toContain("when-field");
-    expect(screen.getByRole("button", { name: "Select date" }).className).toContain("text-xs");
-    expect(screen.getByRole("button", { name: "Select date" }).className).toContain("min-w-[160px]");
+    expect(screen.getByRole("combobox", { name: endsWith("Select date") }).className).toContain("text-xs");
+    expect(screen.getByRole("combobox", { name: endsWith("Select date") }).className).toContain("min-w-[160px]");
   });
 
   it("activates a focused day with Enter and does not move focus with arrows", async () => {
     const user = userEvent.setup();
     const { container, onChange } = renderPicker();
-    await user.click(screen.getByRole("button", { name: "Select date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Select date") }));
     const fifteenth = day(container, 15);
     fifteenth.focus();
     await user.keyboard("{ArrowRight}");
@@ -303,7 +307,7 @@ describe("DatePicker", () => {
     setViewport(width, height);
     const { container } = renderPicker();
     mockRect(container.firstElementChild as HTMLElement, box);
-    await user.click(screen.getByRole("button", { name: "Select date" }));
+    await user.click(screen.getByRole("combobox", { name: endsWith("Select date") }));
     expectAnchored(panel(container), position, align);
   });
 });

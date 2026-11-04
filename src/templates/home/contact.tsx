@@ -65,7 +65,7 @@ const SuccessState = () => (
       <p className="text-[9px] font-bold tracking-[0.25em] uppercase text-muted-fg mb-2">Transmitted</p>
       <p className="text-sm font-semibold text-foreground">Message received.</p>
       <p className="mt-2 text-xs text-muted-fg max-w-xs">
-        We&apos;ll be in touch within 24–48 hours. Check your inbox for a confirmation.
+        I&apos;ll be in touch within 24–48 hours. Check your inbox for a confirmation.
       </p>
     </div>
   </div>
@@ -110,8 +110,8 @@ const Contact = () => {
               Protocol
             </h2>
             <p className="mt-5 text-sm text-muted-fg leading-relaxed max-w-xs">
-              Consult with our engineering team for custom architectural
-              guidance or enterprise support plans.
+              Talk to me directly. I build and maintain GWAN, and I can help
+              with integrating it, architecture questions and support.
             </p>
 
             <div className="mt-8 md:mt-10 space-y-5">
@@ -138,7 +138,7 @@ const Contact = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-[9px] font-bold tracking-[0.25em] uppercase text-muted-fg">We can help with</p>
+                  <p className="text-[9px] font-bold tracking-[0.25em] uppercase text-muted-fg">I can help with</p>
                   <p className="mt-0.5 text-xs text-foreground leading-relaxed">
                     Integration support, bug reports,<br />and feature requests.
                   </p>

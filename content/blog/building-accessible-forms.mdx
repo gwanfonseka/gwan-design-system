@@ -14,7 +14,7 @@ Accessible forms are harder to build than they look. Labels need to be wired to 
 
 ## Labels and inputs
 
-Every Gwan form component — `Input`, `TextArea`, `SelectDropdown`, `MultiSelect`, `SearchInput`, `DatePicker`, `ColorPicker`, `Checkbox`, `RadioButton` — wires up the label automatically. You pass a `label` prop and the component creates a `<label>` element with the correct `htmlFor`/`id` pair:
+Every Gwan form component — `Input`, `TextArea`, `SelectDropdown`, `MultiSelect`, `SearchInput`, `DatePicker`, `TimePicker`, `DateRangePicker`, `ColorPicker`, `OtpInput`, `Slider`, `Checkbox`, `RadioButton` and `Switch` — wires up the label automatically. You pass a `label` prop and the component connects it to the field, so the label becomes the field's accessible name:
 
 ```tsx
 <Input
@@ -24,11 +24,11 @@ Every Gwan form component — `Input`, `TextArea`, `SelectDropdown`, `MultiSelec
 />
 ```
 
-The `id` is derived from the label text, so `label="Email address"` becomes `id="gwan-input-email-address"`. Screen readers announce the label when the input receives focus — no manual plumbing required.
+Text fields use a `<label>` with a matching `htmlFor`/`id`; for `Input`, `label="Email address"` becomes `id="gwan-input-email-address"`. The pickers open from a button, so their name combines the label and the current value — a screen reader hears "Delivery date, Select date". `OtpInput` and a two-thumb `Slider` have several inputs, so the label names the group around them. Screen readers announce the label when the field receives focus — no manual plumbing required.
 
 ## Error announcements
 
-When `isError={true}` is set, three things happen at once:
+Every component with an `isError` prop — `Input`, `TextArea`, `SelectDropdown`, `MultiSelect`, `DatePicker`, `TimePicker`, `DateRangePicker` and `OtpInput` — does three things at once when it's set together with `errorMessage`:
 
 1. `aria-invalid="true"` is added to the input — signals the invalid state to assistive tech
 2. `aria-describedby` links the input to the error message element
@@ -303,7 +303,7 @@ Gwan handles component-level accessibility. You still own:
 1. **Page structure** — use `<main>`, `<nav>`, `<header>` landmarks correctly
 2. **Heading hierarchy** — don't skip from `<h1>` to `<h3>`
 3. **Tab order** — never use `tabIndex > 0`; let DOM order control tab flow
-4. **Color contrast** — the default Gwan palette passes WCAG AA, but verify with a contrast checker after any token changes
+4. **Color contrast** — in the default Gwan palette, every text and background pair the components use meets WCAG AA (4.5:1) in both light and dark mode, and a test in the repository checks them. Verify again with a contrast checker after changing tokens. Field borders (`--border`) are lighter than the 3:1 WCAG asks for input boundaries, so darken that token if your users need it
 5. **Post-submit focus** — after a failed submission, move focus to the first errored field or an error summary at the top:
 
 ```tsx

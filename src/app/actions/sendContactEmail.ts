@@ -42,7 +42,7 @@ export async function sendContactEmail(
     const replyRes = await resend.emails.send({
       from: `GWAN.DEV <${FROM}>`,
       to: email,
-      subject: "We received your message — GWAN.DEV",
+      subject: "I received your message — GWAN.DEV",
       html: autoReplyHtml({ name }),
     });
 

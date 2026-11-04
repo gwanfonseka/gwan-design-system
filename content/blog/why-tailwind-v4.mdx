@@ -108,7 +108,8 @@ In v3, library consumers had to add the library's source to their `content` arra
 In v4, Gwan's published components are JavaScript. The class names in that bundle are Tailwind utilities, and the colours are CSS custom properties you define. Consumers only need to:
 
 1. Add `@source` for `gwan-design-system/dist` so Tailwind sees those class names
-2. Define the CSS variables in their `globals.css`
+2. Add `@custom-variant dark (&:where(.dark, .dark *));` so the few `dark:` utilities follow the `.dark` class instead of the OS setting
+3. Define the CSS variables in their `globals.css`
 
 The token values are runtime CSS, not build-time Tailwind config. This makes theming more resilient and makes the library less tightly coupled to the consumer's build setup.
 

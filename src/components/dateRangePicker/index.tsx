@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useId, useRef, useState } from "react";
 import { FORM_ELEMENT_SIZE } from "../input";
 import { DATE_PICKER_FORMAT } from "../datePicker";
 
@@ -163,6 +163,14 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   const startMonthKey = startDate ? `${startDate.getFullYear()}-${startDate.getMonth()}` : "";
 
   const [open, setOpen]           = useState(false);
+  const fieldId = useId();
+  const labelId = `${fieldId}-label`;
+  const triggerId = `${fieldId}-trigger`;
+  // The name reads as "<label> <current value>", e.g. "Start Select time".
+  const valueId = `${fieldId}-value`;
+  const panelId = `${fieldId}-panel`;
+  const errorId = `${fieldId}-error`;
+  const showError = isError && !!errorMessage;
   const [leftView, setLeftView]   = useState(() => startDate ?? new Date());
   const [syncedMonth, setSyncedMonth] = useState(startMonthKey);
   const [hover, setHover]         = useState<Date | null>(null);
@@ -238,11 +246,21 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   return (
     <div ref={ref} className={`relative inline-flex flex-col gap-1 ${className}`}>
       {label && (
-        <label className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>{label}</label>
+        <label id={labelId} htmlFor={triggerId} className={`text-xs font-semibold ${isError ? "text-danger" : "text-muted-fg"}`}>{label}</label>
       )}
 
       <button
+        id={triggerId}
         type="button"
+        // A trigger that opens a calendar popup is a combobox (ARIA APG date picker pattern),
+        // which also lets it carry aria-invalid.
+        role="combobox"
+        aria-haspopup="dialog"
+        aria-controls={open ? panelId : undefined}
+        aria-expanded={open}
+        aria-labelledby={label ? `${labelId} ${valueId}` : valueId}
+        aria-invalid={isError || undefined}
+        aria-describedby={showError ? errorId : undefined}
         disabled={disabled}
         onClick={toggleOpen}
         className={`flex items-center justify-between gap-2 ${sizeClass} border rounded transition-colors duration-200 ${
@@ -251,7 +269,7 @@ const DateRangePicker: FC<IDateRangePicker> = ({
             : `bg-surface text-foreground cursor-pointer ${borderClass}`
         } ${open && !isError ? "border-primary-default" : ""}`}
       >
-        <span className={hasValue ? "text-foreground" : "text-muted-fg/60"}>
+        <span id={valueId} className={hasValue ? "text-foreground" : "text-muted-fg/60"}>
           {displayValue()}
         </span>
         <svg viewBox="0 0 16 16" fill="none" className={`${iconSize} text-muted-fg shrink-0`} xmlns="http://www.w3.org/2000/svg">
@@ -260,12 +278,12 @@ const DateRangePicker: FC<IDateRangePicker> = ({
         </svg>
       </button>
 
-      {isError && errorMessage && (
-        <p role="alert" className="text-danger text-xs mt-1">{errorMessage}</p>
+      {showError && (
+        <p id={errorId} role="alert" className="text-danger text-xs mt-1">{errorMessage}</p>
       )}
 
       {open && (
-        <div className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-4 ${openUpward ? "bottom-full mb-1.5" : "top-full mt-1.5"} ${alignRight ? "right-0" : "left-0"}`}>
+        <div id={panelId} role="dialog" aria-label={label ?? "Choose a date range"} className={`absolute z-50 bg-surface border border-border rounded-lg shadow-lg p-4 ${openUpward ? "bottom-full mb-1.5" : "top-full mt-1.5"} ${alignRight ? "right-0" : "left-0"}`}>
           <div className="flex gap-6">
             <CalendarMonth
               viewDate={leftView}

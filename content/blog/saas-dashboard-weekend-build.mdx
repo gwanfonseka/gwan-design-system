@@ -1,6 +1,6 @@
 ---
 title: "Build a SaaS Dashboard in a Weekend with Gwan"
-description: "A practical walkthrough of building a complete SaaS admin dashboard — MenuBar, StatCard, CircularProgress, AvatarGroup, Table, Pagination, Modal, and more — wired up end-to-end."
+description: "A step-by-step build of a Users admin page — MenuBar, StatCard, AvatarGroup, a searchable and filterable Table with Pagination, a Modal to confirm removals, a Drawer to invite users, and Snackbar feedback."
 date: "2026-05-03"
 author: "Nimesh Fonseka"
 tags: ["tutorial", "dashboard", "saas", "next.js"]
@@ -8,11 +8,16 @@ coverImage: "/blog/saas-dashboard-weekend-build.jpg"
 draft: false
 ---
 
-This is a build log, not a theory post. We're going to wire up a real admin dashboard using Gwan components — the kind you'd ship to a paying customer. By the end you'll have a top navigation bar, a metrics row, a data table with filters and pagination, inline actions with confirmation modals, and toast notifications throughout.
+This is a build log, not a theory post. We're going to build the **Users** page of a SaaS admin dashboard with Gwan components, step by step. By the end you'll have:
 
-## What we're building
+- a top navigation bar with the signed-in user
+- a metrics row and a team strip
+- a users table you can search, filter by role and page through
+- a row menu that removes a user after a confirmation dialog
+- a slide-in form that invites a new user
+- a snackbar confirming each action
 
-A **Users** page for a SaaS product. Here's exactly what you'll end up with:
+Here's the finished page. It's live, so try it: search, filter, remove someone, invite someone.
 
 <DashboardPreview />
 
@@ -21,85 +26,81 @@ A **Users** page for a SaaS product. Here's exactly what you'll end up with:
 ```bash
 npx create-next-app@latest my-dashboard --typescript --tailwind --app
 cd my-dashboard
-npm install gwan-design-system @tanstack/react-query
+npm install gwan-design-system
 ```
 
-Follow the [Getting Started](/docs) guide to configure Tailwind and your theme tokens.
+Then follow the [Getting Started](/docs) guide to add the stylesheet: the `@source` line, the `dark:` variant and the colour tokens.
 
-## 1. The page shell with MenuBar
+Everything below lives in `src/templates/users/`. Only `users-shell.tsx` needs `"use client"`; the files it imports run on the client with it.
 
-`MenuBar` replaces the old vertical `NavBar` for dashboards — horizontal, sticky, supports avatar and overflow.
+## 1. The data
+
+A small typed list stands in for your API. Swap `USERS` for a fetch when you wire up a backend.
 
 ```tsx
-// src/app/dashboard/users/page.tsx
-import UsersTemplate from "@/templates/users";
+// src/templates/users/data.ts
+export type Role = "Admin" | "Editor" | "Viewer";
+export type Status = "Active" | "Invited" | "Suspended";
 
-export default function UsersPage() {
-  return <UsersTemplate />;
-}
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  status: Status;
+};
+
+export const ROLES: Role[] = ["Admin", "Editor", "Viewer"];
+
+export const USERS: User[] = [
+  { id: "1", name: "Alice Martin", email: "alice@company.com", role: "Admin", status: "Active" },
+  { id: "2", name: "Bob Chen", email: "bob@company.com", role: "Viewer", status: "Active" },
+  { id: "3", name: "Clara Singh", email: "clara@company.com", role: "Editor", status: "Suspended" },
+  { id: "4", name: "David Park", email: "david@company.com", role: "Viewer", status: "Active" },
+  { id: "5", name: "Eva Torres", email: "eva@company.com", role: "Editor", status: "Active" },
+  { id: "6", name: "Frank Liu", email: "frank@company.com", role: "Viewer", status: "Invited" },
+  { id: "7", name: "Grace Kim", email: "grace@company.com", role: "Admin", status: "Active" },
+  { id: "8", name: "Hugo Silva", email: "hugo@company.com", role: "Viewer", status: "Active" },
+];
 ```
 
+## 2. The page shell: MenuBar and Snackbar
+
+The shell renders the top bar, the page heading and the content, and owns the snackbar. `Snackbar` has no timer or close button of its own, so the shell hides it after four seconds.
+
+`MenuBar` suits a top navigation with a handful of items; it moves items that don't fit into a More menu and has its own mobile menu. If you prefer a side menu, `NavBar` takes the same `menuItems`.
+
 ```tsx
-// src/templates/users/index.tsx
+// src/templates/users/users-shell.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
-  MenuBar,
-  Snackbar,
-  SNACK_BAR_TYPE,
-  MENU_BAR_VARIANT,
-  AVATAR_VARIANT,
   AVATAR_SIZE,
-  AVATAR_LABEL_POSITION,
-} from "gwan-design-system";
-import {
+  AVATAR_VARIANT,
+  CheckSVG,
   DashboardSVG,
-  UsersSVG,
+  MENU_BAR_VARIANT,
+  MenuBar,
   OrdersSVG,
   SettingsSVG,
+  Snackbar,
+  SNACK_BAR_TYPE,
+  UsersSVG,
 } from "gwan-design-system";
-import UsersContent from "./content";
+import UsersContent from "./users-content";
 
 const menuItems = [
-  {
-    title: "Dashboard",
-    icon: <DashboardSVG />,
-    route: "/dashboard",
-    isActive: false,
-    isDivider: false,
-  },
-  {
-    title: "Users",
-    icon: <UsersSVG />,
-    route: "/dashboard/users",
-    isActive: true,
-    isDivider: false,
-  },
-  {
-    title: "Orders",
-    icon: <OrdersSVG />,
-    route: "/dashboard/orders",
-    isActive: false,
-    isDivider: false,
-  },
-  {
-    title: "Settings",
-    icon: <SettingsSVG />,
-    route: "/dashboard/settings",
-    isActive: false,
-    isDivider: false,
-  },
+  { title: "Dashboard", icon: <DashboardSVG />, route: "/dashboard", isActive: false, isDivider: false },
+  { title: "Users", icon: <UsersSVG />, route: "/dashboard/users", isActive: true, isDivider: false },
+  { title: "Orders", icon: <OrdersSVG />, route: "/dashboard/orders", isActive: false, isDivider: false },
+  { title: "Settings", icon: <SettingsSVG />, route: "/dashboard/settings", isActive: false, isDivider: false },
 ];
 
-export default function UsersTemplate() {
-  const router = useRouter();
-  const [snack, setSnack] = useState<{
-    message: string;
-    type: SNACK_BAR_TYPE;
-  } | null>(null);
+export default function UsersShell({ onNavigate }: { onNavigate?: (route: string) => void }) {
+  const [snack, setSnack] = useState<{ message: string; type: SNACK_BAR_TYPE } | null>(null);
 
+  // Snackbar has no timer of its own, so the page hides it after four seconds.
   useEffect(() => {
     if (!snack) return;
     const id = window.setTimeout(() => setSnack(null), 4000);
@@ -107,58 +108,71 @@ export default function UsersTemplate() {
   }, [snack]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <MenuBar
         menuItems={menuItems}
-        logoShort="/logo-short.png"
-        logoLong="/logo.png"
+        logoShort="/images/logo_short.png"
+        logoLong="/images/logo.png"
         variant={MENU_BAR_VARIANT.DEFAULT}
         sticky
         isAvatarVisible
         avatarName="John Doe"
         avatarEmail="john@company.com"
-        avatarImage="/avatar.png"
+        avatarImage="/images/profile_picture.png"
         avatarType={AVATAR_VARIANT.IMAGE_WITH_FULL}
         avatarSize={AVATAR_SIZE.SM}
-        avatarLabelPosition={AVATAR_LABEL_POSITION.RIGHT}
-        onNavigate={(route) => router.push(route)}
+        onNavigate={onNavigate}
       />
 
       <main className="px-6 py-8 max-w-7xl mx-auto">
         <div className="mb-8">
           <h2 className="text-lg font-black text-foreground">Users</h2>
-          <p className="text-xs text-muted-fg mt-0.5">
-            Manage your team and permissions.
-          </p>
+          <p className="text-xs text-muted-fg mt-0.5">Manage your team and permissions.</p>
         </div>
-
-        <UsersContent
-          onAction={(message, type) => setSnack({ message, type })}
-        />
+        <UsersContent onAction={(message, type) => setSnack({ message, type })} />
       </main>
 
-      {snack && <Snackbar message={snack.message} type={snack.type} />}
+      {snack && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Snackbar message={snack.message} type={snack.type} icon={<CheckSVG />} />
+        </div>
+      )}
     </div>
   );
 }
 ```
 
-`Snackbar` only accepts `message`, `type`, `icon`, and `className` — there is no `onClose`. The effect above unmounts it after four seconds.
+Replace the logo and avatar paths with your own. The route file passes Next.js navigation in:
 
-## 2. Metrics row with StatCard and CircularProgress
+```tsx
+// src/app/dashboard/users/page.tsx
+"use client";
 
-The top of every good dashboard is a metrics row. `StatCard` handles the KPI tiles; `CircularProgress` works great for a single ring metric alongside them.
+import { useRouter } from "next/navigation";
+import UsersShell from "@/templates/users/users-shell";
+
+export default function UsersPage() {
+  const router = useRouter();
+  return <UsersShell onNavigate={(route) => router.push(route)} />;
+}
+```
+
+## 3. Metrics row
+
+`StatCard` handles the KPI tiles; `CircularProgress` shows a single ratio beside them.
 
 ```tsx
 // src/templates/users/metrics.tsx
 import {
-  StatCard,
-  CircularProgress,
-  STAT_TREND,
-  CIRCULAR_PROGRESS_TYPE,
   CIRCULAR_PROGRESS_SIZE,
+  CIRCULAR_PROGRESS_TYPE,
+  CircularProgress,
+  MoneySVG,
+  OrdersSVG,
+  STAT_TREND,
+  StatCard,
+  UsersSVG,
 } from "gwan-design-system";
-import { UsersSVG, MoneySVG, OrdersSVG } from "gwan-design-system";
 
 export default function Metrics() {
   return (
@@ -184,7 +198,6 @@ export default function Metrics() {
         trendLabel="3% vs last month"
         icon={<OrdersSVG />}
       />
-
       <div className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-2">
         <p className="text-xs text-muted-fg">Plan usage</p>
         <div className="flex items-center gap-3">
@@ -193,10 +206,7 @@ export default function Metrics() {
             size={CIRCULAR_PROGRESS_SIZE.SM}
             type={CIRCULAR_PROGRESS_TYPE.SUCCESS}
           />
-          <div>
-            <p className="text-sm font-bold text-foreground">78%</p>
-            <p className="text-[10px] text-muted-fg">7,800 / 10,000</p>
-          </div>
+          <p className="text-[10px] text-muted-fg">7,800 / 10,000 seats</p>
         </div>
       </div>
     </div>
@@ -204,28 +214,21 @@ export default function Metrics() {
 }
 ```
 
-## 3. Team members with AvatarGroup
+## 4. Team strip
 
-Show who's on the team with a compact stacked avatar row — overflow names appear in a tooltip on hover.
+`AvatarGroup` shows the first four people and folds the rest into a +N bubble whose tooltip lists them. It takes the live user list, so it updates when someone is invited or removed.
 
 ```tsx
-import { AvatarGroup, AVATAR_SIZE, TOOLTIP_POSITION } from "gwan-design-system";
+// src/templates/users/team.tsx
+import { AVATAR_SIZE, AvatarGroup, TOOLTIP_POSITION } from "gwan-design-system";
+import type { User } from "./data";
 
-const teamMembers = [
-  { name: "Alice Martin", email: "alice@company.com", image: "/alice.png" },
-  { name: "Bob Chen", email: "bob@company.com" },
-  { name: "Clara Singh", email: "clara@company.com", image: "/clara.png" },
-  { name: "David Park", email: "david@company.com" },
-  { name: "Eva Torres", email: "eva@company.com", image: "/eva.png" },
-  { name: "Frank Liu", email: "frank@company.com" },
-];
-
-export default function TeamRow() {
+export default function TeamRow({ users }: { users: User[] }) {
   return (
     <div className="flex items-center gap-3">
       <p className="text-xs text-muted-fg">Team</p>
       <AvatarGroup
-        items={teamMembers}
+        items={users.map(({ name, email }) => ({ name, email }))}
         max={4}
         size={AVATAR_SIZE.SM}
         overflowTooltipPosition={TOOLTIP_POSITION.TOP}
@@ -235,60 +238,34 @@ export default function TeamRow() {
 }
 ```
 
-## 4. The data table
+## 5. The users table with row actions
+
+`Table` takes column definitions with a `render` function per column, so cells can hold any component: an `Avatar` for the name, a `Badge` for the status, and a `DropdownMenu` for the row's actions. The columns are built by a function so the menu can call back with the row's user.
 
 ```tsx
-// src/templates/users/table.tsx
+// src/templates/users/users-table.tsx
 import {
-  Table,
-  Badge,
   Avatar,
-  BADGE_TYPE,
-  AVATAR_VARIANT,
   AVATAR_SIZE,
+  AVATAR_VARIANT,
+  Badge,
+  BADGE_TYPE,
+  EclipseHorizontalSVG,
+  DROPDOWN_PLACEMENT,
+  DropdownMenu,
+  Table,
+  TrashSVG,
+  type ITableColumn,
 } from "gwan-design-system";
-import type { ITableColumn } from "gwan-design-system";
+import type { Status, User } from "./data";
 
-type User = {
-  name: string;
-  email: string;
-  role: string;
-  status: string;
-};
-
-const users: User[] = [
-  {
-    name: "Alice Martin",
-    email: "alice@company.com",
-    role: "Admin",
-    status: "Active",
-  },
-  {
-    name: "Bob Chen",
-    email: "bob@company.com",
-    role: "Viewer",
-    status: "Active",
-  },
-  {
-    name: "Clara Singh",
-    email: "clara@company.com",
-    role: "Editor",
-    status: "Suspended",
-  },
-  {
-    name: "David Park",
-    email: "david@company.com",
-    role: "Viewer",
-    status: "Active",
-  },
-];
-
-const statusBadge: Record<string, BADGE_TYPE> = {
+const statusBadge: Record<Status, BADGE_TYPE> = {
   Active: BADGE_TYPE.SUCCESS,
+  Invited: BADGE_TYPE.INFO,
   Suspended: BADGE_TYPE.DANGER,
 };
 
-const columns: ITableColumn[] = [
+const columns = (onDelete: (user: User) => void): ITableColumn[] => [
   {
     header: "Name",
     render: (user: User) => (
@@ -305,70 +282,355 @@ const columns: ITableColumn[] = [
   },
   {
     header: "Email",
-    render: (user: User) => (
-      <span className="text-sm text-muted-fg">{user.email}</span>
-    ),
+    render: (user: User) => <span className="text-sm text-muted-fg">{user.email}</span>,
   },
   {
     header: "Role",
-    render: (user: User) => (
-      <span className="text-sm text-muted-fg">{user.role}</span>
-    ),
+    render: (user: User) => <span className="text-sm text-muted-fg">{user.role}</span>,
   },
   {
     header: "Status",
+    render: (user: User) => <Badge type={statusBadge[user.status]} label={user.status} />,
+  },
+  {
+    header: "",
+    headerClassName: "w-12",
     render: (user: User) => (
-      <Badge type={statusBadge[user.status]} label={user.status} />
+      <DropdownMenu
+        placement={DROPDOWN_PLACEMENT.BOTTOM_RIGHT}
+        trigger={
+          <span aria-label={`Actions for ${user.name}`} className="size-5 block text-muted-fg">
+            <EclipseHorizontalSVG />
+          </span>
+        }
+        items={[
+          {
+            label: "Remove user",
+            icon: <TrashSVG />,
+            destructive: true,
+            onClick: () => onDelete(user),
+          },
+        ]}
+      />
     ),
   },
 ];
 
-export default function UsersTable() {
-  return <Table columns={columns} data={users} bordered />;
+export default function UsersTable({
+  users,
+  onDelete,
+}: {
+  users: User[];
+  onDelete: (user: User) => void;
+}) {
+  return <Table columns={columns(onDelete)} data={users} bordered />;
 }
 ```
 
-## 5. Putting it all together
+## 6. Filter by role
 
-`UsersContent` takes `onAction` so the shell can raise a snackbar. This section only composes the rows — invite and delete call `onAction` when you add them.
+`FilterDropdown` gives you the button and the dropdown; you render the panel. It passes a `close` function, which the panel calls on Apply or Clear. The panel keeps a draft of the ticked roles, so the table only changes when you apply.
 
 ```tsx
-// src/templates/users/content.tsx
-import { SNACK_BAR_TYPE } from "gwan-design-system";
+// src/templates/users/role-filter.tsx
+import { useState } from "react";
+import { Button, BUTTON_SIZE, BUTTON_VARIANTS, Checkbox, FilterDropdown } from "gwan-design-system";
+import { ROLES, type Role } from "./data";
+
+/** The panel keeps a draft so nothing changes until Apply. */
+const RolePanel = ({
+  selected,
+  onApply,
+  close,
+}: {
+  selected: Role[];
+  onApply: (roles: Role[]) => void;
+  close: () => void;
+}) => {
+  const [draft, setDraft] = useState(selected);
+  const toggle = (role: Role, on: boolean) =>
+    setDraft((current) => (on ? [...current, role] : current.filter((r) => r !== role)));
+
+  return (
+    <div className="w-60 p-4 flex flex-col gap-3">
+      <p className="text-sm font-semibold text-foreground">Role</p>
+      {ROLES.map((role) => (
+        <Checkbox
+          key={role}
+          label={role}
+          checked={draft.includes(role)}
+          onChange={(on) => toggle(role, on)}
+        />
+      ))}
+      <div className="flex justify-end gap-2 pt-2">
+        <Button
+          label="Clear"
+          size={BUTTON_SIZE.SM}
+          variant={BUTTON_VARIANTS.TERTIARY}
+          onClick={() => {
+            onApply([]);
+            close();
+          }}
+        />
+        <Button
+          label="Apply"
+          size={BUTTON_SIZE.SM}
+          onClick={() => {
+            onApply(draft);
+            close();
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default function RoleFilter({
+  selected,
+  onChange,
+}: {
+  selected: Role[];
+  onChange: (roles: Role[]) => void;
+}) {
+  return (
+    <FilterDropdown>
+      {(close) => <RolePanel selected={selected} onApply={onChange} close={close} />}
+    </FilterDropdown>
+  );
+}
+```
+
+## 7. Confirm before removing
+
+`Modal` is shown by rendering it, and `onClear` runs when the user presses the close button, clicks the backdrop or presses Escape. It moves focus into the dialog and keeps it there until it closes.
+
+```tsx
+// src/templates/users/delete-user-modal.tsx
+import { Button, BUTTON_VARIANTS, Modal } from "gwan-design-system";
+import type { User } from "./data";
+
+export default function DeleteUserModal({
+  user,
+  onCancel,
+  onConfirm,
+}: {
+  user: User;
+  onCancel: () => void;
+  onConfirm: (user: User) => void;
+}) {
+  return (
+    <Modal title="Remove user?" onClear={onCancel}>
+      <div className="p-4 flex flex-col gap-6">
+        <p className="text-sm text-muted-fg">
+          {user.name} will lose access to the workspace. You can invite them again later.
+        </p>
+        <div className="flex justify-end gap-2">
+          <Button label="Cancel" variant={BUTTON_VARIANTS.TERTIARY} onClick={onCancel} />
+          <Button label="Remove" onClick={() => onConfirm(user)} />
+        </div>
+      </div>
+    </Modal>
+  );
+}
+```
+
+## 8. Invite from a drawer
+
+`Drawer` is controlled with `open` and `onClose`. The form checks the name and email when you submit, and shows the errors through each `Input`'s `isError` and `errorMessage`.
+
+```tsx
+// src/templates/users/invite-drawer.tsx
+import { useState } from "react";
+import { Button, Drawer, Input, SelectDropdown } from "gwan-design-system";
+import { ROLES, type Role, type User } from "./data";
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export default function InviteDrawer({
+  open,
+  onClose,
+  onInvite,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onInvite: (user: User) => void;
+}) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<Role>("Viewer");
+  const [submitted, setSubmitted] = useState(false);
+
+  const nameError = submitted && !name.trim();
+  const emailError = submitted && !EMAIL.test(email);
+
+  const submit = () => {
+    setSubmitted(true);
+    if (!name.trim() || !EMAIL.test(email)) return;
+    onInvite({ id: crypto.randomUUID(), name: name.trim(), email, role, status: "Invited" });
+    setName("");
+    setEmail("");
+    setRole("Viewer");
+    setSubmitted(false);
+  };
+
+  return (
+    <Drawer open={open} onClose={onClose} title="Invite user">
+      <div className="p-4 flex flex-col gap-4">
+        <Input
+          label="Name"
+          value={name}
+          onChange={(e) => setName((e.target as HTMLInputElement).value)}
+          isError={nameError}
+          errorMessage="Enter a name"
+          required
+        />
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+          isError={emailError}
+          errorMessage="Enter a valid email address"
+          required
+        />
+        <SelectDropdown
+          label="Role"
+          options={ROLES.map((r) => ({ label: r }))}
+          value={role}
+          onChange={(value) => setRole(value as Role)}
+        />
+        <Button label="Send invite" onClick={submit} />
+      </div>
+    </Drawer>
+  );
+}
+```
+
+## 9. Putting it together: search, filter, pagination
+
+`UsersContent` holds the state: the users, the search text, the selected roles, the page, and which modal or drawer is open. It filters the list, slices out the current page for `Table`, and gives `Pagination` the filtered count. A search or filter change goes back to page 1.
+
+```tsx
+// src/templates/users/users-content.tsx
+import { useState } from "react";
+import {
+  AddSVG,
+  Button,
+  Pagination,
+  SearchInput,
+  SNACK_BAR_TYPE,
+} from "gwan-design-system";
+import { USERS, type Role, type User } from "./data";
+import DeleteUserModal from "./delete-user-modal";
+import InviteDrawer from "./invite-drawer";
 import Metrics from "./metrics";
+import RoleFilter from "./role-filter";
 import TeamRow from "./team";
-import UsersTable from "./table";
+import UsersTable from "./users-table";
+
+const PAGE_SIZES = [
+  { value: "5", label: "5" },
+  { value: "10", label: "10" },
+];
 
 export default function UsersContent({
   onAction,
 }: {
   onAction: (message: string, type: SNACK_BAR_TYPE) => void;
 }) {
+  const [users, setUsers] = useState<User[]>(USERS);
+  const [query, setQuery] = useState("");
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [paging, setPaging] = useState({ page: 1, size: 5 });
+  const [toDelete, setToDelete] = useState<User | null>(null);
+  const [inviting, setInviting] = useState(false);
+
+  const q = query.trim().toLowerCase();
+  const filtered = users.filter(
+    (u) =>
+      (!q || `${u.name} ${u.email}`.toLowerCase().includes(q)) &&
+      (roles.length === 0 || roles.includes(u.role)),
+  );
+  const pages = Math.max(1, Math.ceil(filtered.length / paging.size));
+  const page = Math.min(paging.page, pages);
+  const visible = filtered.slice((page - 1) * paging.size, page * paging.size);
+
+  // Any change to the search or filter starts again from the first page.
+  const search = (value: string) => {
+    setQuery(value);
+    setPaging((p) => ({ ...p, page: 1 }));
+  };
+  const filterRoles = (next: Role[]) => {
+    setRoles(next);
+    setPaging((p) => ({ ...p, page: 1 }));
+  };
+
+  const remove = (user: User) => {
+    setUsers((all) => all.filter((u) => u.id !== user.id));
+    setToDelete(null);
+    onAction(`${user.name} was removed`, SNACK_BAR_TYPE.SUCCESS);
+  };
+
+  const invite = (user: User) => {
+    setUsers((all) => [user, ...all]);
+    setInviting(false);
+    onAction(`Invitation sent to ${user.email}`, SNACK_BAR_TYPE.SUCCESS);
+  };
+
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <Metrics />
-      <TeamRow />
-      <UsersTable />
-    </>
+      <TeamRow users={users} />
+
+      <div className="flex flex-wrap items-center gap-3">
+        <SearchInput value={query} onChange={search} placeholder="Search name or email" className="w-64" />
+        <RoleFilter selected={roles} onChange={filterRoles} />
+        <Button
+          label="Invite user"
+          leftIcon={<AddSVG />}
+          onClick={() => setInviting(true)}
+          className="ml-auto"
+        />
+      </div>
+
+      {visible.length > 0 ? (
+        <UsersTable users={visible} onDelete={setToDelete} />
+      ) : (
+        <p className="py-10 text-center text-sm text-muted-fg">No users match your search.</p>
+      )}
+
+      <Pagination
+        total={filtered.length}
+        page={page}
+        size={paging.size}
+        options={PAGE_SIZES}
+        onChange={({ page, size }) => setPaging({ page, size })}
+      />
+
+      {toDelete && (
+        <DeleteUserModal user={toDelete} onCancel={() => setToDelete(null)} onConfirm={remove} />
+      )}
+      <InviteDrawer open={inviting} onClose={() => setInviting(false)} onInvite={invite} />
+    </div>
   );
 }
 ```
 
 ## What this covers
 
-| Section        | Components used                                   |
-| -------------- | ------------------------------------------------- |
-| Top navigation | `MenuBar` with sticky, avatar, active item        |
-| Metrics row    | `StatCard` (×3) + `CircularProgress`              |
-| Team strip     | `AvatarGroup` with overflow tooltip               |
-| Data table     | `Table` with `Avatar` + `Badge` in render columns |
+| Section         | Components used                                                |
+| --------------- | -------------------------------------------------------------- |
+| Navigation      | `MenuBar` with sticky, avatar and active item                  |
+| Metrics         | `StatCard` ×3, `CircularProgress`                              |
+| Team            | `AvatarGroup` with overflow tooltip                            |
+| Table           | `Table` with `Avatar`, `Badge` and a `DropdownMenu` per row    |
+| Search & filter | `SearchInput`, `FilterDropdown` with `Checkbox` and `Button`   |
+| Pagination      | `Pagination` with a page-size dropdown                         |
+| Remove user     | `Modal` with `Button`                                          |
+| Invite user     | `Drawer` with `Input`, `SelectDropdown` and `Button`           |
+| Feedback        | `Snackbar`                                                     |
 
 ## What's next
 
-- Wire up real data using `@tanstack/react-query`
-- Add filtering with `FilterDropdown`
-- Add pagination with `Pagination`
-- Add a delete confirmation using `Modal` + `Button`
-- Add toast feedback with `Snackbar`
-- Add a "Create user" slide-in form using `Drawer`
-- Export to CSV with `Button` + `CsvSVG` icon
+- Load users from your API, for example with `@tanstack/react-query`, and send the invite and remove calls there
+- Add an export button with `Button` and the `CsvSVG` icon
