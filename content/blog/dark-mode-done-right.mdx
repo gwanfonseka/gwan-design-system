@@ -140,6 +140,17 @@ Once `.dark` is on `<html>`, everything updates via CSS — no JS re-renders:
 
 All Tailwind utilities (`bg-background`, `text-foreground`) resolve to the correct CSS variable value for the active theme. The browser handles the cascade — zero JavaScript colour mapping.
 
+### Make `dark:` follow the class too
+
+The tokens switch on `.dark`, but Tailwind v4's `dark:` variant doesn't. By default it uses `@media (prefers-color-scheme: dark)`, so a `dark:` utility follows the operating system even when the user has picked light mode on your site. A few Gwan components use `dark:` utilities, such as placeholder colours and the elevated Card shadow, so this matters for them too. Tell Tailwind to use the class instead:
+
+```css
+/* globals.css, right after @import "tailwindcss" */
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+Now tokens and `dark:` utilities both follow the same `.dark` class that next-themes sets.
+
 ## A real-world token system
 
 Two variables is enough to prove the concept, but a production UI needs a full semantic palette — surfaces, borders, interactive states, status colours. Here are the semantic tokens used by [gwan.dev](https://gwan.dev). The numeric scales (primary, teal, emerald, rose, amber, neutral) live in the same `@theme` block and are not repeated here:
@@ -308,7 +319,7 @@ Most apps only need light/dark toggle, but if you want the system option exposed
 
 - Don't use `className={isDark ? "dark-class" : "light-class"}` — it won't work with SSR
 - Don't apply theme in `useEffect` without the mounted guard — you'll get hydration warnings
-- Don't use `@media (prefers-color-scheme: dark)` in CSS alongside `.dark {}` — they'll conflict
+- Don't use `@media (prefers-color-scheme: dark)` in CSS alongside `.dark {}` — they'll conflict. That includes Tailwind's default `dark:` variant; switch it to the class with `@custom-variant` as shown above
 
 ## Summary
 
@@ -319,3 +330,4 @@ Most apps only need light/dark toggle, but if you want the system option exposed
 | Persistence          | next-themes writes to `localStorage`                              |
 | Hydration mismatch   | `suppressHydrationWarning` on `<html>`, `mounted` guard on toggle |
 | Colour switching     | CSS custom properties on `.dark` class — zero JS                  |
+| `dark:` utilities    | `@custom-variant dark` so they follow `.dark`, not the OS         |
