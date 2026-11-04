@@ -5,7 +5,6 @@ export const navSections = [
       { id: "introduction", label: "Introduction" },
       { id: "installation", label: "Installation" },
       { id: "tailwind-setup", label: "Tailwind Setup" },
-      { id: "theme-setup", label: "Theme Setup" },
       { id: "dark-mode", label: "Dark Mode" },
     ],
   },

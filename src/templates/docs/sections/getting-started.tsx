@@ -1,5 +1,6 @@
 import { H2, H3, P, Code, Callout, InlineCode } from "../primitives";
 import pkg from "../../../../package.json";
+import { SETUP_CSS } from "../setup-css";
 
 const GettingStarted = () => (
   <>
@@ -27,23 +28,25 @@ const GettingStarted = () => (
 
     {/* Installation */}
     <H2 id="installation">Installation</H2>
-    <P>Install the GWAN package and its peer dependencies into your existing Next.js project.</P>
+    <P>Install the package and Tailwind CSS v4, which compiles GWAN&apos;s class names in your app.</P>
 
-    <H3>1. Install via npm</H3>
+    <H3>1. Install the package</H3>
     <Code lang="bash">{`npm install gwan-design-system`}</Code>
 
-    <H3>2. Install peer dependencies</H3>
-    <P>GWAN requires React 19, Tailwind CSS v4, and <InlineCode>next-themes</InlineCode> for dark mode support.</P>
-    <Code lang="bash">{`npm install tailwindcss@^4 @tailwindcss/postcss next-themes`}</Code>
+    <H3>2. Install Tailwind CSS v4</H3>
+    <Code lang="bash">{`npm install tailwindcss@^4 @tailwindcss/postcss`}</Code>
 
     <Callout type="info">
-      GWAN targets <strong>Next.js 15+</strong> and <strong>React 19</strong>. If you are on an older version, check the compatibility table in the repository.
+      The only peer dependency is <strong>React 19</strong> or newer. GWAN is developed and tested in{" "}
+      <strong>Next.js 16</strong> with the App Router.
     </Callout>
 
     {/* Tailwind Setup */}
     <H2 id="tailwind-setup">Tailwind Setup</H2>
     <P>
-      GWAN uses Tailwind CSS v4 with the new <InlineCode>@import &quot;tailwindcss&quot;</InlineCode> syntax and the <InlineCode>@theme</InlineCode> directive. There is no <InlineCode>tailwind.config.js</InlineCode> required — all tokens live in your CSS file.
+      Tailwind CSS v4 is configured in CSS, so there is no <InlineCode>tailwind.config.ts</InlineCode>. It finds class
+      names in your own files automatically but skips <InlineCode>node_modules</InlineCode>, so you add GWAN with{" "}
+      <InlineCode>@source</InlineCode>.
     </P>
 
     <H3>1. Configure PostCSS</H3>
@@ -57,109 +60,39 @@ const config = {
 
 export default config;`}</Code>
 
-    <H3>2. Configure content paths</H3>
-    <P>Create <InlineCode>tailwind.config.ts</InlineCode> and point it at your source files.</P>
-    <Code lang="ts">{`// tailwind.config.ts
-const config = {
-  content: [
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/templates/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  darkMode: "class",
-  theme: {},
-  plugins: [],
-};
-
-export default config;`}</Code>
-
-    <H3>3. Import Tailwind in globals.css</H3>
-    <Code lang="css">{`/* src/app/globals.css */
-@import "tailwindcss";
-
-/* Your theme tokens go here — see Theme Setup below */`}</Code>
-
-    {/* Theme Setup */}
-    <H2 id="theme-setup">Theme Setup</H2>
+    <H3>2. Add the stylesheet</H3>
     <P>
-      GWAN&apos;s theming system is built entirely on CSS custom properties and Tailwind&apos;s <InlineCode>@theme</InlineCode> directive. You define your colour tokens once in <InlineCode>globals.css</InlineCode> — both a light and dark variant — and every component reads from those tokens automatically.
+      Put this in <InlineCode>globals.css</InlineCode>. It tells Tailwind where GWAN&apos;s classes are, makes{" "}
+      <InlineCode>dark:</InlineCode> follow the <InlineCode>.dark</InlineCode> class, and defines the colour tokens.
+      Change the hex values to your brand, but keep every token: the package ships no CSS, so a token you leave out
+      has no value.
     </P>
-
-    <H3>1. Define your tokens</H3>
-    <P>Add the following to your <InlineCode>globals.css</InlineCode>. Customise the hex values to match your brand.</P>
-    <Code lang="css">{`/* ─── Light theme ─────────────────────── */
-:root {
-  --background:      #f8f9f5;
-  --foreground:      #1c2218;
-
-  --surface:         #ffffff;
-  --surface-raised:  #eef2e8;
-  --surface-overlay: #e3e9da;
-
-  --border:          #c4cdb8;
-  --muted-fg:        #60705a;
-
-  --primary-default: #435240;
-  --accent:          #0f766e;
-
-  --success:         #059669;
-  --danger:          #e11d48;
-  --warning:         #d97706;
-}
-
-/* ─── Dark theme ──────────────────────── */
-.dark {
-  --background:      #131a10;
-  --foreground:      #e2eada;
-
-  --surface:         #1c241a;
-  --surface-raised:  #252e22;
-  --surface-overlay: #2d392a;
-
-  --border:          #3c4d38;
-  --muted-fg:        #9ea593;
-
-  --primary-default: #adc09e;
-  --accent:          #2dd4bf;
-
-  --success:         #34d399;
-  --danger:          #fb7185;
-  --warning:         #fbbf24;
-}`}</Code>
-
-    <H3>2. Register tokens with Tailwind</H3>
-    <P>Use the <InlineCode>@theme</InlineCode> directive to expose every CSS variable as a Tailwind utility class.</P>
-    <Code lang="css">{`@theme {
-  --color-background:     var(--background);
-  --color-foreground:     var(--foreground);
-  --color-surface:        var(--surface);
-  --color-surface-raised: var(--surface-raised);
-  --color-border:         var(--border);
-  --color-muted-fg:       var(--muted-fg);
-  --color-accent:         var(--accent);
-  --color-success:        var(--success);
-  --color-danger:         var(--danger);
-  --color-warning:        var(--warning);
-
-  /* Primary scale */
-  --color-primary-50:  #f4f7f1;
-  --color-primary-100: #e2eada;
-  --color-primary-500: #9ea593;
-  --color-primary-800: #435240;
-  --color-primary-900: #2c3629;
-}`}</Code>
+    <Code lang="css">{SETUP_CSS}</Code>
 
     <Callout type="tip">
-      Once registered in <InlineCode>@theme</InlineCode>, use these as normal Tailwind utilities — <InlineCode>bg-background</InlineCode>, <InlineCode>text-foreground</InlineCode>, <InlineCode>border-border</InlineCode>, <InlineCode>bg-primary-500</InlineCode>, etc.
+      The <InlineCode>@source</InlineCode> path is relative to the CSS file. From{" "}
+      <InlineCode>src/app/globals.css</InlineCode> it&apos;s <InlineCode>../../node_modules/…</InlineCode>; adjust it if
+      your stylesheet lives elsewhere. The registered tokens are normal utilities too:{" "}
+      <InlineCode>bg-background</InlineCode>, <InlineCode>text-foreground</InlineCode>,{" "}
+      <InlineCode>border-border</InlineCode>, <InlineCode>bg-primary-500</InlineCode>.
+    </Callout>
+
+    <Callout type="tip">
+      Want different colours? The <a href="/themes" className="underline">Theme Generator</a> builds the{" "}
+      <InlineCode>:root</InlineCode>, <InlineCode>.dark</InlineCode> and primary-scale blocks for you.
     </Callout>
 
     {/* Dark Mode */}
     <H2 id="dark-mode">Dark Mode</H2>
     <P>
-      GWAN uses <InlineCode>next-themes</InlineCode> to manage dark mode. The library toggles a <InlineCode>.dark</InlineCode> class on the <InlineCode>&lt;html&gt;</InlineCode> element, which switches the CSS custom properties you defined above.
+      GWAN switches to its dark tokens whenever an ancestor has the <InlineCode>dark</InlineCode> class, normally{" "}
+      <InlineCode>&lt;html&gt;</InlineCode>. The library doesn&apos;t toggle that class itself; your app does. In
+      Next.js, <InlineCode>next-themes</InlineCode> handles it, including the system preference and remembering the
+      choice. It&apos;s what gwan.dev uses.
     </P>
 
     <H3>1. Wrap your app with ThemeProvider</H3>
+    <Code lang="bash">{`npm install next-themes`}</Code>
     <Code lang="tsx">{`// src/app/layout.tsx
 import { ThemeProvider } from "next-themes";
 

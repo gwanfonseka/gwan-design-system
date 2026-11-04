@@ -98,19 +98,18 @@ const Customisation = () => (
     {/* Primary Colour Scale */}
     <H2 id="primary-scale">Primary Colour Scale</H2>
     <P>
-      The three semantic primary tokens (<InlineCode>--primary-default</InlineCode>,{" "}
-      <InlineCode>--primary-default-fg</InlineCode>,{" "}
-      <InlineCode>--primary-muted</InlineCode>) control the main brand colour at
-      a high level. However, many components also reference fixed steps on the
-      primary palette — <InlineCode>primary-100</InlineCode> through{" "}
-      <InlineCode>primary-900</InlineCode> — for interactive states such as
+      The two semantic primary tokens (<InlineCode>--primary-default</InlineCode> and{" "}
+      <InlineCode>--primary-default-fg</InlineCode>) control the main brand colour
+      and follow light and dark mode. Several components also use fixed steps on
+      the primary palette — <InlineCode>primary-100</InlineCode> through{" "}
+      <InlineCode>primary-800</InlineCode> — for interactive states such as
       hover, focus rings, disabled backgrounds, and active fills.
     </P>
     <P>
       These scale steps are registered once in <InlineCode>@theme {"{}"}</InlineCode> and
       do <strong>not</strong> change between light and dark mode. If you rebrand
       to a different hue, you must replace the entire scale so that
-      button hover states, switch tracks, checkbox fills, stepper indicators,
+      button hover states, switch tracks, accordion borders, stepper indicators,
       tabs, and progress bars all match your brand.
     </P>
 
@@ -125,14 +124,18 @@ const Customisation = () => (
         </thead>
         <tbody className="divide-y divide-border">
           {[
-            ["Button",       "100, 200, 300 (secondary); 500, 600, 700 (primary)"],
-            ["Tabs",         "500 (active underline / pill)"],
-            ["Stepper",      "500 (active & complete step, connector)"],
-            ["Switch",       "500 (active track)"],
-            ["Progress Bar", "500 (default fill)"],
-            ["Radio Button", "500 (checked ring + fill)"],
-            ["Checkbox",     "300, 400 (checked state)"],
-            ["Date Picker",  "500 (selected date, today ring)"],
+            ["Button",          "500, 600, 700 (primary fill, hover, pressed); 100, 200, 300, 800 (secondary); 200, 500 (disabled primary)"],
+            ["Tabs",            "500 (active underline, active pill)"],
+            ["Stepper",         "500 (complete and active steps, connectors)"],
+            ["Switch",          "500 (on track)"],
+            ["Progress Bar",    "500 (default fill)"],
+            ["Accordion",       "500 (open border, title hover)"],
+            ["Command Palette", "500 (highlighted command)"],
+            ["Color Picker",    "500 (hover and focus borders)"],
+            ["Filter Dropdown", "500 (trigger hover border)"],
+            ["Text Area",       "500 (hover and focus borders)"],
+            ["Spinner",         "100 (track of the PRIMARY colour)"],
+            ["NavBar",          "100 (default menuBackgroundColor)"],
           ].map(([comp, steps]) => (
             <tr key={comp}>
               <td className="py-2.5 pr-6 font-medium text-foreground">{comp}</td>
@@ -179,36 +182,42 @@ const Customisation = () => (
     </P>
 
     <H3>Example: rebrand to an indigo palette</H3>
-    <Code lang="css">{`/* Override in your globals.css — after @import "tailwindcss" */
+    <P>
+      Change values in the stylesheet from Getting Started; keep every token name. This example changes the
+      brand-related tokens and the primary scale, and leaves the rest as they were.
+    </P>
+    <Code lang="css">{`/* globals.css — edit the values, keep the rest of the stylesheet */
 :root {
-  --background:      #f5f5ff;
-  --foreground:      #1a1a3e;
-  --surface:         #ffffff;
-  --surface-raised:  #ececff;
-  --border:          #c7c7e8;
-  --muted-fg:        #6464a0;
-  --primary-default: #4f46e5; /* indigo-600 */
-  --accent:          #7c3aed; /* violet-600 */
+  /* …other tokens unchanged… */
+  --primary-default:    #4f46e5; /* indigo-600 */
+  --primary-default-fg: #ffffff;
+  --accent:             #7c3aed; /* violet-600 */
 }
 
 .dark {
-  --background:      #0f0f1a;
-  --foreground:      #e0e0ff;
-  --surface:         #16162a;
-  --surface-raised:  #1e1e38;
-  --border:          #2e2e60;
-  --muted-fg:        #8080c0;
-  --primary-default: #818cf8; /* indigo-400 */
-  --accent:          #a78bfa; /* violet-400 */
+  /* …other tokens unchanged… */
+  --primary-default:    #818cf8; /* indigo-400 */
+  --primary-default-fg: #1e1b4b;
+  --accent:             #a78bfa; /* violet-400 */
 }
 
 @theme {
-  --color-primary-500: #6366f1; /* your brand base */
+  /* …semantic mappings unchanged… */
+  --color-primary-50:  #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
 }`}</Code>
 
-    <Callout type="tip">
-      You only need to override the tokens you want to change. Any tokens you
-      leave out will fall back to the GWAN defaults.
+    <Callout type="warn">
+      The package ships no CSS, so there are no built-in values to fall back to. Every token in the Getting
+      Started stylesheet must stay defined; a missing one leaves that colour unset wherever a component uses it.
     </Callout>
 
     <H3>Adding custom component styles</H3>
@@ -226,22 +235,19 @@ const Customisation = () => (
     {/* Versioning */}
     <H2 id="versioning">Versioning</H2>
     <P>
-      GWAN follows <strong>Semantic Versioning</strong> (semver). The version is
-      automatically injected at build time via the{" "}
-      <InlineCode>NEXT_PUBLIC_APP_VERSION</InlineCode> environment variable,
-      which reads from the latest Git tag.
+      GWAN follows <strong>Semantic Versioning</strong> (semver) and is published to npm as{" "}
+      <InlineCode>gwan-design-system</InlineCode>. Releases are listed on the{" "}
+      <a
+        href="https://github.com/gwanfonseka/gwan-design-system/releases"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2"
+      >
+        GitHub releases page
+      </a>
+      . To see which version your app has installed:
     </P>
-    <Code lang="bash">{`# Tag a new release
-git tag v0.2.0
-git push origin v0.2.0
-
-# The build script picks it up automatically:
-# "prebuild": "echo NEXT_PUBLIC_APP_VERSION=$(git describe --tags --abbrev=0) > .env.local"`}</Code>
-
-    <P>You can display the current version in your UI anywhere:</P>
-    <Code lang="tsx">{`<span className="text-muted-fg text-xs">
-  {process.env.NEXT_PUBLIC_APP_VERSION}
-</span>`}</Code>
+    <Code lang="bash">{`npm ls gwan-design-system`}</Code>
 
     <Callout type="info">
       Breaking changes are communicated via a <strong>major</strong> version

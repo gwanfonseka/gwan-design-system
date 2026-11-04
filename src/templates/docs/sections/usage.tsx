@@ -5,11 +5,11 @@ const Usage = () => (
     {/* Using Components */}
     <H2 id="components">Using Components</H2>
     <P>
-      Every GWAN component is a typed React functional component. Import directly from the package and pass the required props. Each component exposes an enum for its variant or type prop to ensure type safety.
+      Every GWAN component is a typed React function component. Import it from the package root and pass the required props. Components with fixed choices, such as variants, sizes and types, export an enum for them, so a wrong value is a type error.
     </P>
 
     <H3>Button</H3>
-    <Code lang="tsx">{`import Button, { BUTTON_VARIANTS } from "gwan-design-system/button";
+    <Code lang="tsx">{`import { Button, BUTTON_VARIANTS } from "gwan-design-system";
 
 <Button
   variant={BUTTON_VARIANTS.PRIMARY}
@@ -25,7 +25,7 @@ const Usage = () => (
 />`}</Code>
 
     <H3>Tag</H3>
-    <Code lang="tsx">{`import Tag, { TAG_TYPE } from "gwan-design-system/tag";
+    <Code lang="tsx">{`import { Tag, TAG_TYPE } from "gwan-design-system";
 
 <Tag type={TAG_TYPE.SUCCESS} label="Completed" />
 <Tag type={TAG_TYPE.DANGER}  label="Failed" />
@@ -33,7 +33,7 @@ const Usage = () => (
 <Tag type={TAG_TYPE.INFO}    label="In Transit" />`}</Code>
 
     <H3>Avatar</H3>
-    <Code lang="tsx">{`import Avatar, { AVATAR_VARIANT } from "gwan-design-system/avatar";
+    <Code lang="tsx">{`import { Avatar, AVATAR_VARIANT } from "gwan-design-system";
 
 // With image
 <Avatar
@@ -51,7 +51,7 @@ const Usage = () => (
 />`}</Code>
 
     <H3>Input</H3>
-    <Code lang="tsx">{`import Input from "gwan-design-system/input";
+    <Code lang="tsx">{`import { Input } from "gwan-design-system";
 
 const [value, setValue] = useState("");
 
@@ -65,8 +65,7 @@ const [value, setValue] = useState("");
 />`}</Code>
 
     <H3>Snackbar</H3>
-    <Code lang="tsx">{`import Snackbar, { SNACK_BAR_TYPE } from "gwan-design-system/snackBar";
-import { CheckSVG } from "gwan-design-system/icons";
+    <Code lang="tsx">{`import { Snackbar, SNACK_BAR_TYPE, CheckSVG } from "gwan-design-system";
 
 <Snackbar
   type={SNACK_BAR_TYPE.SUCCESS}
@@ -77,18 +76,24 @@ import { CheckSVG } from "gwan-design-system/icons";
     {/* Plug & Play */}
     <H2 id="plug-and-play">Plug & Play</H2>
     <P>
-      The real power of GWAN is how quickly you can assemble full UI surfaces. Below is a complete user profile card built entirely from GWAN components — no custom styles required.
+      GWAN components are built to sit together. Below is a complete user profile card made only of GWAN components, plus one wrapper div for layout.
     </P>
 
     <Code lang="tsx">{`"use client";
 
 import { useState } from "react";
-import Button, { BUTTON_VARIANTS } from "gwan-design-system/button";
-import Avatar, { AVATAR_VARIANT } from "gwan-design-system/avatar";
-import Tag, { TAG_TYPE }           from "gwan-design-system/tag";
-import Input                        from "gwan-design-system/input";
-import Snackbar, { SNACK_BAR_TYPE } from "gwan-design-system/snackBar";
-import { CheckSVG }                 from "gwan-design-system/icons";
+import {
+  Avatar,
+  AVATAR_VARIANT,
+  Button,
+  BUTTON_VARIANTS,
+  CheckSVG,
+  Input,
+  Snackbar,
+  SNACK_BAR_TYPE,
+  Tag,
+  TAG_TYPE,
+} from "gwan-design-system";
 
 export default function ProfileCard() {
   const [name, setName]   = useState("Alex Chon");
@@ -122,7 +127,7 @@ export default function ProfileCard() {
       <Button
         variant={BUTTON_VARIANTS.PRIMARY}
         label="Save Changes"
-        icon={<CheckSVG />}
+        leftIcon={<CheckSVG />}
         onClick={handleSave}
       />
 
@@ -137,12 +142,16 @@ export default function ProfileCard() {
   );
 }`}</Code>
 
-    <P>That is the full component. No utility class overrides, no theme wiring — it picks up light and dark mode automatically from the CSS variables you set up once.</P>
+    <P>That is the full component. There is no per-component theming: it follows light and dark mode through the CSS variables you define once in Getting Started.</P>
 
     {/* Client vs Server */}
     <H2 id="client-server">Client vs Server Components</H2>
     <P>
-      Most GWAN components are pure presentational components and work in both server and client contexts. A small number — those that use <InlineCode>useState</InlineCode>, <InlineCode>useEffect</InlineCode>, or browser APIs — must be used inside a <InlineCode>&quot;use client&quot;</InlineCode> boundary.
+      The package does not add <InlineCode>&quot;use client&quot;</InlineCode> to its build. Components without hooks
+      render fine in a Server Component. Components that use hooks must be imported from a file marked{" "}
+      <InlineCode>&quot;use client&quot;</InlineCode>. Server Components also cannot pass event handlers, so a
+      component that needs <InlineCode>onClick</InlineCode> or <InlineCode>onChange</InlineCode> to be interactive
+      needs a Client Component parent once you pass one.
     </P>
 
     <div className="overflow-x-auto my-4">
@@ -150,69 +159,78 @@ export default function ProfileCard() {
         <thead>
           <tr className="border-b-2 border-border text-left">
             <th className="pb-3 pr-4 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">Component</th>
-            <th className="pb-3 pr-4 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">Server Safe</th>
+            <th className="pb-3 pr-4 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">In a Server Component</th>
             <th className="pb-3 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">Reason</th>
           </tr>
         </thead>
         <tbody>
-          {[
-            ["Accordion", "✗ Client", "Uses useState for open/close state per item"],
-            ["Alert", "✗ Client", "Uses useState for dismiss state"],
-            ["Avatar", "✗ Client", "Uses useState + useEffect for pastel colour generation"],
-            ["AvatarGroup", "✗ Client", "Uses useState for overflow tooltip visibility"],
-            ["Badge", "✓ Yes", "Pure presentational"],
-            ["Banner", "✓ Yes", "Pure presentational"],
-            ["Breadcrumb", "✓ Yes", "Pure presentational"],
-            ["Button", "✓ Yes", "Accepts onClick as a prop — no internal hooks"],
-            ["Callout", "✓ Yes", "Pure presentational"],
-            ["Card", "✓ Yes", "Pure presentational"],
-            ["Carousel", "✗ Client", "Uses useState + useEffect for slide index and auto-play"],
-            ["Checkbox", "✓ Yes", "Controlled — accepts onChange as a prop, no internal hooks"],
-            ["Chip", "✓ Yes", "Accepts onClick as a prop — no internal hooks"],
-            ["CircularProgress", "✓ Yes", "Pure presentational — SVG ring driven by value prop"],
-            ["ColorPicker", "✗ Client", "Marked use client — uses useState for colour state"],
-            ["CommandPalette", "✗ Client", "Marked use client — uses useState + keyboard listeners"],
-            ["ContextMenu", "✗ Client", "Uses useState + useRef for cursor position and click-outside detection"],
-            ["DatePicker", "✗ Client", "Marked use client — uses useState for calendar state"],
-            ["DateRangePicker", "✗ Client", "Marked use client — uses useState + useRef for dual-calendar range selection"],
-            ["Divider", "✓ Yes", "Pure presentational"],
-            ["Drawer", "✗ Client", "Uses useEffect to lock body scroll"],
-            ["DropdownMenu", "✗ Client", "Uses useState + useRef for dropdown state and click-outside detection"],
-            ["Ellipsis", "✗ Client", "Uses useState for tooltip visibility"],
-            ["FileUploader", "✗ Client", "Marked use client — uses useState for file list + drag state, useRef for hidden input"],
-            ["FilterDropdown", "✗ Client", "Uses useState for dropdown visibility"],
-            ["Icons", "✓ Yes", "Pure SVG components — no hooks"],
-            ["Input", "✓ Yes", "Controlled — accepts onChange as a prop, no internal hooks"],
-            ["List", "✓ Yes", "Pure presentational — item click handlers passed as props"],
-            ["MenuBar", "✗ Client", "Uses useState + ResizeObserver for overflow and mobile menu"],
-            ["Modal", "✗ Client", "Uses useEffect + useRef for focus trap and scroll lock"],
-            ["MultiSelect", "✗ Client", "Uses useState + useRef for dropdown state, search, and keyboard navigation"],
-            ["NavBar", "✗ Client", "Uses useState + useEffect for collapse, tooltips, active item"],
-            ["OtpInput", "✗ Client", "Marked use client — uses useRef array for auto-focus-next between digit cells"],
-            ["Pagination", "✗ Client", "Uses useState for page-size dropdown"],
-            ["Popover", "✗ Client", "Marked use client — uses useState + click-outside detection"],
-            ["ProgressBar", "✓ Yes", "Pure presentational"],
-            ["RadioButton", "✓ Yes", "Controlled — accepts onChange as a prop, no internal hooks"],
-            ["SearchInput", "✗ Client", "Uses useCallback + useEffect + useRef for debounced search"],
-            ["SelectDropdown", "✗ Client", "Uses useState + useEffect + useRef for dropdown state"],
-            ["Skeleton", "✓ Yes", "Pure presentational"],
-            ["Snackbar", "✓ Yes", "Pure presentational — visibility controlled by consumer"],
-            ["Spinner", "✓ Yes", "Pure presentational — CSS animation only"],
-            ["StatCard", "✓ Yes", "Pure presentational"],
-            ["States", "✓ Yes", "Pure presentational"],
-            ["Stepper", "✓ Yes", "Pure presentational — step state controlled by consumer"],
-            ["Switch", "✓ Yes", "Controlled — accepts onChange as a prop, no internal hooks"],
-            ["Table", "✓ Yes", "Pure presentational — data and sorting controlled by consumer"],
-            ["Tabs", "✓ Yes", "Controlled — accepts activeTab + onChange as props, no internal hooks"],
-            ["Tag", "✓ Yes", "Pure presentational"],
-            ["TextArea", "✓ Yes", "Controlled — accepts onChange as a prop, no internal hooks"],
-            ["TimePicker", "✗ Client", "Marked use client — uses useState for scroll-column picker and click-outside detection"],
-            ["TimeLine", "✗ Client", "Uses useState + useEffect for animated step progression"],
-            ["Tooltip", "✓ Yes", "Pure presentational — visibility controlled by consumer"],
-          ].map(([comp, safe, reason]) => (
+          {(
+            [
+              ["Accordion", "client", "useState for the open sections"],
+              ["Alert", "client", "useState for the dismissed state"],
+              ["Avatar", "client", "useState for the name tooltip"],
+              ["AvatarGroup", "client", "useState for the +N tooltip"],
+              ["Badge", "yes", "No hooks"],
+              ["Banner", "yes", "No hooks"],
+              ["Breadcrumb", "yes", "No hooks"],
+              ["Button", "handlers", "No hooks; onClick is required"],
+              ["Callout", "yes", "No hooks"],
+              ["Card", "yes", "No hooks"],
+              ["Carousel", "client", "useState + useEffect for the slide index and auto-advance"],
+              ["Checkbox", "handlers", "No hooks; onChange is required"],
+              ["Chip", "handlers", "No hooks; onClear is required"],
+              ["CircularProgress", "yes", "No hooks"],
+              ["ColorPicker", "client", "useState + useEffect for the panel and hex field"],
+              ["CommandPalette", "client", "useState + useEffect for search and keyboard navigation"],
+              ["ContextMenu", "client", "useState + useEffect for cursor position and outside clicks"],
+              ["DatePicker", "client", "useState + useEffect for the calendar panel"],
+              ["DateRangePicker", "client", "useState + useEffect for the two-month calendar"],
+              ["Divider", "yes", "No hooks"],
+              ["Drawer", "client", "useEffect to lock page scroll while open"],
+              ["DropdownMenu", "client", "useState + useEffect for the menu and outside clicks"],
+              ["Ellipsis", "client", "useState for the tooltip"],
+              ["FileUploader", "client", "useState + useRef for the file list, drag state and hidden input"],
+              ["FilterDropdown", "client", "useState for the panel"],
+              ["Icons", "yes", "Plain SVG, no hooks"],
+              ["Input", "handlers", "No hooks; pass onChange from a Client Component"],
+              ["List", "handlers", "No hooks; item onClick needs a Client Component"],
+              ["MenuBar", "client", "useState + useEffect for overflow and the mobile menu"],
+              ["Modal", "client", "useEffect + useRef for the focus trap and scroll lock"],
+              ["MultiSelect", "client", "useState + useEffect for the dropdown, search and keyboard navigation"],
+              ["NavBar", "client", "useState + useEffect for collapsing and tooltips"],
+              ["OtpInput", "client", "useRef for moving focus between digits"],
+              ["Pagination", "client", "useState for the page-size dropdown"],
+              ["Popover", "client", "useState + useEffect for open state and outside clicks"],
+              ["ProgressBar", "yes", "No hooks"],
+              ["RadioButton", "handlers", "No hooks; pass onChange from a Client Component"],
+              ["SearchInput", "client", "useEffect + useRef for the debounced search"],
+              ["SelectDropdown", "client", "useState + useEffect for the dropdown"],
+              ["Skeleton", "yes", "No hooks"],
+              ["Slider", "client", "useState for the active thumb"],
+              ["Snackbar", "yes", "No hooks; you decide when to render it"],
+              ["Spinner", "yes", "No hooks; CSS animation"],
+              ["StatCard", "yes", "No hooks"],
+              ["States", "yes", "No hooks"],
+              ["Stepper", "yes", "No hooks; you set each step's status"],
+              ["Switch", "handlers", "Only useId; onChange is required"],
+              ["Table", "yes", "No hooks; column render functions run where Table renders"],
+              ["Tabs", "handlers", "No hooks; switching tabs needs activeKey + onChange from a Client Component"],
+              ["Tag", "yes", "No hooks"],
+              ["TextArea", "handlers", "No hooks; pass onChange from a Client Component"],
+              ["TimeLine", "yes", "No hooks"],
+              ["TimePicker", "client", "useState + useEffect for the scroll columns and outside clicks"],
+              ["Tooltip", "yes", "No hooks; you control isVisible"],
+            ] as const
+          ).map(([comp, mode, reason]) => (
             <tr key={comp} className="border-b border-border">
               <td className="py-2.5 pr-4 font-mono text-[12px] text-foreground">{comp}</td>
-              <td className={`py-2.5 pr-4 text-[12px] font-semibold ${safe.startsWith("✓") ? "text-success" : "text-danger"}`}>{safe}</td>
+              <td
+                className={`py-2.5 pr-4 text-[12px] font-semibold ${
+                  mode === "yes" ? "text-success" : mode === "handlers" ? "text-warning" : "text-danger"
+                }`}
+              >
+                {mode === "yes" ? "✓ Yes" : mode === "handlers" ? "✓ Without handlers" : "✗ Client only"}
+              </td>
               <td className="py-2.5 text-[12px] text-muted-fg">{reason}</td>
             </tr>
           ))}
@@ -221,7 +239,8 @@ export default function ProfileCard() {
     </div>
 
     <Callout type="tip">
-      When importing client-only components inside a Server Component page, wrap them in their own file marked <InlineCode>&quot;use client&quot;</InlineCode> rather than marking the entire page client-side.
+      Put client-only components in their own file marked <InlineCode>&quot;use client&quot;</InlineCode> and import
+      that file from your Server Component page, rather than marking the whole page client-side.
     </Callout>
   </>
 );

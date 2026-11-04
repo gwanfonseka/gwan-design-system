@@ -24,42 +24,43 @@ yarn add gwan-design-system
 
 ## Setup
 
-This library targets **Tailwind CSS v4**. The setup differs from v3 — all theme tokens live in CSS, not `tailwind.config.ts`.
+This library targets **Tailwind CSS v4**, which is configured in CSS. There is no `tailwind.config.ts`.
 
-### 1. Configure Tailwind CSS
+### 1. Install Tailwind CSS v4
 
-In your `tailwind.config.ts`, add the library's source to `content` so Tailwind scans component class names:
+```bash
+npm install tailwindcss@^4 @tailwindcss/postcss
+```
 
-```ts
-// tailwind.config.ts
-import { join, dirname } from "path";
-import { createRequire } from "module";
-
-const require = createRequire(import.meta.url);
-
+```js
+// postcss.config.mjs
 const config = {
-  darkMode: "class",
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    join(
-      dirname(require.resolve("gwan-design-system")),
-      "**/*.{js,ts,jsx,tsx}",
-    ),
-  ],
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
 };
 
 export default config;
 ```
 
-### 2. Import Tailwind and define your theme
+### 2. Add the stylesheet
 
-In your global CSS file, import Tailwind v4 and declare all design tokens inside `@theme {}`. Components read from these CSS custom properties at runtime, so dark mode works automatically.
+Tailwind v4 finds class names in your own files automatically but skips `node_modules`, so point it at gwan-design-system with `@source`. The path is relative to the CSS file; from `src/app/globals.css` it is `../../node_modules/…`.
+
+The package ships no CSS. Every token below is used by at least one component, so keep them all; change the values to your brand. The [Theme Generator](https://gwan.dev/themes) can produce the `:root`, `.dark` and primary-scale blocks for you.
 
 ```css
-/* globals.css */
+/* src/app/globals.css */
 @import "tailwindcss";
 
-/* ─── Light theme ────────────────────────────────────────────── */
+/* GWAN's class names ship in its dist JavaScript. Tailwind skips node_modules,
+   so point it there. The path is relative to this CSS file. */
+@source "../../node_modules/gwan-design-system/dist";
+
+/* Make dark: utilities follow the .dark class instead of the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Light theme ─────────────────────────── */
 :root {
   --background: #f8f9f5;
   --foreground: #1c2218;
@@ -73,11 +74,9 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
 
   --primary-default: #435240;
   --primary-default-fg: #f4f7f1;
-  --primary-muted: #adc09e;
-  --primary-muted-fg: #2c3629;
 
-  --muted: #e3e9da;
   --muted-fg: #60705a;
+  --accent: #0f766e;
 
   --success: #059669;
   --success-bg: #ecfdf5;
@@ -92,7 +91,7 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
   --warning-fg: #78350f;
 }
 
-/* ─── Dark theme ─────────────────────────────────────────────── */
+/* ─── Dark theme ──────────────────────────── */
 .dark {
   --background: #131a10;
   --foreground: #e2eada;
@@ -106,11 +105,9 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
 
   --primary-default: #adc09e;
   --primary-default-fg: #1c2218;
-  --primary-muted: #435240;
-  --primary-muted-fg: #e2eada;
 
-  --muted: #252e22;
   --muted-fg: #9ea593;
+  --accent: #2dd4bf;
 
   --success: #34d399;
   --success-bg: #022c1e;
@@ -125,7 +122,7 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
   --warning-fg: #fde68a;
 }
 
-/* ─── Tailwind v4 theme registration ────────────────────────── */
+/* ─── Register the tokens as Tailwind colours ─ */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -139,11 +136,9 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
 
   --color-primary-default: var(--primary-default);
   --color-primary-default-fg: var(--primary-default-fg);
-  --color-primary-muted: var(--primary-muted);
-  --color-primary-muted-fg: var(--primary-muted-fg);
 
-  --color-muted: var(--muted);
   --color-muted-fg: var(--muted-fg);
+  --color-accent: var(--accent);
 
   --color-success: var(--success);
   --color-success-bg: var(--success-bg);
@@ -157,7 +152,7 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
   --color-warning-bg: var(--warning-bg);
   --color-warning-fg: var(--warning-fg);
 
-  /* Primary scale */
+  /* Primary scale: the same in light and dark mode */
   --color-primary-50: #f4f7f1;
   --color-primary-100: #e2eada;
   --color-primary-200: #c8d5be;
@@ -171,7 +166,11 @@ In your global CSS file, import Tailwind v4 and declare all design tokens inside
 }
 ```
 
-> The values above match the default gwan-design-system palette (Sage Green). Swap them for your own brand colors — just keep the same token names.
+> The values above are the default gwan-design-system palette (Sage Green).
+
+### Dark mode
+
+Components switch to the dark tokens whenever an ancestor has the `dark` class, normally `<html>`. The library doesn't toggle it; your app does. In Next.js, [`next-themes`](https://github.com/pacocoursey/next-themes) with `attribute="class"` handles it, including the system preference.
 
 ### 3. Use a component
 
@@ -195,109 +194,112 @@ export default function MyPage() {
 
 ## Components
 
-**53+ components** across foundations, form controls, data display, navigation, overlays, and feedback.
+**53 components** across actions, form controls, data display, navigation, content and layout, overlays, indicators and feedback. Try each one in the [component playground](https://gwan.dev/components-library).
 
-> **`C` = Client Component** (uses React hooks — add `"use client"` to the importing file if needed)  
-> **`S` = Server Component** (pure render, no hooks — safe to use in React Server Components)
+The package doesn't add `"use client"` to its build, so:
+
+> **`S`** — no hooks; renders in a React Server Component.
+> **`H`** — no hooks, but takes event handlers (`onClick`, `onChange`…). It renders on the server, and needs a Client Component parent once you pass a handler.
+> **`C`** — uses hooks; import it from a file marked `"use client"`.
 
 ### Actions
 
-| Component | Type | Description                                          |
-| --------- | ---- | ---------------------------------------------------- |
-| `Button`  | `S`  | Primary, secondary, ghost, danger, and more variants |
+| Component | Type | Description |
+| --------- | ---- | ----------- |
+| `Button`  | `H`  | Primary, secondary and tertiary variants, three sizes, three corner styles, optional left/right icons |
 
 ### Form Controls
 
-| Component        | Type | Description                                                |
-| ---------------- | ---- | ---------------------------------------------------------- |
-| `Input`          | `S`  | Text input with label, validation states, and clear button |
-| `TextArea`       | `S`  | Multi-line text input with label and validation            |
-| `SelectDropdown` | `C`  | Single-select dropdown with search                         |
-| `FilterDropdown` | `C`  | Multi-category checkbox filter dropdown                    |
-| `Checkbox`       | `S`  | Accessible checkbox with size and edge-style variants      |
-| `RadioButton`    | `S`  | Accessible radio input                                     |
-| `Switch`         | `S`  | Toggle switch with sizes and disabled state                |
-| `DatePicker`     | `C`  | Calendar date picker with min/max and keyboard support     |
-| `FileUploader`   | `C`  | Drag-and-drop or click-to-upload — file list with type badges, size, and remove |
-| `ColorPicker`    | `C`  | Swatch + hex input with preset palette                     |
-| `MultiSelect`    | `C`  | Checkbox multi-option dropdown with chips, search, and keyboard nav |
-| `SearchInput`    | `C`  | Search field with debounced callback, clear button, and loading state |
-| `Slider`         | `C`  | Single-thumb and dual-thumb range slider with size variants and tooltip |
-| `OtpInput`       | `C`  | n-digit OTP/PIN input with auto-focus-next, paste, and mask support     |
-| `TimePicker`     | `C`  | Scroll-column time picker with 12h/24h and optional seconds             |
-| `DateRangePicker`| `C`  | Dual-calendar start/end date range picker with hover preview            |
+| Component         | Type | Description |
+| ----------------- | ---- | ----------- |
+| `Input`           | `H`  | Text input with label, error state, and an optional clear button |
+| `TextArea`        | `H`  | Multi-line input with label, error state, and an optional clear button |
+| `SelectDropdown`  | `C`  | Single-select dropdown with keyboard navigation, optional search and server-side search |
+| `FilterDropdown`  | `C`  | Filter button that opens a panel you render; the panel gets a function to close it |
+| `Checkbox`        | `H`  | Checkbox with label, three sizes and corner styles |
+| `RadioButton`     | `H`  | Radio input; group several with a shared `name` and `selectedValue` |
+| `Switch`          | `H`  | Toggle switch with label, description and three sizes |
+| `DatePicker`      | `C`  | Calendar date picker with min/max dates, display formats and optional time selection |
+| `FileUploader`    | `C`  | Drag-and-drop or click-to-upload, with a file list, type badges, size limits and remove |
+| `ColorPicker`     | `C`  | Swatch, native colour input and hex field with preset colours |
+| `MultiSelect`     | `C`  | Multi-option dropdown with chips, search and keyboard navigation |
+| `SearchInput`     | `C`  | Search field with a debounced callback, clear button and loading state |
+| `Slider`          | `C`  | Single-thumb or two-thumb range slider with sizes and an optional value display |
+| `OtpInput`        | `C`  | n-digit code input with auto-advance, paste and masking |
+| `TimePicker`      | `C`  | Scroll-column time picker, 12h or 24h, optional seconds |
+| `DateRangePicker` | `C`  | Two-month calendar for picking a start and end date, with hover preview |
 
 ### Data Display
 
-| Component     | Type | Description                                        |
-| ------------- | ---- | -------------------------------------------------- |
-| `Table`              | `S`  | Sortable, typed data table                                      |
-| `Pagination`         | `C`  | Page navigation controls                                        |
-| `ProgressBar`        | `S`  | Striped and solid progress bars with size variants              |
-| `StatCard`           | `S`  | Metric tile with value, label, trend indicator, and icon slot   |
-| `CircularProgress`   | `S`  | SVG ring progress with size and color type variants             |
+| Component          | Type | Description |
+| ------------------ | ---- | ----------- |
+| `Table`            | `S`  | Table driven by column definitions with a `render` function per column; optional stripes and row borders |
+| `Pagination`       | `C`  | Previous/next controls with a page-size dropdown |
+| `ProgressBar`      | `S`  | Progress bar with types, sizes, optional stripes and animation |
+| `StatCard`         | `S`  | Metric tile with label, value, trend and icon |
+| `CircularProgress` | `S`  | SVG ring progress with sizes, types and a percentage label |
 
 ### Navigation
 
-| Component    | Type | Description                                              |
-| ------------ | ---- | -------------------------------------------------------- |
-| `NavBar`     | `C`  | Vertical side navigation with sub-menus and avatar       |
-| `MenuBar`    | `C`  | Horizontal top navigation bar with overflow and avatar   |
-| `Tabs`       | `S`  | Tab panels with underline, pill, and boxed variants      |
-| `Breadcrumb` | `S`  | Breadcrumb trail with slash, chevron, and dot separators |
-| `Ellipsis`   | `C`  | Text overflow with tooltip                               |
+| Component    | Type | Description |
+| ------------ | ---- | ----------- |
+| `NavBar`     | `C`  | Collapsible vertical side menu with sub-menus and avatar |
+| `MenuBar`    | `C`  | Horizontal top bar with dropdowns, a More menu for overflow, a mobile menu and avatar |
+| `Tabs`       | `H`  | Tab list and panel with underline, pill and boxed variants; you control the active tab |
+| `Breadcrumb` | `S`  | Breadcrumb trail with slash, chevron and dot separators |
+| `Ellipsis`   | `C`  | Truncated text with the full text in a tooltip on hover |
 
 ### Content & Layout
 
-| Component   | Type | Description                                                      |
-| ----------- | ---- | ---------------------------------------------------------------- |
-| `Card`      | `S`  | Surface container with optional header/footer slots and variants |
-| `Divider`   | `S`  | Horizontal/vertical separator — solid, dashed, or dotted         |
-| `Banner`    | `S`  | Page-level announcement banners                                  |
-| `Carousel`  | `C`  | Image and content carousels                                      |
-| `Accordion` | `C`  | Collapsible panels with single/multi-open modes                  |
-| `TimeLine`  | `C`  | Vertical timeline / activity log                                 |
-| `Stepper`   | `S`  | Horizontal and vertical step indicators                          |
-| `List`      | `S`  | Styled vertical list with icon/avatar slot, right slot, and variants     |
+| Component   | Type | Description |
+| ----------- | ---- | ----------- |
+| `Card`      | `S`  | Surface container with optional header and footer, variants and padding sizes |
+| `Divider`   | `S`  | Horizontal or vertical separator, solid, dashed or dotted, with an optional label |
+| `Banner`    | `S`  | Hero banner with title, subtitle and a background image or colour |
+| `Carousel`  | `C`  | Auto-advancing slides built from Banner props |
+| `Accordion` | `C`  | Collapsible sections, one or several open at a time |
+| `TimeLine`  | `S`  | Vertical event timeline that adds a Pending step until the last event is finished or failed |
+| `Stepper`   | `S`  | Horizontal or vertical steps; you set each step's status |
+| `List`      | `H`  | Vertical list with icon, description, right slot and clickable rows |
 
 ### Overlays
 
-| Component        | Type | Description                                           |
-| ---------------- | ---- | ----------------------------------------------------- |
-| `Modal`          | `C`  | Dialog modals in multiple sizes                       |
-| `Drawer`         | `C`  | Slide-in panels from any edge                         |
-| `Popover`        | `C`  | Anchored overlay with click or hover trigger          |
-| `CommandPalette` | `C`  | Full-screen command launcher with keyboard navigation |
-| `DropdownMenu`   | `C`  | Button-triggered action list with icons, dividers, and destructive items |
-| `ContextMenu`    | `C`  | Right-click triggered action list positioned at cursor |
+| Component        | Type | Description |
+| ---------------- | ---- | ----------- |
+| `Modal`          | `C`  | Dialog in four sizes with focus trapping, Escape and backdrop to close |
+| `Drawer`         | `C`  | Panel that slides in from any edge, with an optional overlay |
+| `Popover`        | `C`  | Panel anchored to a trigger, opened on click or hover |
+| `CommandPalette` | `C`  | Searchable command launcher with groups, shortcuts and keyboard navigation |
+| `DropdownMenu`   | `C`  | Action menu opened from a trigger, with icons, dividers and destructive items |
+| `ContextMenu`    | `C`  | The same action menu, opened by right-clicking an area |
 
 ### Indicators
 
-| Component  | Type | Description                                              |
-| ---------- | ---- | -------------------------------------------------------- |
-| `Tag`      | `S`  | Categorization tags with color variants                  |
-| `Chip`     | `S`  | Small selectable/filterable labels                       |
-| `Badge`    | `S`  | Dot, dot+label, and label-only status badges             |
-| `Avatar`        | `C`  | User avatars with sizes, variants, and label positioning          |
-| `AvatarGroup`   | `C`  | Stacked avatar stack with overflow count and hover tooltip        |
-| `Tooltip`       | `S`  | Hover tooltips with configurable position                         |
-| `Skeleton` | `S`  | Loading placeholders for text, circles, and rects        |
-| `Spinner`  | `S`  | Animated loading ring with size and color variants       |
+| Component     | Type | Description |
+| ------------- | ---- | ----------- |
+| `Tag`         | `S`  | Coloured label with solid and outline variants |
+| `Chip`        | `H`  | Removable label with a × that calls `onClear` |
+| `Badge`       | `S`  | Status badge: label, dot plus label, or dot only |
+| `Avatar`      | `C`  | Picture or initials, with optional name and email, sizes and label position |
+| `AvatarGroup` | `C`  | Overlapping avatars with a +N bubble that lists the rest |
+| `Tooltip`     | `S`  | Positioned tooltip bubble; you control when it's visible |
+| `Skeleton`    | `S`  | Loading placeholders for text lines, circles and rectangles |
+| `Spinner`     | `S`  | Loading ring with sizes and colours |
 
 ### Feedback
 
-| Component  | Type | Description                                            |
-| ---------- | ---- | ------------------------------------------------------ |
-| `Snackbar` | `S`  | Toast-style notifications                              |
-| `Alert`    | `C`  | Inline alerts with solid, outline, and subtle variants |
-| `Callout`  | `S`  | Inline info, warning, success, and error messages      |
-| `States`   | `S`  | Empty, error, and loading state screens                |
+| Component  | Type | Description |
+| ---------- | ---- | ----------- |
+| `Snackbar` | `S`  | Notification bar with type and icon; you decide when to show and hide it |
+| `Alert`    | `C`  | Inline alert with solid, outline and subtle variants, optionally dismissible |
+| `Callout`  | `S`  | Highlighted note: info, warning, tip or danger |
+| `States`   | `S`  | Empty, success, error and loading screens with a title, subtitle and image (pass `stateImage`; the built-in images are not shipped) |
 
 ---
 
 ## Icons
 
-**216 SVG icon components** — all sized at 24×24, using `currentColor` so they inherit text color and respond to Tailwind color utilities.
+**216 SVG icon components**. They use `currentColor`, so they take the text colour, and they fill the element you put them in, so size them with that element.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";
@@ -307,7 +309,7 @@ import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";
 <div className="size-4 text-primary-default"><BellSVG /></div>
 ```
 
-Browse the full icon catalogue at [gwan.dev/components?item=Icons](https://gwan.dev/components?item=Icons) — click any icon to get its import name, sizes preview, and ready-to-copy code snippet.
+Browse the full icon catalogue at [gwan.dev/components-library?tab=Icons](https://gwan.dev/components-library?tab=Icons) — click any icon to get its import name, sizes preview, and ready-to-copy code snippet.
 
 ---
 
@@ -429,12 +431,12 @@ import type {
 
 ## Features
 
-- **Dark mode** — Built-in dark mode support via `next-themes`
-- **TypeScript** — Full type definitions for every component and prop
-- **Tailwind CSS** — All styles use Tailwind utility classes, fully customizable
-- **Next.js App Router** — Compatible with the App Router and React Server Components patterns
-- **Accessible** — Built with semantic HTML and ARIA attributes
-- **ESM + CJS** — Ships both ES module and CommonJS builds
+- **Dark mode** — every component reads CSS variables that switch with a `.dark` class
+- **TypeScript** — typed props, with enums for variants, sizes and types
+- **Tailwind CSS v4** — styles are Tailwind utilities; theme tokens are plain CSS variables
+- **Next.js App Router** — works in Client Components, and hook-free components render in Server Components (see the table above)
+- **Tree-shakeable** — ESM build with `"sideEffects": false`; importing only `Button` leaves about 2 KB of library code in the bundle
+- **ESM + CJS** — ships both ES module and CommonJS builds
 
 ---
 
