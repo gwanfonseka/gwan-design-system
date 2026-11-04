@@ -7,10 +7,10 @@ const GettingStarted = () => (
     {/* Introduction */}
     <H2 id="introduction">Introduction</H2>
     <P>
-      GWAN is a high-performance component library and design system built for Next.js projects. It provides a curated set of production-ready components, a fully typed API, and a Tailwind CSS v4 theming layer — all with first-class dark mode support baked in.
+      GWAN is an open-source component library and design system for Next.js projects. It provides 53 components and 216 icons with typed props, styled with Tailwind CSS v4 and themed with CSS variables, with light and dark mode built in.
     </P>
     <P>
-      GWAN is designed with a <em>plug-and-play</em> philosophy. Drop it into any Next.js project, configure your tokens once, and every component automatically adapts to your brand and colour scheme.
+      Add one stylesheet with your colour tokens, and every component follows your brand and switches between light and dark mode.
     </P>
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 my-6">
       {[
