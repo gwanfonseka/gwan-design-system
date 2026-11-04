@@ -78,15 +78,15 @@ The package ships no CSS. Every token below is used by at least one component, s
   --muted-fg: #60705a;
   --accent: #0f766e;
 
-  --success: #059669;
+  --success: #047857;
   --success-bg: #ecfdf5;
   --success-fg: #064e3b;
 
-  --danger: #e11d48;
+  --danger: #be123c;
   --danger-bg: #fff1f2;
   --danger-fg: #881337;
 
-  --warning: #d97706;
+  --warning: #b45309;
   --warning-bg: #fffbeb;
   --warning-fg: #78350f;
 }

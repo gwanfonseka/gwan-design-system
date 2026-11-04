@@ -36,12 +36,12 @@ const Tabs: FC<ITabs> = ({
 
     if (variant === TABS_VARIANT.UNDERLINE) {
       return isActive
-        ? "text-foreground border-b-2 border-primary-500"
+        ? "text-foreground border-b-2 border-primary-default"
         : "text-muted-fg border-b-2 border-transparent hover:text-foreground hover:border-border transition-colors duration-200 cursor-pointer";
     }
     if (variant === TABS_VARIANT.PILL) {
       return isActive
-        ? "bg-primary-500 text-primary-default-fg rounded-full cursor-default"
+        ? "bg-primary-default text-primary-default-fg rounded-full cursor-default"
         : "text-muted-fg hover:text-foreground hover:bg-surface-raised rounded-full transition-colors duration-200 cursor-pointer";
     }
     if (variant === TABS_VARIANT.BOXED) {

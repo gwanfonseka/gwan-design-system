@@ -38,7 +38,7 @@ const StepIcon = ({ status, index }: { status: STEP_STATUS; index: number }) => 
 
   if (status === STEP_STATUS.COMPLETE) {
     return (
-      <div className={`${base} bg-primary-500 text-white`}>
+      <div className={`${base} bg-primary-default text-primary-default-fg`}>
         <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4" xmlns="http://www.w3.org/2000/svg">
           <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -56,7 +56,7 @@ const StepIcon = ({ status, index }: { status: STEP_STATUS; index: number }) => 
   }
   if (status === STEP_STATUS.ACTIVE) {
     return (
-      <div className={`${base} border-2 border-primary-500 bg-primary-500/10 text-primary-500`}>
+      <div className={`${base} border-2 border-primary-default bg-primary-default/10 text-primary-default`}>
         {index + 1}
       </div>
     );
@@ -94,7 +94,7 @@ const Stepper: FC<IStepper> = ({
               <div className="flex flex-col items-center">
                 <StepIcon status={status} index={index} />
                 {!isLast && (
-                  <div className={`w-0.5 flex-1 my-1 ${status === STEP_STATUS.COMPLETE ? "bg-primary-500" : "bg-border"}`} />
+                  <div className={`w-0.5 flex-1 my-1 ${status === STEP_STATUS.COMPLETE ? "bg-primary-default" : "bg-border"}`} />
                 )}
               </div>
               <div className={`pb-6 ${isLast ? "" : ""}`}>
@@ -124,9 +124,9 @@ const Stepper: FC<IStepper> = ({
           <div key={step.key} className="flex flex-1 items-start">
             <div className="flex flex-col items-center flex-1">
               <div className="flex flex-row items-center w-full">
-                <div className={`${index > 0 ? "flex-1 h-0.5 mr-2" : "hidden"} ${status === STEP_STATUS.COMPLETE || status === STEP_STATUS.ACTIVE ? "bg-primary-500" : "bg-border"}`} />
+                <div className={`${index > 0 ? "flex-1 h-0.5 mr-2" : "hidden"} ${status === STEP_STATUS.COMPLETE || status === STEP_STATUS.ACTIVE ? "bg-primary-default" : "bg-border"}`} />
                 <StepIcon status={status} index={index} />
-                <div className={`${!isLast ? "flex-1 h-0.5 ml-2" : "hidden"} ${status === STEP_STATUS.COMPLETE ? "bg-primary-500" : "bg-border"}`} />
+                <div className={`${!isLast ? "flex-1 h-0.5 ml-2" : "hidden"} ${status === STEP_STATUS.COMPLETE ? "bg-primary-default" : "bg-border"}`} />
               </div>
               {variant === STEPPER_VARIANT.DEFAULT && (
                 <div className="text-center mt-2 px-1">

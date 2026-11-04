@@ -75,19 +75,19 @@ const Customisation = () => (
           />
           <TokenRow
             name="--success"
-            light="#059669"
+            light="#047857"
             dark="#34d399"
             usage="Success states"
           />
           <TokenRow
             name="--danger"
-            light="#e11d48"
+            light="#be123c"
             dark="#fb7185"
             usage="Error states"
           />
           <TokenRow
             name="--warning"
-            light="#d97706"
+            light="#b45309"
             dark="#fbbf24"
             usage="Warning states"
           />
@@ -100,17 +100,15 @@ const Customisation = () => (
     <P>
       The two semantic primary tokens (<InlineCode>--primary-default</InlineCode> and{" "}
       <InlineCode>--primary-default-fg</InlineCode>) control the main brand colour
-      and follow light and dark mode. Several components also use fixed steps on
-      the primary palette — <InlineCode>primary-100</InlineCode> through{" "}
-      <InlineCode>primary-800</InlineCode> — for interactive states such as
-      hover, focus rings, disabled backgrounds, and active fills.
+      and follow light and dark mode. Primary buttons, tabs, the stepper, switches,
+      progress bars and focus borders all use them, so they stay readable in both
+      themes. A few places use fixed steps on the primary palette instead.
     </P>
     <P>
       These scale steps are registered once in <InlineCode>@theme {"{}"}</InlineCode> and
       do <strong>not</strong> change between light and dark mode. If you rebrand
-      to a different hue, you must replace the entire scale so that
-      button hover states, switch tracks, accordion borders, stepper indicators,
-      tabs, and progress bars all match your brand.
+      to a different hue, replace the entire scale so the secondary and disabled
+      buttons and the spinner track match your brand.
     </P>
 
     <H3>Components that use the primary scale</H3>
@@ -124,18 +122,8 @@ const Customisation = () => (
         </thead>
         <tbody className="divide-y divide-border">
           {[
-            ["Button",          "500, 600, 700 (primary fill, hover, pressed); 100, 200, 300, 800 (secondary); 200, 500 (disabled primary)"],
-            ["Tabs",            "500 (active underline, active pill)"],
-            ["Stepper",         "500 (complete and active steps, connectors)"],
-            ["Switch",          "500 (on track)"],
-            ["Progress Bar",    "500 (default fill)"],
-            ["Accordion",       "500 (open border, title hover)"],
-            ["Command Palette", "500 (highlighted command)"],
-            ["Color Picker",    "500 (hover and focus borders)"],
-            ["Filter Dropdown", "500 (trigger hover border)"],
-            ["Text Area",       "500 (hover and focus borders)"],
-            ["Spinner",         "100 (track of the PRIMARY colour)"],
-            ["NavBar",          "100 (default menuBackgroundColor)"],
+            ["Button",  "100, 200, 300, 800 (secondary fill, hover, pressed, text); 200, 500 (disabled primary)"],
+            ["Spinner", "100 (track of the PRIMARY colour)"],
           ].map(([comp, steps]) => (
             <tr key={comp}>
               <td className="py-2.5 pr-6 font-medium text-foreground">{comp}</td>

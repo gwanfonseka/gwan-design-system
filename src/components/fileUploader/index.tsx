@@ -28,19 +28,19 @@ const formatSize = (bytes: number): string => {
 const getFileType = (name: string): { label: string; bg: string; text: string } => {
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
   if (["jpg", "jpeg", "png", "gif", "webp", "svg", "avif"].includes(ext))
-    return { label: "IMG",  bg: "bg-accent/15",   text: "text-accent" };
+    return { label: "IMG",  bg: "bg-accent/10",   text: "text-accent" };
   if (ext === "pdf")
-    return { label: "PDF",  bg: "bg-danger/15",   text: "text-danger" };
+    return { label: "PDF",  bg: "bg-danger/15",   text: "text-danger-fg" };
   if (["doc", "docx"].includes(ext))
     return { label: "DOC",  bg: "bg-primary-default/15", text: "text-primary-default" };
   if (["xls", "xlsx", "csv"].includes(ext))
-    return { label: "XLS",  bg: "bg-success/15",  text: "text-success" };
+    return { label: "XLS",  bg: "bg-success/15",  text: "text-success-fg" };
   if (["zip", "rar", "gz", "tar"].includes(ext))
-    return { label: "ZIP",  bg: "bg-warning/15",  text: "text-warning" };
+    return { label: "ZIP",  bg: "bg-warning/15",  text: "text-warning-fg" };
   if (["mp4", "mov", "avi", "mkv"].includes(ext))
-    return { label: "VID",  bg: "bg-accent/15",   text: "text-accent" };
+    return { label: "VID",  bg: "bg-accent/10",   text: "text-accent" };
   if (["mp3", "wav", "flac", "aac"].includes(ext))
-    return { label: "AUD",  bg: "bg-success/15",  text: "text-success" };
+    return { label: "AUD",  bg: "bg-success/15",  text: "text-success-fg" };
   return { label: ext.toUpperCase().slice(0, 3) || "FILE", bg: "bg-surface-raised", text: "text-muted-fg" };
 };
 

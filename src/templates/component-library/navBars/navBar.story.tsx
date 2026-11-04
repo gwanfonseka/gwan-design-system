@@ -105,8 +105,8 @@ export default defineStory<INavBar>({
     },
     menuBackgroundColor: {
       description: "Background class of the menu.",
-      control: options(["bg-primary-100", "bg-surface", "bg-surface-raised", "bg-background"]),
-      defaultValue: "bg-primary-100",
+      control: options(["bg-surface-raised", "bg-surface", "bg-background", "bg-primary-100"]),
+      defaultValue: "bg-surface-raised",
       group: "Appearance",
     },
     logoShortWidth: {

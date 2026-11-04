@@ -54,7 +54,7 @@ const TextArea: FC<ITextArea> = ({
           className={`bg-surface text-foreground border ${
             isError
               ? "border-danger focus:border-danger"
-              : "border-border hover:border-primary-500 focus:border-primary-500"
+              : "border-border hover:border-primary-default focus:border-primary-default"
           } outline-none py-2.5 pl-3 ${
             onClear ? "pr-8" : "pr-3"
           } ${edges === FORM_ELEMENT_EDGE_STYLE.ROUNDED && "rounded"} ${

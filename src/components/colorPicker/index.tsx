@@ -82,7 +82,7 @@ const ColorPicker: FC<IColorPicker> = ({
         className={`flex items-center ${sizeClass} border rounded transition-colors duration-200 ${
           disabled
             ? "border-border bg-surface-raised opacity-60 cursor-not-allowed"
-            : "border-border bg-surface hover:border-primary-500 cursor-pointer focus:outline-none"
+            : "border-border bg-surface hover:border-primary-default cursor-pointer focus:outline-none"
         }`}
       >
         <span
@@ -117,7 +117,7 @@ const ColorPicker: FC<IColorPicker> = ({
                 value={inputVal}
                 onChange={(e) => handleInputChange(e.target.value)}
                 maxLength={7}
-                className="w-full text-xs font-mono text-foreground bg-surface-raised border border-border rounded px-2 py-1 focus:outline-none focus:border-primary-500"
+                className="w-full text-xs font-mono text-foreground bg-surface-raised border border-border rounded px-2 py-1 focus:outline-none focus:border-primary-default"
                 placeholder="#000000"
               />
             </div>

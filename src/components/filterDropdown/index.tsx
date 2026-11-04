@@ -25,7 +25,7 @@ const FilterDropdown: FC<IFilter> = ({ children, className = "" }: IFilter) => {
   return (
     <div className={`relative ${className}`}>
       <div
-        className="flex flex-row gap-2.5 items-center w-fit border border-border bg-surface px-3 py-2.5 rounded cursor-pointer hover:border-primary-500 transition-colors duration-200"
+        className="flex flex-row gap-2.5 items-center w-fit border border-border bg-surface px-3 py-2.5 rounded cursor-pointer hover:border-primary-default transition-colors duration-200"
         onClick={() => setIsChildrenVisible(!isChildrenVisible)}
       >
         <div className="size-5 text-muted-fg">

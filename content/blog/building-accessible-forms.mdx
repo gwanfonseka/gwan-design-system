@@ -303,7 +303,7 @@ Gwan handles component-level accessibility. You still own:
 1. **Page structure** — use `<main>`, `<nav>`, `<header>` landmarks correctly
 2. **Heading hierarchy** — don't skip from `<h1>` to `<h3>`
 3. **Tab order** — never use `tabIndex > 0`; let DOM order control tab flow
-4. **Color contrast** — the default Gwan palette passes WCAG AA, but verify with a contrast checker after any token changes
+4. **Color contrast** — in the default Gwan palette, every text and background pair the components use meets WCAG AA (4.5:1) in both light and dark mode, and a test in the repository checks them. Verify again with a contrast checker after changing tokens. Field borders (`--border`) are lighter than the 3:1 WCAG asks for input boundaries, so darken that token if your users need it
 5. **Post-submit focus** — after a failed submission, move focus to the first errored field or an error summary at the top:
 
 ```tsx
