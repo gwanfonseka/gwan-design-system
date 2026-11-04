@@ -1,21 +1,33 @@
-const codeSnippet = `import { Button, Tag, Avatar } from '@gwan/core';
-import { useTheme } from '@gwan/theming';
+// Real usage, typechecked against the package's types.
+const codeSnippet = `"use client";
 
-export default function Dashboard() {
-  const { theme, tokens } = useTheme();
+import { useState } from "react";
+import {
+  Avatar,
+  AVATAR_VARIANT,
+  Button,
+  BUTTON_VARIANTS,
+  Tag,
+  TAG_TYPE,
+} from "gwan-design-system";
+
+export default function TeamMember() {
+  const [invited, setInvited] = useState(false);
 
   return (
-    <Layout tokens={tokens}>
+    <div className="flex items-center gap-4">
       <Avatar
         name="Alex Chon"
-        variant="initials"
+        email="alex@gwan.dev"
+        variant={AVATAR_VARIANT.INITIALS_ONLY}
       />
-      <Tag type="success" label="Active" />
+      <Tag type={TAG_TYPE.SUCCESS} label="Active" />
       <Button
-        variant="primary"
-        label="View Components"
+        variant={BUTTON_VARIANTS.PRIMARY}
+        label={invited ? "Invited" : "Invite"}
+        onClick={() => setInvited(true)}
       />
-    </Layout>
+    </div>
   );
 }`;
 
@@ -44,7 +56,7 @@ const features = [
       </svg>
     ),
     title: "Tree-shakeable Exports",
-    desc: "Import only what you use. GWAN's modular architecture ensures your final bundle contains zero dead component code.",
+    desc: "The ESM build is marked side-effect free, so bundlers drop what you don't import. Import only Button and about 2 KB of library code ends up in your bundle.",
   },
   {
     icon: (
@@ -69,8 +81,8 @@ const features = [
         />
       </svg>
     ),
-    title: "Strict Type Architecture",
-    desc: "Every prop, variant, and token is fully typed with TypeScript. Catch design-system misuse at compile time, not in production.",
+    title: "Typed Props and Enums",
+    desc: "Props are TypeScript interfaces, and variants, sizes and types are enums. A wrong value is a compile error, not a surprise in production.",
   },
   {
     icon: (
@@ -96,8 +108,8 @@ const features = [
         />
       </svg>
     ),
-    title: "Design Token Sync",
-    desc: "CSS custom properties flow directly from your Figma tokens to production. One source of truth, zero drift between design and code.",
+    title: "Theme with CSS Variables",
+    desc: "Every colour is a CSS variable in your globals.css, with a light and a dark value. Edit them by hand, or build a palette in the Theme Generator and paste it in.",
   },
   {
     icon: (
@@ -131,8 +143,8 @@ const features = [
         />
       </svg>
     ),
-    title: "Accessibility by Default",
-    desc: "Every component ships with ARIA attributes, keyboard navigation, and focus management built in — WCAG 2.1 AA out of the box.",
+    title: "A Playground for Every Component",
+    desc: "Each component has a live playground with a props table: change any prop, see the result, and copy the code it generates.",
   },
   {
     icon: (
@@ -166,8 +178,8 @@ const features = [
         />
       </svg>
     ),
-    title: "SSR & RSC Compatible",
-    desc: "Built for the modern React ecosystem — components render seamlessly on the server, in streaming, and across React Server Component boundaries.",
+    title: "Server-Rendered in Next.js",
+    desc: "Every component server-renders in the App Router. Hook-free ones render directly in Server Components; the rest go in a \"use client\" file.",
   },
 ];
 
@@ -183,8 +195,8 @@ const ProductionFlow = () => {
             Production Flow
           </h2>
           <p className="mt-4 text-sm text-primary-400 leading-relaxed ml-auto max-w-md">
-            Engineered to work seamlessly with modern meta-frameworks, ensuring
-            your bundle stays light and your interactions stay fluid.
+            Built and tested in Next.js, with a bundle that only carries the
+            components you import.
           </p>
         </div>
 

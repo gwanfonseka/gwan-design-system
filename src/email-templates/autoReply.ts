@@ -14,7 +14,7 @@ export function autoReplyHtml({ name }: { name: string }): string {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>We received your message — GWAN.DEV</title>
+  <title>I received your message — GWAN.DEV</title>
 </head>
 <body style="margin:0;padding:0;background:#0e1510;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#0e1510;padding:48px 20px;">
@@ -38,7 +38,7 @@ export function autoReplyHtml({ name }: { name: string }): string {
               <p style="margin:0 0 4px;font-size:9px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:#60705a;">GWAN.DEV</p>
               <h1 style="margin:14px 0 0;font-size:32px;font-weight:900;color:#e2eada;letter-spacing:-0.025em;line-height:1.15;">Message<br/>Received.</h1>
               <p style="margin:16px auto 0;font-size:13px;color:#7e8c73;line-height:1.65;max-width:320px;">
-                Thank you for reaching out. Our team will review your message and get back to you shortly.
+                Thank you for reaching out. I&rsquo;ll read your message and get back to you shortly.
               </p>
 
               <!-- Decorative rule -->
@@ -61,8 +61,8 @@ export function autoReplyHtml({ name }: { name: string }): string {
               <p style="margin:0 0 6px;font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#3c4d38;">Hello,</p>
               <p style="margin:0 0 20px;font-size:22px;font-weight:800;color:#e2eada;letter-spacing:-0.01em;">${escapeHtml(name)}</p>
               <p style="margin:0;font-size:13px;color:#7e8c73;line-height:1.75;">
-                We've successfully received your enquiry and added it to our review queue.
-                Our engineering team typically responds within <span style="color:#adc09e;font-weight:600;">24–48 hours</span> on working days.
+                Your enquiry has arrived safely in my inbox.
+                I typically respond within <span style="color:#adc09e;font-weight:600;">24–48 hours</span> on working days.
               </p>
             </td>
           </tr>
@@ -87,7 +87,7 @@ export function autoReplyHtml({ name }: { name: string }): string {
                   </td>
                   <td style="padding-bottom:16px;padding-left:14px;vertical-align:top;">
                     <p style="margin:0 0 3px;font-size:12px;font-weight:700;color:#c8d5be;">Review</p>
-                    <p style="margin:0;font-size:12px;color:#60705a;line-height:1.55;">Your message is reviewed by our engineering team.</p>
+                    <p style="margin:0;font-size:12px;color:#60705a;line-height:1.55;">I read every message myself.</p>
                   </td>
                 </tr>
 
@@ -109,7 +109,7 @@ export function autoReplyHtml({ name }: { name: string }): string {
                   </td>
                   <td style="padding-left:14px;vertical-align:top;">
                     <p style="margin:0 0 3px;font-size:12px;font-weight:700;color:#c8d5be;">Collaborate</p>
-                    <p style="margin:0;font-size:12px;color:#60705a;line-height:1.55;">We align on your requirements and move forward together.</p>
+                    <p style="margin:0;font-size:12px;color:#60705a;line-height:1.55;">We agree on what you need and take it from there.</p>
                   </td>
                 </tr>
 
@@ -133,7 +133,7 @@ export function autoReplyHtml({ name }: { name: string }): string {
                   <td width="48%" style="background:#1c241a;border:1px solid #2d392a;border-radius:8px;padding:18px 20px;vertical-align:top;">
                     <p style="margin:0 0 8px;font-size:16px;">📦</p>
                     <p style="margin:0 0 5px;font-size:11px;font-weight:700;color:#adc09e;">Component Library</p>
-                    <p style="margin:0;font-size:11px;color:#60705a;line-height:1.55;">Explore our production-ready components, playgrounds, and code snippets.</p>
+                    <p style="margin:0;font-size:11px;color:#60705a;line-height:1.55;">Explore the components, playgrounds, and code snippets.</p>
                   </td>
                   <td width="4%"></td>
                   <td width="48%" style="background:#1c241a;border:1px solid #2d392a;border-radius:8px;padding:18px 20px;vertical-align:top;">
