@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -220,6 +220,16 @@ const LibraryTemplate = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // The mobile menu stays mounted while hidden, so it would reopen wherever it was last
+  // scrolled. Start from the top and only scroll as far as the current item.
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebarOpen || !sidebar) return;
+    sidebar.scrollTop = 0;
+    sidebar.querySelector('[aria-current="page"]')?.scrollIntoView({ block: "nearest" });
+  }, [sidebarOpen]);
 
   const activeMenuItem = searchParams.get("tab") || menuItems[0].name;
 
@@ -232,8 +242,8 @@ const LibraryTemplate = () => {
   };
 
   return (
-    <div className="custom-bg h-screen overflow-hidden">
-      <div className="bg-transparent h-screen flex flex-col">
+    <div className="custom-bg h-dvh overflow-hidden">
+      <div className="bg-transparent h-full flex flex-col">
         {/* Mobile top bar */}
         <div className="md:hidden flex items-center justify-between px-4 py-3 bg-surface/80 border-b border-border shrink-0">
           <span className="font-black text-sm tracking-[0.25em] uppercase text-foreground">
@@ -272,16 +282,17 @@ const LibraryTemplate = () => {
         )}
 
         {/* Main layout */}
-        <div className="flex flex-row gap-8 flex-1 overflow-hidden">
+        <div className="flex flex-row gap-8 flex-1 min-h-0 overflow-hidden">
           {/* Sidebar */}
           <div
+            ref={sidebarRef}
             className={`
               fixed md:relative top-0 md:top-auto left-0 z-60 md:z-auto
-              h-full md:h-screen
+              h-dvh md:h-full
               flex flex-col gap-4
               bg-surface/80 backdrop-blur-md
               py-4 px-6 md:px-8
-              overflow-y-auto
+              overflow-y-auto overscroll-contain
               w-full md:w-68 lg:w-72 xl:w-87.5
               transition-transform duration-300 ease-in-out
               ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
@@ -447,6 +458,7 @@ const LibraryTemplate = () => {
                   return (
                     <div
                       key={menuItem.name}
+                      aria-current={isActive ? "page" : undefined}
                       className={`px-3 py-2 rounded-lg w-full cursor-pointer transition-colors duration-150 ${
                         isActive
                           ? "bg-surface-raised"
@@ -465,8 +477,9 @@ const LibraryTemplate = () => {
           </div>
 
           {/* Content area */}
-          <div className="py-3 md:py-4 px-3 md:pr-8 md:pl-0 flex flex-1 overflow-y-auto w-full">
-            <div className="bg-surface rounded-lg p-4 md:p-6 w-full h-full overflow-y-auto flex flex-col gap-8 md:gap-12">
+          {/* Content area: the panel is the only scroller; the padding around it never scrolls. */}
+          <div className="py-3 md:py-4 px-3 md:pr-8 md:pl-0 flex flex-1 min-w-0 min-h-0 w-full">
+            <div className="bg-surface rounded-lg p-4 md:p-6 w-full min-h-0 overflow-y-auto overscroll-contain flex flex-col gap-8 md:gap-12">
               <p className="text-foreground text-xl font-medium">
                 {activeMenuItem}
               </p>
