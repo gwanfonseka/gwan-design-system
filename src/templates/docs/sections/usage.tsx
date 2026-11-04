@@ -1,4 +1,5 @@
 import { H2, H3, P, Code, Callout, InlineCode } from "../primitives";
+import { SERVER_SUPPORT } from "../server-support";
 
 const Usage = () => (
   <>
@@ -147,11 +148,10 @@ export default function ProfileCard() {
     {/* Client vs Server */}
     <H2 id="client-server">Client vs Server Components</H2>
     <P>
-      The package does not add <InlineCode>&quot;use client&quot;</InlineCode> to its build. Components without hooks
-      render fine in a Server Component. Components that use hooks must be imported from a file marked{" "}
-      <InlineCode>&quot;use client&quot;</InlineCode>. Server Components also cannot pass event handlers, so a
-      component that needs <InlineCode>onClick</InlineCode> or <InlineCode>onChange</InlineCode> to be interactive
-      needs a Client Component parent once you pass one.
+      The package does not add <InlineCode>&quot;use client&quot;</InlineCode> to its build. Components that only
+      display content render in a Server Component. Interactive ones, which use hooks or attach their own event
+      handlers, must be imported from a file marked <InlineCode>&quot;use client&quot;</InlineCode>. A few render
+      on the server until you pass them a handler, because Server Components cannot pass functions.
     </P>
 
     <div className="overflow-x-auto my-4">
@@ -164,64 +164,7 @@ export default function ProfileCard() {
           </tr>
         </thead>
         <tbody>
-          {(
-            [
-              ["Accordion", "client", "useState for the open sections"],
-              ["Alert", "client", "useState for the dismissed state"],
-              ["Avatar", "client", "useState for the name tooltip"],
-              ["AvatarGroup", "client", "useState for the +N tooltip"],
-              ["Badge", "yes", "No hooks"],
-              ["Banner", "yes", "No hooks"],
-              ["Breadcrumb", "yes", "No hooks"],
-              ["Button", "handlers", "No hooks; onClick is required"],
-              ["Callout", "yes", "No hooks"],
-              ["Card", "yes", "No hooks"],
-              ["Carousel", "client", "useState + useEffect for the slide index and auto-advance"],
-              ["Checkbox", "handlers", "No hooks; onChange is required"],
-              ["Chip", "handlers", "No hooks; onClear is required"],
-              ["CircularProgress", "yes", "No hooks"],
-              ["ColorPicker", "client", "useState + useEffect for the panel and hex field"],
-              ["CommandPalette", "client", "useState + useEffect for search and keyboard navigation"],
-              ["ContextMenu", "client", "useState + useEffect for cursor position and outside clicks"],
-              ["DatePicker", "client", "useState + useEffect for the calendar panel"],
-              ["DateRangePicker", "client", "useState + useEffect for the two-month calendar"],
-              ["Divider", "yes", "No hooks"],
-              ["Drawer", "client", "useEffect to lock page scroll while open"],
-              ["DropdownMenu", "client", "useState + useEffect for the menu and outside clicks"],
-              ["Ellipsis", "client", "useState for the tooltip"],
-              ["FileUploader", "client", "useState + useRef for the file list, drag state and hidden input"],
-              ["FilterDropdown", "client", "useState for the panel"],
-              ["Icons", "yes", "Plain SVG, no hooks"],
-              ["Input", "handlers", "No hooks; pass onChange from a Client Component"],
-              ["List", "handlers", "No hooks; item onClick needs a Client Component"],
-              ["MenuBar", "client", "useState + useEffect for overflow and the mobile menu"],
-              ["Modal", "client", "useEffect + useRef for the focus trap and scroll lock"],
-              ["MultiSelect", "client", "useState + useEffect for the dropdown, search and keyboard navigation"],
-              ["NavBar", "client", "useState + useEffect for collapsing and tooltips"],
-              ["OtpInput", "client", "useRef for moving focus between digits"],
-              ["Pagination", "client", "useState for the page-size dropdown"],
-              ["Popover", "client", "useState + useEffect for open state and outside clicks"],
-              ["ProgressBar", "yes", "No hooks"],
-              ["RadioButton", "handlers", "No hooks; pass onChange from a Client Component"],
-              ["SearchInput", "client", "useEffect + useRef for the debounced search"],
-              ["SelectDropdown", "client", "useState + useEffect for the dropdown"],
-              ["Skeleton", "yes", "No hooks"],
-              ["Slider", "client", "useState for the active thumb"],
-              ["Snackbar", "yes", "No hooks; you decide when to render it"],
-              ["Spinner", "yes", "No hooks; CSS animation"],
-              ["StatCard", "yes", "No hooks"],
-              ["States", "yes", "No hooks"],
-              ["Stepper", "yes", "No hooks; you set each step's status"],
-              ["Switch", "handlers", "Only useId; onChange is required"],
-              ["Table", "yes", "No hooks; column render functions run where Table renders"],
-              ["Tabs", "handlers", "No hooks; switching tabs needs activeKey + onChange from a Client Component"],
-              ["Tag", "yes", "No hooks"],
-              ["TextArea", "handlers", "No hooks; pass onChange from a Client Component"],
-              ["TimeLine", "yes", "No hooks"],
-              ["TimePicker", "client", "useState + useEffect for the scroll columns and outside clicks"],
-              ["Tooltip", "yes", "No hooks; you control isVisible"],
-            ] as const
-          ).map(([comp, mode, reason]) => (
+          {SERVER_SUPPORT.map(([comp, mode, reason]) => (
             <tr key={comp} className="border-b border-border">
               <td className="py-2.5 pr-4 font-mono text-[12px] text-foreground">{comp}</td>
               <td

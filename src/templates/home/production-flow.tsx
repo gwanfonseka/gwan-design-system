@@ -179,7 +179,7 @@ const features = [
       </svg>
     ),
     title: "Server-Rendered in Next.js",
-    desc: "Every component server-renders in the App Router. Hook-free ones render directly in Server Components; the rest go in a \"use client\" file.",
+    desc: "Every component server-renders in the App Router. Display components like Badge, Card and Table render directly in Server Components; interactive ones go in a \"use client\" file.",
   },
 ];
 

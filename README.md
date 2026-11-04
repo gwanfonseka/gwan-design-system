@@ -200,25 +200,25 @@ The package doesn't add `"use client"` to its build, so:
 
 > **`S`** — no hooks; renders in a React Server Component.
 > **`H`** — no hooks, but takes event handlers (`onClick`, `onChange`…). It renders on the server, and needs a Client Component parent once you pass a handler.
-> **`C`** — uses hooks; import it from a file marked `"use client"`.
+> **`C`** — uses hooks or attaches its own event handlers; import it from a file marked `"use client"`.
 
 ### Actions
 
 | Component | Type | Description |
 | --------- | ---- | ----------- |
-| `Button`  | `H`  | Primary, secondary and tertiary variants, three sizes, three corner styles, optional left/right icons |
+| `Button`  | `C`  | Primary, secondary and tertiary variants, three sizes, three corner styles, optional left/right icons |
 
 ### Form Controls
 
 | Component         | Type | Description |
 | ----------------- | ---- | ----------- |
-| `Input`           | `H`  | Text input with label, error state, and an optional clear button |
+| `Input`           | `C`  | Text input with label, error state, and an optional clear button |
 | `TextArea`        | `H`  | Multi-line input with label, error state, and an optional clear button |
 | `SelectDropdown`  | `C`  | Single-select dropdown with keyboard navigation, optional search and server-side search |
 | `FilterDropdown`  | `C`  | Filter button that opens a panel you render; the panel gets a function to close it |
-| `Checkbox`        | `H`  | Checkbox with label, three sizes and corner styles |
-| `RadioButton`     | `H`  | Radio input; group several with a shared `name` and `selectedValue` |
-| `Switch`          | `H`  | Toggle switch with label, description and three sizes |
+| `Checkbox`        | `C`  | Checkbox with label, three sizes and corner styles |
+| `RadioButton`     | `C`  | Radio input; group several with a shared `name` and `selectedValue` |
+| `Switch`          | `C`  | Toggle switch with label, description and three sizes |
 | `DatePicker`      | `C`  | Calendar date picker with min/max dates, display formats and optional time selection |
 | `FileUploader`    | `C`  | Drag-and-drop or click-to-upload, with a file list, type badges, size limits and remove |
 | `ColorPicker`     | `C`  | Swatch, native colour input and hex field with preset colours |
@@ -245,7 +245,7 @@ The package doesn't add `"use client"` to its build, so:
 | ------------ | ---- | ----------- |
 | `NavBar`     | `C`  | Collapsible vertical side menu with sub-menus and avatar |
 | `MenuBar`    | `C`  | Horizontal top bar with dropdowns, a More menu for overflow, a mobile menu and avatar |
-| `Tabs`       | `H`  | Tab list and panel with underline, pill and boxed variants; you control the active tab |
+| `Tabs`       | `C`  | Tab list and panel with underline, pill and boxed variants and arrow-key navigation; you control the active tab |
 | `Breadcrumb` | `S`  | Breadcrumb trail with slash, chevron and dot separators |
 | `Ellipsis`   | `C`  | Truncated text with the full text in a tooltip on hover |
 
@@ -267,7 +267,7 @@ The package doesn't add `"use client"` to its build, so:
 | Component        | Type | Description |
 | ---------------- | ---- | ----------- |
 | `Modal`          | `C`  | Dialog in four sizes with focus trapping, Escape and backdrop to close |
-| `Drawer`         | `C`  | Panel that slides in from any edge, with an optional overlay |
+| `Drawer`         | `C`  | Dialog panel that slides in from any edge, with an optional overlay; Escape closes it and focus stays inside |
 | `Popover`        | `C`  | Panel anchored to a trigger, opened on click or hover |
 | `CommandPalette` | `C`  | Searchable command launcher with groups, shortcuts and keyboard navigation |
 | `DropdownMenu`   | `C`  | Action menu opened from a trigger, with icons, dividers and destructive items |
@@ -278,7 +278,7 @@ The package doesn't add `"use client"` to its build, so:
 | Component     | Type | Description |
 | ------------- | ---- | ----------- |
 | `Tag`         | `S`  | Coloured label with solid and outline variants |
-| `Chip`        | `H`  | Removable label with a × that calls `onClear` |
+| `Chip`        | `C`  | Removable label with a × that calls `onClear` |
 | `Badge`       | `S`  | Status badge: label, dot plus label, or dot only |
 | `Avatar`      | `C`  | Picture or initials, with optional name and email, sizes and label position |
 | `AvatarGroup` | `C`  | Overlapping avatars with a +N bubble that lists the rest |
@@ -293,7 +293,7 @@ The package doesn't add `"use client"` to its build, so:
 | `Snackbar` | `S`  | Notification bar with type and icon; you decide when to show and hide it |
 | `Alert`    | `C`  | Inline alert with solid, outline and subtle variants, optionally dismissible |
 | `Callout`  | `S`  | Highlighted note: info, warning, tip or danger |
-| `States`   | `S`  | Empty, success, error and loading screens with a title, subtitle and image (pass `stateImage`; the built-in images are not shipped) |
+| `States`   | `S`  | Empty, success, error and loading screens with a built-in illustration or your own image |
 
 ---
 
@@ -434,7 +434,7 @@ import type {
 - **Dark mode** — every component reads CSS variables that switch with a `.dark` class
 - **TypeScript** — typed props, with enums for variants, sizes and types
 - **Tailwind CSS v4** — styles are Tailwind utilities; theme tokens are plain CSS variables
-- **Next.js App Router** — works in Client Components, and hook-free components render in Server Components (see the table above)
+- **Next.js App Router** — works in Client Components, and display components render in Server Components (see the table above)
 - **Tree-shakeable** — ESM build with `"sideEffects": false`; importing only `Button` leaves about 2 KB of library code in the bundle
 - **ESM + CJS** — ships both ES module and CommonJS builds
 
