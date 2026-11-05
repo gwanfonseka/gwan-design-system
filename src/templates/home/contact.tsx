@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { sendContactEmail } from "@/app/actions/sendContactEmail";
-
-interface FieldErrors {
-  name?: string;
-  email?: string;
-  message?: string;
-}
+import { CONTACT_LIMITS, validateContact, type ContactFieldErrors } from "@/lib/contactValidation";
 
 const InputField = ({
   label,
@@ -16,6 +11,7 @@ const InputField = ({
   value,
   onChange,
   error,
+  maxLength,
 }: {
   label: string;
   type?: string;
@@ -23,6 +19,7 @@ const InputField = ({
   value: string;
   onChange: (v: string) => void;
   error?: string;
+  maxLength: number;
 }) => (
   <div>
     <label className="block text-[9px] font-bold tracking-[0.25em] uppercase text-muted-fg mb-1.5">
@@ -31,6 +28,7 @@ const InputField = ({
     <input
       type={type}
       placeholder={placeholder}
+      maxLength={maxLength}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className={`w-full border bg-surface rounded px-3 py-2.5 text-xs text-foreground placeholder:text-muted-fg/60 focus:outline-none transition-colors duration-200 ${
@@ -42,17 +40,6 @@ const InputField = ({
     )}
   </div>
 );
-
-const validate = (name: string, email: string, message: string): FieldErrors => {
-  const errors: FieldErrors = {};
-  if (!name.trim()) errors.name = "Name is required.";
-  else if (name.trim().length < 2) errors.name = "Name must be at least 2 characters.";
-  if (!email.trim()) errors.email = "Email is required.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "Enter a valid email address.";
-  if (!message.trim()) errors.message = "Message is required.";
-  else if (message.trim().length < 10) errors.message = "Message must be at least 10 characters.";
-  return errors;
-};
 
 const SuccessState = () => (
   <div className="flex flex-col items-center justify-center py-16 text-center gap-5">
@@ -75,19 +62,20 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState<FieldErrors>({});
+  const [website, setWebsite] = useState("");
+  const [errors, setErrors] = useState<ContactFieldErrors>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [serverError, setServerError] = useState("");
 
   const handleSubmit = async () => {
-    const fieldErrors = validate(name, email, message);
+    const fieldErrors = validateContact(name, email, message);
     setErrors(fieldErrors);
     if (Object.keys(fieldErrors).length > 0) return;
 
     setStatus("loading");
     setServerError("");
 
-    const result = await sendContactEmail(name, email, message);
+    const result = await sendContactEmail(name, email, message, website);
 
     if (result.success) {
       setStatus("success");
@@ -186,6 +174,7 @@ const Contact = () => {
                     value={name}
                     onChange={setName}
                     error={errors.name}
+                    maxLength={CONTACT_LIMITS.name}
                   />
                   <InputField
                     label="Channel"
@@ -194,6 +183,7 @@ const Contact = () => {
                     value={email}
                     onChange={setEmail}
                     error={errors.email}
+                    maxLength={CONTACT_LIMITS.email}
                   />
                 </div>
 
@@ -205,6 +195,7 @@ const Contact = () => {
                     placeholder="Describe your technical requirements..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    maxLength={CONTACT_LIMITS.message}
                     rows={5}
                     className={`w-full border bg-surface rounded px-3 py-2.5 text-xs text-foreground placeholder:text-muted-fg/60 focus:outline-none transition-colors duration-200 resize-none ${
                       errors.message ? "border-danger focus:border-danger" : "border-border focus:border-primary-500"
@@ -213,6 +204,21 @@ const Contact = () => {
                   {errors.message && (
                     <p className="mt-1 text-[10px] text-danger">{errors.message}</p>
                   )}
+                </div>
+
+                {/* Honeypot: off-screen rather than display:none, which many bots skip. */}
+                <div aria-hidden="true" className="absolute -left-[9999px]">
+                  <label>
+                    Website
+                    <input
+                      type="text"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                    />
+                  </label>
                 </div>
 
                 {serverError && (

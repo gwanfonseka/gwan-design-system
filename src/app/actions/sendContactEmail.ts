@@ -3,6 +3,7 @@
 import { Resend } from "resend";
 import { adminNotificationHtml } from "@/email-templates/adminNotification";
 import { autoReplyHtml } from "@/email-templates/autoReply";
+import { validateContact } from "@/lib/contactValidation";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -15,16 +16,26 @@ export interface ContactResult {
 }
 
 export async function sendContactEmail(
-  name: string,
-  email: string,
-  message: string,
+  rawName: string,
+  rawEmail: string,
+  rawMessage: string,
+  website = "",
 ): Promise<ContactResult> {
-  if (!name.trim() || !email.trim() || !message.trim()) {
-    return { success: false, error: "All fields are required." };
+  // A Server Action is a public endpoint, so its arguments can be anything.
+  if ([rawName, rawEmail, rawMessage, website].some((value) => typeof value !== "string")) {
+    return { success: false, error: "Invalid submission." };
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { success: false, error: "Invalid email address." };
-  }
+
+  // Honeypot: people never see this field. Report success so a bot learns nothing.
+  if (website) return { success: true };
+
+  const errors = validateContact(rawName, rawEmail, rawMessage);
+  const firstError = errors.name ?? errors.email ?? errors.message;
+  if (firstError) return { success: false, error: firstError };
+
+  const name = rawName.trim();
+  const email = rawEmail.trim();
+  const message = rawMessage.trim();
 
   try {
     const adminRes = await resend.emails.send({
