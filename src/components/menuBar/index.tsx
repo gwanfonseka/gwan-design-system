@@ -131,7 +131,7 @@ const MenuBar: FC<IMenuBar> = ({
       let count = 0;
 
       for (let i = 0; i < items.length; i++) {
-        const w = items[i]?.offsetWidth ?? 0;
+        const w = items[i]!.offsetWidth;
         // If this item would push us past the threshold where we'd need a "More"
         // button, stop — unless it's the last item and everything else fits.
         const isLast = i === items.length - 1;
@@ -156,7 +156,6 @@ const MenuBar: FC<IMenuBar> = ({
   }, [menuItems]);
 
   const handleItemClick = (item: IMenuItem) => {
-    if (item.isDivider) return;
     setActiveItem(item.title);
     if (item.hasChildren) {
       setOpenDropdown(openDropdown === item.title ? null : item.title);
@@ -216,26 +215,21 @@ const MenuBar: FC<IMenuBar> = ({
   }
 
   const topLevelButtons = () => {
-    const container = itemsContainerRef.current;
-    if (!container) return [] as HTMLButtonElement[];
     const buttons: HTMLButtonElement[] = [];
-    for (const child of container.children) {
-      if (!(child instanceof HTMLElement) || !child.classList.contains("relative")) continue;
-      const button = [...child.children].find((node) => node instanceof HTMLButtonElement);
-      if (button instanceof HTMLButtonElement) buttons.push(button);
+    for (const child of itemsContainerRef.current!.children) {
+      if (!child.classList.contains("relative")) continue;
+      buttons.push(child.querySelector("button")!);
     }
     return buttons;
   };
 
-  const focusTop = (button: HTMLButtonElement | undefined) => {
-    if (!button) return;
+  const focusTop = (button: HTMLButtonElement) => {
     const id = button.dataset.menubarItem;
     if (id) setRovingId(id);
     button.focus();
   };
 
-  const panelButtons = (panel: Element | null) =>
-    panel ? [...panel.querySelectorAll("button")] : [];
+  const panelButtons = (panel: Element) => [...panel.querySelectorAll("button")];
 
   // Menubar keyboard: arrows, Home, and End move focus (and wrap); they do not
   // activate. Down/Up open a submenu. Escape closes it and returns focus.
@@ -243,7 +237,6 @@ const MenuBar: FC<IMenuBar> = ({
     const target = e.target;
     if (!(target instanceof HTMLButtonElement)) return;
     const tops = topLevelButtons();
-    if (!tops.length) return;
     const topIndex = tops.indexOf(target);
     const panel = target.closest("[data-menubar-panel]");
     const inMenu = topIndex === -1 && !!panel;
@@ -289,7 +282,7 @@ const MenuBar: FC<IMenuBar> = ({
       const canOpen = id === "__more__" ? hasOverflow : !!item?.hasChildren;
       if (!canOpen) return;
       flushSync(() => setOpenDropdown(id));
-      const opened = target.parentElement?.querySelector("[data-menubar-panel]") ?? null;
+      const opened = target.parentElement!.querySelector("[data-menubar-panel]")!;
       const buttons = panelButtons(opened);
       (e.key === "ArrowUp" ? buttons[buttons.length - 1] : buttons[0])?.focus();
       return;
@@ -317,7 +310,7 @@ const MenuBar: FC<IMenuBar> = ({
         setOpenDropdown(willOpen ? id : null);
       });
       if (!willOpen) return;
-      const opened = target.parentElement?.querySelector("[data-menubar-panel]") ?? null;
+      const opened = target.parentElement!.querySelector("[data-menubar-panel]")!;
       panelButtons(opened)[0]?.focus();
     }
   };
