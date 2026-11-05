@@ -3,10 +3,10 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import Chip from "../chip";
-import Drawer from "../drawer";
+import Drawer, { DRAWER_PLACEMENT } from "../drawer";
 import FileUploader from "../fileUploader";
 import FilterDropdown from "../filterDropdown";
-import Tabs from "../tabs";
+import Tabs, { TABS_VARIANT } from "../tabs";
 
 describe("Drawer", () => {
   const Harness = ({ showOverlay = true }: { showOverlay?: boolean }) => {
@@ -144,5 +144,105 @@ describe("FileUploader", () => {
     expect(handleAttachment).toHaveBeenCalledTimes(1);
     expect(onFilesChange).toHaveBeenCalledTimes(1);
     expect(onFilesChange).toHaveBeenCalledWith([file]);
+  });
+});
+
+describe("Drawer focus trap and sizes", () => {
+  it("wraps backwards from the first element", async () => {
+    const user = userEvent.setup();
+    render(
+      <Drawer open onClose={() => {}} title="T">
+        <input aria-label="Name" />
+      </Drawer>,
+    );
+    await user.tab({ shift: true });
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveFocus();
+  });
+
+  it("leaves Tab alone between elements and without the overlay", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(
+      <Drawer open onClose={() => {}} title="T">
+        <input aria-label="A" />
+        <input aria-label="B" />
+      </Drawer>,
+    );
+    await user.tab();
+    await user.tab();
+    expect(screen.getByRole("textbox", { name: "B" })).toHaveFocus();
+    await user.tab({ shift: true });
+    expect(screen.getByRole("textbox", { name: "A" })).toHaveFocus();
+    rerender(
+      <Drawer open onClose={() => {}} title="T" showOverlay={false}>
+        <input aria-label="A" />
+      </Drawer>,
+    );
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-modal");
+  });
+
+  it("uses a generic name without a title", () => {
+    render(
+      <Drawer open onClose={() => {}}>
+        Body
+      </Drawer>,
+    );
+    expect(screen.getByRole("dialog", { name: "Drawer" })).toBeInTheDocument();
+  });
+
+  it.each([
+    [DRAWER_PLACEMENT.TOP, "h-72"],
+    [DRAWER_PLACEMENT.BOTTOM, "h-72"],
+    [DRAWER_PLACEMENT.LEFT, "w-80"],
+  ])("sizes a %s drawer", (placement, className) => {
+    render(
+      <Drawer open onClose={() => {}} placement={placement}>
+        Body
+      </Drawer>,
+    );
+    expect(screen.getByRole("dialog").className).toContain(className);
+  });
+});
+
+describe("Tabs variants and edges", () => {
+  const items = [
+    { key: "a", label: "One", content: "Panel one" },
+    { key: "b", label: "Two", content: "Panel two" },
+  ];
+
+  it("selects the first tab without an activeKey", () => {
+    render(<Tabs items={items} />);
+    expect(screen.getByRole("tab", { name: "One" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it.each([
+    [TABS_VARIANT.PILL, "bg-primary-default", "rounded-full", "rounded-full"],
+    [TABS_VARIANT.BOXED, "shadow-sm", "rounded-md", "rounded-lg"],
+  ])("styles the %s variant", (variant, active, inactive, track) => {
+    render(<Tabs items={items} activeKey="a" variant={variant} />);
+    expect(screen.getByRole("tab", { name: "One" }).className).toContain(active);
+    expect(screen.getByRole("tab", { name: "Two" }).className).toContain(inactive);
+    expect(screen.getByRole("tablist").className).toContain(track);
+  });
+
+  it("adds no style for an unknown variant from plain JavaScript", () => {
+    render(<Tabs items={items} activeKey="a" variant={"other" as TABS_VARIANT} />);
+    expect(screen.getByRole("tab", { name: "One" }).className).not.toContain("undefined");
+    expect(screen.getByRole("tablist").className).not.toContain("undefined");
+  });
+
+  it("wraps with ArrowLeft and ignores other keys", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Tabs items={items} activeKey="a" onChange={onChange} />);
+    await user.tab();
+    await user.keyboard("x");
+    expect(onChange).not.toHaveBeenCalled();
+    await user.keyboard("{ArrowLeft}");
+    expect(onChange).toHaveBeenCalledWith("b");
+  });
+
+  it("copes with no items", () => {
+    render(<Tabs items={[]} />);
+    expect(screen.getByRole("tabpanel")).not.toHaveAttribute("aria-labelledby");
   });
 });

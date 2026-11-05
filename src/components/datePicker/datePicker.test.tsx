@@ -311,3 +311,48 @@ describe("DatePicker", () => {
     expectAnchored(panel(container), position, align);
   });
 });
+
+describe("DatePicker time fields", () => {
+  const date = (h: number) => new Date(2026, 2, 15, h, 5);
+
+  const openAt = async (hour: number, format: DATE_PICKER_FORMAT) => {
+    const user = userEvent.setup();
+    const view = renderPicker({ value: date(hour), timePicker: true, format });
+    await user.click(screen.getByRole("combobox"));
+    const hours = within(panel(view.container)).getAllByRole("spinbutton")[0];
+    return { ...view, user, hours };
+  };
+
+  it("closes when the trigger is pressed again", async () => {
+    const user = userEvent.setup();
+    renderPicker();
+    const trigger = screen.getByRole("combobox");
+    await user.click(trigger);
+    await user.click(trigger);
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("treats an empty 24-hour field as 0", async () => {
+    const { hours, onChange } = await openAt(8, DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME);
+    fireEvent.change(hours, { target: { value: "" } });
+    expect(onChange.mock.lastCall![0].getHours()).toBe(0);
+  });
+
+  it.each([
+    [9, "12", 0],
+    [9, "3", 3],
+    [9, "", 1],
+    [15, "12", 12],
+    [15, "3", 15],
+  ])("converts 12-hour input at %i:00 when typing '%s' to %i", async (hour, typed, expected) => {
+    const { hours, onChange } = await openAt(hour, DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME_12);
+    fireEvent.change(hours, { target: { value: typed } });
+    expect(onChange.mock.lastCall![0].getHours()).toBe(expected);
+  });
+
+  it("moves from AM to PM", async () => {
+    const { user, container, onChange } = await openAt(9, DATE_PICKER_FORMAT.DD_MMM_YYYY_TIME_12);
+    await user.click(within(panel(container)).getByRole("button", { name: "AM" }));
+    expect(onChange.mock.lastCall![0].getHours()).toBe(21);
+  });
+});
