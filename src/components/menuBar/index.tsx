@@ -97,6 +97,8 @@ const MenuBar: FC<IMenuBar> = ({
   const [activeItem, setActiveItem] = useState(() => menuItems.find((i) => i.isActive)?.title ?? "");
   const [prevMenuItems, setPrevMenuItems] = useState(menuItems);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  // Separate from openDropdown: the More panel needs that to stay on "__more__".
+  const [expandedOverflow, setExpandedOverflow] = useState<string | null>(null);
   const [rovingId, setRovingId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(menuItems.length);
@@ -155,10 +157,11 @@ const MenuBar: FC<IMenuBar> = ({
     return () => observer.disconnect();
   }, [menuItems, isLoading]);
 
-  const handleItemClick = (item: IMenuItem) => {
+  const handleItemClick = (item: IMenuItem, isOverflow = false) => {
     setActiveItem(item.title);
     if (item.hasChildren) {
-      setOpenDropdown(openDropdown === item.title ? null : item.title);
+      if (isOverflow) setExpandedOverflow(expandedOverflow === item.title ? null : item.title);
+      else setOpenDropdown(openDropdown === item.title ? null : item.title);
       return;
     }
     setOpenDropdown(null);
@@ -169,6 +172,7 @@ const MenuBar: FC<IMenuBar> = ({
 
   const handleSubItemClick = (sub: ISubMenuItem) => {
     setOpenDropdown(null);
+    setExpandedOverflow(null);
     setMobileOpen(false);
     onNavigate?.(sub.route);
   };
@@ -322,7 +326,7 @@ const MenuBar: FC<IMenuBar> = ({
         <button
           data-menubar-item={item.title}
           tabIndex={isOverflow ? -1 : rovingId === item.title ? 0 : -1}
-          onClick={() => handleItemClick(item)}
+          onClick={() => handleItemClick(item, isOverflow)}
           className={`w-full flex flex-row items-center gap-1.5 px-3 py-2 rounded text-sm transition-colors duration-150 cursor-pointer ${
             isOverflow ? "text-left" : ""
           } ${isActive ? activeItemStyle : inactiveItemStyle} ${menuItemTextClass}`}
@@ -334,7 +338,7 @@ const MenuBar: FC<IMenuBar> = ({
           {item.hasChildren && (
             <span
               className={`size-3.5 shrink-0 transition-transform duration-200 ${
-                openDropdown === item.title ? "rotate-180" : ""
+                (isOverflow ? expandedOverflow : openDropdown) === item.title ? "rotate-180" : ""
               }`}
             >
               <ChevDownSVG />
@@ -368,7 +372,7 @@ const MenuBar: FC<IMenuBar> = ({
         )}
 
         {/* Sub-menu for overflow items (nested list, no absolute positioning) */}
-        {item.hasChildren && openDropdown === item.title && isOverflow && (
+        {item.hasChildren && expandedOverflow === item.title && isOverflow && (
           <div className="ml-3 flex flex-col border-l border-border pl-2 mb-1">
             {item.children?.map((sub, i) => (
               <button
