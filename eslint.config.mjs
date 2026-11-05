@@ -5,8 +5,8 @@ const eslintConfig = [
   ...nextCoreWebVitals,
   ...nextTypescript,
   {
-    // Generated tsup output (committed under dist/). Not source.
-    ignores: ["dist/**"],
+    // Generated output: the tsup build and the coverage report. Not source.
+    ignores: ["dist/**", "coverage/**"],
   },
 ];
 
