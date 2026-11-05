@@ -18,5 +18,11 @@ export default defineConfig({
     css: false,
     restoreMocks: true,
     clearMocks: true,
+    coverage: {
+      provider: "v8",
+      include: ["src/components/**/*.tsx"],
+      exclude: ["**/*.test.tsx"],
+      reporter: ["text-summary", "json", "json-summary", "html"],
+    },
   },
 });
