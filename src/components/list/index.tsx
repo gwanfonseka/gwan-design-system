@@ -81,13 +81,7 @@ const List: FC<IList> = ({
         const isLast    = index === items.length - 1;
         const isClickable = !!item.onClick && !item.disabled;
 
-        const dividerClass = !isLast
-          ? isFlush
-            ? "border-b border-border"
-            : isCard || isBordered
-            ? "border-b border-border"
-            : "border-b border-border"
-          : "";
+        const dividerClass = !isLast ? "border-b border-border" : "";
 
         const itemClass = [
           "flex items-center gap-3",
