@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -240,5 +240,50 @@ describe("Avatar", () => {
       />,
     );
     expect(container.querySelector(".w-32")).toBeNull();
+  });
+});
+
+describe("Avatar edge cases", () => {
+  it("still gets a colour with no name or email", () => {
+    const { container } = render(
+      <Avatar name="" email="" variant={AVATAR_VARIANT.INITIALS_ONLY} />,
+    );
+    expect(container.querySelector("[style*='background']")).not.toBeNull();
+  });
+
+  it("right-aligns the label on the left side", () => {
+    render(
+      <Avatar
+        name="Ada Lovelace"
+        email="ada@x.dev"
+        variant={AVATAR_VARIANT.INITIALS_WITH_FULL}
+        labelPosition={AVATAR_LABEL_POSITION.LEFT}
+      />,
+    );
+    expect(screen.getByText("ada@x.dev").closest(".items-end")).not.toBeNull();
+  });
+
+  it("puts the loading placeholder label on the chosen side", () => {
+    const { container } = render(
+      <Avatar
+        name="Ada Lovelace"
+        email="ada@x.dev"
+        variant={AVATAR_VARIANT.INITIALS_WITH_FULL}
+        labelPosition={AVATAR_LABEL_POSITION.LEFT}
+        isLoading
+      />,
+    );
+    expect(container.querySelector(".items-end")).not.toBeNull();
+  });
+
+  it("shows the image tooltip only while hovering", () => {
+    const { container } = render(
+      <Avatar name="Ada Lovelace" email="ada@x.dev" image="/a.png" variant={AVATAR_VARIANT.IMAGE_ONLY} />,
+    );
+    const wrapper = container.querySelector("img")!.parentElement!;
+    fireEvent.mouseEnter(wrapper);
+    expect(wrapper.querySelector(".absolute.block")).not.toBeNull();
+    fireEvent.mouseLeave(wrapper);
+    expect(wrapper.querySelector(".absolute.block")).toBeNull();
   });
 });

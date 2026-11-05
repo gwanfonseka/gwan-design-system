@@ -257,3 +257,12 @@ function withinButtons(col: HTMLElement, name: string) {
   if (!match) throw new Error(`missing ${name}`);
   return match;
 }
+
+it("keeps the error border while open", async () => {
+  const user = userEvent.setup();
+  renderPicker({ isError: true });
+  const trigger = screen.getByRole("combobox", { name: endsWith("Select time") });
+  await user.click(trigger);
+  expect(trigger.className).toContain("border-danger");
+  expect(trigger.className).not.toContain("border-primary-default");
+});

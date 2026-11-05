@@ -147,3 +147,9 @@ describe("TimeLine", () => {
     expect(screen.queryByText("Pending")).not.toBeInTheDocument();
   });
 });
+
+it("treats a log without a status from plain JavaScript as still in progress", () => {
+  render(<TimeLine logs={[{ title: "Started" } as ILog]} />);
+  expect(screen.getByText("Started")).toBeInTheDocument();
+  expect(screen.getByText("Pending")).toBeInTheDocument();
+});
