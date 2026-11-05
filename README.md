@@ -446,6 +446,7 @@ Contributions are welcome via pull requests.
 
 - Direct pushes to `main` are not allowed
 - All changes must go through a pull request with review
+- Every component must stay at 100% test coverage; `npm run test:coverage` fails otherwise, in CI too
 
 ```bash
 git checkout -b feature/my-feature

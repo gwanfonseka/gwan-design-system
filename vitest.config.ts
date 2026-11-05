@@ -23,6 +23,8 @@ export default defineConfig({
       include: ["src/components/**/*.tsx"],
       exclude: ["**/*.test.tsx"],
       reporter: ["text-summary", "json", "json-summary", "html"],
+      // Every component must stay fully covered. Checked per file, so one can't hide behind the rest.
+      thresholds: { 100: true, perFile: true },
     },
   },
 });
