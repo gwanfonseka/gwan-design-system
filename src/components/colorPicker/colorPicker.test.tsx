@@ -58,3 +58,13 @@ describe("ColorPicker", () => {
     expect(screen.queryByRole("textbox", { name: "Hex colour" })).not.toBeInTheDocument();
   });
 });
+
+it("ColorPicker reports a preset and the default swatch", async () => {
+  const user = userEvent.setup();
+  const onChange = vi.fn();
+  const { container } = render(<ColorPicker label="Ink" onChange={onChange} presets={["#ff0000"]} />);
+  expect(screen.getByText("Ink")).toBeInTheDocument();
+  await user.click(container.querySelector("button")!);
+  await user.click(screen.getByTitle("#ff0000"));
+  expect(onChange).toHaveBeenCalledWith("#ff0000");
+});

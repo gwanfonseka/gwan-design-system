@@ -62,3 +62,27 @@ describe("CommandPalette", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 });
+
+it("CommandPalette hides while closed and selects a filtered item", async () => {
+  const user = userEvent.setup();
+  const onClose = vi.fn();
+  const onSelect = vi.fn();
+  const { rerender } = render(
+    <CommandPalette open={false} onClose={onClose} items={[]} />,
+  );
+  expect(screen.queryByPlaceholderText("Type a command or search...")).not.toBeInTheDocument();
+  rerender(
+    <CommandPalette
+      open
+      onClose={onClose}
+      placeholder="Find"
+      items={[
+        { id: "1", label: "Copy", group: "Edit", onSelect },
+        { id: "2", label: "Paste", onSelect: vi.fn() },
+      ]}
+    />,
+  );
+  await user.type(screen.getByPlaceholderText("Find"), "cop");
+  await user.click(screen.getByRole("button", { name: /Copy/ }));
+  expect(onSelect).toHaveBeenCalledTimes(1);
+});

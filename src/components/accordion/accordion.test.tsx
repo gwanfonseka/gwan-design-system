@@ -39,3 +39,22 @@ describe("Accordion", () => {
     expect(container.firstElementChild!.className).not.toContain("rounded-lg");
   });
 });
+
+it("Accordion opens a default item and ignores a disabled one", async () => {
+  const user = userEvent.setup();
+  render(
+    <Accordion
+      variant={ACCORDION_VARIANT.BORDERED}
+      defaultOpenKey="a"
+      items={[
+        { key: "a", title: "Alpha", content: "First body" },
+        { key: "b", title: "Beta", content: "Second body", disabled: true },
+      ]}
+    />,
+  );
+  expect(screen.getByText("First body")).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Beta" }));
+  expect(screen.queryByText("Second body")).not.toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Alpha" }));
+  expect(screen.queryByText("First body")).not.toBeInTheDocument();
+});

@@ -33,3 +33,20 @@ describe("Stepper", () => {
     expect(container.firstElementChild!.className).toContain("flex-row");
   });
 });
+
+it("Stepper marks the active step", () => {
+  render(
+    <Stepper
+      orientation={STEPPER_ORIENTATION.VERTICAL}
+      activeKey="b"
+      steps={[
+        { key: "a", title: "Account" },
+        { key: "b", title: "Review", description: "Check" },
+        { key: "c", title: "Done", status: STEP_STATUS.ERROR },
+      ]}
+    />,
+  );
+  expect(screen.getByText("Review")).toBeInTheDocument();
+  expect(screen.getByText("Check")).toBeInTheDocument();
+  expect(screen.getByText("2")).toBeInTheDocument();
+});

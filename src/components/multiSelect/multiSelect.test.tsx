@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import MultiSelect from "./index";
+import MultiSelect, { MULTI_SELECT_SIZE } from "./index";
 
 const options = [
   { value: "a", label: "Apple" },
@@ -115,4 +115,25 @@ describe("MultiSelect", () => {
       expect(trigger).toHaveAttribute("aria-expanded", "false");
     });
   });
+});
+
+it("MultiSelect adds and removes a value", async () => {
+  const user = userEvent.setup();
+  const onChange = vi.fn();
+  render(
+    <MultiSelect
+      label="Tags"
+      size={MULTI_SELECT_SIZE.SM}
+      required
+      options={[{ value: "red", label: "Red" }, { value: "blue", label: "Blue" }]}
+      value={["red"]}
+      onChange={onChange}
+    />,
+  );
+  expect(screen.getByText("Red")).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Remove Red" }));
+  expect(onChange).toHaveBeenCalledWith([]);
+  await user.click(screen.getByRole("combobox"));
+  await user.click(screen.getByRole("option", { name: "Blue" }));
+  expect(onChange).toHaveBeenCalledWith(["red", "blue"]);
 });

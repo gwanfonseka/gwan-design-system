@@ -23,3 +23,12 @@ describe("Callout", () => {
     expect(screen.getByText("Careful")).toBeInTheDocument();
   });
 });
+
+it("Callout uses the type label unless a title is passed", () => {
+  const { rerender } = render(<Callout type={CALLOUT_TYPE.DANGER}>Watch out</Callout>);
+  expect(screen.getByText("Danger")).toBeInTheDocument();
+  expect(screen.getByText("Watch out")).toBeInTheDocument();
+  rerender(<Callout title="Custom">Body</Callout>);
+  expect(screen.getByText("Custom")).toBeInTheDocument();
+  expect(screen.queryByText("Note")).not.toBeInTheDocument();
+});

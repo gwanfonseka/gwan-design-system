@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import FileUploader from "./index";
+import { StrictMode } from "react";
 
 const MB = 1024 * 1024;
 
@@ -162,5 +163,42 @@ describe("FileUploader", () => {
     add(file("a.pdf"));
     rerender(<FileUploader handleAttachment={handleAttachment} disabled />);
     expect(screen.queryByRole("button", { name: "Remove a.pdf" })).not.toBeInTheDocument();
+  });
+});
+
+it("FileUploader reports the selected file", async () => {
+  const user = userEvent.setup();
+  const handleAttachment = vi.fn();
+  const onFilesChange = vi.fn();
+  render(
+    <FileUploader
+      title="Drop"
+      handleAttachment={handleAttachment}
+      onFilesChange={onFilesChange}
+      accept=".txt"
+    />,
+  );
+  const file = new File(["hello"], "note.txt", { type: "text/plain" });
+  const input = document.querySelector("input[type=file]") as HTMLInputElement;
+  await user.upload(input, file);
+  expect(handleAttachment).toHaveBeenCalledWith(file);
+  expect(screen.getByText("note.txt")).toBeInTheDocument();
+});
+
+describe("FileUploader", () => {
+  it("calls its callbacks once per change, even under Strict Mode", () => {
+    const handleAttachment = vi.fn();
+    const onFilesChange = vi.fn();
+    const { container } = render(
+      <StrictMode>
+        <FileUploader handleAttachment={handleAttachment} onFilesChange={onFilesChange} multiple />
+      </StrictMode>,
+    );
+    const input = container.querySelector('input[type="file"]')!;
+    const file = new File(["x"], "report.pdf", { type: "application/pdf" });
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(handleAttachment).toHaveBeenCalledTimes(1);
+    expect(onFilesChange).toHaveBeenCalledTimes(1);
+    expect(onFilesChange).toHaveBeenCalledWith([file]);
   });
 });

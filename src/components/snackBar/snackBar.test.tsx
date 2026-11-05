@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Snackbar, { SNACK_BAR_TYPE } from "./index";
+import Spinner, { SPINNER_COLOR, SPINNER_SIZE } from "../spinner";
 
 const root = (message: string) => screen.getByText(message).closest(".border, [class*='border-']")!;
 
@@ -20,4 +21,15 @@ describe("Snackbar", () => {
     render(<Snackbar type={"other" as SNACK_BAR_TYPE} message="Saved" />);
     expect(root("Saved").className).toContain("bg-surface");
   });
+});
+
+it("Snackbar and Spinner expose their status text", () => {
+  render(
+    <>
+      <Snackbar type={SNACK_BAR_TYPE.DANGER} message="Failed" />
+      <Spinner size={SPINNER_SIZE.LG} color={SPINNER_COLOR.DANGER} />
+    </>,
+  );
+  expect(screen.getByText("Failed")).toBeInTheDocument();
+  expect(screen.getByRole("status", { name: "Loading" })).toBeInTheDocument();
 });

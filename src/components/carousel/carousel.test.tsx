@@ -25,3 +25,9 @@ describe("Carousel", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 });
+
+it("Carousel shows the first slide", () => {
+  render(<Carousel slides={[{ title: "One" }, { title: "Two" }]} interval={60000} />);
+  expect(screen.getByText("One")).toBeInTheDocument();
+  expect(screen.getByText("Two")).toBeInTheDocument();
+});

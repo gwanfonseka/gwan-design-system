@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import Popover, { POPOVER_TRIGGER } from "./index";
+import { POPOVER_PLACEMENT } from "./index";
 
 describe("Popover", () => {
   it("closes on an outside press but not on a press inside", async () => {
@@ -29,4 +30,24 @@ describe("Popover", () => {
     fireEvent.mouseLeave(root);
     expect(screen.queryByText("Body")).not.toBeInTheDocument();
   });
+});
+
+it("Popover opens on click and on hover", async () => {
+  const user = userEvent.setup();
+  const { rerender } = render(
+    <Popover trigger={<button type="button">Info</button>} content="Details" title="About" placement={POPOVER_PLACEMENT.TOP} />,
+  );
+  expect(screen.queryByText("Details")).not.toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "Info" }));
+  expect(screen.getByText("Details")).toBeInTheDocument();
+  rerender(
+    <Popover
+      trigger={<span>Hover me</span>}
+      content="Pop"
+      triggerOn={POPOVER_TRIGGER.HOVER}
+      placement={POPOVER_PLACEMENT.RIGHT}
+    />,
+  );
+  await user.hover(screen.getByText("Hover me"));
+  expect(screen.getByText("Pop")).toBeInTheDocument();
 });

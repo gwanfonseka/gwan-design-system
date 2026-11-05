@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import AvatarGroup from "./index";
+import { AVATAR_SIZE } from "../avatar";
 
 const people = ["Ann Lee", "Bo Chen", "Cy Roy"].map((name) => ({ name, email: `${name}@x.dev` }));
 
@@ -20,4 +21,19 @@ describe("AvatarGroup", () => {
     render(<AvatarGroup items={people} max={3} />);
     expect(screen.queryByText(/^\+/)).not.toBeInTheDocument();
   });
+});
+
+it("AvatarGroup shows the overflow count", () => {
+  render(
+    <AvatarGroup
+      max={1}
+      size={AVATAR_SIZE.SM}
+      items={[
+        { name: "Ada Lovelace", email: "a@x.com" },
+        { name: "Grace Hopper", email: "g@x.com" },
+      ]}
+    />,
+  );
+  expect(screen.getByText("AL")).toBeInTheDocument();
+  expect(screen.getByText("+1")).toBeInTheDocument();
 });

@@ -42,3 +42,12 @@ describe("Skeleton", () => {
     expect((lines[2] as HTMLElement).style.width).toBe("70%");
   });
 });
+
+it("Skeleton renders a circle and several text lines", () => {
+  const { container, rerender } = render(
+    <Skeleton variant={SKELETON_VARIANT.CIRCLE} width={24} />,
+  );
+  expect(container.firstElementChild).toHaveStyle({ width: "24px", height: "24px" });
+  rerender(<Skeleton variant={SKELETON_VARIANT.TEXT} lines={3} />);
+  expect(container.querySelectorAll(".animate-pulse")).toHaveLength(3);
+});

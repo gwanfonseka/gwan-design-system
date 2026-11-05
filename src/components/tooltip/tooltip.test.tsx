@@ -21,3 +21,13 @@ describe("Tooltip", () => {
     expect(bubble().className).not.toMatch(/(bottom|top|left|right)-full/);
   });
 });
+
+it("Tooltip stays hidden until isVisible", () => {
+  const { container, rerender } = render(
+    <Tooltip position={TOOLTIP_POSITION.TOP} label="Hint" isVisible={false} />,
+  );
+  expect(container.firstElementChild!.className).toContain("hidden");
+  rerender(<Tooltip position={TOOLTIP_POSITION.BOTTOM} label="Hint" isVisible />);
+  expect(container.firstElementChild!.className).toContain("block");
+  expect(screen.getByText("Hint")).toBeInTheDocument();
+});

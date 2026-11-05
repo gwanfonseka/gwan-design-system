@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Tag, { TAG_EDGE_STYLE, TAG_TYPE, TAG_VARIANT } from "./index";
+import TextArea from "../textarea";
 
 describe("Tag", () => {
   it.each([
@@ -24,4 +25,16 @@ describe("Tag", () => {
     render(<Tag type={TAG_TYPE.DEFAULT} label="Label" edges={edges} />);
     expect(screen.getByText("Label").className).toContain(className);
   });
+});
+
+it("Tag and TextArea render their props", () => {
+  render(
+    <>
+      <Tag type={TAG_TYPE.INFO} label="New" variant={TAG_VARIANT.OUTLINE} edges={TAG_EDGE_STYLE.PILL} />
+      <TextArea label="Notes" value="Hello" required isError errorMessage="Needed" onChange={() => {}} />
+    </>,
+  );
+  expect(screen.getByText("New")).toBeInTheDocument();
+  expect(screen.getByLabelText("Notes *")).toHaveValue("Hello");
+  expect(screen.getByRole("alert")).toHaveTextContent("Needed");
 });

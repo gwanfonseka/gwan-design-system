@@ -1,6 +1,7 @@
 import { createEvent, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import OtpInput from "./index";
+import OtpInput, { OTP_SIZE } from "./index";
+import userEvent from "@testing-library/user-event";
 
 const setup = (value: string, length = 4) => {
   const onChange = vi.fn();
@@ -102,4 +103,20 @@ describe("OtpInput", () => {
       expect(onChange).toHaveBeenCalledWith("12");
     });
   });
+});
+
+it("OtpInput fills a digit and reports completion", async () => {
+  const user = userEvent.setup();
+  const onChange = vi.fn();
+  const onComplete = vi.fn();
+  const view = render(
+    <OtpInput value="" onChange={onChange} onComplete={onComplete} length={4} size={OTP_SIZE.SM} label="Code" />,
+  );
+  await user.type(screen.getByLabelText("Digit 1 of 4"), "1");
+  expect(onChange).toHaveBeenCalledWith("1");
+  view.rerender(
+    <OtpInput value="123" onChange={onChange} onComplete={onComplete} length={4} label="Code" />,
+  );
+  await user.type(screen.getByLabelText("Digit 4 of 4"), "4");
+  expect(onComplete).toHaveBeenCalledWith("1234");
 });

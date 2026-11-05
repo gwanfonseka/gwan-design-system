@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FORM_ELEMENT_SIZE } from "../input";
 import SearchInput from "./index";
+import userEvent from "@testing-library/user-event";
 
 describe("SearchInput", () => {
   beforeEach(() => vi.useFakeTimers());
@@ -39,4 +40,17 @@ describe("SearchInput", () => {
     render(<SearchInput value={value} onChange={() => {}} size={size} />);
     expect(screen.getByRole("textbox").className).toContain(className);
   });
+});
+
+it("SearchInput reports typed text and clears it", async () => {
+  const user = userEvent.setup();
+  const onChange = vi.fn();
+  const { container, rerender } = render(
+    <SearchInput value="" onChange={onChange} label="Find" size={FORM_ELEMENT_SIZE.SM} />,
+  );
+  await user.type(screen.getByLabelText("Find"), "a");
+  expect(onChange).toHaveBeenCalledWith("a");
+  rerender(<SearchInput value="a" onChange={onChange} label="Find" />);
+  await user.click(container.querySelector(".cursor-pointer")!);
+  expect(onChange).toHaveBeenCalledWith("");
 });

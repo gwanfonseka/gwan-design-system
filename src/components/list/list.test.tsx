@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import List, { LIST_VARIANT } from "./index";
+import userEvent from "@testing-library/user-event";
+import { LIST_SIZE } from "./index";
 
 describe("List", () => {
   it.each([
@@ -36,4 +38,23 @@ describe("List", () => {
     fireEvent.keyDown(row, { key: "Enter" });
     expect(onClick).not.toHaveBeenCalled();
   });
+});
+
+it("List calls the item click handler and skips a disabled item", async () => {
+  const user = userEvent.setup();
+  const onClick = vi.fn();
+  render(
+    <List
+      variant={LIST_VARIANT.BORDERED}
+      size={LIST_SIZE.LG}
+      items={[
+        { key: "1", title: "Inbox", description: "3 new", onClick },
+        { key: "2", title: "Archive", disabled: true, onClick },
+      ]}
+    />,
+  );
+  await user.click(screen.getByText("Inbox"));
+  expect(onClick).toHaveBeenCalledTimes(1);
+  await user.click(screen.getByText("Archive"));
+  expect(onClick).toHaveBeenCalledTimes(1);
 });

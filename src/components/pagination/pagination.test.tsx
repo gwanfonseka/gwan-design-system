@@ -54,3 +54,23 @@ describe("Pagination", () => {
     expect(onChange).toHaveBeenCalledWith({ total: 30, page: 1, size: 25 });
   });
 });
+
+it("Pagination changes the page and the page size", async () => {
+  const user = userEvent.setup();
+  const onChange = vi.fn();
+  render(
+    <Pagination
+      total={50}
+      page={2}
+      size={10}
+      options={[{ label: "10", value: "10" }, { label: "20", value: "20" }]}
+      onChange={onChange}
+    />,
+  );
+  expect(screen.getByText("2 of 5 pages")).toBeInTheDocument();
+  const buttons = screen.getAllByRole("button");
+  await user.click(buttons[0]);
+  expect(onChange).toHaveBeenCalledWith({ total: 50, page: 1, size: 10 });
+  await user.click(buttons[1]);
+  expect(onChange).toHaveBeenCalledWith({ total: 50, page: 3, size: 10 });
+});

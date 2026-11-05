@@ -1,6 +1,7 @@
 import { createEvent, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import Input, { FORM_ELEMENT_SIZE } from "./index";
+import { FORM_ELEMENT_EDGE_STYLE } from "./index";
 
 const pasteInto = (input: HTMLElement, text: string) => {
   const event = createEvent.paste(input, { clipboardData: { getData: () => text } });
@@ -71,4 +72,25 @@ describe("Input", () => {
     expect(onPaste).toHaveBeenCalledTimes(1);
     expect(onKeyDown).toHaveBeenCalledTimes(1);
   });
+});
+
+it("Input blocks scientific notation and shows an error", () => {
+  const onChange = vi.fn();
+  render(
+    <Input
+      label="Count"
+      value="1"
+      type="number"
+      min={0}
+      required
+      isError
+      errorMessage="Too small"
+      onChange={onChange}
+      edges={FORM_ELEMENT_EDGE_STYLE.SQUARED}
+      size={FORM_ELEMENT_SIZE.SM}
+    />,
+  );
+  const input = screen.getByLabelText("Count *");
+  expect(fireEvent.keyDown(input, { key: "e" })).toBe(false);
+  expect(screen.getByRole("alert")).toHaveTextContent("Too small");
 });

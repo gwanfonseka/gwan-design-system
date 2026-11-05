@@ -91,3 +91,15 @@ describe("Modal", () => {
     expect(screen.getByRole("dialog").className).not.toContain("rounded-lg");
   });
 });
+
+it("Modal labels the dialog and closes from Escape", () => {
+  const onClear = vi.fn();
+  render(
+    <Modal title="Confirm" onClear={onClear} size={MODAL_SIZE.MEDIUM}>
+      <p>Are you sure?</p>
+    </Modal>,
+  );
+  expect(screen.getByRole("dialog", { name: "Confirm" })).toBeInTheDocument();
+  fireEvent.keyDown(window, { key: "Escape" });
+  expect(onClear).toHaveBeenCalledTimes(1);
+});

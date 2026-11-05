@@ -68,3 +68,15 @@ describe("ContextMenu", () => {
     expect(screen.queryByRole("button", { name: "Edit" })).not.toBeInTheDocument();
   });
 });
+
+it("ContextMenu opens on a context event", () => {
+  const onClick = vi.fn();
+  render(
+    <ContextMenu items={[{ label: "Rename", onClick }]}>
+      <span>Target</span>
+    </ContextMenu>,
+  );
+  fireEvent.contextMenu(screen.getByText("Target"));
+  fireEvent.click(screen.getByRole("button", { name: "Rename" }));
+  expect(onClick).toHaveBeenCalledTimes(1);
+});

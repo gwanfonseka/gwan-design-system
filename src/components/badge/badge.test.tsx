@@ -31,3 +31,11 @@ describe("Badge", () => {
     expect(screen.getByText("Live").querySelector(".rounded-full")).not.toBeNull();
   });
 });
+
+it("Badge shows its label, dot, and size", () => {
+  const { container } = render(
+    <Badge type={BADGE_TYPE.DANGER} variant={BADGE_VARIANT.OUTLINE} size={BADGE_SIZE.SMALL} label={3} dot />,
+  );
+  expect(screen.getByText("3")).toBeInTheDocument();
+  expect(container.querySelector(".rounded-full")).toBeTruthy();
+});

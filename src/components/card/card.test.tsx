@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import Card from "./index";
+import Card, { CARD_PADDING, CARD_VARIANT } from "./index";
 
 describe("Card", () => {
   it("renders a plain body without slots", () => {
@@ -20,4 +20,15 @@ describe("Card", () => {
     expect(screen.getByText("Actions").className).toContain("border-t");
     expect(container.querySelector(".border-b")).toBeNull();
   });
+});
+
+it("Card renders header, body, and footer", () => {
+  render(
+    <Card variant={CARD_VARIANT.ELEVATED} padding={CARD_PADDING.SM} header="Head" footer="Foot">
+      Body
+    </Card>,
+  );
+  expect(screen.getByText("Head")).toBeInTheDocument();
+  expect(screen.getByText("Body")).toBeInTheDocument();
+  expect(screen.getByText("Foot")).toBeInTheDocument();
 });

@@ -30,3 +30,15 @@ describe("Breadcrumb", () => {
     expect(container.querySelector(".rounded-full.bg-muted-fg")).not.toBeNull();
   });
 });
+
+it("Breadcrumb links every item except the current page", () => {
+  render(
+    <Breadcrumb
+      separator={BREADCRUMB_SEPARATOR.SLASH}
+      items={[{ label: "Home", href: "/" }, { label: "Docs" }]}
+    />,
+  );
+  expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/");
+  expect(screen.getByText("Docs")).toHaveAttribute("aria-current", "page");
+  expect(screen.getByText("/")).toBeInTheDocument();
+});

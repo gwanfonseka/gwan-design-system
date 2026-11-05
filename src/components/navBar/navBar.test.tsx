@@ -170,3 +170,28 @@ describe("NavBar", () => {
     expect(container.querySelector(".font-semibold")).toBeNull();
   });
 });
+
+const menuItem = {
+  title: "Home",
+  route: "/home",
+  isActive: true,
+  isDivider: false,
+};
+
+it("NavBar shows the active item and navigates", async () => {
+  const user = userEvent.setup();
+  const onNavigate = vi.fn();
+  render(
+    <NavBar
+      menuItems={[menuItem, { ...menuItem, title: "Docs", route: "/docs", isActive: false }]}
+      logoShort="/s.svg"
+      logoLong="/l.svg"
+      isAvatarVisible={false}
+      onNavigate={onNavigate}
+    />,
+  );
+  expect(screen.getByAltText("logo_short")).toBeInTheDocument();
+  await user.click(screen.getByText("Docs"));
+  expect(onNavigate).toHaveBeenCalledWith("/docs");
+  await new Promise((resolve) => setTimeout(resolve, 250));
+});

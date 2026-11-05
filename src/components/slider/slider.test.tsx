@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import Slider from "./index";
+import Slider, { SLIDER_SIZE } from "./index";
 
 describe("Slider", () => {
   it("labels a single thumb directly", () => {
@@ -46,4 +46,18 @@ describe("Slider", () => {
     fireEvent.touchStart(low);
     expect(low.style.zIndex).toBe("20");
   });
+});
+
+it("Slider reports a single value and a range", () => {
+  const onChange = vi.fn();
+  const { rerender } = render(
+    <Slider label="Volume" value={20} onChange={onChange} size={SLIDER_SIZE.SM} showTooltip />,
+  );
+  expect(screen.getByText("20")).toBeInTheDocument();
+  fireEvent.change(screen.getByRole("slider"), { target: { value: "40" } });
+  expect(onChange).toHaveBeenCalledWith(40);
+  rerender(<Slider value={[10, 70]} onChange={onChange} showTooltip />);
+  expect(screen.getByText("10 – 70")).toBeInTheDocument();
+  fireEvent.change(screen.getByRole("slider", { name: "Maximum value" }), { target: { value: "80" } });
+  expect(onChange).toHaveBeenCalledWith([10, 80]);
 });
