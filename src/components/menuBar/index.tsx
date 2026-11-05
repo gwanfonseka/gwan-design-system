@@ -153,7 +153,7 @@ const MenuBar: FC<IMenuBar> = ({
     calculate();
 
     return () => observer.disconnect();
-  }, [menuItems]);
+  }, [menuItems, isLoading]);
 
   const handleItemClick = (item: IMenuItem) => {
     setActiveItem(item.title);

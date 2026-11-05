@@ -353,3 +353,13 @@ describe("MenuBar", () => {
     expect(visibleLabels(container)).toEqual(["Only"]);
   });
 });
+
+describe("MenuBar after loading", () => {
+  it("measures its items once loading ends", () => {
+    mockWidths(80, 100);
+    const { rerender } = renderBar({ isLoading: true });
+    expect(screen.queryByRole("button", { name: "More" })).not.toBeInTheDocument();
+    rerender(<MenuBar {...base} />);
+    expect(screen.getByRole("button", { name: "More" })).toBeInTheDocument();
+  });
+});
