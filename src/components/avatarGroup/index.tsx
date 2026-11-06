@@ -6,7 +6,7 @@ import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
 export interface IAvatarGroupItem {
   name: string;
-  email: string;
+  email?: string;
   image?: string;
 }
 
