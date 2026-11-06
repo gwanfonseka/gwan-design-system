@@ -198,9 +198,7 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   }
 
   const updatePlacement = () => {
-    const el = ref.current;
-    if (!el) return;
-    const rect           = el.getBoundingClientRect();
+    const rect           = ref.current!.getBoundingClientRect();
     const panelWidth     = 496; // 2 × 220px calendars + gap-6 (24px) + p-4 (32px)
     const panelHeight    = 320;
     const spaceRight     = window.innerWidth  - rect.left;
@@ -210,7 +208,6 @@ const DateRangePicker: FC<IDateRangePicker> = ({
   };
 
   const toggleOpen = () => {
-    if (disabled) return;
     if (!open) updatePlacement();
     setOpen((v) => !v);
   };

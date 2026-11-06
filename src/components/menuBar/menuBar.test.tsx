@@ -353,3 +353,250 @@ describe("MenuBar", () => {
     expect(visibleLabels(container)).toEqual(["Only"]);
   });
 });
+
+describe("MenuBar after loading", () => {
+  it("measures its items once loading ends", () => {
+    mockWidths(80, 100);
+    const { rerender } = renderBar({ isLoading: true });
+    expect(screen.queryByRole("button", { name: "More" })).not.toBeInTheDocument();
+    rerender(<MenuBar {...base} />);
+    expect(screen.getByRole("button", { name: "More" })).toBeInTheDocument();
+  });
+});
+
+describe("MenuBar details", () => {
+  const products = item("Products", {
+    hasChildren: true,
+    children: [
+      { title: "Shoes", route: "/shoes", isActive: true },
+      { title: "Hats", route: "/hats", isActive: false },
+    ],
+  });
+
+  it("does nothing on mount while loading", () => {
+    mockWidths(1000, 40);
+    renderBar({ isLoading: true });
+    expect(screen.queryByRole("menubar")).not.toBeInTheDocument();
+  });
+
+  it("copes with no items", () => {
+    mockWidths(1000, 40);
+    renderBar({ menuItems: [] });
+    expect(screen.getByRole("menubar")).toBeEmptyDOMElement();
+  });
+
+  it("closes a parent's submenu on a second click", async () => {
+    mockWidths(1000, 40);
+    const user = userEvent.setup();
+    renderBar({ menuItems: [products] });
+    const button = screen.getByRole("button", { name: "Products" });
+    await user.click(button);
+    expect(screen.getByRole("button", { name: "Shoes" })).toBeInTheDocument();
+    await user.click(button);
+    expect(screen.queryByRole("button", { name: "Shoes" })).not.toBeInTheDocument();
+  });
+
+  it("toggles More with the mouse", async () => {
+    mockWidths(80, 100);
+    const user = userEvent.setup();
+    renderBar();
+    const more = screen.getByRole("button", { name: "More" });
+    await user.click(more);
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+    await user.click(more);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("shows a parent's children inside More, and navigates from them", async () => {
+    mockWidths(80, 100);
+    const user = userEvent.setup();
+    const { onNavigate } = renderBar({ menuItems: [products, item("Docs")] });
+    await user.click(screen.getByRole("button", { name: "More" }));
+    await user.click(screen.getByRole("button", { name: "Products" }));
+    expect(screen.getByRole("button", { name: "Shoes" }).className).toContain("text-primary-default");
+    expect(screen.getByRole("button", { name: "Hats" }).className).toContain("text-muted-fg");
+    await user.click(screen.getByRole("button", { name: "Hats" }));
+    expect(onNavigate).toHaveBeenCalledWith("/hats");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("collapses a parent inside More on a second click, keeping More open", async () => {
+    mockWidths(80, 100);
+    const user = userEvent.setup();
+    renderBar({ menuItems: [products, item("Docs")] });
+    await user.click(screen.getByRole("button", { name: "More" }));
+    const parent = screen.getByRole("button", { name: "Products" });
+    await user.click(parent);
+    expect(parent.querySelector(".rotate-180")).not.toBeNull();
+    await user.click(parent);
+    expect(screen.queryByRole("button", { name: "Shoes" })).not.toBeInTheDocument();
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("copes with a parent that has no children list, in the row and in More", async () => {
+    mockWidths(1000, 40);
+    const user = userEvent.setup();
+    const empty = item("Empty", { hasChildren: true });
+    const view = renderBar({ menuItems: [empty] });
+    await user.click(screen.getByRole("button", { name: "Empty" }));
+    expect(screen.getByRole("button", { name: "Empty" })).toBeInTheDocument();
+    view.unmount();
+    mockWidths(80, 100);
+    renderBar({ menuItems: [empty, item("Docs")] });
+    await user.click(screen.getByRole("button", { name: "More" }));
+    await user.click(screen.getByRole("button", { name: "Empty" }));
+    expect(screen.getByRole("button", { name: "Empty" })).toBeInTheDocument();
+  });
+
+  it("defaults the avatar when plain JavaScript passes null for its props", () => {
+    mockWidths(1000, 40);
+    const props = { isAvatarVisible: true, avatarName: "Ada", avatarEmail: "a@x.dev", avatarType: null, avatarImage: null };
+    const { container } = render(<MenuBar {...base} {...(props as object)} />);
+    // IMAGE_ONLY shows no name label, and an empty image falls back to initials.
+    expect(screen.queryByText("Ada", { selector: "p.font-semibold" })).not.toBeInTheDocument();
+    expect(container.querySelector('img[src="null"]')).toBeNull();
+  });
+
+  describe("mobile menu", () => {
+    const toggle = (container: HTMLElement) => container.querySelector("button.md\\:hidden") as HTMLElement;
+
+    it("draws dividers and icons, closes from the toggle, and marks the active sub-item", async () => {
+      mockWidths(1000, 40);
+      const user = userEvent.setup();
+      const { container, onNavigate } = renderBar({
+        menuItems: [
+          item("Home", { icon: <svg data-testid="icon" /> }),
+          item("", { isDivider: true }),
+          products,
+        ],
+      });
+      await user.click(toggle(container));
+      const panel = container.querySelector(".md\\:hidden.border-t") as HTMLElement;
+      expect(panel.querySelector(".border-b")).not.toBeNull();
+      expect(panel.querySelector('[data-testid="icon"]')).not.toBeNull();
+      const parent = [...panel.querySelectorAll("button")].find((b) => b.textContent?.includes("Products"))!;
+      await user.click(parent);
+      const sub = (name: string) => [...panel.querySelectorAll("button")].find((b) => b.textContent === name)!;
+      expect(sub("Shoes").className).toContain("text-primary-default");
+      expect(sub("Hats").className).toContain("text-muted-fg");
+      await user.click(sub("Hats"));
+      expect(onNavigate).toHaveBeenCalledWith("/hats");
+      expect(container.querySelector(".md\\:hidden.border-t")).toBeNull();
+    });
+
+    it("copes with a parent with no children list", async () => {
+      mockWidths(1000, 40);
+      const user = userEvent.setup();
+      const { container } = renderBar({ menuItems: [item("Empty", { hasChildren: true })] });
+      await user.click(toggle(container));
+      const panel = container.querySelector(".md\\:hidden.border-t") as HTMLElement;
+      await user.click(panel.querySelector("button")!);
+      expect(panel.querySelectorAll("button")).toHaveLength(1);
+    });
+  });
+
+  describe("keyboard edges", () => {
+    const bar = () => screen.getByRole("menubar");
+    const key = (el: Element, k: string) => fireEvent.keyDown(el, { key: k });
+
+    it("ignores keys on anything but a button", () => {
+      mockWidths(1000, 40);
+      renderBar();
+      expect(key(bar(), "ArrowRight")).toBe(true);
+    });
+
+    it("closes an open submenu when Home moves away", async () => {
+      mockWidths(1000, 40);
+      const user = userEvent.setup();
+      renderBar({ menuItems: [item("Docs"), products] });
+      const button = screen.getByRole("button", { name: "Products" });
+      await user.click(button);
+      key(button, "Home");
+      expect(screen.queryByRole("button", { name: "Shoes" })).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Docs" })).toHaveFocus();
+    });
+
+    it("opens a submenu at its last item with ArrowUp", () => {
+      mockWidths(1000, 40);
+      renderBar({ menuItems: [products] });
+      key(screen.getByRole("button", { name: "Products" }), "ArrowUp");
+      expect(screen.getByRole("button", { name: "Hats" })).toHaveFocus();
+    });
+
+    it("opens More with ArrowDown, and leaves plain items alone", () => {
+      mockWidths(80, 100);
+      renderBar();
+      key(screen.getByRole("button", { name: "More" }), "ArrowDown");
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+    });
+
+    it("does nothing on ArrowDown, Enter or Space on a leaf", () => {
+      mockWidths(1000, 40);
+      renderBar();
+      const home = screen.getByRole("button", { name: "Home" });
+      key(home, "ArrowDown");
+      expect(key(home, " ")).toBe(true);
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+
+    it("ignores Escape with nothing open", () => {
+      mockWidths(1000, 40);
+      renderBar();
+      expect(key(screen.getByRole("button", { name: "Home" }), "Escape")).toBe(true);
+    });
+
+    it("closes from the top-level button with Escape", async () => {
+      mockWidths(1000, 40);
+      const user = userEvent.setup();
+      renderBar({ menuItems: [products] });
+      const button = screen.getByRole("button", { name: "Products" });
+      await user.click(button);
+      key(button, "Escape");
+      expect(screen.queryByRole("button", { name: "Shoes" })).not.toBeInTheDocument();
+      expect(button).toHaveFocus();
+    });
+
+    it("closes an open parent with Enter, and More with Space", async () => {
+      mockWidths(1000, 40);
+      const user = userEvent.setup();
+      const view = renderBar({ menuItems: [products] });
+      const button = screen.getByRole("button", { name: "Products" });
+      key(button, "Enter");
+      expect(screen.getByRole("button", { name: "Shoes" })).toHaveFocus();
+      key(button, "Enter");
+      expect(screen.queryByRole("button", { name: "Shoes" })).not.toBeInTheDocument();
+      view.unmount();
+      mockWidths(80, 100);
+      renderBar();
+      const more = screen.getByRole("button", { name: "More" });
+      await user.click(more);
+      key(more, " ");
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+
+    it("tolerates keys from the hidden measuring row", async () => {
+      mockWidths(80, 100);
+      const user = userEvent.setup();
+      const { container } = renderBar();
+      await user.click(screen.getByRole("button", { name: "More" }));
+      const hidden = container.querySelector("[aria-hidden] button")!;
+      key(hidden, "ArrowDown");
+      key(hidden, "Enter");
+      key(hidden, "ArrowRight");
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      await user.click(screen.getByRole("button", { name: "More" }));
+      key(hidden, "Escape");
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+
+    it("skips an item with no focusable children", () => {
+      mockWidths(1000, 40);
+      renderBar({ menuItems: [item("Empty", { hasChildren: true })] });
+      const button = screen.getByRole("button", { name: "Empty" });
+      key(button, "ArrowDown");
+      expect(button).toBeInTheDocument();
+      key(button, "Enter");
+      expect(button).toBeInTheDocument();
+    });
+  });
+});

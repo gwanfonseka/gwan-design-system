@@ -34,12 +34,8 @@ const Modal: FC<IModal> = ({
   // Store previous focus and move focus inside on mount; restore on unmount
   useEffect(() => {
     previousFocus.current = document.activeElement;
-    const focusable = modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
-    if (focusable?.length) {
-      focusable[0].focus();
-    } else {
-      modalRef.current?.focus();
-    }
+    // The close button is always there, so there is always something to focus.
+    modalRef.current!.querySelector<HTMLElement>(FOCUSABLE)!.focus();
     return () => {
       (previousFocus.current as HTMLElement | null)?.focus();
     };
@@ -55,10 +51,7 @@ const Modal: FC<IModal> = ({
   // Focus trap
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key !== "Tab") return;
-    const focusable = Array.from(
-      modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []
-    );
-    if (!focusable.length) return;
+    const focusable = Array.from(modalRef.current!.querySelectorAll<HTMLElement>(FOCUSABLE));
     const first = focusable[0];
     const last  = focusable[focusable.length - 1];
     if (e.shiftKey) {

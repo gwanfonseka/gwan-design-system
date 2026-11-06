@@ -46,11 +46,9 @@ const OtpInput: FC<IOtpInput> = ({
   const { cell, text } = sizeMap[size];
 
   const focusAt = (index: number) => {
-    const el = inputRefs.current[index];
-    if (el) {
-      el.focus();
-      el.select();
-    }
+    const el = inputRefs.current[index]!;
+    el.focus();
+    el.select();
   };
 
   const update = (index: number, char: string) => {

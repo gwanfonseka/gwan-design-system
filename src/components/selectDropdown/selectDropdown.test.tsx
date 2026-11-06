@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { mockRect, setViewport } from "../../test/helpers";
@@ -372,5 +372,53 @@ describe("SelectDropdown", () => {
       />,
     );
     expect(screen.getByRole("combobox").className.split(/\s+/)).toContain("rounded");
+  });
+});
+
+describe("SelectDropdown edge cases", () => {
+  it("ignores other keys while closed", () => {
+    renderSelect();
+    const input = screen.getByRole("combobox");
+    fireEvent.keyDown(input, { key: "a" });
+    expect(input).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("does nothing on Enter with no option highlighted", () => {
+    const { onChange } = renderSelect();
+    const input = screen.getByRole("combobox");
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.keyDown(input, { key: "Enter" });
+    expect(onChange).not.toHaveBeenCalled();
+    expect(input).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("closes when focus leaves, but not when it moves into the list", async () => {
+    const user = userEvent.setup();
+    renderSelect({ searchable: true });
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    fireEvent.blur(input, { relatedTarget: screen.getByPlaceholderText("Search...") });
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    fireEvent.blur(input, { relatedTarget: document.body });
+    expect(input).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("debounces onSearch, keeping only the last query", async () => {
+    const user = userEvent.setup();
+    const onSearch = vi.fn();
+    renderSelect({ searchable: true, onSearch, debounce: 50 });
+    await user.click(screen.getByRole("combobox"));
+    const search = screen.getByPlaceholderText("Search...");
+    fireEvent.change(search, { target: { value: "a" } });
+    fireEvent.change(search, { target: { value: "ab" } });
+    await waitFor(() => expect(onSearch).toHaveBeenCalledWith("ab"));
+    expect(onSearch).toHaveBeenCalledTimes(1);
+  });
+
+  it("squares the search box with squared edges", async () => {
+    const user = userEvent.setup();
+    renderSelect({ searchable: true, edges: FORM_ELEMENT_EDGE_STYLE.SQUARED });
+    await user.click(screen.getByRole("combobox"));
+    expect(screen.getByPlaceholderText("Search...").className).not.toMatch(/\brounded\b/);
   });
 });
