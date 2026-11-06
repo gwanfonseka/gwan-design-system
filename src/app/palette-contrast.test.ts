@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { SETUP_CSS } from "@/templates/docs/setup-css";
+import { SETUP_CSS, THEME_SCRIPT, THEME_TOGGLE, VITE_CONFIG } from "@/templates/docs/setup-css";
 
 const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
 
@@ -79,7 +79,7 @@ it("keeps the fixed secondary-button pair at 4.5:1 in both themes", () => {
 describe("published setup stylesheet", () => {
   it("is the same in the README and the docs", () => {
     const readme = fs.readFileSync(path.join(process.cwd(), "README.md"), "utf8");
-    expect(readme).toContain(SETUP_CSS);
+    for (const block of [SETUP_CSS, VITE_CONFIG, THEME_SCRIPT, THEME_TOGGLE]) expect(readme).toContain(block);
   });
 
   it("uses the site's own token values", () => {

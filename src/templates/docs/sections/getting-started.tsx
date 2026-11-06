@@ -1,6 +1,6 @@
 import { H2, H3, P, Code, Callout, InlineCode } from "../primitives";
 import pkg from "../../../../package.json";
-import { SETUP_CSS } from "../setup-css";
+import { SETUP_CSS, THEME_SCRIPT, THEME_TOGGLE, VITE_CONFIG } from "../setup-css";
 
 const GettingStarted = () => (
   <>
@@ -38,7 +38,7 @@ const GettingStarted = () => (
 
     <Callout type="info">
       The only peer dependency is <strong>React 19</strong> or newer. GWAN is developed and tested in{" "}
-      <strong>Next.js 16</strong> with the App Router.
+      <strong>Next.js 16</strong> with the App Router, and also works in <strong>Vite</strong>.
     </Callout>
 
     {/* Tailwind Setup */}
@@ -137,6 +137,22 @@ export function ThemeToggle() {
     <Callout type="warn">
       Always check <InlineCode>mounted</InlineCode> before rendering theme-dependent UI. The server renders without knowing the user&apos;s preference, so reading <InlineCode>theme</InlineCode> before mount will produce a hydration mismatch.
     </Callout>
+
+    {/* Vite */}
+    <H2 id="vite">Using Vite</H2>
+    <P>GWAN doesn&apos;t need Next.js. In a Vite app, use Tailwind&apos;s Vite plugin instead of PostCSS.</P>
+    <Code lang="bash">{`npm install tailwindcss@^4 @tailwindcss/vite`}</Code>
+    <Code lang="ts">{VITE_CONFIG}</Code>
+    <P>
+      Put the stylesheet from Tailwind Setup in <InlineCode>src/index.css</InlineCode>, change its{" "}
+      <InlineCode>@source</InlineCode> line to{" "}
+      <InlineCode>@source &quot;../node_modules/gwan-design-system/dist&quot;;</InlineCode>, and import it in{" "}
+      <InlineCode>src/main.tsx</InlineCode>.
+    </P>
+    <H3>Dark mode without next-themes</H3>
+    <P>Set the class before the page paints, then toggle it. This works in any React app.</P>
+    <Code lang="html">{THEME_SCRIPT}</Code>
+    <Code lang="tsx">{THEME_TOGGLE}</Code>
   </>
 );
 

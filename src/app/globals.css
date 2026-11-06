@@ -76,7 +76,8 @@
   --warning-fg: #fde68a;
 }
 
-@theme {
+/* inline: utilities read the token directly, so a nested .dark section changes colour too. */
+@theme inline {
   /* ─── Semantic (theme-aware, read from CSS vars) ─────────────── */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -110,7 +111,9 @@
   --color-warning: var(--warning);
   --color-warning-bg: var(--warning-bg);
   --color-warning-fg: var(--warning-fg);
+}
 
+@theme {
   /* ─── Primary scale (Sage Green — base: #9ea593) ────────────── */
   --color-primary-50: #f4f7f1;
   --color-primary-100: #e2eada;
