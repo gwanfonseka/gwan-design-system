@@ -58,3 +58,12 @@ it("List calls the item click handler and skips a disabled item", async () => {
   await user.click(screen.getByText("Archive"));
   expect(onClick).toHaveBeenCalledTimes(1);
 });
+
+it("List marks a selected row", () => {
+  render(<List items={[{ key: "1", title: "Inbox", selected: true }, { key: "2", title: "Archive" }]} />);
+  const selected = screen.getByText("Inbox");
+  expect(selected.className).toContain("text-primary-default");
+  expect(selected.closest("li")).toHaveAttribute("aria-current", "true");
+  expect(selected.closest("li")?.className).toContain("bg-surface-raised");
+  expect(screen.getByText("Archive").closest("li")).not.toHaveAttribute("aria-current");
+});

@@ -31,6 +31,7 @@ import {
   SettingsSVG,
   UsersSVG,
 } from "@/components/icons";
+import counts from "@/lib/library-counts.json";
 
 /** A bento tile: a small working scenario, plus links to the playgrounds of what it's built from. */
 const Tile = ({
@@ -260,7 +261,7 @@ const ComponentIntelligence = () => (
         href="/components-library"
         className="self-start text-xs font-bold tracking-[0.18em] uppercase text-foreground border-b border-foreground pb-1 hover:opacity-70 transition-opacity"
       >
-        Explore all 53 components
+        Explore all {counts.components} components
       </Link>
     </div>
   </section>

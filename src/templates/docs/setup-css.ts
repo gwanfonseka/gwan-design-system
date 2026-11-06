@@ -75,8 +75,10 @@ export const SETUP_CSS = `/* src/app/globals.css */
   --warning-fg: #fde68a;
 }
 
-/* ─── Register the tokens as Tailwind colours ─ */
-@theme {
+/* ─── Register the tokens as Tailwind colours ─
+   inline: utilities read the token directly, so a
+   nested .dark section changes colour too. */
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -104,8 +106,10 @@ export const SETUP_CSS = `/* src/app/globals.css */
   --color-warning: var(--warning);
   --color-warning-bg: var(--warning-bg);
   --color-warning-fg: var(--warning-fg);
+}
 
-  /* Primary scale: the same in light and dark mode */
+/* Primary scale: the same in light and dark mode */
+@theme {
   --color-primary-50: #f4f7f1;
   --color-primary-100: #e2eada;
   --color-primary-200: #c8d5be;
@@ -116,4 +120,33 @@ export const SETUP_CSS = `/* src/app/globals.css */
   --color-primary-700: #60705a;
   --color-primary-800: #435240;
   --color-primary-900: #2c3629;
+}`;
+
+/** Vite setup, shown in the docs and README. A test keeps the two in step. */
+export const VITE_CONFIG = `// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});`;
+
+/** Runs before first paint, so a dark page never flashes light. */
+export const THEME_SCRIPT = `<!-- index.html, inside <head> -->
+<script>
+  const saved = localStorage.getItem("theme");
+  const dark = saved ? saved === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.classList.toggle("dark", dark);
+</script>`;
+
+export const THEME_TOGGLE = `import { Button } from "gwan-design-system";
+
+export function ThemeToggle() {
+  const toggle = () => {
+    const dark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  };
+
+  return <Button label="Toggle theme" onClick={toggle} />;
 }`;

@@ -30,6 +30,8 @@ export interface IStepper {
   activeKey?: string;
   orientation?: STEPPER_ORIENTATION;
   variant?: STEPPER_VARIANT;
+  /** Vertical only: shows every step's content, not just the active step's. */
+  showAllContent?: boolean;
   className?: string;
 }
 
@@ -73,6 +75,7 @@ const Stepper: FC<IStepper> = ({
   activeKey,
   orientation = STEPPER_ORIENTATION.HORIZONTAL,
   variant = STEPPER_VARIANT.DEFAULT,
+  showAllContent = false,
   className = "",
 }) => {
   const getStatus = (step: IStep, index: number): STEP_STATUS => {
@@ -104,7 +107,7 @@ const Stepper: FC<IStepper> = ({
                 {step.description && (
                   <p className="text-xs text-muted-fg mt-0.5">{step.description}</p>
                 )}
-                {status === STEP_STATUS.ACTIVE && step.content && (
+                {(showAllContent || status === STEP_STATUS.ACTIVE) && step.content && (
                   <div className="mt-3">{step.content}</div>
                 )}
               </div>

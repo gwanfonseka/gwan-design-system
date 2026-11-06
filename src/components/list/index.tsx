@@ -20,6 +20,7 @@ export interface IListItem {
   icon?: ReactNode;
   rightSlot?: ReactNode;
   disabled?: boolean;
+  selected?: boolean;
   onClick?: () => void;
 }
 
@@ -94,6 +95,7 @@ const List: FC<IList> = ({
             ? ""
             : "",
           item.disabled ? "opacity-50 cursor-not-allowed" : "",
+          item.selected ? "bg-surface-raised" : "",
         ].filter(Boolean).join(" ");
 
         return (
@@ -102,6 +104,7 @@ const List: FC<IList> = ({
             className={itemClass}
             onClick={isClickable ? item.onClick : undefined}
             role={isClickable ? "button" : undefined}
+            aria-current={item.selected ? "true" : undefined}
             tabIndex={isClickable ? 0 : undefined}
             onKeyDown={isClickable ? (e) => { if (e.key === "Enter" || e.key === " ") item.onClick?.(); } : undefined}
           >
@@ -111,7 +114,7 @@ const List: FC<IList> = ({
               </span>
             )}
             <span className="flex-1 min-w-0">
-              <span className={`block font-medium text-foreground truncate`}>{item.title}</span>
+              <span className={`block font-medium truncate ${item.selected ? "text-primary-default" : "text-foreground"}`}>{item.title}</span>
               {item.description && (
                 <span className={`block ${descSize} text-muted-fg truncate`}>{item.description}</span>
               )}

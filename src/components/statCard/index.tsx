@@ -6,14 +6,25 @@ export enum STAT_TREND {
   NEUTRAL = "NEUTRAL",
 }
 
+export enum STAT_CARD_VARIANT {
+  DEFAULT = "DEFAULT",
+  FLAT = "FLAT",
+}
+
 export interface IStatCard {
   label: string;
   value: string | number;
   trend?: STAT_TREND;
   trendLabel?: string;
   icon?: ReactNode;
+  variant?: STAT_CARD_VARIANT;
   className?: string;
 }
+
+const variantClass: Record<STAT_CARD_VARIANT, string> = {
+  [STAT_CARD_VARIANT.DEFAULT]: "bg-surface border border-border",
+  [STAT_CARD_VARIANT.FLAT]:    "bg-surface-raised",
+};
 
 const trendConfig: Record<STAT_TREND, { color: string; arrow: string }> = {
   [STAT_TREND.UP]:      { color: "text-success",  arrow: "↑" },
@@ -27,12 +38,13 @@ const StatCard: FC<IStatCard> = ({
   trend,
   trendLabel,
   icon,
+  variant = STAT_CARD_VARIANT.DEFAULT,
   className = "",
 }) => {
   const trendCfg = trend ? trendConfig[trend] : null;
 
   return (
-    <div className={`bg-surface border border-border rounded-xl p-5 flex flex-col gap-3 ${className}`}>
+    <div className={`${variantClass[variant]} rounded-xl p-5 flex flex-col gap-3 ${className}`}>
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-fg">{label}</p>
         {icon && (

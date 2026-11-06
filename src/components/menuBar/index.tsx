@@ -5,7 +5,7 @@ import Avatar, {
   AVATAR_SIZE,
   AVATAR_LABEL_POSITION,
 } from "../avatar";
-import { FC, ReactNode, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { FC, Fragment, ReactNode, useEffect, useRef, useState, type HTMLAttributes, type KeyboardEvent, type MouseEvent as ReactMouseEvent } from "react";
 import { flushSync } from "react-dom";
 import { ChevDownSVG, MenuSVG, CrossSVG } from "../icons";
 import type { IMenuItem, ISubMenuItem } from "../navBar";
@@ -25,10 +25,14 @@ export enum MENU_BAR_ITEMS_ALIGN {
 
 type MenuBarSharedProps = {
   menuItems: IMenuItem[];
-  logoShort: string;
-  logoLong: string;
+  /** Alt text for logoShort. */
+  logoAlt?: string;
   logoShortWidth?: number;
   logoShortHeight?: number;
+  /** Names the navigation for screen readers. */
+  "aria-label"?: string;
+  /** Renders items without children as real links to their route. onNavigate still handles plain clicks. */
+  itemsAsLinks?: boolean;
   sticky?: boolean;
   variant?: MENU_BAR_VARIANT;
   itemsAlign?: MENU_BAR_ITEMS_ALIGN;
@@ -39,10 +43,23 @@ type MenuBarSharedProps = {
   rightSlot?: ReactNode;
 };
 
+type LogoImageProps = {
+  logo?: undefined;
+  logoShort: string;
+  logoLong: string;
+};
+
+type LogoSlotProps = {
+  /** Replaces the logo images. Accepts text or any element, including a link. */
+  logo: ReactNode;
+  logoShort?: string;
+  logoLong?: string;
+};
+
 type AvatarVisibleProps = {
   isAvatarVisible: true;
   avatarName: string;
-  avatarEmail: string;
+  avatarEmail?: string;
   avatarImage: string;
   avatarType: AVATAR_VARIANT;
   avatarSize?: AVATAR_SIZE;
@@ -60,6 +77,7 @@ type AvatarHiddenProps = {
 };
 
 export type IMenuBar = MenuBarSharedProps &
+  (LogoImageProps | LogoSlotProps) &
   (AvatarVisibleProps | AvatarHiddenProps);
 
 const variantClass: Record<MENU_BAR_VARIANT, string> = {
@@ -74,10 +92,14 @@ const MORE_BTN_WIDTH = 88;
 
 const MenuBar: FC<IMenuBar> = ({
   menuItems,
+  logo,
   logoShort,
   logoLong,
+  logoAlt = "logo",
   logoShortWidth = 36,
   logoShortHeight = 36,
+  "aria-label": ariaLabel,
+  itemsAsLinks = false,
   isAvatarVisible = false,
   avatarName = "",
   avatarEmail = "",
@@ -219,27 +241,52 @@ const MenuBar: FC<IMenuBar> = ({
   }
 
   const topLevelButtons = () => {
-    const buttons: HTMLButtonElement[] = [];
+    const buttons: HTMLElement[] = [];
     for (const child of itemsContainerRef.current!.children) {
       if (!child.classList.contains("relative")) continue;
-      buttons.push(child.querySelector("button")!);
+      buttons.push(child.querySelector<HTMLElement>("a, button")!);
     }
     return buttons;
   };
 
-  const focusTop = (button: HTMLButtonElement) => {
+  const focusTop = (button: HTMLElement) => {
     const id = button.dataset.menubarItem;
     if (id) setRovingId(id);
     button.focus();
   };
 
-  const panelButtons = (panel: Element) => [...panel.querySelectorAll("button")];
+  const panelButtons = (panel: Element) => [...panel.querySelectorAll<HTMLElement>("a, button")];
+
+  // A link when itemsAsLinks is on and the item goes somewhere, otherwise a button.
+  const renderControl = (
+    route: string | undefined,
+    onActivate: () => void,
+    props: HTMLAttributes<HTMLElement> & { "data-menubar-item"?: string },
+    children: ReactNode,
+  ) => {
+    if (!itemsAsLinks || route === undefined) {
+      return <button {...props} onClick={onActivate}>{children}</button>;
+    }
+    const handleLinkClick = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+      // Leave cmd-click and friends to the browser, so a new tab still works.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (onNavigate) e.preventDefault();
+      onActivate();
+    };
+    return <a {...props} href={route} onClick={handleLinkClick}>{children}</a>;
+  };
 
   // Menubar keyboard: arrows, Home, and End move focus (and wrap); they do not
   // activate. Down/Up open a submenu. Escape closes it and returns focus.
   const handleMenuKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     const target = e.target;
-    if (!(target instanceof HTMLButtonElement)) return;
+    if (!(target instanceof HTMLButtonElement || target instanceof HTMLAnchorElement)) return;
+    // Links only activate on Enter natively.
+    if (e.key === " " && target instanceof HTMLAnchorElement) {
+      e.preventDefault();
+      target.click();
+      return;
+    }
     const tops = topLevelButtons();
     const topIndex = tops.indexOf(target);
     const panel = target.closest("[data-menubar-panel]");
@@ -321,30 +368,38 @@ const MenuBar: FC<IMenuBar> = ({
 
   const renderItemButton = (item: IMenuItem, isOverflow = false) => {
     const isActive = activeItem === item.title;
+    const isExpanded = (isOverflow ? expandedOverflow : openDropdown) === item.title;
     return (
       <>
-        <button
-          data-menubar-item={item.title}
-          tabIndex={isOverflow ? -1 : rovingId === item.title ? 0 : -1}
-          onClick={() => handleItemClick(item, isOverflow)}
-          className={`w-full flex flex-row items-center gap-1.5 px-3 py-2 rounded text-sm transition-colors duration-150 cursor-pointer ${
-            isOverflow ? "text-left" : ""
-          } ${isActive ? activeItemStyle : inactiveItemStyle} ${menuItemTextClass}`}
-        >
-          {item.icon && <span className="size-4 shrink-0">{item.icon}</span>}
-          <span className={isOverflow ? "flex-1" : ""}>
-            {stableText(item.title, isActive)}
-          </span>
-          {item.hasChildren && (
-            <span
-              className={`size-3.5 shrink-0 transition-transform duration-200 ${
-                (isOverflow ? expandedOverflow : openDropdown) === item.title ? "rotate-180" : ""
-              }`}
-            >
-              <ChevDownSVG />
+        {renderControl(
+          item.hasChildren ? undefined : item.route,
+          () => handleItemClick(item, isOverflow),
+          {
+            role: "menuitem",
+            "data-menubar-item": item.title,
+            tabIndex: isOverflow ? -1 : rovingId === item.title ? 0 : -1,
+            "aria-haspopup": item.hasChildren ? "menu" : undefined,
+            "aria-expanded": item.hasChildren ? isExpanded : undefined,
+            className: `w-full flex flex-row items-center gap-1.5 px-3 py-2 rounded text-sm transition-colors duration-150 cursor-pointer ${
+              isOverflow ? "text-left" : ""
+            } ${isActive ? activeItemStyle : inactiveItemStyle} ${menuItemTextClass}`,
+          },
+          <>
+            {item.icon && <span className="size-4 shrink-0">{item.icon}</span>}
+            <span className={isOverflow ? "flex-1" : ""}>
+              {stableText(item.title, isActive)}
             </span>
-          )}
-        </button>
+            {item.hasChildren && (
+              <span
+                className={`size-3.5 shrink-0 transition-transform duration-200 ${
+                  isExpanded ? "rotate-180" : ""
+                }`}
+              >
+                <ChevDownSVG />
+              </span>
+            )}
+          </>,
+        )}
 
         {/* Sub-menu dropdown */}
         {item.hasChildren && openDropdown === item.title && !isOverflow && (
@@ -352,41 +407,50 @@ const MenuBar: FC<IMenuBar> = ({
             data-menubar-panel
             data-menubar-owner={item.title}
             role="menu"
+            aria-label={item.title}
             className="absolute top-full left-0 mt-1 min-w-44 bg-surface border border-border rounded shadow-lg z-50 py-1"
           >
             {item.children?.map((sub, i) => (
-              <button
-                key={i}
-                tabIndex={-1}
-                onClick={() => handleSubItemClick(sub)}
-                className={`w-full text-left px-4 py-2.5 text-sm transition-colors duration-150 cursor-pointer ${
-                  sub.isActive
-                    ? "text-primary-default font-medium bg-primary-default/5"
-                    : "text-muted-fg hover:text-foreground hover:bg-surface-raised"
-                }`}
-              >
-                {sub.title}
-              </button>
+              <Fragment key={i}>
+                {renderControl(
+                  sub.route,
+                  () => handleSubItemClick(sub),
+                  {
+                    role: "menuitem",
+                    tabIndex: -1,
+                    className: `block w-full text-left px-4 py-2.5 text-sm transition-colors duration-150 cursor-pointer ${
+                      sub.isActive
+                        ? "text-primary-default font-medium bg-primary-default/5"
+                        : "text-muted-fg hover:text-foreground hover:bg-surface-raised"
+                    }`,
+                  },
+                  sub.title,
+                )}
+              </Fragment>
             ))}
           </div>
         )}
 
         {/* Sub-menu for overflow items (nested list, no absolute positioning) */}
         {item.hasChildren && expandedOverflow === item.title && isOverflow && (
-          <div className="ml-3 flex flex-col border-l border-border pl-2 mb-1">
+          <div role="group" aria-label={item.title} className="ml-3 flex flex-col border-l border-border pl-2 mb-1">
             {item.children?.map((sub, i) => (
-              <button
-                key={i}
-                tabIndex={-1}
-                onClick={() => handleSubItemClick(sub)}
-                className={`w-full text-left px-3 py-2 text-sm rounded transition-colors duration-150 cursor-pointer ${
-                  sub.isActive
-                    ? "text-primary-default font-medium"
-                    : "text-muted-fg hover:text-foreground hover:bg-surface-raised"
-                }`}
-              >
-                {sub.title}
-              </button>
+              <Fragment key={i}>
+                {renderControl(
+                  sub.route,
+                  () => handleSubItemClick(sub),
+                  {
+                    role: "menuitem",
+                    tabIndex: -1,
+                    className: `block w-full text-left px-3 py-2 text-sm rounded transition-colors duration-150 cursor-pointer ${
+                      sub.isActive
+                        ? "text-primary-default font-medium"
+                        : "text-muted-fg hover:text-foreground hover:bg-surface-raised"
+                    }`,
+                  },
+                  sub.title,
+                )}
+              </Fragment>
             ))}
           </div>
         )}
@@ -397,22 +461,28 @@ const MenuBar: FC<IMenuBar> = ({
   return (
     <nav
       ref={navRef}
+      aria-label={ariaLabel}
       className={`w-full z-50 ${sticky ? "sticky top-0" : ""} ${variantClass[variant]} ${className}`}
     >
       <div className="px-4 h-14 flex items-center gap-4">
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <img
-            src={logoShort}
-            alt="logo"
-            width={logoShortWidth}
-            height={logoShortHeight}
-          />
-          <img
-            src={logoLong}
-            alt="logo"
-            className="hidden sm:block h-6 w-auto"
-          />
+          {logo ?? (
+            <>
+              <img
+                src={logoShort}
+                alt={logoAlt}
+                width={logoShortWidth}
+                height={logoShortHeight}
+              />
+              {/* Decorative: logoShort always shows, so it carries the name. */}
+              <img
+                src={logoLong}
+                alt=""
+                className="hidden sm:block h-6 w-auto"
+              />
+            </>
+          )}
         </div>
 
         {/* Desktop menu items */}
@@ -432,6 +502,8 @@ const MenuBar: FC<IMenuBar> = ({
                     ref={(el) => {
                       itemRefs.current[index] = el;
                     }}
+                    role="separator"
+                    aria-orientation="vertical"
                     className="w-px h-5 bg-border mx-1 shrink-0"
                   />
                 );
@@ -442,6 +514,7 @@ const MenuBar: FC<IMenuBar> = ({
                   ref={(el) => {
                     itemRefs.current[index] = el;
                   }}
+                  role="none"
                   className="relative shrink-0"
                 >
                   {renderItemButton(item)}
@@ -480,8 +553,11 @@ const MenuBar: FC<IMenuBar> = ({
 
             {/* "More" overflow button */}
             {hasOverflow && (
-              <div className="relative shrink-0">
+              <div role="none" className="relative shrink-0">
                 <button
+                  role="menuitem"
+                  aria-haspopup="menu"
+                  aria-expanded={openDropdown === "__more__"}
                   data-menubar-item="__more__"
                   tabIndex={rovingId === "__more__" ? 0 : -1}
                   onClick={() =>
@@ -508,10 +584,11 @@ const MenuBar: FC<IMenuBar> = ({
                     data-menubar-panel
                     data-menubar-owner="__more__"
                     role="menu"
+                    aria-label="More"
                     className="absolute top-full right-0 mt-1 min-w-48 bg-surface border border-border rounded shadow-lg z-50 py-1"
                   >
                     {overflowItems.map((item, i) => (
-                      <div key={i} className="px-1">
+                      <div key={i} role="none" className="px-1">
                         {renderItemButton(item, true)}
                       </div>
                     ))}
@@ -539,6 +616,8 @@ const MenuBar: FC<IMenuBar> = ({
           )}
           {/* Mobile hamburger */}
           <button
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
             className="md:hidden size-8 flex items-center justify-center text-muted-fg hover:text-foreground cursor-pointer"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
@@ -561,38 +640,45 @@ const MenuBar: FC<IMenuBar> = ({
             const isActive = activeItem === item.title;
             return (
               <div key={index}>
-                <button
-                  onClick={() => handleItemClick(item)}
-                  className={`w-full flex items-center gap-2 px-3 py-2.5 rounded text-sm transition-colors duration-150 cursor-pointer ${
-                    isActive ? activeItemStyle : inactiveItemStyle
-                  } ${menuItemTextClass}`}
-                >
-                  {item.icon && <span className="size-4">{item.icon}</span>}
-                  <span className="flex-1 text-left">
-                    {stableText(item.title, isActive)}
-                  </span>
-                  {item.hasChildren && (
-                    <span
-                      className={`size-3.5 transition-transform duration-200 ${openDropdown === item.title ? "rotate-180" : ""}`}
-                    >
-                      <ChevDownSVG />
+                {renderControl(
+                  item.hasChildren ? undefined : item.route,
+                  () => handleItemClick(item),
+                  {
+                    className: `w-full flex items-center gap-2 px-3 py-2.5 rounded text-sm transition-colors duration-150 cursor-pointer ${
+                      isActive ? activeItemStyle : inactiveItemStyle
+                    } ${menuItemTextClass}`,
+                  },
+                  <>
+                    {item.icon && <span className="size-4">{item.icon}</span>}
+                    <span className="flex-1 text-left">
+                      {stableText(item.title, isActive)}
                     </span>
-                  )}
-                </button>
+                    {item.hasChildren && (
+                      <span
+                        className={`size-3.5 transition-transform duration-200 ${openDropdown === item.title ? "rotate-180" : ""}`}
+                      >
+                        <ChevDownSVG />
+                      </span>
+                    )}
+                  </>,
+                )}
                 {item.hasChildren && openDropdown === item.title && (
                   <div className="ml-4 flex flex-col gap-0.5 mt-0.5 mb-1">
                     {item.children?.map((sub, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleSubItemClick(sub)}
-                        className={`w-full text-left px-3 py-2 text-sm rounded transition-colors duration-150 cursor-pointer ${
-                          sub.isActive
-                            ? "text-primary-default font-medium"
-                            : "text-muted-fg hover:text-foreground hover:bg-surface-raised"
-                        }`}
-                      >
-                        {sub.title}
-                      </button>
+                      <Fragment key={i}>
+                        {renderControl(
+                          sub.route,
+                          () => handleSubItemClick(sub),
+                          {
+                            className: `block w-full text-left px-3 py-2 text-sm rounded transition-colors duration-150 cursor-pointer ${
+                              sub.isActive
+                                ? "text-primary-default font-medium"
+                                : "text-muted-fg hover:text-foreground hover:bg-surface-raised"
+                            }`,
+                          },
+                          sub.title,
+                        )}
+                      </Fragment>
                     ))}
                   </div>
                 )}

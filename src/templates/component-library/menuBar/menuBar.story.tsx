@@ -41,16 +41,35 @@ export default defineStory<IMenuBar>({
       required: true,
       group: "Content",
     },
+    logo: {
+      description: "Replaces the logo images. Accepts text or any element, including a link to the top of the page.",
+      control: data({
+        None: undefined,
+        Text: <span className="font-semibold text-foreground">GWAN</span>,
+        Link: (
+          <a href="#top" className="font-semibold text-foreground">
+            GWAN
+          </a>
+        ),
+      }),
+      type: "ReactNode",
+      defaultValue: "None",
+      group: "Content",
+    },
     logoLong: {
-      description: "Full logo shown on wide screens.",
+      description: "Full logo shown on wide screens. Required unless logo is set.",
       control: image(),
-      required: true,
       group: "Content",
     },
     logoShort: {
-      description: "Compact logo shown on narrow screens.",
+      description: "Compact logo shown on narrow screens. Required unless logo is set.",
       control: image(),
-      required: true,
+      group: "Content",
+    },
+    logoAlt: {
+      description: "Alt text for logoShort. Use your product's name.",
+      control: text(),
+      defaultValue: "logo",
       group: "Content",
     },
     rightSlot: {
@@ -146,6 +165,12 @@ export default defineStory<IMenuBar>({
       defaultValue: false,
       group: "Behaviour",
     },
+    itemsAsLinks: {
+      description: "Renders items without children as real links to their route. onNavigate still handles plain clicks, and cmd-click opens a new tab.",
+      control: boolean(),
+      defaultValue: false,
+      group: "Behaviour",
+    },
     isLoading: {
       description: "Replaces the items with a loading shimmer.",
       control: boolean(),
@@ -157,6 +182,11 @@ export default defineStory<IMenuBar>({
       control: action(),
       type: "(route: string) => void",
       group: "Events",
+    },
+    "aria-label": {
+      description: "Names the navigation for screen readers. Use it when a page has more than one nav.",
+      control: text(),
+      group: "Advanced",
     },
     className: {
       description: "Extra classes on the bar.",
