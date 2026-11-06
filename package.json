@@ -11,15 +11,19 @@
     "README.md"
   ],
   "scripts": {
+    "counts": "node scripts/library-counts.mjs",
+    "predev": "npm run counts",
     "dev": "next dev",
-    "prebuild": "echo \"NEXT_PUBLIC_APP_VERSION=$(git describe --tags --abbrev=0)\" > .env.local",
+    "prebuild": "echo \"NEXT_PUBLIC_APP_VERSION=$(git describe --tags --abbrev=0)\" > .env.local && npm run counts",
     "build": "next build",
     "build:lib": "rm -rf dist && tsup",
     "prepack": "npm run build:lib",
     "prepare": "npm run build:lib",
     "start": "next start",
     "lint": "eslint .",
+    "pretest": "npm run counts",
     "test": "TZ=UTC VITE_CONFIG_NATIVE_IGNORE_WARNING=true vitest run",
+    "pretest:watch": "npm run counts",
     "test:watch": "TZ=UTC VITE_CONFIG_NATIVE_IGNORE_WARNING=true vitest",
     "test:coverage": "TZ=UTC VITE_CONFIG_NATIVE_IGNORE_WARNING=true vitest run --coverage"
   },

@@ -1,5 +1,6 @@
 import { H2, H3, P, Code, Callout, InlineCode } from "../primitives";
 import pkg from "../../../../package.json";
+import counts from "@/lib/library-counts.json";
 import { SETUP_CSS, THEME_SCRIPT, THEME_TOGGLE, VITE_CONFIG } from "../setup-css";
 
 const GettingStarted = () => (
@@ -7,15 +8,15 @@ const GettingStarted = () => (
     {/* Introduction */}
     <H2 id="introduction">Introduction</H2>
     <P>
-      GWAN is an open-source component library and design system for Next.js projects. It provides 54 components and 217 icons with typed props, styled with Tailwind CSS v4 and themed with CSS variables, with light and dark mode built in.
+      GWAN is an open-source component library and design system for Next.js projects. It provides {counts.components} components and {counts.icons} icons with typed props, styled with Tailwind CSS v4 and themed with CSS variables, with light and dark mode built in.
     </P>
     <P>
       Add one stylesheet with your colour tokens, and every component follows your brand and switches between light and dark mode.
     </P>
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 my-6">
       {[
-        { label: "Components", value: "54+" },
-        { label: "Icons", value: "217+" },
+        { label: "Components", value: `${counts.components}` },
+        { label: "Icons", value: `${counts.icons}` },
         { label: "Version", value: `v${pkg.version}` },
         { label: "License", value: "MIT" },
       ].map((s) => (
