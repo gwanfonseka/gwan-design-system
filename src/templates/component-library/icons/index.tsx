@@ -19,7 +19,8 @@ const Icons = () => {
   const [selected, setSelected] = useState<string | null>(null);
   const [copied, setCopied] = useState<"import" | "usage" | null>(null);
 
-  const allIcons = Object.keys(svgList);
+  // BrightHigh is the old name of BrightHighSVG, so it would list that icon twice.
+  const allIcons = Object.keys(svgList).filter((name) => name !== "BrightHigh");
   const filtered = query.trim()
     ? allIcons.filter((name) =>
         name.toLowerCase().includes(query.toLowerCase()),

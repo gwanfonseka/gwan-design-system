@@ -14,9 +14,9 @@ export default defineStory<ICarousel>({
   args: { slides: "Three slides" },
   argTypes: {
     slides: {
-      description: "Slides, each with the same props as Banner.",
+      description: "Slides, each with the same props as Banner, or { content } to show anything else.",
       control: data({ "Three slides": SLIDES, "One slide": SLIDES.slice(0, 1) }),
-      type: "IBanner[]",
+      type: "ICarouselSlide[]",
       required: true,
       group: "Content",
     },

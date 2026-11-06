@@ -194,7 +194,7 @@ export default function MyPage() {
 
 ## Components
 
-**53 components** across actions, form controls, data display, navigation, content and layout, overlays, indicators and feedback. Try each one in the [component playground](https://gwan.dev/components-library).
+**54 components** across actions, form controls, data display, navigation, content and layout, overlays, indicators and feedback. Try each one in the [component playground](https://gwan.dev/components-library).
 
 The package doesn't add `"use client"` to its build, so:
 
@@ -247,6 +247,7 @@ The package doesn't add `"use client"` to its build, so:
 | `MenuBar`    | `C`  | Horizontal top bar with dropdowns, a More menu for overflow, a mobile menu and avatar |
 | `Tabs`       | `C`  | Tab list and panel with underline, pill and boxed variants and arrow-key navigation; you control the active tab |
 | `Breadcrumb` | `S`  | Breadcrumb trail with slash, chevron and dot separators |
+| `TextLink`   | `H`  | Inline text link in the primary colour |
 | `Ellipsis`   | `C`  | Truncated text with the full text in a tooltip on hover |
 
 ### Content & Layout
@@ -299,7 +300,7 @@ The package doesn't add `"use client"` to its build, so:
 
 ## Icons
 
-**216 SVG icon components**. They use `currentColor`, so they take the text colour, and they fill the element you put them in, so size them with that element.
+**217 SVG icon components**. They use `currentColor`, so they take the text colour, and they fill the element you put them in, so size them with that element.
 
 ```tsx
 import { SearchSVG, BellSVG, SettingsSVG, UserSVG } from "gwan-design-system";
@@ -401,6 +402,7 @@ import type {
   IDivider,
   IBanner,
   ICarousel,
+  ICarouselSlide,
   IAccordion,
   IAccordionItem,
   ITimeLine,
@@ -413,6 +415,7 @@ import type {
   ICommandPalette,
   ICommandItem,
   ITag,
+  ITextLink,
   IChip,
   IBadge,
   IAvatar,

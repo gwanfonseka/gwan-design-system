@@ -7,15 +7,15 @@ const GettingStarted = () => (
     {/* Introduction */}
     <H2 id="introduction">Introduction</H2>
     <P>
-      GWAN is an open-source component library and design system for Next.js projects. It provides 53 components and 216 icons with typed props, styled with Tailwind CSS v4 and themed with CSS variables, with light and dark mode built in.
+      GWAN is an open-source component library and design system for Next.js projects. It provides 54 components and 217 icons with typed props, styled with Tailwind CSS v4 and themed with CSS variables, with light and dark mode built in.
     </P>
     <P>
       Add one stylesheet with your colour tokens, and every component follows your brand and switches between light and dark mode.
     </P>
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 my-6">
       {[
-        { label: "Components", value: "53+" },
-        { label: "Icons", value: "216+" },
+        { label: "Components", value: "54+" },
+        { label: "Icons", value: "217+" },
         { label: "Version", value: `v${pkg.version}` },
         { label: "License", value: "MIT" },
       ].map((s) => (

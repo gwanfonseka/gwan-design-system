@@ -1,8 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import Banner, { IBanner } from "../banner";
 
+/** A Banner's props, or `content` to show anything else. */
+export type ICarouselSlide = IBanner | { content: ReactNode };
+
 export interface ICarousel {
-  slides: IBanner[];
+  slides: ICarouselSlide[];
   interval?: number;
   className?: string;
 }
@@ -23,39 +26,28 @@ const Carousel: FC<ICarousel> = ({
 
   return (
     <div className={`relative w-full h-60 md:h-121 overflow-hidden ${className}`}>
-      {slides.map(
-        (
-          {
-            title,
-            titleClassName,
-            subTitle,
-            subTitleClassName,
-            backgroundImage,
-            backgroundColor,
-            contentPlacement,
-          },
-          index,
-        ) => {
-          return (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-              }`}
-            >
-              <Banner
-                title={title}
-                titleClassName={titleClassName}
-                subTitle={subTitle}
-                subTitleClassName={subTitleClassName}
-                contentPlacement={contentPlacement}
-                backgroundImage={backgroundImage}
-                backgroundColor={backgroundColor}
-              />
-            </div>
-          );
-        },
-      )}
+      {slides.map((slide, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+          }`}
+        >
+          {"content" in slide ? (
+            slide.content
+          ) : (
+            <Banner
+              title={slide.title}
+              titleClassName={slide.titleClassName}
+              subTitle={slide.subTitle}
+              subTitleClassName={slide.subTitleClassName}
+              contentPlacement={slide.contentPlacement}
+              backgroundImage={slide.backgroundImage}
+              backgroundColor={slide.backgroundColor}
+            />
+          )}
+        </div>
+      ))}
     </div>
   );
 };

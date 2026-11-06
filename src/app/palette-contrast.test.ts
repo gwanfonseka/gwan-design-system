@@ -42,6 +42,7 @@ const TEXT_PAIRS: [string, (t: (k: string) => RGB) => [RGB, RGB]][] = [
   ["Primary button, Tabs pill, Stepper step", (t) => [t("primary-default-fg"), t("primary-default")]],
   ["Primary button hover (90%)", (t) => [t("primary-default-fg"), tint(t("primary-default"), t("background"), 0.9)]],
   ["Primary button pressed (80%)", (t) => [t("primary-default-fg"), tint(t("primary-default"), t("background"), 0.8)]],
+  ["Selected List row title on raised surfaces", (t) => [t("primary-default"), t("surface-raised")]],
   ["Tertiary button and primary text on surfaces", (t) => [t("primary-default"), t("surface")]],
   ["Primary text on a 15% primary tint", (t) => [t("primary-default"), tint(t("primary-default"), t("surface"), 0.15)]],
   ["Accent text on surfaces", (t) => [t("accent"), t("surface")]],

@@ -19,7 +19,7 @@ export default defineStory<ITag>({
       group: "Appearance",
     },
     variant: {
-      description: "Filled background or outline only.",
+      description: "Filled background or outline only. On raised surfaces such as a FLAT Card, use OUTLINE for the DEFAULT type: its fill matches the surface.",
       control: enumOf(TAG_VARIANT, "TAG_VARIANT"),
       defaultValue: TAG_VARIANT.SOLID,
       group: "Appearance",

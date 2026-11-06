@@ -72,8 +72,8 @@ const Hero = () => {
         </h1>
 
         <p className="mt-6 md:mt-8 text-sm text-muted-fg leading-relaxed max-w-md mx-auto">
-          GWAN is an open-source React component library for Next.js: 53 typed
-          components and 216 icons, styled with Tailwind CSS v4 and themed with
+          GWAN is an open-source React component library for Next.js: 54 typed
+          components and 217 icons, styled with Tailwind CSS v4 and themed with
           CSS variables, with light and dark mode built in.
         </p>
         <p className="mt-4 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">

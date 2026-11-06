@@ -76,7 +76,7 @@ export const image = (): Control => ({
  * handler at all changes what the component does (e.g. `onClear` adds a clear button).
  */
 export const action = (
-  opts: { optional?: boolean; signature?: string; update?: (...args: never[]) => Args } = {},
+  opts: { optional?: boolean; inCode?: boolean; signature?: string; update?: (...args: never[]) => Args } = {},
 ): Control => ({
   kind: "action",
   ...opts,

@@ -50,3 +50,15 @@ it("Stepper marks the active step", () => {
   expect(screen.getByText("Check")).toBeInTheDocument();
   expect(screen.getByText("2")).toBeInTheDocument();
 });
+
+it("Stepper can keep every step's content visible", () => {
+  const steps = [
+    { key: "a", title: "One", content: <p>First</p> },
+    { key: "b", title: "Two", content: <p>Second</p> },
+  ];
+  const { rerender } = render(<Stepper orientation={STEPPER_ORIENTATION.VERTICAL} activeKey="a" steps={steps} />);
+  expect(screen.queryByText("Second")).not.toBeInTheDocument();
+  rerender(<Stepper orientation={STEPPER_ORIENTATION.VERTICAL} activeKey="a" steps={steps} showAllContent />);
+  expect(screen.getByText("First")).toBeInTheDocument();
+  expect(screen.getByText("Second")).toBeInTheDocument();
+});

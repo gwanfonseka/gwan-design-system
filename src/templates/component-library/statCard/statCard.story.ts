@@ -1,4 +1,4 @@
-import StatCard, { STAT_TREND, type IStatCard } from "@/components/statCard";
+import StatCard, { STAT_CARD_VARIANT, STAT_TREND, type IStatCard } from "@/components/statCard";
 import { defineStory, enumOf, icon, text } from "@/playground";
 
 export default defineStory<IStatCard>({
@@ -33,6 +33,12 @@ export default defineStory<IStatCard>({
       description: "Icon in the card header, beside the label.",
       control: icon(),
       group: "Content",
+    },
+    variant: {
+      description: "Bordered surface, or FLAT for a borderless raised surface that matches Card's FLAT.",
+      control: enumOf(STAT_CARD_VARIANT, "STAT_CARD_VARIANT"),
+      defaultValue: STAT_CARD_VARIANT.DEFAULT,
+      group: "Appearance",
     },
     className: {
       description: "Extra classes on the card.",

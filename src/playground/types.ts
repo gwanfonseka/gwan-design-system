@@ -40,6 +40,8 @@ export type Control =
       kind: "action";
       /** The handler changes behaviour by being present, so it starts off and is switched on. */
       optional?: boolean;
+      /** Keeps an optional handler in generated code, for props most uses will set. */
+      inCode?: boolean;
       /** How the handler reads in generated code. Defaults to `() => {}`. */
       signature?: string;
       /** Args to change when it's called, e.g. clearing `value` from `onClear`. */
