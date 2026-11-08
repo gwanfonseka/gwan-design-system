@@ -1,3 +1,5 @@
+import counts from "@/lib/library-counts.json";
+
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-16">
@@ -72,8 +74,8 @@ const Hero = () => {
         </h1>
 
         <p className="mt-6 md:mt-8 text-sm text-muted-fg leading-relaxed max-w-md mx-auto">
-          GWAN is an open-source React component library for Next.js: 53 typed
-          components and 216 icons, styled with Tailwind CSS v4 and themed with
+          GWAN is an open-source React component library for Next.js: {counts.components} typed
+          components and {counts.icons} icons, styled with Tailwind CSS v4 and themed with
           CSS variables, with light and dark mode built in.
         </p>
         <p className="mt-4 text-[10px] font-bold tracking-[0.2em] uppercase text-muted-fg">

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import TimeLine, { STEP_DIRECTION, STEP_STATUS, type ILog } from "./index";
+import TimeLine, { STEP_DIRECTION, TIMELINE_STATUS, type ILog } from "./index";
 
 function log(title: string, status: string, extra: Partial<ILog> = {}): ILog {
   return { title, status, ...extra };
@@ -20,7 +20,7 @@ describe("TimeLine", () => {
     render(
       <TimeLine
         logs={[
-          log("Queued", STEP_STATUS.SUCCESS, {
+          log("Queued", TIMELINE_STATUS.SUCCESS, {
             placeholderRight: "09:00",
             placeholderBottom: "Waiting",
             description: "Accepted",
@@ -41,7 +41,7 @@ describe("TimeLine", () => {
     render(
       <TimeLine
         direction={STEP_DIRECTION.UPWARD}
-        logs={[log("One", STEP_STATUS.SUCCESS), log("Two", "Running")]}
+        logs={[log("One", TIMELINE_STATUS.SUCCESS), log("Two", "Running")]}
       />,
     );
     expect(titles()).toEqual(["One", "Two", "Pending"]);
@@ -51,8 +51,8 @@ describe("TimeLine", () => {
     const { rerender } = render(
       <TimeLine
         logs={[
-          log("One", STEP_STATUS.SUCCESS),
-          log("Two", STEP_STATUS.FAILED),
+          log("One", TIMELINE_STATUS.SUCCESS),
+          log("Two", TIMELINE_STATUS.FAILED),
         ]}
       />,
     );
@@ -62,7 +62,7 @@ describe("TimeLine", () => {
     rerender(
       <TimeLine
         direction={STEP_DIRECTION.UPWARD}
-        logs={[log("One", STEP_STATUS.SUCCESS), log("Two", STEP_STATUS.FINISHED)]}
+        logs={[log("One", TIMELINE_STATUS.SUCCESS), log("Two", TIMELINE_STATUS.FINISHED)]}
       />,
     );
     expect(titles()).toEqual(["One", "Two"]);
@@ -70,17 +70,17 @@ describe("TimeLine", () => {
 
   it("maps a single log and many logs", () => {
     const { rerender } = render(
-      <TimeLine logs={[log("Only", STEP_STATUS.SUCCESS)]} direction={STEP_DIRECTION.UPWARD} />,
+      <TimeLine logs={[log("Only", TIMELINE_STATUS.SUCCESS)]} direction={STEP_DIRECTION.UPWARD} />,
     );
     expect(titles()).toEqual(["Only", "Pending"]);
 
     rerender(
       <TimeLine
         logs={[
-          log("A", STEP_STATUS.SUCCESS),
-          log("B", STEP_STATUS.SUCCESS),
-          log("C", STEP_STATUS.SUCCESS),
-          log("D", STEP_STATUS.FINISHED),
+          log("A", TIMELINE_STATUS.SUCCESS),
+          log("B", TIMELINE_STATUS.SUCCESS),
+          log("C", TIMELINE_STATUS.SUCCESS),
+          log("D", TIMELINE_STATUS.FINISHED),
         ]}
       />,
     );
@@ -92,9 +92,9 @@ describe("TimeLine", () => {
       <TimeLine
         direction={STEP_DIRECTION.UPWARD}
         logs={[
-          log("Ok", STEP_STATUS.SUCCESS),
-          log("Done", STEP_STATUS.FINISHED),
-          log("Bad", STEP_STATUS.FAILED),
+          log("Ok", TIMELINE_STATUS.SUCCESS),
+          log("Done", TIMELINE_STATUS.FINISHED),
+          log("Bad", TIMELINE_STATUS.FAILED),
           log("Later", "Pending"),
         ]}
       />,
@@ -125,7 +125,7 @@ describe("TimeLine", () => {
   });
 
   it("reorders when direction changes", () => {
-    const logs = [log("One", STEP_STATUS.SUCCESS), log("Two", "Running")];
+    const logs = [log("One", TIMELINE_STATUS.SUCCESS), log("Two", "Running")];
     const { rerender } = render(<TimeLine logs={logs} direction={STEP_DIRECTION.DOWNWARD} />);
     expect(titles()).toEqual(["Pending", "Two", "One"]);
     rerender(<TimeLine logs={logs} direction={STEP_DIRECTION.UPWARD} />);
@@ -134,7 +134,7 @@ describe("TimeLine", () => {
 
   it("applies className on the root", () => {
     const { container } = render(
-      <TimeLine className="timeline" logs={[log("Only", STEP_STATUS.FINISHED)]} />,
+      <TimeLine className="timeline" logs={[log("Only", TIMELINE_STATUS.FINISHED)]} />,
     );
     expect(container.firstElementChild).toHaveClass("timeline");
     expect(titles()).toEqual(["Only"]);
@@ -146,4 +146,10 @@ describe("TimeLine", () => {
     expect(container.firstElementChild).toBeEmptyDOMElement();
     expect(screen.queryByText("Pending")).not.toBeInTheDocument();
   });
+});
+
+it("treats a log without a status from plain JavaScript as still in progress", () => {
+  render(<TimeLine logs={[{ title: "Started" } as ILog]} />);
+  expect(screen.getByText("Started")).toBeInTheDocument();
+  expect(screen.getByText("Pending")).toBeInTheDocument();
 });

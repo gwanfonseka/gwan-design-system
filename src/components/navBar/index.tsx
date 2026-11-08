@@ -42,7 +42,7 @@ type NavBarSharedProps = {
 type AvatarVisibleProps = {
   isAvatarVisible: true;
   avatarName: string;
-  avatarEmail: string;
+  avatarEmail?: string;
   avatarImage: string;
   avatarType: AVATAR_VARIANT;
 };
@@ -306,6 +306,7 @@ const NavBar: FC<INavBar> = ({
               }
               image={avatarImage}
               isLoading={isLoading}
+              className="pl-1.25"
             />
           </div>
         )}

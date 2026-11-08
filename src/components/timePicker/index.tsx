@@ -84,7 +84,7 @@ const TimePicker: FC<ITimePicker> = ({
     const fallback = { h: 12, m: 0, s: 0, period: "AM" as "AM" | "PM", valid: false };
     if (!v || !v.trim()) return fallback;
     const parts = v.split(":");
-    const read = (raw: string | undefined) => (raw == null ? Number.NaN : parseInt(raw, 10));
+    const read = (raw: string) => parseInt(raw, 10);
     const h24 = read(parts[0]);
     const m = parts.length < 2 ? 0 : read(parts[1]);
     const s = parts.length < 3 ? 0 : read(parts[2]);
@@ -169,9 +169,7 @@ const TimePicker: FC<ITimePicker> = ({
   }, [open]);
 
   const updatePlacement = () => {
-    const el = ref.current;
-    if (!el) return;
-    const rect        = el.getBoundingClientRect();
+    const rect        = ref.current!.getBoundingClientRect();
     const panelWidth  = 240;
     const panelHeight = 220;
     setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
@@ -179,7 +177,6 @@ const TimePicker: FC<ITimePicker> = ({
   };
 
   const toggleOpen = () => {
-    if (disabled) return;
     if (!open) updatePlacement();
     setOpen((v) => !v);
   };

@@ -26,7 +26,7 @@ const formatSize = (bytes: number): string => {
 };
 
 const getFileType = (name: string): { label: string; bg: string; text: string } => {
-  const ext = name.split(".").pop()?.toLowerCase() ?? "";
+  const ext = name.split(".").pop()!.toLowerCase();
   if (["jpg", "jpeg", "png", "gif", "webp", "svg", "avif"].includes(ext))
     return { label: "IMG",  bg: "bg-accent/10",   text: "text-accent" };
   if (ext === "pdf")

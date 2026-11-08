@@ -1,5 +1,5 @@
 import Stepper, { STEP_STATUS, STEPPER_ORIENTATION, STEPPER_VARIANT, type IStepper } from "@/components/stepper";
-import { data, defineStory, enumOf, text } from "@/playground";
+import { boolean, data, defineStory, enumOf, text } from "@/playground";
 
 const CHECKOUT = [
   { key: "cart", title: "Cart", description: "2 items", status: STEP_STATUS.COMPLETE },
@@ -40,6 +40,12 @@ export default defineStory<IStepper>({
       control: enumOf(STEPPER_VARIANT, "STEPPER_VARIANT"),
       defaultValue: STEPPER_VARIANT.DEFAULT,
       group: "Appearance",
+    },
+    showAllContent: {
+      description: "Vertical only: shows every step's content, not just the active step's.",
+      control: boolean(),
+      defaultValue: false,
+      group: "Behaviour",
     },
     className: {
       description: "Extra classes on the wrapper.",

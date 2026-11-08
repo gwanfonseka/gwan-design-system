@@ -173,9 +173,7 @@ const DatePicker: FC<IDatePicker> = ({
   }
 
   const updatePlacement = () => {
-    const el = ref.current;
-    if (!el) return;
-    const rect        = el.getBoundingClientRect();
+    const rect        = ref.current!.getBoundingClientRect();
     const panelWidth  = 256;
     const panelHeight = 320;
     setAlignRight(window.innerWidth  - rect.left < panelWidth  && rect.right > panelWidth);
@@ -183,7 +181,6 @@ const DatePicker: FC<IDatePicker> = ({
   };
 
   const toggleOpen = () => {
-    if (disabled) return;
     if (!open) updatePlacement();
     setOpen((v) => !v);
   };

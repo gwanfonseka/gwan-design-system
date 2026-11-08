@@ -299,3 +299,13 @@ describe("DateRangePicker", () => {
     expectAnchored(panel(container), position, align);
   });
 });
+
+it("closes when the trigger is pressed again", async () => {
+  const user = userEvent.setup();
+  renderPicker();
+  const trigger = screen.getByRole("combobox", { name: endsWith("Start date → End date") });
+  await user.click(trigger);
+  expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await user.click(trigger);
+  expect(trigger).toHaveAttribute("aria-expanded", "false");
+});

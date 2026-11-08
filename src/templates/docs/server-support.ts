@@ -57,6 +57,7 @@ export const SERVER_SUPPORT: [component: string, support: ServerSupport, reason:
   ["Tabs", "client", "useRef + its own click and arrow-key handlers"],
   ["Tag", "yes", "No hooks"],
   ["TextArea", "handlers", "No hooks; pass onChange or onClear from a Client Component"],
+  ["TextLink", "handlers", "Attaches onClick only if you pass one"],
   ["TimeLine", "yes", "No hooks"],
   ["TimePicker", "client", "useState + useEffect for the scroll columns and outside clicks"],
   ["Tooltip", "yes", "No hooks; you control isVisible"],

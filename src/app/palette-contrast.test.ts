@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { SETUP_CSS } from "@/templates/docs/setup-css";
+import { SETUP_CSS, THEME_SCRIPT, THEME_TOGGLE, VITE_CONFIG } from "@/templates/docs/setup-css";
 
 const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
 
@@ -42,6 +42,7 @@ const TEXT_PAIRS: [string, (t: (k: string) => RGB) => [RGB, RGB]][] = [
   ["Primary button, Tabs pill, Stepper step", (t) => [t("primary-default-fg"), t("primary-default")]],
   ["Primary button hover (90%)", (t) => [t("primary-default-fg"), tint(t("primary-default"), t("background"), 0.9)]],
   ["Primary button pressed (80%)", (t) => [t("primary-default-fg"), tint(t("primary-default"), t("background"), 0.8)]],
+  ["Selected List row title on raised surfaces", (t) => [t("primary-default"), t("surface-raised")]],
   ["Tertiary button and primary text on surfaces", (t) => [t("primary-default"), t("surface")]],
   ["Primary text on a 15% primary tint", (t) => [t("primary-default"), tint(t("primary-default"), t("surface"), 0.15)]],
   ["Accent text on surfaces", (t) => [t("accent"), t("surface")]],
@@ -78,7 +79,7 @@ it("keeps the fixed secondary-button pair at 4.5:1 in both themes", () => {
 describe("published setup stylesheet", () => {
   it("is the same in the README and the docs", () => {
     const readme = fs.readFileSync(path.join(process.cwd(), "README.md"), "utf8");
-    expect(readme).toContain(SETUP_CSS);
+    for (const block of [SETUP_CSS, VITE_CONFIG, THEME_SCRIPT, THEME_TOGGLE]) expect(readme).toContain(block);
   });
 
   it("uses the site's own token values", () => {

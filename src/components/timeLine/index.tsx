@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { CircleSVG } from "../icons";
 
-export enum STEP_STATUS {
+export enum TIMELINE_STATUS {
   SUCCESS = "Success",
   FAILED = "Failed",
   FINISHED = "Finished",
@@ -30,7 +30,7 @@ const canonicalStatus = (status?: string) => status?.trim().toLowerCase() ?? "";
 
 const isTerminal = (status?: string) => {
   const normalized = canonicalStatus(status);
-  return normalized === STEP_STATUS.FAILED.toLowerCase() || normalized === STEP_STATUS.FINISHED.toLowerCase();
+  return normalized === TIMELINE_STATUS.FAILED.toLowerCase() || normalized === TIMELINE_STATUS.FINISHED.toLowerCase();
 };
 
 const TimeLine: FC<ITimeLine> = ({
@@ -50,14 +50,14 @@ const TimeLine: FC<ITimeLine> = ({
 
   const getIcon = (status?: string) => {
     switch (canonicalStatus(status)) {
-      case STEP_STATUS.SUCCESS.toLowerCase():
-      case STEP_STATUS.FINISHED.toLowerCase():
+      case TIMELINE_STATUS.SUCCESS.toLowerCase():
+      case TIMELINE_STATUS.FINISHED.toLowerCase():
         return (
           <div className="size-4 bg-success rounded-full text-success-fg">
             <CircleSVG />
           </div>
         );
-      case STEP_STATUS.FAILED.toLowerCase():
+      case TIMELINE_STATUS.FAILED.toLowerCase():
         return (
           <div className="size-4 bg-danger rounded-full text-danger-fg">
             <CircleSVG />

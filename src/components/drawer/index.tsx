@@ -45,8 +45,8 @@ const Drawer: FC<IDrawer> = ({
   useEffect(() => {
     if (!open) return;
     const previous = document.activeElement as HTMLElement | null;
-    const first = panelRef.current?.querySelector<HTMLElement>(FOCUSABLE);
-    (first ?? panelRef.current)?.focus();
+    // The close button is always there, so there is always something to focus.
+    panelRef.current!.querySelector<HTMLElement>(FOCUSABLE)!.focus();
     return () => previous?.focus();
   }, [open]);
 
@@ -62,8 +62,7 @@ const Drawer: FC<IDrawer> = ({
   // With the overlay the page behind is unusable, so keep Tab inside the drawer.
   const trapFocus = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== "Tab" || !showOverlay) return;
-    const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
-    if (!focusable.length) return;
+    const focusable = Array.from(panelRef.current!.querySelectorAll<HTMLElement>(FOCUSABLE));
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (e.shiftKey && document.activeElement === first) {

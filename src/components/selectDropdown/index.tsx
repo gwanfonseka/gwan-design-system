@@ -110,9 +110,7 @@ const SelectDropdown: FC<ISelectDropdown> = ({
     anchor.top > anchor.spaceBelow;
 
   const measureAnchor = () => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
+    const rect = containerRef.current!.getBoundingClientRect();
     setAnchor({
       spaceBelow: window.innerHeight - rect.bottom,
       top: rect.top,
@@ -120,7 +118,6 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   const openMenu = () => {
-    if (disabled) return;
     measureAnchor();
     const idx = displayOptions.findIndex((o) => (o.value ?? o.label) === value);
     setHighlightedIndex(idx);
@@ -135,7 +132,6 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   };
 
   const toggleMenu = () => {
-    if (disabled) return;
     if (isOptionsVisible) closeMenu();
     else openMenu();
   };
@@ -166,7 +162,6 @@ const SelectDropdown: FC<ISelectDropdown> = ({
   }, [onSearch, debounceMs]);
 
   const handleTriggerKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) return;
     if (!isOptionsVisible) {
       if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) {
         e.preventDefault();

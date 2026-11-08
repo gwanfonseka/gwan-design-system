@@ -14,7 +14,7 @@ export default defineStory<ITimeLine>({
   argTypes: {
     logs: {
       description:
-        "Events in order. status is \"Success\", \"Failed\" or \"Finished\" (any case). Until the last log is Failed or Finished, a Pending step is added at the end.",
+        "Events in order. status is \"Success\", \"Failed\" or \"Finished\" (any case), or a TIMELINE_STATUS value. Until the last log is Failed or Finished, a Pending step is added at the end.",
       control: data({
         "In progress": ORDER,
         Delivered: [...ORDER, { title: "Delivered", placeholderRight: "16:30", status: "Finished" }],

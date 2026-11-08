@@ -23,11 +23,15 @@ export enum AVATAR_LABEL_POSITION {
 
 export interface IAvatar {
   name: string;
-  email: string;
+  email?: string;
   image?: string;
   variant: string;
   size?: AVATAR_SIZE;
   labelPosition?: AVATAR_LABEL_POSITION;
+  /** Shows the name and email on hover, for the variants with no visible label. */
+  showTooltip?: boolean;
+  /** Defaults to the side set by labelPosition. */
+  tooltipPosition?: TOOLTIP_POSITION;
   className?: string;
   isLoading?: boolean;
 }
@@ -61,11 +65,13 @@ const generatePastelColor = (seed: string) => {
 
 const Avatar: FC<IAvatar> = ({
   name,
-  email,
+  email = "",
   image,
   variant,
   size = AVATAR_SIZE.LG,
   labelPosition = AVATAR_LABEL_POSITION.RIGHT,
+  showTooltip = true,
+  tooltipPosition,
   className = "",
   isLoading = false,
 }) => {
@@ -74,9 +80,9 @@ const Avatar: FC<IAvatar> = ({
   const bgColor = generatePastelColor(name.trim() || email.trim());
 
   const sizes = sizeMap[size];
-  const tooltipPos = labelPosition === AVATAR_LABEL_POSITION.LEFT
+  const tooltipPos = tooltipPosition ?? (labelPosition === AVATAR_LABEL_POSITION.LEFT
     ? TOOLTIP_POSITION.LEFT
-    : TOOLTIP_POSITION.RIGHT;
+    : TOOLTIP_POSITION.RIGHT);
 
   const generateInitials = (fullName: string) => {
     const parts = fullName.trim().split(/\s+/).filter(Boolean);
@@ -85,13 +91,13 @@ const Avatar: FC<IAvatar> = ({
     return `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
   };
 
-  const renderTooltip = (isVisible: boolean) => (
+  const renderTooltip = (isVisible: boolean) => showTooltip && (
     <Tooltip
       position={tooltipPos}
       label={
         <div className="flex flex-col">
           {name}
-          <p className="opacity-70 text-xs">{email}</p>
+          {email && <p className="opacity-70 text-xs">{email}</p>}
         </div>
       }
       isVisible={isVisible}
@@ -135,9 +141,12 @@ const Avatar: FC<IAvatar> = ({
   const label = showLabel && (
     <div className={`flex flex-col ${labelPosition === AVATAR_LABEL_POSITION.LEFT ? "items-end" : "items-start"}`}>
       <p className={`font-semibold text-foreground leading-tight ${sizes.text}`}>{name}</p>
-      <p className={`text-muted-fg ${sizes.sub}`}>{email}</p>
+      {email && <p className={`text-muted-fg ${sizes.sub}`}>{email}</p>}
     </div>
   );
+
+  // Only the labelled variants are padded, so the others stay square.
+  const padding = showLabel ? "pl-1.25" : "";
 
   if (isLoading) {
     const shimmerLabel = showLabel && (
@@ -147,7 +156,7 @@ const Avatar: FC<IAvatar> = ({
       </div>
     );
     return (
-      <div className={`flex flex-row items-center gap-2 pl-1.25 animate-pulse ${className}`}>
+      <div className={`flex flex-row items-center gap-2 ${padding} animate-pulse ${className}`}>
         {labelPosition === AVATAR_LABEL_POSITION.LEFT && shimmerLabel}
         <div className={`${sizes.avatar} rounded-full bg-surface-raised`} />
         {labelPosition === AVATAR_LABEL_POSITION.RIGHT && shimmerLabel}
@@ -156,7 +165,7 @@ const Avatar: FC<IAvatar> = ({
   }
 
   return (
-    <div className={`flex flex-row items-center gap-2 pl-1.25 ${className}`}>
+    <div className={`flex flex-row items-center gap-2 ${padding} ${className}`}>
       {labelPosition === AVATAR_LABEL_POSITION.LEFT && label}
       {renderAvatarImage()}
       {labelPosition === AVATAR_LABEL_POSITION.RIGHT && label}

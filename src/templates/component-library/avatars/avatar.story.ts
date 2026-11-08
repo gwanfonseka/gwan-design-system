@@ -1,4 +1,5 @@
 import Avatar, { AVATAR_LABEL_POSITION, AVATAR_SIZE, AVATAR_VARIANT, type IAvatar } from "@/components/avatar";
+import { TOOLTIP_POSITION } from "@/components/tooltip";
 import { boolean, defineStory, enumOf, image, SAMPLE_IMAGES, SAMPLE_PERSON, text } from "@/playground";
 
 export default defineStory<IAvatar>({
@@ -18,9 +19,8 @@ export default defineStory<IAvatar>({
       group: "Content",
     },
     email: {
-      description: "Shown under the name in the *_WITH_FULL variants.",
+      description: "Shown under the name in the *_WITH_FULL variants, and in the tooltip.",
       control: text(),
-      required: true,
       group: "Content",
     },
     image: {
@@ -40,6 +40,17 @@ export default defineStory<IAvatar>({
       control: enumOf(AVATAR_SIZE, "AVATAR_SIZE"),
       defaultValue: AVATAR_SIZE.LG,
       group: "Appearance",
+    },
+    showTooltip: {
+      description: "Shows the name and email on hover, for the *_ONLY variants.",
+      control: boolean(),
+      defaultValue: true,
+      group: "Behaviour",
+    },
+    tooltipPosition: {
+      description: "Side the tooltip opens on. Defaults to the labelPosition side. Near a screen edge, pick the side with room.",
+      control: enumOf(TOOLTIP_POSITION, "TOOLTIP_POSITION"),
+      group: "Behaviour",
     },
     labelPosition: {
       description: "Side the name and email sit on.",
