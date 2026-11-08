@@ -3,7 +3,10 @@ import * as Icons from "@/components/icons";
 
 const registry = Icons as unknown as Record<string, ComponentType>;
 
-export const ICON_NAMES = Object.keys(registry).sort((a, b) => a.localeCompare(b));
+// BrightHigh is the old name of BrightHighSVG, so it would list that icon twice.
+export const ICON_NAMES = Object.keys(registry)
+  .filter((name) => name !== "BrightHigh")
+  .sort((a, b) => a.localeCompare(b));
 
 export const getIcon = (name: string): ComponentType | undefined => registry[name];
 

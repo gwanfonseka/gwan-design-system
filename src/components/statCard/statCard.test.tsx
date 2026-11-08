@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import StatCard, { STAT_TREND } from "./index";
+import StatCard, { STAT_CARD_VARIANT, STAT_TREND } from "./index";
 import States, { STATE_TYPE } from "../state";
 
 describe("StatCard", () => {
@@ -28,4 +28,12 @@ it("StatCard and State render their copy", () => {
   expect(container.querySelector("img")).toBeNull();
   expect(container.querySelector('[aria-hidden="true"] svg')).not.toBeNull();
   expect(screen.getByText("Nothing yet")).toBeInTheDocument();
+});
+
+it("StatCard has a borderless variant", () => {
+  const { container, rerender } = render(<StatCard label="Users" value={12} />);
+  expect((container.firstChild as HTMLElement).className).toContain("border-border");
+  rerender(<StatCard label="Users" value={12} variant={STAT_CARD_VARIANT.FLAT} />);
+  expect((container.firstChild as HTMLElement).className).toContain("bg-surface-raised");
+  expect((container.firstChild as HTMLElement).className).not.toContain("border");
 });

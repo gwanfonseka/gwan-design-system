@@ -57,10 +57,30 @@ export default defineStory<IButton>({
       group: "Behaviour",
     },
     onClick: {
-      description: "Called when the button is clicked.",
-      control: action(),
-      required: true,
+      description: "Called when the button is clicked. Receives the event, so a router can take over a link.",
+      control: action({ inCode: true }),
       group: "Events",
+    },
+    href: {
+      description: "Renders a link instead of a button.",
+      control: text("e.g. /pricing"),
+      group: "Behaviour",
+    },
+    target: {
+      description: "Where a link opens. _blank adds a safe rel unless you set one.",
+      control: options(["_self", "_blank"]),
+      type: "string",
+      group: "Behaviour",
+    },
+    rel: {
+      description: "Link relationship.",
+      control: text(),
+      group: "Behaviour",
+    },
+    "aria-label": {
+      description: "Names the button for screen readers. Needed when it only has an icon.",
+      control: text(),
+      group: "Advanced",
     },
     className: {
       description: "Extra classes on the button element.",

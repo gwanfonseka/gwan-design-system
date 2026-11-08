@@ -166,7 +166,7 @@ export const generateCode = (story: AnyStory, args: Args): string => {
       continue;
     }
     if (control.kind === "action") {
-      if (required || (control.optional && value === true)) {
+      if (required || control.inCode || (control.optional && value === true)) {
         out.attrs.push(`${key}={${control.signature ?? "() => {}"}}`);
       }
       continue;

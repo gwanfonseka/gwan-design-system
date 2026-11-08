@@ -36,6 +36,7 @@ import AccordionTemplate from "./accordion";
 import SkeletonTemplate from "./skeleton";
 import ProgressBars from "./progressBar";
 import Breadcrumbs from "./breadcrumb";
+import TextLinks from "./textLink";
 import DrawerTemplate from "./drawer";
 import Popovers from "./popover";
 import Alerts from "./alert";
@@ -111,6 +112,7 @@ const menuGroups = [
       { name: "Menu Bar", template: <MenuBarTemplate /> },
       { name: "Tabs", template: <TabsTemplate /> },
       { name: "Breadcrumb", template: <Breadcrumbs /> },
+      { name: "TextLink", template: <TextLinks /> },
       { name: "Ellipsis", template: <EllipsisTemplate /> },
     ],
   },

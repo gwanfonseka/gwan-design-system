@@ -31,3 +31,9 @@ it("Carousel shows the first slide", () => {
   expect(screen.getByText("One")).toBeInTheDocument();
   expect(screen.getByText("Two")).toBeInTheDocument();
 });
+
+it("Carousel shows custom slide content", () => {
+  render(<Carousel slides={[{ content: <p>Custom</p> }, { title: "Banner" }]} interval={60000} />);
+  expect(screen.getByText("Custom")).toBeInTheDocument();
+  expect(screen.getByText("Banner")).toBeInTheDocument();
+});

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { BUTTON_VARIANTS } from "@/components/button";
 import badgeStory from "@/templates/component-library/badge/badge.story";
+import textLinkStory from "@/templates/component-library/textLink/textLink.story";
 import buttonStory from "@/templates/component-library/buttons/button.story";
 import tagStory from "@/templates/component-library/tags/tag.story";
 import Playground from "./Playground";
@@ -72,7 +73,12 @@ describe("<Playground />", () => {
       expect(within(table).getByText(key)).toBeInTheDocument();
     }
     expect(within(table).getByText("BUTTON_VARIANTS.PRIMARY")).toBeInTheDocument();
-    expect(within(table).getByTitle("Required")).toBeInTheDocument();
+    expect(within(table).queryByTitle("Required")).not.toBeInTheDocument();
+  });
+
+  it("marks required props in the table", () => {
+    render(<Playground story={textLinkStory} />);
+    expect(within(screen.getByRole("table", { name: "Props" })).getAllByTitle("Required")).toHaveLength(2);
   });
 
   it("updates the preview and code when an enum changes", async () => {

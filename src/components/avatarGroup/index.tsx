@@ -6,7 +6,7 @@ import Tooltip, { TOOLTIP_POSITION } from "../tooltip";
 
 export interface IAvatarGroupItem {
   name: string;
-  email: string;
+  email?: string;
   image?: string;
 }
 
@@ -27,11 +27,11 @@ const sizeClass: Record<AVATAR_SIZE, string> = {
 };
 
 const offsetClass: Record<AVATAR_SIZE, string> = {
-  [AVATAR_SIZE.XS]: "-ml-2",
-  [AVATAR_SIZE.SM]: "-ml-3",
-  [AVATAR_SIZE.MD]: "-ml-3",
-  [AVATAR_SIZE.LG]: "-ml-4",
-  [AVATAR_SIZE.XL]: "-ml-5",
+  [AVATAR_SIZE.XS]: "-ml-0.75",
+  [AVATAR_SIZE.SM]: "-ml-1.75",
+  [AVATAR_SIZE.MD]: "-ml-1.75",
+  [AVATAR_SIZE.LG]: "-ml-2.75",
+  [AVATAR_SIZE.XL]: "-ml-3.75",
 };
 
 const AvatarGroup: FC<IAvatarGroup> = ({

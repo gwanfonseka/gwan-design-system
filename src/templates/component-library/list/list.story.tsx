@@ -16,10 +16,11 @@ export default defineStory<IList>({
   argTypes: {
     items: {
       description:
-        "Rows as { key, title, description?, icon?, rightSlot?, disabled?, onClick? }. Rows with onClick are clickable and respond to Enter and Space.",
+        "Rows as { key, title, description?, icon?, rightSlot?, disabled?, selected?, onClick? }. Rows with onClick are clickable and respond to Enter and Space.",
       control: data({
         Settings: SETTINGS,
         "Titles only": SETTINGS.map(({ key, title }) => ({ key, title })),
+        "With selection": SETTINGS.map((row, index) => ({ ...row, selected: index === 0 })),
       }),
       type: "IListItem[]",
       required: true,

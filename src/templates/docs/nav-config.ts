@@ -6,6 +6,7 @@ export const navSections = [
       { id: "installation", label: "Installation" },
       { id: "tailwind-setup", label: "Tailwind Setup" },
       { id: "dark-mode", label: "Dark Mode" },
+      { id: "vite", label: "Using Vite" },
     ],
   },
   {

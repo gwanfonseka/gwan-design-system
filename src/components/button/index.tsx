@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, MouseEventHandler, ReactNode } from "react";
 
 export enum BUTTON_VARIANTS {
   PRIMARY   = "primary",
@@ -21,7 +21,13 @@ export enum BUTTON_SIZE {
 export interface IButton {
   variant?: BUTTON_VARIANTS;
   label?: string;
-  onClick: () => void;
+  /** Names the button when there's no visible label, such as an icon-only button. */
+  "aria-label"?: string;
+  onClick?: MouseEventHandler<HTMLElement>;
+  /** Renders a link instead of a button. */
+  href?: string;
+  target?: string;
+  rel?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   type?: "button" | "submit";
@@ -36,7 +42,7 @@ const variantClass = (variant: BUTTON_VARIANTS, disabled: boolean): string => {
     case BUTTON_VARIANTS.PRIMARY:
       return disabled
         ? "bg-primary-200 text-primary-500 cursor-not-allowed"
-        : "bg-primary-default text-primary-default-fg hover:bg-primary-default/90 active:bg-primary-default/80";
+        : "bg-primary-default text-primary-default-fg cursor-pointer hover:bg-primary-default/90 active:bg-primary-default/80";
 
     case BUTTON_VARIANTS.SECONDARY:
       return disabled
@@ -67,7 +73,11 @@ const sizeConfig: Record<BUTTON_SIZE, { text: string; px: string; py: string; py
 const Button: FC<IButton> = ({
   variant  = BUTTON_VARIANTS.PRIMARY,
   label,
+  "aria-label": ariaLabel,
   onClick,
+  href,
+  target,
+  rel,
   leftIcon,
   rightIcon,
   type     = "button",
@@ -78,19 +88,36 @@ const Button: FC<IButton> = ({
 }: IButton) => {
   const s = sizeConfig[size];
   const padding = label ? `${s.py} ${s.px}` : s.pyIcon;
+  const classes = `${variantClass(variant, disabled)} ${padding} ${s.text} ${edgeClass(edges)} ${className}`;
+
+  const content = (
+    <div className="flex flex-row gap-2 items-center">
+      {leftIcon  && <div className={s.icon}>{leftIcon}</div>}
+      {label     && <span>{label}</span>}
+      {rightIcon && <div className={s.icon}>{rightIcon}</div>}
+    </div>
+  );
+
+  if (href) {
+    // Links have no disabled state: dropping href is what stops one being followed.
+    return (
+      <a
+        href={disabled ? undefined : href}
+        target={target}
+        rel={rel ?? (target === "_blank" ? "noopener noreferrer" : undefined)}
+        aria-label={ariaLabel}
+        aria-disabled={disabled || undefined}
+        onClick={disabled ? undefined : onClick}
+        className={`inline-block ${classes}`}
+      >
+        {content}
+      </a>
+    );
+  }
 
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={`${variantClass(variant, disabled)} ${padding} ${s.text} ${edgeClass(edges)} ${className}`}
-    >
-      <div className="flex flex-row gap-2 items-center">
-        {leftIcon  && <div className={s.icon}>{leftIcon}</div>}
-        {label     && <span>{label}</span>}
-        {rightIcon && <div className={s.icon}>{rightIcon}</div>}
-      </div>
+    <button type={type} aria-label={ariaLabel} onClick={onClick} disabled={disabled} className={classes}>
+      {content}
     </button>
   );
 };
