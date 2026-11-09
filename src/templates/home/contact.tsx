@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { sendContactEmail } from "@/app/actions/sendContactEmail";
+import { trackEvent } from "@/lib/analytics";
 import { CONTACT_LIMITS, validateContact, type ContactFieldErrors } from "@/lib/contactValidation";
 
 const InputField = ({
@@ -78,6 +79,8 @@ const Contact = () => {
     const result = await sendContactEmail(name, email, message, website);
 
     if (result.success) {
+      // The honeypot also returns success and sends nothing. Skip that case.
+      if (!website) trackEvent("contact_submit");
       setStatus("success");
     } else {
       setStatus("error");
