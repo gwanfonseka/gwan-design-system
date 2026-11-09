@@ -24,7 +24,11 @@ The image sets `NODE_ENV=production`, `PORT=3000`, and `HOSTNAME=0.0.0.0`. Compo
 
 `NEXT_PUBLIC_APP_VERSION` is written at image build time from the latest git tag. No application code reads it, so it is not part of `.env`.
 
-`VERCEL` is set by Vercel only. `src/app/vercel-telemetry.tsx` reads it to decide whether to render Analytics and Speed Insights. Do not set it on the VPS.
+`NEXT_PUBLIC_GA_ID` is a GitHub Actions repository variable, not a secret and not a key in this `.env`. The deploy workflow passes it as a Docker build-arg of the same name. Next.js inlines `NEXT_PUBLIC_*` during `next build`, so the value has to be present then. Putting it in `/root/gwan/gwan-site/.env` does not change the tag the browser loads. Leave the variable unset and the image still builds, with Google Analytics off. Changing the variable takes a new image: push to `main`, or run the workflow on `main`.
+
+The value is a GA4 measurement ID: `G-` followed by letters and digits. `src/app/google-analytics.tsx` renders the tag only when that id is set and `VERCEL` is not `1`. Develop and pull request previews therefore never send hits, including when the same name is also set on the Vercel project. App Router client navigations count as page views because the Google tag records history changes. In the GA4 property, leave enhanced measurement on and leave "Page changes based on browser history events" checked. Both are the default on a new property. A second page-view call would double-count those navigations.
+
+`VERCEL` is set by Vercel only. `src/app/vercel-telemetry.tsx` reads it to decide whether to render Analytics and Speed Insights. `src/app/google-analytics.tsx` reads it to keep Google Analytics off those builds. Do not set it on the VPS.
 
 ## GitHub Actions secrets
 
@@ -37,6 +41,14 @@ These repository secrets are set. The workflow only reads them.
 | `CONTABO_SSH_KEY` | Private key for that user. The public key belongs in `authorized_keys`. |
 
 The job's permissions are `contents: read` and `packages: write`. Push and pull both use that job's `GITHUB_TOKEN`. There is no registry password secret and no personal access token.
+
+## GitHub Actions variables
+
+| Variable | Secret | Required | Where it is read |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_GA_ID` | no | no | Docker build-arg in `.github/workflows/deploy-site.yml`, then inlined by `next build` into `src/app/google-analytics.tsx` |
+
+Set this in the repository's Actions variables, not in secrets. An empty value is valid. The workflow passes `vars.NEXT_PUBLIC_GA_ID` through even when the variable has not been created.
 
 ## GHCR
 

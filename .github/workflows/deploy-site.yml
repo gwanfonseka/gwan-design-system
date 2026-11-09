@@ -6,6 +6,11 @@
 #   CONTABO_USER     SSH user (the deploy path is /root/gwan/gwan-site)
 #   CONTABO_SSH_KEY  private key that matches that user's authorized_keys
 #
+# Repository variables (not secrets) this workflow reads:
+#   NEXT_PUBLIC_GA_ID  optional GA4 measurement ID (G- plus letters and digits).
+#                      Unset or empty leaves Google Analytics off. The build
+#                      does not fail when the variable is missing.
+#
 # GHCR push and the server-side pull both use this job's GITHUB_TOKEN.
 # The token is piped to `docker login --password-stdin` over SSH and is not
 # placed on a command line. `docker logout` runs at the end of the deploy step
@@ -65,6 +70,7 @@ jobs:
             ghcr.io/gwanfonseka/gwan-site:sha-${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_APP_VERSION=${{ steps.version.outputs.version }}
+            NEXT_PUBLIC_GA_ID=${{ vars.NEXT_PUBLIC_GA_ID }}
           labels: |
             org.opencontainers.image.source=https://github.com/gwanfonseka/gwan-design-system
             org.opencontainers.image.revision=${{ github.sha }}

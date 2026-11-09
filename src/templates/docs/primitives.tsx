@@ -1,11 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent, type AnalyticsEvent } from "@/lib/analytics";
 
-export const Code = ({ children, lang = "" }: { children: string; lang?: string }) => {
+export const Code = ({
+  children,
+  lang = "",
+  event,
+}: {
+  children: string;
+  lang?: string;
+  event?: AnalyticsEvent;
+}) => {
   const [copied, setCopied] = useState(false);
   const copy = () => {
-    navigator.clipboard.writeText(children.trim());
+    const text = children.trim();
+    void navigator.clipboard.writeText(text).then(
+      () => {
+        if (event) trackEvent(event);
+      },
+      () => {},
+    );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

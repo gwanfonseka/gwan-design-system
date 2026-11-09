@@ -32,7 +32,7 @@ const GettingStarted = () => (
     <P>Install the package and Tailwind CSS v4, which compiles GWAN&apos;s class names in your app.</P>
 
     <H3>1. Install the package</H3>
-    <Code lang="bash">{`npm install gwan-design-system`}</Code>
+    <Code lang="bash" event="copy_install_command">{`npm install gwan-design-system`}</Code>
 
     <H3>2. Install Tailwind CSS v4</H3>
     <Code lang="bash">{`npm install tailwindcss@^4 @tailwindcss/postcss`}</Code>
