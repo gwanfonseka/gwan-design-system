@@ -3,6 +3,7 @@ import counts from "@/lib/library-counts.json";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import ProductionGoogleAnalytics from "@/app/google-analytics";
 import VercelTelemetry from "@/app/vercel-telemetry";
 
 const geistSans = Geist({
@@ -55,6 +56,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <VercelTelemetry />
+        <ProductionGoogleAnalytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

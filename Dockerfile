@@ -19,6 +19,9 @@ COPY --from=deps /app/dist ./dist
 COPY . .
 ARG NEXT_PUBLIC_APP_VERSION=
 ENV NEXT_PUBLIC_APP_VERSION=$NEXT_PUBLIC_APP_VERSION
+# Optional GA4 measurement ID. Inlined by `next build`. Empty leaves analytics off.
+ARG NEXT_PUBLIC_GA_ID=
+ENV NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
 ENV STANDALONE=1
 RUN npm run build
 

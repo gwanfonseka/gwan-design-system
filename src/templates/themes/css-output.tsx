@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 const CopyIcon = () => (
   <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +20,12 @@ const CssOutput = ({ cssOutput }: { cssOutput: string }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(cssOutput);
+    try {
+      await navigator.clipboard.writeText(cssOutput);
+    } catch {
+      return;
+    }
+    trackEvent("copy_theme_css");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
