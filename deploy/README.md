@@ -2,18 +2,16 @@
 
 `main` is built into `ghcr.io/gwanfonseka/gwan-site` and run here. Vercel still builds `develop` and pull request previews. `vercel.json` turns main off in two places: `git.deploymentEnabled.main` is false, and `ignoreCommand` exits 0 when `VERCEL_GIT_COMMIT_REF` is `main` (exit 0 skips the build; any other ref, including an unset one, still builds).
 
-The workflow that deploys is `.github/workflows/deploy-site.yml`. It runs on push to `main` and on a manual run of that workflow when the selected branch is `main`. It does not copy files to the server. The directory below has to exist first.
+The workflow that deploys is `.github/workflows/deploy-site.yml`. It runs on push to `main` and on a manual run of that workflow when the selected branch is `main`. Each run copies `deploy/docker-compose.yml` to `/root/gwan/gwan-site/docker-compose.yml`. It does not read or write `.env`.
 
 ## One-time server setup
 
 1. Create `/root/gwan/gwan-site/`.
-2. Copy `deploy/docker-compose.yml` to `/root/gwan/gwan-site/docker-compose.yml`.
-3. Copy `deploy/env.example` to `/root/gwan/gwan-site/.env` and set the variables below.
-4. The external Docker network `gwan-print-worker_default` must already exist (it is the network the current Caddy container is on).
-5. Log in to GHCR if the package is private (see below).
-6. Add the Caddy site block and reload Caddy.
+2. Copy `deploy/env.example` to `/root/gwan/gwan-site/.env` and set the variables below. Leave this file on the server. Deploys do not replace it.
+3. The external Docker network `gwan-print-worker_default` must already exist (it is the network the current Caddy container is on).
+4. Add the Caddy site block and reload Caddy.
 
-When `docker-compose.yml` changes in git, copy the new file into `/root/gwan/gwan-site/` before the next deploy. `.env` stays only on the server.
+`.env` has to be in place before the first deploy. `docker compose up` reads it and will fail if it is missing. The compose file is written by the workflow, so it does not need to be copied by hand.
 
 ## Environment variables
 
@@ -30,15 +28,15 @@ The image sets `NODE_ENV=production`, `PORT=3000`, and `HOSTNAME=0.0.0.0`. Compo
 
 ## GitHub Actions secrets
 
-Create these on the repository. The workflow only reads them.
+These repository secrets are set. The workflow only reads them.
 
 | Secret | Value |
 | --- | --- |
 | `CONTABO_HOST` | Server hostname or IP |
-| `CONTABO_USER` | SSH user that can run Docker and read `/root/gwan/gwan-site` |
+| `CONTABO_USER` | SSH user that can run Docker and write `/root/gwan/gwan-site/docker-compose.yml` |
 | `CONTABO_SSH_KEY` | Private key for that user. The public key belongs in `authorized_keys`. |
 
-The image push uses the workflow `GITHUB_TOKEN` (`packages: write`). There is no registry password secret.
+The job's permissions are `contents: read` and `packages: write`. Push and pull both use that job's `GITHUB_TOKEN`. There is no registry password secret and no personal access token.
 
 ## GHCR
 
@@ -47,21 +45,17 @@ Image: `ghcr.io/gwanfonseka/gwan-site`
 Tags pushed on each main deploy:
 
 - `latest` — what `docker-compose.yml` runs
-- `sha-<full git commit>` — kept for rollback
+- `sha-<full git commit>` — the revision that was built
 
-New GitHub Container Registry packages are **private** by default, including packages pushed from a public repository. A private package cannot be pulled by the server until it authenticates.
+The package can stay private. Nothing in Package settings has to change, and the server does not need its own login.
 
-On the server, as the user that runs compose (root, given the path above):
+On each deploy the job, still on the runner, pipes `GITHUB_TOKEN` into the SSH session's stdin:
 
 ```bash
-docker login ghcr.io -u gwanfonseka
+docker login ghcr.io -u <github.actor> --password-stdin
 ```
 
-Use a personal access token with `read:packages` as the password. If the repository is private, the token also needs access to that repository. Docker saves the login in `/root/.docker/config.json`. Later `docker compose pull` from the workflow reuses it. The workflow does not log the server in.
-
-Alternatively, open the package on GitHub (**Packages → gwan-site → Package settings**), connect it to `gwanfonseka/gwan-design-system`, and change the visibility to **Public**. Then the server can pull with no login. Public is appropriate if the image contains only the site and secrets stay in `.env` (they are not baked into the image).
-
-The first push creates the package under the `gwanfonseka` account. If that push is rejected, open the package settings and grant this repository's Actions access to it.
+The token is not passed as a command-line argument. The job then runs `docker compose pull && docker compose up -d` in `/root/gwan/gwan-site`. At the end of that step it runs `docker logout ghcr.io`, including when pull, start, or the container health check fails. The server does not keep GHCR credentials between deploys. A manual `docker pull` on the server will not work while it is logged out. The next workflow run logs in again, pulls, and logs out.
 
 ## Caddy
 
@@ -83,8 +77,8 @@ gwan.dev {
 Do this once, before the first production deploy (the first push of this workflow to `main`).
 
 1. Merge the change through `develop` to `main` only after the steps below are in place. Until this workflow file is on `main`, pushes do not deploy.
-2. Create the three repository secrets.
-3. Finish the server setup above, including `.env`, the compose file, and the Caddy block. Reload Caddy.
+2. The repository secrets `CONTABO_HOST`, `CONTABO_USER`, and `CONTABO_SSH_KEY` are already set.
+3. Finish the server setup above (`.env` and the Caddy block). Reload Caddy. The workflow writes `docker-compose.yml` and does not touch `.env`.
 4. Lower the DNS TTL for `gwan.dev` and `www.gwan.dev` ahead of the switch.
 5. Let `main` build and start the container. The job fails if the container's `/api/health` is not OK, and it fails if `https://gwan.dev/` does not return 200. While DNS still points at Vercel, the public check can pass against the old site. The container check is the one that proves this deploy.
 6. Point `gwan.dev` and `www.gwan.dev` at the VPS (the address Caddy already uses for 80/443).
@@ -100,19 +94,9 @@ Vercel will not deploy `main`. `develop` and pull request previews keep building
 
 ## Rollback
 
-The previous image tag is still on GHCR.
+The server is logged out of GHCR after every deploy, so it cannot pull an older tag on its own.
 
-```bash
-cd /root/gwan/gwan-site
-# replace SHA with the previous full commit tagged sha-<commit>
-docker pull ghcr.io/gwanfonseka/gwan-site:sha-SHA
-```
-
-Edit `docker-compose.yml` so `image` is `ghcr.io/gwanfonseka/gwan-site:sha-SHA`, then:
-
-```bash
-docker compose up -d
-```
+To roll the site back, revert `main` to the earlier commit and push. That run builds that revision, logs the server in with the job token, pulls it, and logs out.
 
 To put traffic back on Vercel immediately, point DNS for `gwan.dev` and `www.gwan.dev` back at Vercel. The last successful Vercel production deployment keeps serving. Shipping `main` there again means removing `git.deploymentEnabled` and the `ignoreCommand` from `vercel.json` and pushing.
 

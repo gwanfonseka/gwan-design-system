@@ -1,14 +1,15 @@
 # Builds the production image on every push to main (and on manual dispatch of
 # main) and rolls it out on the Contabo VPS.
 #
-# Repository secrets this workflow reads (create them in GitHub; this file does
-# not create them):
+# Repository secrets this workflow reads:
 #   CONTABO_HOST     server hostname or IP
 #   CONTABO_USER     SSH user (the deploy path is /root/gwan/gwan-site)
 #   CONTABO_SSH_KEY  private key that matches that user's authorized_keys
 #
-# The image is pushed with the workflow's GITHUB_TOKEN. No registry password
-# secret is required for the push.
+# GHCR push and the server-side pull both use this job's GITHUB_TOKEN.
+# The token is piped to `docker login --password-stdin` over SSH and is not
+# placed on a command line. `docker logout` runs at the end of the deploy step
+# even when a later command fails, so the server does not keep credentials.
 
 name: Deploy site
 
@@ -30,6 +31,9 @@ jobs:
     # workflow_dispatch can target any branch. Only main is production.
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,32 +70,62 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Deploy on the VPS
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.CONTABO_HOST }}
-          username: ${{ secrets.CONTABO_USER }}
-          key: ${{ secrets.CONTABO_SSH_KEY }}
-          command_timeout: 20m
-          script_stop: true
-          script: |
-            set -eu
-            cd /root/gwan/gwan-site
-            docker compose pull
-            docker compose up -d
-            ok=0
-            for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
-              if docker compose exec -T gwan-site node -e "fetch('http://127.0.0.1:3000/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"; then
-                ok=1
-                break
-              fi
-              sleep 5
-            done
-            if [ "$ok" -ne 1 ]; then
-              docker compose ps || true
-              docker compose logs --tail=100 gwan-site || true
-              echo "gwan-site container health check failed" >&2
-              exit 1
+        timeout-minutes: 20
+        env:
+          # Bound here so the shell command line contains the variable name, not the token.
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SSH_PRIVATE_KEY: ${{ secrets.CONTABO_SSH_KEY }}
+          CONTABO_HOST: ${{ secrets.CONTABO_HOST }}
+          CONTABO_USER: ${{ secrets.CONTABO_USER }}
+          GHCR_USER: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          key="$RUNNER_TEMP/contabo_key"
+          known="$RUNNER_TEMP/contabo_known_hosts"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$key"
+          chmod 600 "$key"
+          ssh_base=(
+            ssh
+            -i "$key"
+            -o IdentitiesOnly=yes
+            -o BatchMode=yes
+            -o ConnectTimeout=20
+            -o StrictHostKeyChecking=accept-new
+            -o UserKnownHostsFile="$known"
+          )
+          target="${CONTABO_USER}@${CONTABO_HOST}"
+
+          # Refresh the compose file only. stdin is the file. .env is not written.
+          "${ssh_base[@]}" "$target" "mkdir -p /root/gwan/gwan-site && cat > /root/gwan/gwan-site/docker-compose.yml" < deploy/docker-compose.yml
+
+          logout() {
+            "${ssh_base[@]}" "$target" "docker logout ghcr.io" || true
+          }
+          trap logout EXIT
+
+          quoted_user=$(printf '%q' "$GHCR_USER")
+          printf '%s\n' "$GHCR_TOKEN" | "${ssh_base[@]}" "$target" "docker login ghcr.io -u ${quoted_user} --password-stdin"
+
+          "${ssh_base[@]}" "$target" bash -s <<'REMOTE'
+          set -eu
+          cd /root/gwan/gwan-site
+          docker compose pull
+          docker compose up -d
+          ok=0
+          for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
+            if docker compose exec -T gwan-site node -e "fetch('http://127.0.0.1:3000/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"; then
+              ok=1
+              break
             fi
+            sleep 5
+          done
+          if [ "$ok" -ne 1 ]; then
+            docker compose ps || true
+            docker compose logs --tail=100 gwan-site || true
+            echo "gwan-site container health check failed" >&2
+            exit 1
+          fi
+          REMOTE
 
       - name: Check https://gwan.dev
         run: |
