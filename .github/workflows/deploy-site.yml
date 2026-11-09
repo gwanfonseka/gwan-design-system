@@ -1,0 +1,101 @@
+# Builds the production image on every push to main (and on manual dispatch of
+# main) and rolls it out on the Contabo VPS.
+#
+# Repository secrets this workflow reads (create them in GitHub; this file does
+# not create them):
+#   CONTABO_HOST     server hostname or IP
+#   CONTABO_USER     SSH user (the deploy path is /root/gwan/gwan-site)
+#   CONTABO_SSH_KEY  private key that matches that user's authorized_keys
+#
+# The image is pushed with the workflow's GITHUB_TOKEN. No registry password
+# secret is required for the push.
+
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: gwan-site-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # workflow_dispatch can target any branch. Only main is production.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Image version
+        id: version
+        run: echo "version=$(git describe --tags --abbrev=0 2>/dev/null || echo dev)" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          platforms: linux/amd64
+          provenance: false
+          sbom: false
+          tags: |
+            ghcr.io/gwanfonseka/gwan-site:latest
+            ghcr.io/gwanfonseka/gwan-site:sha-${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_APP_VERSION=${{ steps.version.outputs.version }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/gwanfonseka/gwan-design-system
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: Deploy on the VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.CONTABO_HOST }}
+          username: ${{ secrets.CONTABO_USER }}
+          key: ${{ secrets.CONTABO_SSH_KEY }}
+          command_timeout: 20m
+          script_stop: true
+          script: |
+            set -eu
+            cd /root/gwan/gwan-site
+            docker compose pull
+            docker compose up -d
+            ok=0
+            for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
+              if docker compose exec -T gwan-site node -e "fetch('http://127.0.0.1:3000/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"; then
+                ok=1
+                break
+              fi
+              sleep 5
+            done
+            if [ "$ok" -ne 1 ]; then
+              docker compose ps || true
+              docker compose logs --tail=100 gwan-site || true
+              echo "gwan-site container health check failed" >&2
+              exit 1
+            fi
+
+      - name: Check https://gwan.dev
+        run: |
+          set -eu
+          code=$(curl -sS -L --max-time 30 --retry 5 --retry-delay 3 --retry-all-errors -o /dev/null -w "%{http_code}" https://gwan.dev/)
+          echo "https://gwan.dev/ -> ${code}"
+          test "$code" = "200"

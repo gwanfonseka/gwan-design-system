@@ -1,0 +1,24 @@
+# Production site on the Contabo VPS. Copy this file to /root/gwan/gwan-site/.
+# Caddy, on the external network below, publishes 80/443 and proxies here.
+# This service publishes no host ports.
+
+name: gwan-site
+
+services:
+  gwan-site:
+    image: ghcr.io/gwanfonseka/gwan-site:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    # Next standalone binds HOSTNAME. Pin it so the process listens on every
+    # interface inside the network, which is what Caddy dials.
+    environment:
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+    networks:
+      - edge
+
+networks:
+  edge:
+    external: true
+    name: gwan-print-worker_default

@@ -14,7 +14,7 @@
     "counts": "node scripts/library-counts.mjs",
     "predev": "npm run counts",
     "dev": "next dev",
-    "prebuild": "echo \"NEXT_PUBLIC_APP_VERSION=$(git describe --tags --abbrev=0)\" > .env.local && npm run counts",
+    "prebuild": "node scripts/write-app-version.mjs && npm run counts",
     "build": "next build",
     "build:lib": "rm -rf dist && tsup",
     "prepack": "npm run build:lib",
