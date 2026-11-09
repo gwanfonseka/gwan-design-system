@@ -30,7 +30,7 @@ const Founder = () => {
             </div>
 
             <a
-              href="https://nimesh.fly.dev/"
+              href="https://nimesh.gwan.dev/"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-1.5"
