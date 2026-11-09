@@ -2,9 +2,8 @@ import "./globals.css";
 import counts from "@/lib/library-counts.json";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
+import VercelTelemetry from "@/app/vercel-telemetry";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,8 +54,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SpeedInsights />
-        <Analytics />
+        <VercelTelemetry />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

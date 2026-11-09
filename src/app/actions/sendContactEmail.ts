@@ -5,10 +5,14 @@ import { adminNotificationHtml } from "@/email-templates/adminNotification";
 import { autoReplyHtml } from "@/email-templates/autoReply";
 import { validateContact } from "@/lib/contactValidation";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const FROM = process.env.RESEND_FROM_EMAIL ?? "noreply@gwan.dev";
 const ADMIN_EMAIL = "gwanfonseka@gmail.com";
+
+// The SDK throws when the key is missing. Creating the client at import time
+// would crash every page that references this action, including the homepage.
+function createResend(): Resend {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export interface ContactResult {
   success: boolean;
@@ -38,6 +42,7 @@ export async function sendContactEmail(
   const message = rawMessage.trim();
 
   try {
+    const resend = createResend();
     const adminRes = await resend.emails.send({
       from: `GWAN Contact <${FROM}>`,
       to: ADMIN_EMAIL,
